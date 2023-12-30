@@ -1,4 +1,4 @@
-# <img src="https://github.com/vitx-studios/vite/blob/main/Assets/VITE.png" alt="Logo" width="48"/> VITE #
+# <img src="https://github.com/vitx-studios/vite/blob/main/Assets/VITE.png" alt="Logo" width="24"/> VITE #
 ###### Versatile Integrated Technology Engine
 
 [Cpp-Badge]: https://img.shields.io/badge/C%2B%2B-23-blue
