@@ -1,2 +1,2 @@
-# vite
+# VITE
 Versatile Integrated Technology Engine
