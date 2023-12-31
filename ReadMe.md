@@ -1,5 +1,4 @@
-# <img src="https://github.com/vitx-studios/vite/blob/main/Assets/VITE.png" alt="Logo" width="24"/> VITE #
-###### Versatile Integrated Technology Engine
+# <img src="https://github.com/vitx-studios/vite/blob/main/Assets/Hedron.png" alt="Logo" width="24"/> Hedron #
 
 [Cpp-Badge]: https://img.shields.io/badge/C%2B%2B-23-blue
 [C-Badge]: https://img.shields.io/badge/C-17-blue
