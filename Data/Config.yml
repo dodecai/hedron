@@ -3,3 +3,10 @@ App:
   Description: "Game Engine Framework"
   Version: "0.0.0"
 
+Settings:
+  Vite:
+    Resolution: "1280x1024"
+    VSync: true
+  Vivid:
+    Resolution: "1024x768"
+    VSync: true

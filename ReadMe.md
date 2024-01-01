@@ -49,6 +49,9 @@ Everything revolving around the application and its renderer.
 ### On the Horizon
 Expect a slew of surprises until my satisfaction knows no bounds!
 
+# Documentation
+[Manual](Manual/#Index.md "Manual")
+
 # Legalities
 
 Several [third-party](3rd-Party/ReadMe.md "3rd-Party") libraries power this project.
