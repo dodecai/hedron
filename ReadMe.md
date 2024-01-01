@@ -1,4 +1,4 @@
-# <img src="https://github.com/vitx-studios/vite/blob/main/Assets/Hedron.png" alt="Logo" width="24"/> Hedron #
+﻿# <img src="https://github.com/dodecai/hedron/blob/main/Assets/Logos/Hedron.png" alt="Logo" width="24"/> Hedron #
 
 [Cpp-Badge]: https://img.shields.io/badge/C%2B%2B-23-blue
 [C-Badge]: https://img.shields.io/badge/C-17-blue
@@ -16,7 +16,7 @@
 > **Attention:** Currently under construction, heavy development, and in an early stage.
 This project was restarted from scratch. Switch to the 'ultra'-project to get the most out of it.
 
-I embarked on this journey to create Ultra Spectra, a dynamic game engine framework. My motivation? Simple – it's immensely enjoyable, and coding is my passion.
+I embarked on this journey to create Hedron, a dynamic game engine framework. My motivation? Simple – it's immensely enjoyable, and coding is my passion.
 
 Now, let's address the elephant in the room: am I reinventing the wheel? Look around the market – each day, a "new" solution emerges for age-old problems.
 
