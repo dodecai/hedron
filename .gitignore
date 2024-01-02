@@ -10,9 +10,9 @@
 .vscode/
 
 # Files
-**.log
-**.sln
-**.vcxproj
-**.vcxproj.filters
-**.vcxproj.user
+*.log
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
 
