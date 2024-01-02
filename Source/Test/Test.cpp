@@ -19,6 +19,8 @@ public:
 
     // Methods
     void Create() override {
+        LogInfo("Hello World!");
+        ShowLibraryInfo();
     }
 
 	void Destroy() override {
