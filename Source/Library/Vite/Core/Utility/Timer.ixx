@@ -8,7 +8,7 @@ export namespace Vite {
 /// @brief Timer Units:
 /// Seconds (s), Milliseconds (ms), Microseconds (µs), Nanoseconds (ns)
 ///
-enum class TimerUnit: uint8 {
+enum class TimerUnit {
     Seconds,
     Milliseconds,
     Microseconds,

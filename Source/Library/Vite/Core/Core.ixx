@@ -11,7 +11,6 @@ import "Platform.h";
 // Default
 export import Vite.Core.Config;
 export import Vite.Core.Helpers;
-export import Vite.Core.Logger;
 
 // Types
 export import Vite.Core.Concepts;
@@ -25,11 +24,11 @@ export import Vite.Core.UUID;
 
 // Utilities
 //export import Vite.Core.Chrono;
-export import Vite.Core.Delegate;
-export import Vite.Core.Dispatcher;
+//export import Vite.Core.Delegate;
+//export import Vite.Core.Dispatcher;
 export import Vite.Core.Emitter;
 export import Vite.Core.Random;
-export import Vite.Core.Signal;
+//export import Vite.Core.Signal;
 export import Vite.Core.String;
 export import Vite.Core.ThreadPool;
 export import Vite.Core.Timer;

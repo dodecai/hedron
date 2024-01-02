@@ -8,10 +8,13 @@ public:
     Test() {}
     ~Test() {}
 
-    void Create() override {}
+    void Create() override {
+    }
+
 	void Destroy() override {}
 
 	void Update() override {
+        
 	}
 };
 

@@ -20,6 +20,7 @@
 
 #pragma endregion
 
+// Module
 export module Vite.Core.UUID;
 
 // Library
