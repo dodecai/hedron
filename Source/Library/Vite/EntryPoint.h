@@ -1,9 +1,9 @@
-#pragma once
+﻿#pragma once
 
 // Library
 import Vite.Core;
 import Vite.Core.Application;
-import <Vite/Core/Platform.h>;
+import <Vite/Core/Support.h>;
 
 ///
 /// @brief Application EntryPoint
@@ -22,6 +22,7 @@ int main(int argc, char** argv) {
 	// Initialization
 	Vite::Arguments arguments({ argv + 1, argv + argc });
 	auto app = Vite::CreateApplication();
+    app->SetArguments(arguments);
 
 	// Run
 	#ifdef APP_MODE_DEBUG

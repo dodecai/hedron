@@ -16,9 +16,9 @@
     warnings "Extra"
 	
     debugdir "%{wks.location}/Build/%{cfg.buildcfg}"
-    dependson { "Chrono" }
+    dependson { "Vite" }
     entrypoint "mainCRTStartup"
-    files { "**.h", "**.cpp", "**.cppm", "**.cxx", "**.inl", "**.ixx", "**.lua" }
+    files { "**.h", "**.cpp", "**.cppm", "**.cxx", "**.inl", "**.ixx", "**.lua", "**.natvis", "**.rc" }
     postbuildcommands {
         "robocopy /mir /nfl /ndl /njh /njs /np /r:2 /w:1 \"%{wks.location}Assets\" \"%{cfg.targetdir}/Assets\"",
         "robocopy /mir /nfl /ndl /njh /njs /np /r:2 /w:1 \"%{wks.location}Data\" \"%{cfg.targetdir}/Data\"",
@@ -32,7 +32,7 @@
         "%{Headers.Library}"
     }
     links {
-        "Chrono"
+        "Vite"
     }
 
     filter { "configurations:Debug" }

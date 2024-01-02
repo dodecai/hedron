@@ -1,20 +1,15 @@
-import <Settings.h>;
+﻿import <Settings.h>;
 import <Vite/EntryPoint.h>;
-
-import Vite.Core;
 
 namespace Vite {
 
 class Test: public Application {
 public:
-	void Create() override {
-		string greeting = "Hello, World!";
-		size_t greetinghash = "Hello, World!"_hash;
-		std::cout << greeting << " " << greetinghash << std::endl;
-	}
+    Test() {}
+    ~Test() {}
 
-	void Destroy() override {
-	}
+    void Create() override {}
+	void Destroy() override {}
 
 	void Update() override {
 	}

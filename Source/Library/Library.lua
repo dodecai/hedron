@@ -17,7 +17,7 @@
     warnings "Extra"
     
     debugdir "%{wks.location}/Build/%{cfg.buildcfg}"
-    files { "**.h", "**.cpp", "**.cppm", "**.cxx", "**.inl", "**.ixx", "**.lua", "**.natvis" }
+    files { "**.h", "**.cpp", "**.cppm", "**.cxx", "**.inl", "**.ixx", "**.lua", "**.natvis", "**.rc" }
     postbuildcommands {
         "copy /b /y \"%{Package.ShaderC}\" \"%{cfg.targetdir}/\"",
         "exit /b 0",
