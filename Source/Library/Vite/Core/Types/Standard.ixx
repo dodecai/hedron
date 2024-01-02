@@ -28,9 +28,12 @@ using std::wstring_view;
 // Stream
 using std::ifstream;
 using std::ofstream;
+using std::ostream;
+using std::ostringstream;
 using std::stringstream;
 using std::wifstream;
 using std::wofstream;
+using std::wostream;
 
 // Types
 using empty = std::monostate;
