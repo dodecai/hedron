@@ -1,22 +1,36 @@
-export module Vite.Core.Types;
+﻿export module Vite.Core.Standard;
 
 export import std;
 
 export namespace Vite {
 
+// Concurency
+using std::atomic;
+using std::condition_variable;
+using std::future;
+using std::mutex;
+using std::thread;
+
 // Container
 using std::array;
+using std::byte;
+using std::function;
 using std::list;
+using std::map;
+using std::queue;
 using std::string;
 using std::string_view;
+using std::unordered_map;
 using std::vector;
 using std::wstring;
 using std::wstring_view;
 
-// Smart-Pointer
-using std::shared_ptr;
-using std::unique_ptr;
-using std::weak_ptr;
+// Stream
+using std::ifstream;
+using std::ofstream;
+using std::stringstream;
+using std::wifstream;
+using std::wofstream;
 
 // Types
 using empty = std::monostate;
