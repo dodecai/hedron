@@ -1,10 +1,9 @@
-﻿export module Vite.Core.Memory;
-
-///
+﻿///
 /// @brief: This module serves something like a memory allocation/deallocation watcher.
 ///         It will notify the application, if possible memory leaks are detected.
 /// @note:  Currently this is only the barebone, there is still some work to be done.
 /// 
+export module Vite.Core.Memory;
 
 import std.compat;
 import Vite.Logger;
@@ -47,11 +46,14 @@ export void operator delete[](void *memory, size_t size) noexcept {
     sAllocationMetrics.TotalFreed += size;
     free(memory);
 }
+
 ///
 /// @brief Functions
 ///
 
-export inline void VerifyMemoryUsage() {
+export namespace Hedron::Debug {
+
+inline void VerifyMemoryUsage() {
     Hedron::Log("Current Memory Usage: {} bytes\n - Total Allocated: {} bytes\n - Total Deallocated: {} bytes",
         sAllocationMetrics.CurrentUsage(),
         sAllocationMetrics.TotalAllocated,
@@ -59,7 +61,7 @@ export inline void VerifyMemoryUsage() {
     );
 }
 
-export inline void DetectMemoryLeaks() {
+inline void DetectMemoryLeaks() {
     auto usage = sAllocationMetrics.CurrentUsage();
     if (usage != 0) {
         Hedron::LogWarning("Memory Leaks Detected [leaked '{}' bytes]!", usage);
@@ -69,4 +71,6 @@ export inline void DetectMemoryLeaks() {
         Hedron::LogInfo("No Memory Leaks Detected");
     }
     VerifyMemoryUsage();
+}
+
 }

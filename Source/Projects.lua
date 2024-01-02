@@ -61,7 +61,7 @@ filter {}
 
 --include "App/App.lua"
 --include "Game/Game.lua"
-include "Library/Library.lua"
+include "Library/Vite.lua"
 --include "Modules/Modules.lua"
 include "Test/Test.lua"
 include "Vivid/Vivid.lua"

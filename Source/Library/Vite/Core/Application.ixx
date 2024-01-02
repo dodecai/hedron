@@ -1,6 +1,9 @@
 ﻿export module Vite.Core.Application;
 
 import Vite.Core;
+import Vite.Core.Chrono;
+import Vite.Logger;
+
 export import Vite.Core.Arguments;
 export import Vite.Core.Layers;
 export import Vite.Core.Settings;
@@ -19,10 +22,20 @@ public:
 	// Default
     Application(const Settings &settings = {}): mSettings(settings) {
         if (pInstance) { throw std::runtime_error("Application already initialized!"); }
-		pInstance = this;
+        pInstance = this;
+
+        logger.SetLevel(mSettings.LogLevel);
+        logger.Attach(CreateScope<ConsoleLogger>());
+        logger.Attach(CreateScope<FileLogger>("Test.log"));
+        logger.Attach(CreateScope<MemoryLogger>());
+
+        // Initialization
+        //Log("{} started ...\n  on: '{}'\n  at: '{}'", mSettings.Title, appchrono.GetDate(), appchrono.GetTime());
+        //LogCaption("Initialization");
 	}
 	virtual ~Application() {
 		pInstance = nullptr;
+		//Log("{} finished ...\n  on: '{}'\n  at: '{}'\n", mSettings.Title, appchrono.GetDate(), appchrono.GetTime());
 	}
 
 	// Accessors
