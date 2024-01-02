@@ -50,7 +50,7 @@ Everything revolving around the application and its renderer.
 Expect a slew of surprises until my satisfaction knows no bounds!
 
 # Documentation
-[Manual](Manual/#Index.md "Manual")
+[Manual](Manual/Index.md "Manual")
 
 # Legalities
 

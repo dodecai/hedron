@@ -1,7 +1,7 @@
 ﻿include "3rd-Party/Build/Modules.lua"
 
 workspace "Hedron"
-    defines { "SOLUTION_NAME=Hedron" }
+    defines { "SOLUTION_NAME=Vite" }
     architecture "x64"
     configurations { "Debug", "Release", "Distribution" }
     buildoptions "/utf-8"
