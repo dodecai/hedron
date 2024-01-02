@@ -6,7 +6,7 @@ import std;
 /// @brief These little helpers can be very useful in some cases.
 ///
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// Category: Enumerations

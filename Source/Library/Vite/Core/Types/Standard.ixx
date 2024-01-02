@@ -2,9 +2,9 @@
 
 export import std;
 
-export namespace Vite {
+export namespace Hedron {
 
-// Concurency
+// Concurrency
 using std::atomic;
 using std::condition_variable;
 using std::future;
@@ -34,6 +34,7 @@ using std::stringstream;
 using std::wifstream;
 using std::wofstream;
 using std::wostream;
+using std::wostringstream;
 
 // Types
 using empty = std::monostate;

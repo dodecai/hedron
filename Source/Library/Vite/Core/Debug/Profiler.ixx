@@ -1,14 +1,14 @@
 ﻿export module Vite.Core.Profiler;
 
 import Vite.Core;
-//import Ultra.Logger;
+import Vite.Logger;
 
 
 ///
 /// @brief: Profiles code and generates tracing data for chrome based browsers (URL: chrome://tracing/)
 ///
 
-namespace Vite::Debug {
+namespace Hedron::Debug {
 
 // Types
 using SteadyClock = std::chrono::steady_clock;
@@ -55,7 +55,7 @@ public:
             mCurrentSession = CreateScope<ProfilerSession>(name);
             WriteHeader();
         } else {
-            //Vite::LogError("Instrumentor couldn't open target file '{}'!\n", file);
+            Hedron::LogError("Instrumentor couldn't open target file '{}'!\n", file);
         }
     }
     void WriteProfile(const ProfilerResult &result) {
@@ -158,7 +158,7 @@ private:
 
 }
 
-export namespace Vite::Debug {
+export namespace Hedron::Debug {
 
 void StartProfiling(const string &name, const string &file = "ProfilerResults.json") {
     Instrumentor::Instance().BeginSession(name, file);

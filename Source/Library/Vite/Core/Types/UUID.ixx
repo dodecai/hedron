@@ -26,7 +26,7 @@ export module Vite.Core.UUID;
 // Library
 import std;
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Currently we use a string to hold the 128-Bit value, cause in our usecase it doesn't really matter

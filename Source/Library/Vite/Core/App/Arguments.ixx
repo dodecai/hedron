@@ -1,8 +1,8 @@
-export module Vite.Core.Arguments;
+﻿export module Vite.Core.Arguments;
 
 import std;
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Container for passed command line arguments

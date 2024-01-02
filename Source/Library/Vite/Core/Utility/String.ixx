@@ -3,7 +3,7 @@
 // Library
 import Vite.Core.Standard;
 
-export namespace Vite {
+export namespace Hedron {
 
 /// @brief This class offers easy to use string extensions
 class String {
@@ -135,7 +135,7 @@ public:
 
 module: private;
 
-namespace Vite {
+namespace Hedron {
 
 void String::Test() {
     string string00 = "First Second and SeConD Third";

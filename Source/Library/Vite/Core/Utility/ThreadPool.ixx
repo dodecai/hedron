@@ -2,7 +2,7 @@
 
 import Vite.Core.Standard;
 
-export namespace Vite {
+export namespace Hedron {
 
 class ThreadPool {
 public:

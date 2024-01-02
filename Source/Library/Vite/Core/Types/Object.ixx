@@ -8,7 +8,7 @@ import std;
 /// @note The classes here are useful for controlling copying, moving, and modification of objects in the application.
 ///
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Removes the move constructer/operator from a derived class.

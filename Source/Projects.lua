@@ -1,5 +1,21 @@
 ﻿solutionitems {
     ["Assets"] = {
+        ["Fonts"] = {
+        },
+        ["Icons"] = {
+            "Assets/Icons/*.ico",
+        },
+        ["Logos"] = {
+            "Assets/Logos/*",
+        },
+        ["Models"] = {
+        },
+        ["Shaders"] = {
+        },
+        ["Sounds"] = {
+        },
+        ["Textures"] = {
+        },
     },
     ["Build"] = {
         "3rd-Party/Build/Modules.lua",

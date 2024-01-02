@@ -9,7 +9,7 @@ export import Vite.Core.Statistics;
 
 int main(int, char**);
 
-export namespace Vite {
+export namespace Hedron {
 
 class Application {
 	// Friends

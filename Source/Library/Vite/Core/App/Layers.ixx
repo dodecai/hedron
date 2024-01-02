@@ -4,7 +4,7 @@ import Vite.Core;
 //import Vite.Core.Event.Data;
 //import Vite.System.Event;
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Simple Application Layer Implementation
