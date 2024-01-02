@@ -1,4 +1,4 @@
-# 3rd-Party
+﻿# 3rd-Party
 /3rd-Party/**/Assets
 
 # Build
@@ -10,9 +10,9 @@
 .vscode/
 
 # Files
-*.log
-*.sln
-*.vcxproj
-*.vcxproj.filters
-*.vcxproj.user
+**.log
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
 
