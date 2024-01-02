@@ -3,7 +3,7 @@
 import std;
 import Vite.Core.Concepts;
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Property: Built-In Getter and Setter for <any> type

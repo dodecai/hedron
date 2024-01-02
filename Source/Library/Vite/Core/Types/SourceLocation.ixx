@@ -4,7 +4,7 @@ import std;
 import Vite.Core.Helpers;
 
 // Helpers
-namespace Vite {
+namespace Hedron {
 
 // Extracts the pretty class name from a function signature
 consteval std::string_view ExtractClassFromSignature(const std::string_view signature) {
@@ -19,7 +19,7 @@ consteval std::string_view ExtractClassFromSignature(const std::string_view sign
 
 }
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief SourceLocation (with more information)

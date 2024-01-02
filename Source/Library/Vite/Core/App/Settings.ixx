@@ -2,7 +2,7 @@
 
 import Vite.Core;
 
-export namespace Vite {
+export namespace Hedron {
 
 struct Settings {
     // Properties

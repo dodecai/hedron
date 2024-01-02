@@ -9,7 +9,7 @@ import <Vite/Core/Support.h>;
 /// @brief Application EntryPoint
 /// @note Can be used only once!
 ///
-extern Vite::Application* Vite::CreateApplication();
+extern Hedron::Application*Hedron::CreateApplication();
 
 // Application Logic
 int main(int argc, char** argv) {
@@ -20,23 +20,23 @@ int main(int argc, char** argv) {
 	#endif
 
 	// Initialization
-	Vite::Arguments arguments({ argv + 1, argv + argc });
-	auto app = Vite::CreateApplication();
+        Hedron::Arguments arguments({ argv + 1, argv + argc });
+	auto app = Hedron::CreateApplication();
     app->SetArguments(arguments);
 
 	// Run
 	#ifdef APP_MODE_DEBUG
-		//Vite::Debug::Profiler::Start();
+		//Hedron::Debug::Profiler::Start();
 	#endif
 	app->Run();
 	#if APP_MODE_DEBUG
-		//Vite::Debug::Profiler::Stop();
+		//Hedron::Debug::Profiler::Stop();
 	#endif
 
 	// Finalization
 	delete app;
 	#if APP_MODE_DEBUG
-		//Vite::Debug::Memory::DetectLeaks();
+		//Hedron::Debug::Memory::DetectLeaks();
 	#endif
 	return 0;
 }

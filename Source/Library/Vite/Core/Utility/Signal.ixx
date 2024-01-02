@@ -8,7 +8,7 @@ import Vite.Core.Delegate;
 
 import <entt/entt.hpp>;
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Sink class.

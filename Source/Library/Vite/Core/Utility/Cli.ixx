@@ -8,7 +8,7 @@ import Vite.Core.Standard;
 /// @note Tested with Windows Terminal
 /// @source https://en.wikipedia.org/wiki/ANSI_escape_code
 /// 
-export namespace Vite::Cli {
+export namespace Hedron::Cli {
 
 // Background Colors
 enum class Background {
@@ -90,9 +90,9 @@ enum class Style {
 // Concepts
 template <typename T>
 concept typename_climodifier =
-    std::is_same_v<std::decay_t<T>, Vite::Cli::Background> ||
-    std::is_same_v<std::decay_t<T>, Vite::Cli::Color> ||
-    std::is_same_v<std::decay_t<T>, Vite::Cli::Style>;
+    std::is_same_v<std::decay_t<T>, Hedron::Cli::Background> ||
+    std::is_same_v<std::decay_t<T>, Hedron::Cli::Color> ||
+    std::is_same_v<std::decay_t<T>, Hedron::Cli::Style>;
 
 // Overloads
 template <typename_climodifier T>
@@ -157,7 +157,7 @@ void Test() {
 // Global Overloads
 export namespace std {
 
-template <Vite::Cli::typename_climodifier T>
+template <Hedron::Cli::typename_climodifier T>
 struct formatter<T> {
     constexpr auto parse(format_parse_context &ctx) {
         return ctx.begin();

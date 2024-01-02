@@ -1,10 +1,10 @@
-﻿export module Vite.Core.Config;
+﻿export module Vite.Config;
 
 import Vite.Core.Standard;
-//import Vite.Logger;
+import Vite.Logger;
 
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Configuration
@@ -21,6 +21,11 @@ public:
     ~Config() = default;
 
     void Load(const string &file) {
+        mConfigFile = file;
+    }
+    template <typename T = string>
+    T GetSetting(const string &key, const string &value) const {
+        return T {};
     }
 
 private:

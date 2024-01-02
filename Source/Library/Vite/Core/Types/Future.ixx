@@ -2,7 +2,7 @@
 
 import std;
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Container for future objects, with some syntactic sugar.

@@ -6,7 +6,7 @@ import std;
 /// @brief The following definitions serve as replacement possibilities for standard smart pointers.
 /// 
 
-export namespace Vite {
+export namespace Hedron {
 
 // Reference Pointer
 template<typename T>

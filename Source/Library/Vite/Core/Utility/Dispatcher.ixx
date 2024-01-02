@@ -23,7 +23,7 @@ class dispatcher_handler final: public basic_dispatcher_handler {
     static_assert(std::is_same_v<Type, std::decay_t<Type>>, "Invalid type");
 
     using alloc_traits = std::allocator_traits<Allocator>;
-    using signal_type = Vite::Signal<void(Type &), Allocator>;
+    using signal_type = Hedron::Signal<void(Type &), Allocator>;
     using container_type = std::vector<Type, typename alloc_traits::template rebind_alloc<Type>>;
 
 public:
@@ -80,7 +80,7 @@ private:
 
 }
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Basic dispatcher implementation.

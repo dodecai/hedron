@@ -1,6 +1,8 @@
-﻿export module Vite.Core.Logger;
+﻿export module Vite.Logger;
 
 // Library
+import "Vite/Core/Support.h";
+
 import Vite.Core;
 import Vite.Core.Chrono;
 import Vite.Core.Cli;
@@ -12,7 +14,7 @@ import Vite.Core.String;
 /// basically an extension to cout with some gimmicks.
 /// @type Singleton
 ///
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// Common
@@ -47,17 +49,17 @@ concept typename_logmodifier =
 template <typename_logmodifier T>
 inline auto &operator<<(ostream &os, const T &level) {
     switch (level) {
-        case Vite::LogLevel::Trace:   { return os << " [ Trace ] "; }
-        case Vite::LogLevel::Debug:   { return os << " [ Debug ] "; }
-        case Vite::LogLevel::Info:    { return os << " [ Info  ] "; }
-        case Vite::LogLevel::Warn:    { return os << " [ Warn  ] "; }
-        case Vite::LogLevel::Error:   { return os << " [ Error ] "; }
-        case Vite::LogLevel::Fatal:   { return os << " [ Fatal ] "; }
+        case Hedron::LogLevel::Trace:   { return os << " [ Trace ] "; }
+        case Hedron::LogLevel::Debug:   { return os << " [ Debug ] "; }
+        case Hedron::LogLevel::Info:    { return os << " [ Info  ] "; }
+        case Hedron::LogLevel::Warn:    { return os << " [ Warn  ] "; }
+        case Hedron::LogLevel::Error:   { return os << " [ Error ] "; }
+        case Hedron::LogLevel::Fatal:   { return os << " [ Fatal ] "; }
 
-        case Vite::LogLevel::Caption: {
+        case Hedron::LogLevel::Caption: {
             return os << "\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n";
         }
-        case Vite::LogLevel::Delimiter: {
+        case Hedron::LogLevel::Delimiter: {
             return os << "----------------------------------------------------------------\n";
         }
 
@@ -68,17 +70,17 @@ inline auto &operator<<(ostream &os, const T &level) {
 template <typename_logmodifier T>
 inline auto &operator<<(wostream &os, const T &level) {
     switch (level) {
-        case Vite::LogLevel::Trace:   { return os << " [ Trace ] "; }
-        case Vite::LogLevel::Debug:   { return os << " [ Debug ] "; }
-        case Vite::LogLevel::Info:    { return os << " [ Info  ] "; }
-        case Vite::LogLevel::Warn:    { return os << " [ Warn  ] "; }
-        case Vite::LogLevel::Error:   { return os << " [ Error ] "; }
-        case Vite::LogLevel::Fatal:   { return os << " [ Fatal ] "; }
+        case Hedron::LogLevel::Trace:   { return os << " [ Trace ] "; }
+        case Hedron::LogLevel::Debug:   { return os << " [ Debug ] "; }
+        case Hedron::LogLevel::Info:    { return os << " [ Info  ] "; }
+        case Hedron::LogLevel::Warn:    { return os << " [ Warn  ] "; }
+        case Hedron::LogLevel::Error:   { return os << " [ Error ] "; }
+        case Hedron::LogLevel::Fatal:   { return os << " [ Fatal ] "; }
 
-        case Vite::LogLevel::Caption: {
+        case Hedron::LogLevel::Caption: {
             return os << "\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n";
         }
-        case Vite::LogLevel::Delimiter: {
+        case Hedron::LogLevel::Delimiter: {
             return os << "----------------------------------------------------------------\n";
         }
 
@@ -198,17 +200,17 @@ public:
 private: 
     Cli::Color GetLogLevelColor(LogLevel level) {
         switch (level) {
-            case LogLevel::Trace:        { return Vite::Cli::Color::LightMagenta; }
-            case LogLevel::Debug:        { return Vite::Cli::Color::LightGreen; }
-            case LogLevel::Info:         { return Vite::Cli::Color::LightGray; }
-            case LogLevel::Warn:         { return Vite::Cli::Color::LightYellow; }
-            case LogLevel::Error:        { return Vite::Cli::Color::LightRed; }
-            case LogLevel::Fatal:        { return Vite::Cli::Color::Red; }
+            case LogLevel::Trace:        { return Hedron::Cli::Color::LightMagenta; }
+            case LogLevel::Debug:        { return Hedron::Cli::Color::LightGreen; }
+            case LogLevel::Info:         { return Hedron::Cli::Color::LightGray; }
+            case LogLevel::Warn:         { return Hedron::Cli::Color::LightYellow; }
+            case LogLevel::Error:        { return Hedron::Cli::Color::LightRed; }
+            case LogLevel::Fatal:        { return Hedron::Cli::Color::Red; }
 
-            case LogLevel::Caption:      { return Vite::Cli::Color::LightBlue; }
-            case LogLevel::Delimiter:    { return Vite::Cli::Color::Yellow; }
+            case LogLevel::Caption:      { return Hedron::Cli::Color::LightBlue; }
+            case LogLevel::Delimiter:    { return Hedron::Cli::Color::Yellow; }
 
-            default:                     { return  Vite::Cli::Color::White; }
+            default:                     { return  Hedron::Cli::Color::White; }
         }
     }
 
@@ -383,7 +385,7 @@ public:
                 if (sink->GetType() == type) sink->operator()(record, formattedArgs);
             }
         } catch (std::exception ex) {
-            //this->operator()("Vite::Logger: {}", ex.what());
+            //this->operator()("Hedron::Logger: {}", ex.what());
         }
     }
 
@@ -398,7 +400,7 @@ public:
                 sink->operator()(record, formattedArgs);
             }
         } catch (std::exception ex) {
-            //this->operator()("Vite::Logger: {}", ex.what());
+            //this->operator()("Hedron::Logger: {}", ex.what());
         }
     }
 
@@ -581,25 +583,25 @@ template<typename ...Args> void LogFatal(const LogRecord &record, Args &&...args
 namespace std {
 
 template <>
-struct formatter<Vite::LogLevel> {
+struct formatter<Hedron::LogLevel> {
     constexpr auto parse(format_parse_context &context) {
         return context.begin();
     }
 
-    auto format(const Vite::LogLevel &level, format_context &context) const {
+    auto format(const Hedron::LogLevel &level, format_context &context) const {
         switch (level) {
-            case Vite::LogLevel::Trace:    { return format_to(context.out(), " [ Trace ] "); }
-            case Vite::LogLevel::Debug:    { return format_to(context.out(), " [ Debug ] "); }
-            case Vite::LogLevel::Info:     { return format_to(context.out(), " [ Info  ] "); }
-            case Vite::LogLevel::Warn:     { return format_to(context.out(), " [ Warn  ] "); }
-            case Vite::LogLevel::Error:    { return format_to(context.out(), " [ Error ] "); }
-            case Vite::LogLevel::Fatal:    { return format_to(context.out(), " [ Fatal ] "); }
+            case Hedron::LogLevel::Trace:    { return format_to(context.out(), " [ Trace ] "); }
+            case Hedron::LogLevel::Debug:    { return format_to(context.out(), " [ Debug ] "); }
+            case Hedron::LogLevel::Info:     { return format_to(context.out(), " [ Info  ] "); }
+            case Hedron::LogLevel::Warn:     { return format_to(context.out(), " [ Warn  ] "); }
+            case Hedron::LogLevel::Error:    { return format_to(context.out(), " [ Error ] "); }
+            case Hedron::LogLevel::Fatal:    { return format_to(context.out(), " [ Fatal ] "); }
 
-            case Vite::LogLevel::Caption: {
+            case Hedron::LogLevel::Caption: {
                 return format_to(context.out(),
                     "\n▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬\n");
             }
-            case Vite::LogLevel::Delimiter: {
+            case Hedron::LogLevel::Delimiter: {
                 return format_to(context.out(),
                     "----------------------------------------------------------------\n"
                 );

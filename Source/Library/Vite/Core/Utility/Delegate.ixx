@@ -33,7 +33,7 @@ template<typename... Class, typename Ret, typename... Args>
 
 }
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Basic delegate implementation.

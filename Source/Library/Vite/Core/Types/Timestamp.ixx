@@ -1,6 +1,6 @@
 ﻿export module Vite.Core.Timestamp;
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Timestamp: Holds the delta time in milliseconds for floating-point types.

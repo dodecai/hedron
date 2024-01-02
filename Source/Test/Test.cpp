@@ -1,20 +1,30 @@
 ﻿import <Settings.h>;
 import <Vite/EntryPoint.h>;
 
-namespace Vite {
+import Vite;
 
+// Switches
+//#define CORE_TESTS
+//#define ENGINE_TESTS
+//#define RESEARCH_TESTS
+
+namespace Hedron {
+
+// Application
 class Test: public Application {
 public:
-    Test() {}
-    ~Test() {}
+    // Default
+    Test() = default;
+    ~Test() = default;
 
+    // Methods
     void Create() override {
     }
 
-	void Destroy() override {}
+	void Destroy() override {
+    }
 
 	void Update() override {
-        
 	}
 };
 

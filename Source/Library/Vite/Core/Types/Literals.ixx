@@ -1,4 +1,4 @@
-export module Vite.Core.Literals;
+﻿export module Vite.Core.Literals;
 
 import std;
 
@@ -6,7 +6,7 @@ import std;
 /// @brief Literals
 ///
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Hashes a string literal.

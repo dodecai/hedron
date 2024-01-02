@@ -5,7 +5,7 @@ export module Vite.Core.Chrono;
 import Vite.Core.Standard;
 import Vite.Core.Object;
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Chrono: Delivers current date/time/runtime/timestamp in ISO 8601 format.

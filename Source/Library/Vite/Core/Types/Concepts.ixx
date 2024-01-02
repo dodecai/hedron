@@ -1,4 +1,4 @@
-export module Vite.Core.Concepts;
+﻿export module Vite.Core.Concepts;
 
 import std;
 
@@ -6,7 +6,7 @@ import std;
 /// @brief Concepts
 ///
 
-export namespace Vite {
+export namespace Hedron {
 
 ///
 /// @brief Concepts for Arithmetic Types
