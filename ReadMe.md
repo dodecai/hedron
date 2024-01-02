@@ -12,7 +12,7 @@
 [![C-Badge]][C-Url]
 [![License-Url][License-Badge]][License-Url]
 
-[![MSBuild](https://github.com/dodecai/hedron/actions/workflows/msbuild.yml/badge.svg)](https://github.com/larioteo/ultra/actions/workflows/msbuild.yml)
+[![MSBuild](https://github.com/dodecai/hedron/actions/workflows/msbuild.yml/badge.svg)](https://github.com/dodecai/hedron/actions/workflows/msbuild.yml)
 
 > **Attention:** Currently under construction, heavy development, and in an early stage.
 This project was restarted from scratch. Switch to the 'ultra'-project to get the most out of it.
