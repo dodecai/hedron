@@ -1,4 +1,4 @@
-﻿export module Vite.Core.States;
+﻿export module Vite.App.States;
 
 import Vite.Core;
 

@@ -1,0 +1,454 @@
+<mxfile host="Electron" modified="2024-01-03T00:57:12.820Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.16 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="ntrllhZyKcsxtgzol9L8" version="22.1.16" type="device">
+  <diagram name="Page-1" id="Ch2R5TFC7xsnGBo0b88v">
+    <mxGraphModel dx="2004" dy="3360" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-105" value="Human Interface Devices (HID)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="320" width="240" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-98" value="Collision &amp;amp; Physics" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="320" width="420" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-97" value="Profiling &amp;amp; Debugging" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="840" y="320" width="260" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-11" value="Hardware Abstraction Layer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="2120" width="1760" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-15" value="Platform Independence Layer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1640" width="1760" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-17" value="Platform Detection" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1720" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-18" value="Atomic Data Types" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1720" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-19" value="Collections and Iterators" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="530" y="1720" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-20" value="File System" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="710" y="1720" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-21" value="Network Transport Layer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1720" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-22" value="Hi-Res Timer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="1720" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-23" value="Threading Library" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="1720" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-24" value="Graphics Wrappers" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="1720" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-25" value="Physics/Collision Wrapper" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="1720" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-26" value="Core Systems" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1280" width="1760" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-27" value="Parser (CSV, XML, etc.)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-28" value="Profiling / Stats Gathering" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-29" value="Engine Config (INI files, etc.)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="530" y="1480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-30" value="Random Number Generator" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="710" y="1480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-31" value="Curves &amp;amp; Surfaces Library" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-32" value="RTTI / Reflection and Serialization" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="1480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-33" value="Object Handles / Unique Ids" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="1480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-34" value="Asyncrhonous File I/O" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="1480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-35" value="Memory Card I/O (Older Consoles)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="1480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-36" value="Module Start-Up and Shut-Down" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-37" value="Assertions" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-38" value="Unit Testing" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="530" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-39" value="Memory Allocation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="710" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-40" value="Math Library" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-41" value="Strings and Hashed String Ids" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-42" value="Debug Printing and Logging" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-43" value="Localization Services" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-44" value="Movie Player" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="1360" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-45" value="Resources (Game Assets)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="800" width="1760" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-46" value="Resource Manager" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1000" width="1600" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-55" value="3D Model Resource" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="170" y="880" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-56" value="Texture Resource" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="350" y="880" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-57" value="Material Resource" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="530" y="880" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-58" value="Font Resource" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="710" y="880" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-59" value="Skeleton Resource" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="880" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-60" value="Collision Resource" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="880" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-61" value="Physics Parameters" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="880" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-62" value="Game World/Map" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="880" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-63" value="etc." style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="880" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-64" value="3rd Party SDKs" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="1880" width="1760" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-65" value="DirectX, OpenGL, libgcm, Edge" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="170" y="1960" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-66" value="Havok, PhysX, ODE" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="350" y="1960" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-67" value="Boost++" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="530" y="1960" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-68" value="STL / STLPort" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="710" y="1960" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-69" value="Kynapse" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="1960" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-70" value="Granny, Havok, Animation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="1960" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-71" value="Euphoria" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1250" y="1960" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-72" value="OpenAL" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="1960" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-73" value="etc." style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1610" y="1960" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-74" value="Hardware" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="710" y="2200" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-75" value="Drivers" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="2200" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-76" value="OS" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1070" y="2200" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-78" value="Low-Level Renderer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="90" y="320" width="710" height="440" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-79" value="Primitive Submission" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="170" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-80" value="Viewports &amp;amp; Virtual Screens" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="350" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-81" value="Texture and Surface Mgmt." style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="530" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-82" value="Debug Drawing (Lines, etc)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="710" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-83" value="Memory &amp;amp; Performance Stats" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-84" value="Rigit Bodies" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-85" value="Phantoms" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-86" value="Physical Device I/O" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="640" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-88" value="Materials &amp;amp; Shaders" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="170" y="400" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-89" value="Static &amp;amp; Dynamic Lighting" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="350" y="400" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-90" value="Cameras" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="530" y="400" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-91" value="Text &amp;amp; Fonts" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="710" y="400" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-92" value="Recording &amp;amp; Playback" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="400" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-93" value="Forces &amp;amp; Constraints" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="400" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-94" value="Ray/Shape Casting (Queries)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="400" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-95" value="Game-Specific Interface" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="520" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-99" value="Graphics Device Interface" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="160" y="640" width="590" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-100" value="In-Game Menus or Console" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="640" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-103" value="Shapes" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="640" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-104" value="Physics/Collision World" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="640" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-118" value="Scene Graph / Culling Optimizations" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="560" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-119" value="Spatial Hash (BSP Tree, kd-Tree, ...)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="150" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-120" value="Occlusion &amp;amp; PVS" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="150" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-121" value="LOD System" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="460" y="150" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-122" value="Visual Effects" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="-400" width="560" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-123" value="Particle &amp;amp; Decal Systems" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="-200" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-124" value="Post Effects" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="-200" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-125" value="Environment Mapping" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="460" y="-200" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-132" value="Light Mapping &amp;amp; Dynamic Shadows" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="-320" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-133" value="HDR Lighting" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="-320" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-134" value="PRT Lighting, Subsurf, Scatter" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="460" y="-320" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-149" value="Sceletal Animation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="680" y="-320" width="600" height="600" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-150" value="LERP and Additive Blending" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="-130" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-151" value="Animation Playback" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="900" y="-130" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-152" value="Sub-skeletal Animation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="-130" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-153" value="Animation State Tree &amp;amp; Layers" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="720" y="-250" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-154" value="Inverse Kinematics (IK)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="900" y="-250" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-155" value="Game-Specific Post-Processing" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="-250" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-156" value="Animation Decompression" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="900" y="80" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-157" value="Skeleton Mesh Rendering" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="660" y="250" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-159" value="Ragdoll Physics" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;rotation=0;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="250" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-160" value="Audio" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="-315" width="240" height="595" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-161" value="3D Audio Model" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="-130" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-162" value="DSP/Effects" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="-250" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-163" value="Audio Playback / Management" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1640" y="80" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-164" value="Online Multiplayer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="-315" width="240" height="595" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-165" value="Object Authority Policy" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="-130" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-166" value="Match-Making &amp;amp; Game Mgmt." style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="-250" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-167" value="Game State Replication" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="80" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-184" value="Front End" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="80" y="-760" width="560" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-185" value="In-Game GUI" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="-560" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-186" value="In-Game Menus" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="-560" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-187" value="Wrappers / Attract Mode" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="460" y="-560" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-188" value="Heads-Up Display (HUD)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="100" y="-680" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-189" value="Full-Motion Video (FMV)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="280" y="-680" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-191" value="Gameplay Foundations" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="695" y="-770" width="1145" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-195" value="High-Level Game Flow System / FSM" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="755" y="-720" width="1035" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-190" value="In-Game Cinematics (IGC)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="460" y="-680" width="250" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-169" value="Hierarchical Object Attachment" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="-380" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-199" value="Scripting System" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="755" y="-600" width="1035" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-200" value="Static World Elements" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="755" y="-480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-201" value="Dynamic Game Object Model" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="960" y="-480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-202" value="Event/Messaging System" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="-480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-203" value="Wolrd Loading / Streaming" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1620" y="-480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-204" value="Real-Time Agent-Based Simulation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="-480" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-205" value="GAME-SPECIFIC SUBSYSTEMS" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="85" y="-1160" width="1755" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-213" value="Game-Specific Rendering" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="110" y="-1080" width="370" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-214" value="Terrain Rendering" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="130" y="-940" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-215" value="Water Simulation &amp;amp; Rendering" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="300" y="-940" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-218" value="etc." style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="220" y="-1030" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-219" value="Player Mechanics" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="500" y="-1080" width="370" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-220" value="Collision Manifold" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="-940" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-221" value="Movement" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="690" y="-940" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-222" value="State Machine &amp;amp; Animation" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="520" y="-1030" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-234" value="Game Cameras" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="890" y="-1080" width="370" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-235" value="Player-Follow Camera" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="910" y="-940" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-236" value="Debug Fly-Through Camera" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="-940" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-237" value="Fixed Cameras" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="910" y="-1030" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-238" value="Scripted / Animated Cameras" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1080" y="-1030" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-239" value="AI" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;verticalAlign=top;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="-1080" width="370" height="250" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-240" value="Sight Traces &amp;amp; Perception" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="-940" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-241" value="Path Finding (A*)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="-940" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-242" value="Goals &amp;amp; Decision-Making" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="-1030" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-243" value="Actions (Engine Interface)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="-1030" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-223" value="Camera-Relative Controls (HID)" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="690" y="-1030" width="210" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-244" value="Weapons" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1660" y="-1120" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-246" value="Power-Ups" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1660" y="-1060" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-247" value="Vehicles" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1660" y="-1000" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-248" value="Puzzles" style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1660" y="-940" width="160" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrUrNDY8Ed_602AfriBM-249" value="etc." style="rounded=1;whiteSpace=wrap;html=1;fontSize=21;glass=0;spacingTop=0;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1660" y="-880" width="160" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

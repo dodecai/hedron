@@ -1,14 +1,13 @@
-﻿export module Vite.Core.Profiler;
+﻿export module Vite.Debug.Profiler;
 
 import Vite.Core;
 import Vite.Logger;
-
 
 ///
 /// @brief: Profiles code and generates tracing data for chrome based browsers (URL: chrome://tracing/)
 ///
 
-namespace Hedron::Debug {
+namespace Hedron::Debug::Profiler {
 
 // Types
 using SteadyClock = std::chrono::steady_clock;
@@ -96,7 +95,7 @@ private:
     }
 
     void WriteHeader() {
-        auto application = "Ultra";
+        auto application = "Hedron";
         auto version = "v1.0.0";
         mStream << "{\n"
             << R"(  "displayTimeUnit": "ms",)"  << "\n"
@@ -158,18 +157,19 @@ private:
 
 }
 
-export namespace Hedron::Debug {
+export namespace Hedron::Debug::Profiler {
 
-void StartProfiling(const string &name, const string &file = "ProfilerResults.json") {
+inline void Start(const string &name, const string &file = "ProfilerResults.json") {
     Instrumentor::Instance().BeginSession(name, file);
 }
 
-ScopedTimer ProfileScope(const char *name, const function<void(const string &, double duration)> &function = nullptr, [[maybe_unused]] const SourceLocation &location = SourceLocation::Current()) {
+inline ScopedTimer ProfileScope(const char *name, const function<void(const string &, double duration)> &function = nullptr, [[maybe_unused]] const SourceLocation &location = SourceLocation::Current()) {
     return ScopedTimer(name, function);
 }
 
-void StopProfiling() {
+void Stop() {
     Instrumentor::Instance().EndSession();
 }
 
 }
+

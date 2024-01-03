@@ -1,4 +1,4 @@
-﻿export module Vite.Core.Settings;
+﻿export module Vite.App.Settings;
 
 import Vite.Core;
 import Vite.Logger;

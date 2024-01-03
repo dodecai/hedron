@@ -1,9 +1,12 @@
 ﻿#pragma once
 
 // Library
-import Vite.Core;
-import Vite.Core.Application;
-import <Vite/Core/Support.h>;
+import <Vite/Base/Platform/Support.h>;
+
+import Vite.App.Application;
+import Vite.Base;
+import Vite.Debug.Profiler;
+import Vite.Memory;
 
 ///
 /// @brief Application EntryPoint
@@ -20,23 +23,23 @@ int main(int argc, char** argv) {
 	#endif
 
 	// Initialization
-        Hedron::Arguments arguments({ argv + 1, argv + argc });
+    Hedron::Arguments arguments({ argv + 1, argv + argc });
 	auto app = Hedron::CreateApplication();
     app->SetArguments(arguments);
 
 	// Run
 	#ifdef APP_MODE_DEBUG
-		//Hedron::Debug::Profiler::Start();
+		Hedron::Debug::Profiler::Start("App");
 	#endif
 	app->Run();
 	#if APP_MODE_DEBUG
-		//Hedron::Debug::Profiler::Stop();
+		Hedron::Debug::Profiler::Stop();
 	#endif
 
 	// Finalization
 	delete app;
 	#if APP_MODE_DEBUG
-		//Hedron::Debug::Memory::DetectLeaks();
+		Hedron::Debug::Memory::DetectLeaks();
 	#endif
 	return 0;
 }

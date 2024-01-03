@@ -1,4 +1,4 @@
-﻿export module Vite.Core.Arguments;
+﻿export module Vite.App.Arguments;
 
 import std;
 
