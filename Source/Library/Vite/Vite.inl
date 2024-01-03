@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-import "Vite/Core/Support.h";
+import "Vite/Base/Platform/Support.h";
 
 ///
 /// Library Properties

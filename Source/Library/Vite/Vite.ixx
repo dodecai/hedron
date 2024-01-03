@@ -30,8 +30,8 @@ export import Vite.Logger;
 
 // Debug Extensions
 #ifdef LIB_EXTENSION_DEBUG
-    //export import Ultra.Debug.Memory;
-    //export import Ultra.Debug.Profiler;
+    //export import Vite.Core.Memory;
+    //export import Vite.Core.Profiler;
 #endif
 
 // Engine Extensions

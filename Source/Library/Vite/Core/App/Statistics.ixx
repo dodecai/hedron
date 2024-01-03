@@ -1,4 +1,4 @@
-﻿export module Vite.Core.Statistics;
+﻿export module Vite.App.Statistics;
 
 import Vite.Core;
 
