@@ -3,8 +3,8 @@
 // Configuration
 import "Vite/Vite.inl";
 
-// Properties
-export import Vite.Core;
+// Base Extensions
+export import Vite.Base;
 
 // Prime Extensions
 export import Vite.Config;
@@ -12,42 +12,47 @@ export import Vite.Logger;
 
 // Core Extensions
 #ifdef LIB_EXTENSION_CORE
-    // Application
-    //export import Vite.Core.Layers;
-
-    // Utilities
-    //export import Vite.Core.Chrono;
-    //export import Vite.Core.Delegate;
-    //export import Vite.Core.Dispatcher;
-    //export import Vite.Core.Emitter;
-    //export import Vite.Core.Future;
-    //export import Vite.Core.Random;
-    //export import Vite.Core.Signal;
-    //export import Vite.Core.String;
-    //export import Vite.Core.ThreadPool;
-    //export import Vite.Core.Timer;
-#endif
-
-// Debug Extensions
-#ifdef LIB_EXTENSION_DEBUG
-    //export import Vite.Core.Memory;
-    //export import Vite.Core.Profiler;
+    // Debug
+    //export import Vite.Debug.Profiler;
+    
+    // Events
+    //export import Vite.Event;
+    
+    // Network
+    //export import Vite.Network;
+        
+    // Serializer / Deserializer
+    //export import Vite.Serializer;
+    
+    // Utils
+    //export import Vite.Util.Chrono;
+    //export import Vite.Util.Random;
+    //export import Vite.Util.String;
+    //export import Vite.Util.ThreadPool;
+    //export import Vite.Util.Timer;
 #endif
 
 // Engine Extensions
-#ifdef LIB_EXTENSION_ENGINE
+#ifdef LIB_EXTENSION_SYSTEMS
+    //export import Vite.Animation;
+    //export import Vite.Asset
+    //export import Vite.Media;
+    //export import Vite.Networking;
+    //export import Vite.Physics;
+    //export import Vite.Renderer;
+    //export import Vite.Scene;
+    //export import Vite.Scripting;
+    //export import Vite.UI;
 #endif
 
 // System Extensions
-#ifdef LIB_EXTENSION_SYSTEM
+#ifdef LIB_EXTENSION_TOOLS
+    //export import Vite.Build;
 #endif
 
-// UI Extensions
-#ifdef LIB_EXTENSION_UI
-#endif
-export namespace Hedron {
+export namespace Hedron::Debug {
 
-void ShowLibraryInfo() {
+void DisplayLibraryVersion() {
     logger << "Library Information\n"
         << " - Caption:     " << LibCaption     << "\n"
         << " - Description: " << LibDescription << "\n"
@@ -56,10 +61,8 @@ void ShowLibraryInfo() {
 
     logger << "Library Features\n" << std::boolalpha
         << " - Core:    " << Features::LibCoreExtensions    << "\n"
-        << " - Debug:   " << Features::LibDebugExtensions   << "\n"
-        << " - Engine:  " << Features::LibEngineExtensions  << "\n"
-        << " - System:  " << Features::LibSystemExtensions  << "\n"
-        << " - UI:      " << Features::LibUiExtensions      << "\n"
+        << " - Systems: " << Features::LibSystemsExtensions << "\n"
+        << " - Tools:   " << Features::LibToolsExtensions   << "\n"
         << std::noboolalpha;
 
     logger << "\n";

@@ -3,10 +3,21 @@
 // Library
 import <Vite/Base/Platform/Support.h>;
 
-import Vite.App.Application;
 import Vite.Base;
-import Vite.Debug.Profiler;
-import Vite.Memory;
+import Vite.App.Application;
+#ifdef APP_MODE_DEBUG
+    import Vite.Debug.Profiler;
+    import Vite.Memory;
+#endif
+
+///
+/// @brief Application ExitPoint
+///
+void HedronExit() {
+    #if APP_MODE_DEBUG
+        Hedron::Memory::Debug::DetectLeaks();
+    #endif
+}
 
 ///
 /// @brief Application EntryPoint
@@ -17,6 +28,7 @@ extern Hedron::Application*Hedron::CreateApplication();
 // Application Logic
 int main(int argc, char** argv) {
 	// Preparation
+    std::atexit(HedronExit);
 	#ifdef APP_PLATFORM_WINDOWS
 		// Switch to UTF-8 codepage
 		std::system("chcp 65001 >nul");
@@ -38,8 +50,5 @@ int main(int argc, char** argv) {
 
 	// Finalization
 	delete app;
-	#if APP_MODE_DEBUG
-		Hedron::Debug::Memory::DetectLeaks();
-	#endif
 	return 0;
 }

@@ -57,7 +57,7 @@
         --"yaml-cpp",
 
         --"%{Library.ShaderC}",
-	    --"%{Library.Vulkan}",
+	--"%{Library.Vulkan}",
 
         --"LibPHX",
     }

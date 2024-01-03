@@ -7,12 +7,11 @@ import "Vite/Base/Platform/Support.h";
 ///
 
 // Switches to enable or disable Features
-//#define LIB_EXTENSION_PRIME   // Prime Extensions like Types (cannot be disabled)
+//#define LIB_EXTENSION_BASE    // Base Extensions like Types (cannot be disabled)
+//#define LIB_EXTENSION_PRIME   // Prime Extensions like Config or Logger (cannot be disabled)
 #define LIB_EXTENSION_CORE      // Application Configuration, Layout, Workflow and Utility Extensions
-#define LIB_EXTENSION_DEBUG     // Debugging and Profiling Extension
-#define LIB_EXTENSION_ENGINE    // Graphics API selection and Context Binding Extensions (implies ui extensions)
-#define LIB_EXTENSION_SYSTEM    // System Extensions like color output in cli, event system, file system, input system, library loading
-#define LIB_EXTENSION_UI        // UI extensions like window creation and event system
+#define LIB_EXTENSION_SYSTEMS   // Graphics API selection and Context Binding Extensions (implies ui extensions)
+#define LIB_EXTENSION_TOOLS     // System Extensions like color output in cli, event system, file system, input system, library loading
 
 export namespace Hedron {
 
@@ -33,25 +32,15 @@ namespace Features {
 #else
     inline constexpr bool LibCoreExtensions = false;
 #endif
-#ifdef LIB_EXTENSION_DEBUG
-    inline constexpr bool LibDebugExtensions = true;
+#ifdef LIB_EXTENSION_SYSTEMS
+    inline constexpr bool LibSystemsExtensions = true;
 #else
-    inline constexpr bool LibDebugExtensions = false;
+    inline constexpr bool LibSystemsExtensions = false;
 #endif
-#ifdef LIB_EXTENSION_ENGINE
-    inline constexpr bool LibEngineExtensions = true;
+#ifdef LIB_EXTENSION_TOOLS
+    inline constexpr bool LibToolsExtensions = true;
 #else
-    inline constexpr bool LibEngineExtensions = false;
-#endif
-#ifdef LIB_EXTENSION_SYSTEM
-    inline constexpr bool LibSystemExtensions = true;
-#else
-    inline constexpr bool LibSystemExtensions = false;
-#endif
-#ifdef LIB_EXTENSION_UI
-    inline constexpr bool LibUiExtensions = true;
-#else
-    inline constexpr bool LibUiExtensions = false;
+    inline constexpr bool LibToolsExtensions = false;
 #endif
 
 }

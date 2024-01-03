@@ -2,9 +2,9 @@
 /// @brief Signal/Slot System
 /// Base: https://github.com/skypjack/entt/blob/master/src/entt/signal/sigh.hpp
 ///
-export module Vite.Core.Signal;
+export module Vite.Event.Signal;
 
-import Vite.Core.Delegate;
+import Vite.Event.Delegate;
 
 import <entt/entt.hpp>;
 

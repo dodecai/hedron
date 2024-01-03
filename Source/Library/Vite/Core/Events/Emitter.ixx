@@ -2,7 +2,7 @@
 /// @brief Event Emitter
 /// Base: https://github.com/skypjack/entt/blob/master/src/entt/signal/emitter.hpp
 ///
-export module Vite.Core.Emitter;
+export module Vite.Event.Emitter;
 
 import <entt/entt.hpp>;
 

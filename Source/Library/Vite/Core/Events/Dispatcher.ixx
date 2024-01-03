@@ -2,9 +2,9 @@
 /// @brief Event Dispatcher
 /// Base: https://github.com/skypjack/entt/blob/master/src/entt/signal/dispatcher.hpp
 ///
-export module Vite.Core.Dispatcher;
+export module Vite.Event.Dispatcher;
 
-import Vite.Core.Signal;
+import Vite.Event.Signal;
 
 import <entt/entt.hpp>;
 

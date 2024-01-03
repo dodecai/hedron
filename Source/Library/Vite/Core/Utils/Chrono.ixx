@@ -11,6 +11,9 @@ export namespace Hedron {
 /// Simply use 'appchrono' under the Vite Namespace to retrieve the desired information.
 /// 
 class Chrono: public SteadyObject {
+    // Friends
+    friend class Application;
+
 private:
     // Types
     using SystemClock = std::chrono::system_clock;
@@ -21,11 +24,16 @@ private:
     Chrono(): mStartTime(SystemClock::now()) {}
     ~Chrono() = default;
 
+    // Destroy the global instance
+    static void Destroy() {
+        delete &Instance();
+    }
+
 public:
     // Returns an instance to the global static object
     static Chrono &Instance() {
-        static Chrono instance;
-        return instance;
+        static Chrono *instance = new Chrono();
+        return *instance;
     }
 
     // Accessors
