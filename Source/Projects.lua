@@ -32,14 +32,14 @@
     ["Data"] = {
         "Data/*",
     },
-    ["Manual"] = {
+    ["Guide"] = {
         ["3rd-Party"] = {
             "3rd-Party/*.md",
         },
         ["Concept"] = {
-            "Manual/Concept/*",
+            "Guide/Concept/*",
         },
-        "Manual/*",
+        "Guide/*",
     },
     ["Scripts"] = {
         "Scripts/*",

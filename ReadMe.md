@@ -49,8 +49,19 @@ Everything revolving around the application and its renderer.
 ### On the Horizon
 Expect a slew of surprises until my satisfaction knows no bounds!
 
-# Documentation
-[Manual](Manual/Index.md "Manual")
+
+# Collaboration
+> Got interessted?
+
+First up, give our [contribution rules](Contributing.md "contribution rules") a quick look. If they don't freak you out, dive into our [guide](Guide/Index.md "guide") to get the lowdown on how we roll.
+After that you can contact one of our administrators to get access to the repository.
+
+Here's the scoop on what we're craving right now:
+- Code Wizards: Got skills in teaking and enchanting our core system? We need you!
+- Wordsmiths: If you can turn tech talk into easy reading, help us buff up our docs and guides.
+- Bug Busters: Love squashing pesky buts? We've got a few for you to crush.
+
+Feeling ready? Hit up one of our admins to get your hands on the repo. Can't wait to see what you bring to the table!
 
 # Legalities
 
