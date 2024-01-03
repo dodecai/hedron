@@ -1,4 +1,29 @@
-﻿```md
+﻿# Concept
+This is the main concept of the project, which delivers a good overview about the inner workings.
+
+### Architecture
+<img src="https://github.com/dodecai/hedron/blob/main/Manual/Concept/Architecture.png" alt="Architecture"/>
+
+### Dependency Diagram
+```mermaid
+classDiagram
+    App <|-- Application
+
+    Application --> Config
+    Application --> Context
+    Application --> Emmiter
+    Application --> Renderer
+    Application --> Window
+
+    Context  --> Renderer
+```
+
+### Structure
+```md
+3rd-Party/
+├─ EnTT/
+└─ ...
+
 Vite/ [Library]
 ├─ Base/
 │  ├─ Algebra/
@@ -11,10 +36,6 @@ Vite/ [Library]
 │  │  ├─ GFXContext
 │  │  ├─ Input
 │  │  └─ SFXContext
-│  ├─ ECS/
-│  │  ├─ Component
-│  │  ├─ Entity
-│  │  └─ System
 │  ├─ Helpers/
 │  │  └─ Helpers
 │  ├─ Memory/
@@ -22,25 +43,28 @@ Vite/ [Library]
 │  ├─ Platform/
 │  │  ├─ Detection
 │  │  └─ Support
-│  ├─ RTTI/
+│  ├─ Runtime/
 │  │  └─ RTTI
-│  ├─ Serializer/
-│  │  └─ Serializer
 │  ├─ System/
 │  │  ├─ Cli
 │  │  ├─ FileSystem
 │  │  └─ Module
-│  └─ Types/
-│     ├─ Concepts
-│     ├─ Future
-│     ├─ Literals
-│     ├─ Object
-│     ├─ Property
-│     ├─ SmartPointer
-│     ├─ Standard
-│     ├─ SourceLocation
-│     ├─ Timestamp
-│     └─ UUID
+│  ├─ Types/
+│  │  ├─ Component
+│  │  ├─ Concepts
+│  │  ├─ Entity
+│  │  ├─ Future
+│  │  ├─ Literals
+│  │  ├─ Object
+│  │  ├─ Property
+│  │  ├─ SmartPointer
+│  │  ├─ Standard
+│  │  ├─ SourceLocation
+│  │  ├─ System
+│  │  ├─ Timestamp
+│  │  └─ UUID
+│  └─ Wrappers/
+│     └─ 3rd-Party
 ├─ Core/
 │  ├─ App/
 │  │  ├─ Application
@@ -61,6 +85,10 @@ Vite/ [Library]
 │  │  └─ Signal
 │  ├─ Logger/
 │  │  └─ Logger
+│  ├─ Network/
+│  │  └─ Network
+│  ├─ Serializer/
+│  │  └─ Serializer
 │  └─ Utils/
 │     ├─ Chrono
 │     ├─ Random
@@ -70,15 +98,15 @@ Vite/ [Library]
 ├─ Platform/
 │  ├─ DirectX/
 │  │  ├─ DXContext
-│  │  ├─ DXRenderDevice
+│  │  ├─ DXRenderer
 │  │  └─ ...
 │  ├─ OpenGL/
 │  │  ├─ GLContext
-│  │  ├─ GLRenderDevice
+│  │  ├─ GLRenderer
 │  │  └─ ...
 │  ├─ Vulkan/
 │  │  ├─ VKContext
-│  │  ├─ VKRenderDevice
+│  │  ├─ VKRenderer
 │  │  └─ ...
 │  └─ WinAPI/
 │     ├─ WinDialog
@@ -89,7 +117,7 @@ Vite/ [Library]
 ├─ Systems/
 │  ├─ Animation/
 │  │  └─ Animation
-│  ├─ Assets/
+│  ├─ Asset/
 │  │  ├─ Asset
 │  │  ├─ AssetManager
 │  │  ├─ Font
@@ -103,10 +131,14 @@ Vite/ [Library]
 │  │  ├─ Audio
 │  │  ├─ Media
 │  │  └─ Video
+│  ├─ Networking/
+│  │  └─ Networking
 │  ├─ Physics/
 │  │  └─ Physics
 │  ├─ Renderer/
 │  │  ├─ Camera/
+│  │  │  ├─ Camera
+│  │  │  └─ DesignerCamera
 │  │  ├─ Buffer
 │  │  ├─ CommandBuffer
 │  │  ├─ FontRenderer
@@ -121,7 +153,7 @@ Vite/ [Library]
 │  │  ├─ SpriteRenderer
 │  │  ├─ SwapChain
 │  │  ├─ Texture
-│     ├─ UIRenderer
+│  │  ├─ UIRenderer
 │  │  └─ Viewport
 │  ├─ Scene/
 │  │  ├─ Scene
@@ -137,6 +169,8 @@ Vite/ [Library]
 │     ├─ ImGuiBuilder
 │     ├─ ImGuiLayer
 │     └─ Window
+├─ Tools/
+│  └─ Build
 └─ Vite
 
 Vivid/ [Editor]
