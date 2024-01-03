@@ -2,7 +2,7 @@
 This is the main concept of the project, which delivers a good overview about the inner workings.
 
 ### Architecture
-<img src="https://github.com/dodecai/hedron/blob/main/Manual/Concept/Architecture.png" alt="Architecture"/>
+<img src="https://github.com/dodecai/hedron/blob/main/Guide/Concept/Architecture.png" alt="Architecture"/>
 
 ### Dependency Diagram
 ```mermaid
