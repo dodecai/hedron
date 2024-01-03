@@ -36,6 +36,9 @@
         ["3rd-Party"] = {
             "3rd-Party/*.md",
         },
+        ["Concept"] = {
+            "Manual/Concept/*",
+        },
         "Manual/*",
     },
     ["Scripts"] = {
