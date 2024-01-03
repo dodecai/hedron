@@ -9,6 +9,9 @@ import Vite.Logger;
 
 namespace Hedron::Debug::Profiler {
 
+// Forward declarations
+void Stop();
+
 // Types
 using SteadyClock = std::chrono::steady_clock;
 using Duration = std::chrono::microseconds;
@@ -20,7 +23,7 @@ struct ProfilerResult {
     std::thread::id ThreadID {};
     double StartTime {};
     double DeltaTime {};
-} static sProfilerResults {};
+};
 
 using ProfileResults = std::vector<ProfilerResult>;
 
@@ -35,14 +38,22 @@ struct ProfilerSession {
 /// ProfileScope("Application");
 ///
 class Instrumentor {
+    // Friends
+    friend void Hedron::Debug::Profiler::Stop();
+
 private:
     Instrumentor() = default;
     ~Instrumentor() = default;
 
+    // Destroy the global instance
+    static void Destroy() {
+        delete &Instance();
+    }
+
 public:
     static Instrumentor &Instance() {
-        static Instrumentor instance;
-        return instance;
+        static Instrumentor *instance = new Instrumentor();
+        return *instance;
     }
 
     void BeginSession(const std::string &name, const std::string &file = "results.json") {
@@ -169,6 +180,7 @@ inline ScopedTimer ProfileScope(const char *name, const function<void(const stri
 
 void Stop() {
     Instrumentor::Instance().EndSession();
+    Instrumentor::Destroy();
 }
 
 }

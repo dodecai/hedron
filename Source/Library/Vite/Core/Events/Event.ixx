@@ -1,3 +1,3 @@
-﻿export module Vite.Core.Event;
+﻿export module Vite.Event;
 
 export namespace Hedron {}

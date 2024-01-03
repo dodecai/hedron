@@ -2,7 +2,7 @@
 /// @brief Delegate
 /// Base: https://github.com/skypjack/entt/blob/master/src/entt/signal/delegate.hpp
 ///
-export module Vite.Core.Delegate;
+export module Vite.Event.Delegate;
 
 import <entt/entt.hpp>;
 

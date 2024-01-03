@@ -34,8 +34,10 @@ public:
         //LogCaption("Initialization");
 	}
 	virtual ~Application() {
+        //Log("{} finished ...\n  on: '{}'\n  at: '{}'\n", mSettings.Title, appchrono.GetDate(), appchrono.GetTime());
+        Chrono::Destroy();
+        Logger::Destroy();
 		pInstance = nullptr;
-		//Log("{} finished ...\n  on: '{}'\n  at: '{}'\n", mSettings.Title, appchrono.GetDate(), appchrono.GetTime());
 	}
 
 	// Accessors

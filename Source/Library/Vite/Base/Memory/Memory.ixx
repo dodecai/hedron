@@ -6,7 +6,6 @@
 export module Vite.Memory;
 
 import std.compat;
-import Vite.Logger;
 
 ///
 /// @brief Properties
@@ -51,10 +50,12 @@ export void operator delete[](void *memory, size_t size) noexcept {
 /// @brief Functions
 ///
 
-export namespace Hedron::Debug::Memory {
+export namespace Hedron::Memory::Debug {
+
+constexpr auto caption = "Hedron::Memory::Debug";
 
 inline void VerifyUsage() {
-    Hedron::Log("Current Memory Usage: {} bytes\n - Total Allocated: {} bytes\n - Total Deallocated: {} bytes",
+    std::print("Current Memory Usage: {} bytes\n - Total Allocated: {} bytes\n - Total Deallocated: {} bytes\n",
         sAllocationMetrics.CurrentUsage(),
         sAllocationMetrics.TotalAllocated,
         sAllocationMetrics.TotalFreed
@@ -62,20 +63,20 @@ inline void VerifyUsage() {
 }
 
 inline void DetectLeaks() {
-    auto &freed = ::sAllocationMetrics.TotalFreed;
-    auto &total = ::sAllocationMetrics.TotalAllocated;
+    auto freed = ::sAllocationMetrics.TotalFreed;
+    auto total = ::sAllocationMetrics.TotalAllocated;
     auto usage = ::sAllocationMetrics.CurrentUsage();
 
     if (total > 0 && freed > 0) {
         if (usage > 0) {
-            Hedron::LogWarning("Memory Leaks Detected [leaked '{}' bytes]!", usage);
+            std::print("# [ WARN  ] {}: Memory Leaks Detected [leaked '{}' bytes]!\n", caption, usage);
         } else {
-            Hedron::LogInfo("No Memory Leaks Detected.");
+            std::print("# [ INFO  ] {}: No Memory Leaks Detected.\n", caption);
         }
     } else if (total > 0 || freed > 0) {
-        Hedron::LogError("Memory Leak Detection failed!");
+        std::print("# [ ERROR ] {}: Memory Leak Detection failed!\n", caption);
     } else {
-        Hedron::LogInfo("Nothing was allocated.");
+        std::print("# [ INFO  ] {}: Nothing was allocated.\n", caption);
     }
 
     VerifyUsage();

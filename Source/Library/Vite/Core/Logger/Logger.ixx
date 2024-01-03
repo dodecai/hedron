@@ -316,7 +316,6 @@ private:
     Messages mMessages;
 };
 
-
 ///
 /// @brief Logger
 /// 
@@ -325,16 +324,24 @@ private:
 /// else mStream << std::forward<T>(data);
 ///
 class Logger: public SteadyObject {
+    // Friends
+    friend class Application;
+
 private:
     // Constructors and Deconstructor
     Logger(): mLogLevel(LogLevel::Trace) {}
     virtual ~Logger() = default;
 
+    // Destroy the global instance
+    static void Destroy() {
+        delete &Instance();
+    }
+
 public:
     // Get the global instance to the logger
     static Logger &Instance() {
-        static Logger instance;
-        return instance;
+        static Logger *instance = new Logger();;
+        return *instance;
     }
 
     // Methods
@@ -351,6 +358,7 @@ public:
     void Flush() {
         this->operator()({ "{}", mStreamLogLevel }, mStreamBuffer.view());
         mStreamBuffer.str("");
+        mStreamBuffer.flush();
         mStreamLogLevel = LogLevel::Default;
     }
 

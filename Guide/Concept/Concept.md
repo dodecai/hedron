@@ -32,9 +32,14 @@ Vite/ [Library]
 │  │  ├─ Quaternion
 │  │  └─ Vector
 │  ├─ Devices/
+│  │  ├─ Input/
+│  │  │  ├─ Controller
+│  │  │  ├─ Input
+│  │  │  ├─ Keyboard
+│  │  │  ├─ Mouse
+│  │  │  └─ Touch
 │  │  ├─ Display
 │  │  ├─ GFXContext
-│  │  ├─ Input
 │  │  └─ SFXContext
 │  ├─ Helpers/
 │  │  └─ Helpers
@@ -139,6 +144,12 @@ Vite/ [Library]
 │  │  ├─ Camera/
 │  │  │  ├─ Camera
 │  │  │  └─ DesignerCamera
+│  │  ├─ Specialized/
+│  │  │  ├─ FontRenderer
+│  │  │  ├─ MeshRenderer
+│  │  │  ├─ SceneRenderer
+│  │  │  ├─ SpriteRenderer
+│  │  │  └─ UIRenderer
 │  │  ├─ Buffer
 │  │  ├─ CommandBuffer
 │  │  ├─ FontRenderer
