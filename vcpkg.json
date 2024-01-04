@@ -1,0 +1,10 @@
+﻿{
+  "name": "Hedron",
+  "version": "0.0.0",
+  "description": "Game Engine Framework",
+  "homepage": "https://github.com/dodecai/hedron",
+  "license": "MIT",
+  "dependencies": [
+    "assimp"
+  ]
+}

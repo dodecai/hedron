@@ -11,6 +11,7 @@
 # Directories
 .vs/
 .vscode/
+ToDo/
 
 # Files
 *.log
