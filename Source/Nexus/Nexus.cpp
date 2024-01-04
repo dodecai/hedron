@@ -15,11 +15,11 @@ import Vite;
 namespace Hedron {
 
 // Application
-class Test: public Application {
+class Nexus: public Application {
 public:
     // Constructors and Destructor
-    Test() = default;
-    ~Test() = default;
+    Nexus() = default;
+    ~Nexus() = default;
 
     // Methods
     void Create() override {
@@ -53,7 +53,7 @@ private:
 
 // Application Entry-Point
 Application* CreateApplication() {
-	return new Test();
+	return new Nexus();
 }
 
 }

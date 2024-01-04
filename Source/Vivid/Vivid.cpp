@@ -29,7 +29,7 @@ private:
 
 // Application Entry-Point
 Application* CreateApplication() {
-	return new Vivid({ "Vivid", "1280x1024" });
+	return new Vivid({ "Vivid", "1280x1024" /*, GraphicsAPI::OpenGL */ });
 }
 
 }

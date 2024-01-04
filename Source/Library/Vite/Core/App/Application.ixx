@@ -262,6 +262,7 @@ private:
 
             // Update application
             //mContext->Attach();
+            //mRenderer->RenderFrame();
             //for (Layer *layer : mLayers) layer->Update(deltaTime);
             //Update(deltaTime);
             //if (mWindow->GetState(WindowState::Alive)) {
@@ -341,6 +342,7 @@ private:
     //Reference<Context> mContext;
     //Reference<Dialog> mDialog;
     //Scope<EventListener> mListener;
+    //Scope<Renderer> mRenderer;
     //Scope<Window> mWindow;
     //ImGuiLayer *pImGuiLayer;
 };

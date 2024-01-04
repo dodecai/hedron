@@ -1,4 +1,4 @@
-﻿export module Vite.Module.Phoenix;
+﻿export module Phoenix;
 
 ///
 /// @brief This module contains original source code from the Phoenix game library.

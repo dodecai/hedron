@@ -158,9 +158,8 @@ filter { "configurations:Distribution" }
     
 filter {}
 
---include "App/App.lua"
---include "Game/Game.lua"
 include "Library/Vite.lua"
-include "Test/Test.lua"
+include "Gaia/Gaia.lua"
+include "Nexus/Nexus.lua"
 include "Vivid/Vivid.lua"
 include "Phoenix/Phoenix.lua"

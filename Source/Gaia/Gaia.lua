@@ -1,7 +1,6 @@
-﻿project "Phoenix"
-    defines { "PROJECT_NAME=Phoenix" }
+﻿project "Gaia"
+    defines { "PROJECT_NAME=Gaia" }
     language "C++"
-    --characterset "MBCS"
     characterset "Unicode"
     conformancemode "true"
     cdialect "C17"
@@ -15,7 +14,7 @@
     staticruntime "on"
     toolset "msc"
     warnings "Extra"
-
+    
     debugdir "%{wks.location}/Build/%{cfg.buildcfg}"
     dependson { "Vite" }
     entrypoint "mainCRTStartup"
@@ -27,26 +26,13 @@
     }
     
     externalincludedirs {
-        "%{Headers.ThirdParty}",
-
-        "%{Headers.LibPHX}",
-        "%{Headers.LibPHXext}",
+	    "%{Headers.ThirdParty}"
     }
     includedirs {
-        "%{Headers.Library}",
-        "%{Headers.LibPHX}",
+        "%{Headers.Library}"
     }
-    libdirs { "%{wks.location}/3rd-Party/LibPHX/ext/lib/win64" }
     links {
-        "opengl32",
-        "glew32",
-        --"freetype",
-        "Vite",
-        "lua51",
-        "SDL2",
-        "user32",
-        "winmm",
-        "Ws2_32",
+        "Vite"
     }
 
     filter { "configurations:Debug" }
