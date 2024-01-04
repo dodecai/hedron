@@ -1,5 +1,5 @@
-﻿project "Test"
-    defines { "PROJECT_NAME=Test" }
+﻿project "Nexus"
+    defines { "PROJECT_NAME=Nexus" }
     language "C++"
     characterset "Unicode"
     conformancemode "true"

@@ -1,7 +1,8 @@
 ﻿import <Settings.h>;
-import <Ultra/EntryPoint.h>;
-import Ultra;
-import Ultra.Module.Phoenix;
+import <Vite/EntryPoint.h>;
+
+import Vite;
+import Phoenix;
 
 namespace Hedron {
 
@@ -9,7 +10,7 @@ namespace Hedron {
 class App: public Application {
 public:
     // Constructors and Destructor
-    App(const ApplicationProperties &properties): Application(ApplicationProperties(true)) {}
+    App(const Settings &settings): Application(settings) {}
     ~App() = default;
 
     // Methods
@@ -28,7 +29,8 @@ public:
         Lua_SetBool(mLua, "__debug__", false); //DEBUG > 0
         Lua_SetBool(mLua, "__embedded__", true);
         Lua_SetNumber(mLua, "__checklevel__", 0); // CHECK_LEVEL [=0]
-        Lua_SetStr(mLua, "__app__", "TestHmGui");
+        //Lua_SetStr(mLua, "__app__", "TestHmGui");
+        Lua_SetStr(mLua, "__app__", "LTheory");
         Lua_DoFile(mLua, "./Script/Main.lua");
     }
 
@@ -37,18 +39,19 @@ public:
         Engine_Free();
     }
 
-    void Update([[maybe_unused]] Timestamp deltaTime) {
+    void Update([[maybe_unused]] DeltaTime deltaTime) {
         Engine_Update();
     }
 
 private:
     Lua *mLua = nullptr;
-    Scope<Renderer> mRenderer;
 };
 
 // Application Entry-Point
 Application *CreateApplication() {
-    return new App({ "Game", "1280x1024", GraphicsAPI::OpenGL });
+    Settings settings = { "Phoenix", "1280x1024" /*, GraphicsAPI::OpenGL */ };
+    settings.ExternalLoop = true;
+    return new App(settings);
 }
 
 }

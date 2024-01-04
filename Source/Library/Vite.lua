@@ -48,18 +48,18 @@
 	    "%{Headers.Library}",
     }
     links {
-        --"assimp",
-        --"DearImGui",
-        --"FreeType",
-        --"Glad",
-        --"MSDFgen",
-        --"MSDF-Atlas-Gen",
-        --"yaml-cpp",
+        "assimp",
+        "DearImGui",
+        "FreeType",
+        "Glad",
+        "MSDFgen",
+        "MSDF-Atlas-Gen",
+        "yaml-cpp",
 
-        --"%{Library.ShaderC}",
-	--"%{Library.Vulkan}",
+        "%{Library.ShaderC}",
+	    --"%{Library.Vulkan}",
 
-        --"LibPHX",
+        "LibPHX",
     }
 
     filter { "files: **.natvis "}

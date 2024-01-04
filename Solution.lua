@@ -6,7 +6,7 @@ workspace "Hedron"
     configurations { "Debug", "Release", "Distribution" }
     buildoptions "/utf-8"
     flags { "MultiProcessorCompile" }
-    startproject "Test"
+    startproject "Nexus"
     systemversion "latest"
 
     includedirs { "Source" }
