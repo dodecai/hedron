@@ -4,6 +4,10 @@ import Vite.Type.Standard;
 import Vite.Algebra.Vector;
 export namespace Hedron {
 
+#pragma pack(push, 1)
+#pragma warning(push, 1)
+#pragma warning(disable: 4201)
+
 ///
 /// @brief Quaternion
 ///
@@ -208,6 +212,9 @@ private:
         return std::abs(a - b) < epsilon;
     }
 };
+
+#pragma pack(pop)
+#pragma warning(pop)
 
 
 using Quaternion = QuaternionBase<float>;

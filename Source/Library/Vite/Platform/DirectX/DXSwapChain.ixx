@@ -1,3 +1,3 @@
-﻿export module Vite.Platform.DXSwapChain;
+﻿export module Vite.Platform.DXSwapchain;
 
 export namespace Hedron {}

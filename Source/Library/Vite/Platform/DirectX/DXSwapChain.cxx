@@ -1,3 +1,3 @@
-﻿module Vite.Platform.DXSwapChain;
+﻿module Vite.Platform.DXSwapchain;
 
 namespace Hedron {}
