@@ -7,7 +7,7 @@ The following is a list of third-party libraries used in this project, along wit
 
 > ToDo
 
-<!--These are leftovers which were used in the prototype.
+<!--These are leftovers which were used in the previous project.
 | Project | License |
 | :------ | :-----: |
 | [Dear ImGui](https://github.com/ocornut/imgui "imgui")                                     | MIT                |
@@ -29,6 +29,12 @@ The following is a list of third-party libraries used in this project, along wit
 
 > Please note that the above list is subject to change, as we may add or remove libraries in the future.
 We encourage users to check the project repository for any updates or changes to the list.
+
+<!-- These are leftovers which were used in the prototype. I left them here because they may be needed again.
+| [Glslang](https://github.com/KhronosGroup/SPIRV-Tools.git "glslang")                  | Multi         |
+| [SPIR-V Cross](https://github.com/KhronosGroup/SPIRV-Cross.git "SPIRV-Cross")         | Apache2.0     |
+| [SPIR-V Headers](https://github.com/KhronosGroup/SPIRV-Headers.git "SPIRV-Headers")   | MIT           |
+-->
 
 ## Inspiration
 This project was also inspired by several other projects in terms of architecture, functionality, and more.
