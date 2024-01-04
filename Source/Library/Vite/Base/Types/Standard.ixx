@@ -8,6 +8,7 @@ export namespace Hedron {
 using std::atomic;
 using std::condition_variable;
 using std::future;
+using std::packaged_task;
 using std::mutex;
 using std::thread;
 

@@ -15,6 +15,7 @@ export import Vite.App.Layers;
 export import Vite.App.Settings;
 export import Vite.App.States;
 export import Vite.App.Statistics;
+import Vite.Util.ThreadPool;
 
 export import Vite.ImGui.Layer;
 
@@ -52,6 +53,9 @@ public:
         Log("{} started ...\n  on: '{}'\n  at: '{}'", mSettings.Title, appchrono.GetDate(), appchrono.GetTime());
         if (mSettings.ExternalLoop) return;
         LogCaption("Initialization");
+
+        // Start Thread Pool
+        mThreadPool = CreateScope<ThreadPool>();
 
         // Load and configure Systems
         LogInfo("Loading Systems");
@@ -229,8 +233,8 @@ private:
         // Runtime Properties
         double delay {};
         double frames {};
-        string title(64, ' ');
         Timer timer {};
+        string title(64, ' ');
         
         // Main-Loop
         LogCaption("Main-Loop");
@@ -264,7 +268,7 @@ private:
             //mContext->Attach();
             //mRenderer->RenderFrame();
             //for (Layer *layer : mLayers) layer->Update(deltaTime);
-            //Update(deltaTime);
+            Update(deltaTime);
             //if (mWindow->GetState(WindowState::Alive)) {
             //    mListener->Update();
             //    pCoreLayer->Prepare();
@@ -337,6 +341,7 @@ private:
     Statistics mStatistics;
 
     // Systems
+    Scope<ThreadPool> mThreadPool;
     LayerStack mLayers;
     //Reference<Config> mConfig;
     //Reference<Context> mContext;
