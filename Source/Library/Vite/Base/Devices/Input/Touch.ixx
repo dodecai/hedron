@@ -1,3 +1,3 @@
-﻿export module Vite.Device.Input.Mouse;
+﻿export module Vite.Device.Input.Touch;
 
 export namespace Hedron {}

@@ -1,4 +1,4 @@
-﻿export module Vite.Core.ThreadPool;
+﻿export module Vite.Util.ThreadPool;
 
 import Vite.Base;
 

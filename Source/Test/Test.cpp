@@ -25,7 +25,7 @@ public:
 	void Destroy() override {
     }
 
-	void Update() override {
+	void Update([[maybe_unused]] DeltaTime deltaTime) override {
 	}
 };
 

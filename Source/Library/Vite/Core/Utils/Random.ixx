@@ -1,4 +1,4 @@
-﻿export module Vite.Core.Random;
+﻿export module Vite.Util.Random;
 
 import Vite.Base;
 

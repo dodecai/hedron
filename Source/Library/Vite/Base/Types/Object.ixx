@@ -4,7 +4,7 @@ import std;
 
 ///
 /// @brief Contains classes for managing object behavior and immutability.
-/// They can be used as base classes to ensure specific behaviors.
+/// @detail They can be used as base classes to ensure specific behaviors.
 /// @note The classes here are useful for controlling copying, moving, and modification of objects in the application.
 ///
 

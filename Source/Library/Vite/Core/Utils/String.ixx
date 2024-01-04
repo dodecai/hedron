@@ -1,4 +1,4 @@
-﻿export module Vite.Core.String;
+﻿export module Vite.Util.String;
 
 // Library
 import Vite.Base;

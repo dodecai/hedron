@@ -4,8 +4,8 @@
 import "Vite/Base/Platform/Support.h";
 
 import Vite.Base;
-import Vite.Core.Chrono;
-import Vite.Core.String;
+import Vite.Util.Chrono;
+import Vite.Util.String;
 
 ///
 /// @brief This logger fulfils all your basic needs, and accepts nearly everything you throw at it.

@@ -27,10 +27,10 @@ concept typename_floating_point = std::is_floating_point_v<T>;
 
 
 ///
-/// @brief Concepts for Hashable Types
+/// @brief Concepts for hash-able Types
 ///
 
-// All size_t convertible Types
+// Detects: All size_t convertible Types (hash-able)
 template<typename T>
 concept typename_hashable = requires(T a) {
     { std::hash<T>{}(a) } -> std::convertible_to<std::size_t>;

@@ -1,6 +1,6 @@
 ﻿export module Vite.App.Arguments;
 
-import std;
+import Vite.Base;
 
 export namespace Hedron {
 
