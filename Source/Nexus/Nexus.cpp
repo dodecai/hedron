@@ -2,6 +2,7 @@
 import <Vite/EntryPoint.h>;
 
 import Vite;
+import Vite.Util.ThreadPool;
 
 //import Vite.Test.Core;
 //import Vite.Test.Engine;
@@ -14,6 +15,12 @@ import Vite;
 
 namespace Hedron {
 
+// Performance Test
+long long Fibonacci(int n) {
+    if (n <= 1) return n;
+    return Fibonacci(n - 1) + Fibonacci(n - 2);
+}
+
 // Application
 class Nexus: public Application {
 public:
@@ -23,6 +30,7 @@ public:
 
     // Methods
     void Create() override {
+        mThreadPool = CreateScope<ThreadPool>();
         #ifdef CORE_TESTS
             mCore = CreateReference<Test::Core>();
         #endif
@@ -43,9 +51,31 @@ public:
         #ifdef SYSTEMS_TESTS
             mEngine->Test(deltaTime);
         #endif
+
+        
+
+        static double delay = 0.0;
+        delay += deltaTime.GetMilliseconds();
+
+        if (delay >= 0.2) {
+            // Thread Pool Tasks
+            const int n = 2;
+            auto fibResultA = mThreadPool->Enqueue([&] {
+                auto result = Fibonacci(n);
+                return result;
+            });
+            auto fibResultB = mThreadPool->Enqueue([&] {
+                auto result = Fibonacci(n);
+                return result;
+            });
+
+            delay = 0.0;
+        }
     }
 
 private:
+    //
+    Scope<ThreadPool> mThreadPool;
     //Reference<Test::Core> mCore;
     //Test::Engine *mEngine;
     //Reference<Test::Research> mResearch;

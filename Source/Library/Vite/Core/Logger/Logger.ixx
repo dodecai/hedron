@@ -543,13 +543,13 @@ inline Logger &logger = Logger::Instance();
 /// they will help removing unnecessary code in release and distribution builds, therefore they also override the log levels.
 ///
 
-template<typename ...Args> void Log(const LogRecord &record, Args &&...args)            { logger(LogLevel::Default, record, args...); logger << "\n"; }
-template<typename ...Args> void LogCaption(const LogRecord &record, Args &&...args)     { logger(LogLevel::Caption, record, args...); logger; }
-template<typename ...Args> void LogDelimiter(const LogRecord &record, Args &&...args)   { logger(LogLevel::Delimiter, record, args...); logger; }
+template<typename ...Args> void Log(const LogRecord &record, Args &&...args)            { logger(LogLevel::Default, record, args..., "\n"); }
+template<typename ...Args> void LogCaption(const LogRecord &record, Args &&...args)     { logger(LogLevel::Caption, record, args...); }
+template<typename ...Args> void LogDelimiter(const LogRecord &record, Args &&...args)   { logger(LogLevel::Delimiter, record, args...); }
 #ifdef APP_MODE_DEBUG
     template<typename T, typename ...Args> bool AppAssert(T *object, const LogRecord &record, Args &&...args) {
         if (!object) {
-            logger(LogLevel::Fatal, record, args...); logger << "\n";
+            logger(LogLevel::Fatal, record, args..., "\n");
             //APP_DEBUGBREAK();
             return true;
         }
@@ -557,22 +557,22 @@ template<typename ...Args> void LogDelimiter(const LogRecord &record, Args &&...
     }
     template<typename T, typename ...Args> bool AppAssert(T object, const LogRecord &record, Args &&...args) {
         if (!object) {
-            logger(LogLevel::Fatal, record, args...); logger << "\n";
+            logger(LogLevel::Fatal, record, args..., "\n");
             //APP_DEBUGBREAK();
             return true;
         }
         return false;
     }
 
-    template<typename ...Args> void LogTrace(const LogRecord &record, Args &&...args)   { logger(LogLevel::Trace, record, args...); logger << "\n"; }
-    template<typename ...Args> void LogDebug(const LogRecord &record, Args &&...args)   { logger(LogLevel::Debug, record, args...); logger << "\n"; }
-    template<typename ...Args> void LogInfo(const LogRecord &record, Args &&...args)    { logger(LogLevel::Info,  record, args...); logger << "\n"; }
+    template<typename ...Args> void LogTrace(const LogRecord &record, Args &&...args)   { logger(LogLevel::Trace, record, args..., "\n"); }
+    template<typename ...Args> void LogDebug(const LogRecord &record, Args &&...args)   { logger(LogLevel::Debug, record, args..., "\n"); }
+    template<typename ...Args> void LogInfo(const LogRecord &record, Args &&...args)    { logger(LogLevel::Info,  record, args..., "\n"); }
 #elif APP_MODE_RELEASE
     template<typename ...Args> void AppAssert([[maybe_unused]] Args &&...args)          {}
 
     template<typename ...Args> void LogTrace([[maybe_unused]] Args &&...args)           {}
     template<typename ...Args> void LogDebug([[maybe_unused]] Args &&...args)           {}
-    template<typename ...Args> void LogInfo(const LogRecord &record, Args &&...args)    { logger(LogLevel::Info,  record, args...); logger << "\n"; }
+    template<typename ...Args> void LogInfo(const LogRecord &record, Args &&...args)    { logger(LogLevel::Info,  record, args..., "\n"); }
 #elif APP_MODE_DISTRIBUTION
     template<typename ...Args> void AppAssert([[maybe_unused]] Args &&...args)          {}
 
@@ -580,9 +580,9 @@ template<typename ...Args> void LogDelimiter(const LogRecord &record, Args &&...
     template<typename ...Args> void LogDebug([[maybe_unused]] Args &&...args)           {}
     template<typename ...Args> void LogInfo([[maybe_unused]] Args &&...args)            {}
 #endif
-template<typename ...Args> void LogWarning(const LogRecord &record, Args &&...args)     { logger(LogLevel::Warn,   record, args...); logger << "\n"; }
-template<typename ...Args> void LogError(const LogRecord &record, Args &&...args)       { logger(LogLevel::Error,  record, args...); logger << "\n"; }
-template<typename ...Args> void LogFatal(const LogRecord &record, Args &&...args)       { logger(LogLevel::Fatal,  record, args...); logger << "\n"; }
+template<typename ...Args> void LogWarning(const LogRecord &record, Args &&...args)     { logger(LogLevel::Warn,   record, args..., "\n"); }
+template<typename ...Args> void LogError(const LogRecord &record, Args &&...args)       { logger(LogLevel::Error,  record, args..., "\n"); }
+template<typename ...Args> void LogFatal(const LogRecord &record, Args &&...args)       { logger(LogLevel::Fatal,  record, args..., "\n"); }
 
 }
 
