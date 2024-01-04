@@ -1,7 +1,7 @@
 ﻿export module Vivid.View.Designer;
 
 import Vite;
-import Vite.Core.Layers;
+import Vite.App.Layers;
 
 import Vivid.Component.Menu;
 import Vivid.Panel.Browser;
@@ -24,7 +24,7 @@ public:
     virtual ~Designer() = default;
 
     void Create() override {}
-    void Update(Timestamp deltaTime) override {}
+    void Update(DeltaTime deltaTime) override {}
 
     // Accessors
     DesignerState GetState() const { return mState; };

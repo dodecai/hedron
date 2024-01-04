@@ -7,10 +7,10 @@ export namespace Hedron {
 
 struct Settings {
     // Properties
-    //GfxApi GfxApi = GfxApi::OpenGL;
-    LogLevel LogLevel = LogLevel::Trace;
     string Title = "Hedron";
     string Resolution = "1024x768";
+    //GfxApi GfxApi = GfxApi::OpenGL;
+    LogLevel LogLevel = LogLevel::Trace;
 
     // Options
     bool EnableConsoleLogging = true;
