@@ -7,6 +7,17 @@
 /// Due to some differences between compilers, we need to define some macros to support the library.
 ///
 
+// Compiler Specifics
+#ifdef APP_PLATFORM_WINDOWS
+    #ifdef APP_COMPILER_MSVC
+        #define CPP_NO_UNIQUE_ADDRESS [[msvc::no_unique_address]]
+    #else
+        #define CPP_NO_UNIQUE_ADDRESS [[no_unique_address]]
+    #endif
+#else 
+    #define CPP_NO_UNIQUE_ADDRESS [[no_unique_address]]
+#endif
+
 // Export/Import for Dynamic Libraries
 #ifdef APP_PLATFORM_WINDOWS
     #ifdef APP_SHARED_LIBRARY
@@ -14,15 +25,8 @@
     #else
         #define APP_API __declspec(dllimport)
     #endif
-
-    #ifdef APP_COMPILER_MSVC
-        #define CPP_NO_UNIQUE_ADDRESS [[msvc::no_unique_address]]
-    #else
-        #define CPP_NO_UNIQUE_ADDRESS [[no_unique_address]]
-    #endif
 #else
 	#define APP_API
-	#define CPP_NO_UNIQUE_ADDRESS [[no_unique_address]]
 #endif
 
 // DebugBreak Support
