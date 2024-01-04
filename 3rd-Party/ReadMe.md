@@ -7,7 +7,6 @@ The following is a list of third-party libraries used in this project, along wit
 
 > ToDo
 
-<!--These are leftovers which were used in the previous project.
 | Project | License |
 | :------ | :-----: |
 | [Dear ImGui](https://github.com/ocornut/imgui "imgui")                                     | MIT                |
@@ -25,7 +24,7 @@ The following is a list of third-party libraries used in this project, along wit
 | [Shaderc](https://github.com/google/shaderc "shaderc")                                     | Apache-2.0         |
 | [Vulkan Headers](https://github.com/KhronosGroup/Vulkan-Headers.git "vulkan")              | Apache-2.0 or MIT  |
 | [yaml-cpp](https://github.com/jbeder/yaml-cpp "yaml-cpp")                                  | MIT                |
--->
+
 
 > Please note that the above list is subject to change, as we may add or remove libraries in the future.
 We encourage users to check the project repository for any updates or changes to the list.
