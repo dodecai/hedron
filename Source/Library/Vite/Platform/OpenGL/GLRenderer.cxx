@@ -1,3 +1,9 @@
 ﻿module Vite.Platform.GLRenderer;
 
-namespace Hedron {}
+namespace Hedron {
+
+//GLRenderer::GLRenderer() {}
+
+//GLRenderer::~GLRenderer() {}
+
+}

@@ -1,3 +1,3 @@
-﻿module Vite.Platform.DXFrameBuffer;
+﻿module Vite.Platform.DXFramebuffer;
 
 namespace Hedron {}
