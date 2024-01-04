@@ -7,7 +7,7 @@ git rm -f -r "test"
 git rm -f -r "util"
 git rm -f ".appveyor.yml"
 git rm -f ".gitignore"
-git rm -f ".travis.yml
+git rm -f ".travis.yml"
 git rm -f "CMakeLists.txt"
 git rm -f "manual.md"
 
