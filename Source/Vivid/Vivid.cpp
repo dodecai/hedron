@@ -18,7 +18,7 @@ public:
 	void Create() override {}
 	void Destroy() override {}
 
-	void Update() override {
+	void Update([[maybe_unused]] DeltaTime deltaTime) override {
         //Aurora::ShowDemo();
         //Aurora::Update(deltaTime);
         //Aurora::Draw();

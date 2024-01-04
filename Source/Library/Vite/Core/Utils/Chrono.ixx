@@ -1,5 +1,5 @@
 ﻿// Module
-export module Vite.Core.Chrono;
+export module Vite.Util.Chrono;
 
 // Library
 import Vite.Base;

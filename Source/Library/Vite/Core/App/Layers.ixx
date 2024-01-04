@@ -1,6 +1,6 @@
 ﻿export module Vite.App.Layers;
 
-import Vite.Core;
+import Vite.Base;
 //import Vite.Core.Event.Data;
 //import Vite.System.Event;
 
@@ -20,19 +20,18 @@ public:
     virtual void Create() {}
     virtual void Destroy() {}
     virtual void GuiUpdate() {}
-    virtual void Update([[maybe_unused]] Timestamp deltaTime) {}
+    virtual void Update([[maybe_unused]] DeltaTime deltaTime) {}
 
     inline const string &GetName() const { return mName; }
 
     // EventListener
-    //[[maybe_unused]] virtual void OnControllerEvent([[maybe_unused]] ControllerEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter) {}
-    //[[maybe_unused]] virtual void OnKeyboardEvent([[maybe_unused]] KeyboardEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter) {}
-    //[[maybe_unused]] virtual void OnMouseEvent([[maybe_unused]] MouseEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter) {}
-    //[[maybe_unused]] virtual void OnTouchEvent([[maybe_unused]] TouchEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter) {}
-    //[[maybe_unused]] virtual void OnWindowEvent([[maybe_unused]] WindowEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter) {}
-
-    //[[maybe_unused]] virtual void OnDeviceEvent([[maybe_unused]] DeviceEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter) {}
-    //[[maybe_unused]] virtual void OnPowerEvent([[maybe_unused]] PowerEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter) {}
+    virtual void OnControllerEvent(/*[[maybe_unused]] ControllerEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
+    virtual void OnDeviceEvent(/*[[maybe_unused]] DeviceEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
+    virtual void OnKeyboardEvent(/*[[maybe_unused]] KeyboardEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
+    virtual void OnMouseEvent(/*[[maybe_unused]] MouseEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
+    virtual void OnPowerEvent(/*[[maybe_unused]] PowerEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter*/) {}
+    virtual void OnTouchEvent(/*[[maybe_unused]] TouchEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
+    virtual void OnWindowEvent(/*[[maybe_unused]] WindowEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
 
 protected:
     string mName;

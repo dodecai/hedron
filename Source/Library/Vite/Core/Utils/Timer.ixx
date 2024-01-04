@@ -1,4 +1,4 @@
-﻿export module Vite.Core.Timer;
+﻿export module Vite.Util.Timer;
 
 import Vite.Base;
 

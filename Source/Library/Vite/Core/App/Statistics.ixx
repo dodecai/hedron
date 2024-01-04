@@ -1,6 +1,6 @@
 ﻿export module Vite.App.Statistics;
 
-import Vite.Core;
+import Vite.Base;
 
 export namespace Hedron {
 
