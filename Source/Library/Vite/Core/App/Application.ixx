@@ -92,6 +92,7 @@ public:
         Log("{} finished ...\n  on: '{}'\n  at: '{}'\n", mSettings.Title, appchrono.GetDate(), appchrono.GetTime());
         Chrono::Destroy();
         Logger::Destroy();
+        Input::Destroy();
 		pAppInstance = nullptr;
     }
 
