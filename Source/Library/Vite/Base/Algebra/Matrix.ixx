@@ -1,8 +1,8 @@
 ﻿export module Vite.Algebra.Matrix;
 
-import Vite.Type.Standard;
 import Vite.Algebra.Quaternion;
 import Vite.Algebra.Vector;
+import Vite.Type.Standard;
 
 export namespace Hedron {
 
@@ -17,20 +17,20 @@ concept MatrixNumerics =
 
 ///
 /// @brief Matrix[2-4 x 2-4]D
+/// @todo Fix tests, which I broke with the new architecture.
 ///
 template<MatrixNumerics T, size_t N>
 struct MatrixBase {
+    /// Data
     array<array<T, N>, N> Data {};
 
-    // Accessors
+    /// Accessors
     operator T *() {
         return &Data[0][0];
     }
     operator const T *() const {
         return &Data[0][0];
     }
-
-    // Assignment
     T &At(size_t row, size_t col) {
         return Data[row][col];
     }
@@ -38,6 +38,126 @@ struct MatrixBase {
         return Data[row][col];
     }
 
+    /// Arithmetic
+    MatrixBase operator+(const MatrixBase &other) {
+        MatrixBase result;
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                result.Data[i][j] = Data[i][j] + other.Data[i][j];
+            }
+        }
+        return result;
+    }
+    MatrixBase operator-(const MatrixBase &other) {
+        MatrixBase result;
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                result.Data[i][j] = Data[i][j] - other.Data[i][j];
+            }
+        }
+        return result;
+    }
+    MatrixBase operator*(const MatrixBase &other) const {
+        MatrixBase result;
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                for (size_t k = 0; k < N; k++) {
+                    result.Data[i][j] += Data[i][k] * other.Data[k][j];
+                }
+            }
+        }
+        return result;
+    }
+    MatrixBase operator*(T scalar) {
+        MatrixBase result;
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                result.Data[i][j] = Data[i][j] * scalar;
+            }
+        }
+        return result;
+    }
+    MatrixBase operator/(T scalar) {
+        ValidateScalar(scalar);
+        MatrixBase result;
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                result.Data[i][j] = Data[i][j] / scalar;
+            }
+        }
+        return result;
+    }
+    //template<MatrixNumerics T, size_t N>
+    //friend MatrixBase<T, N> operator*(const MatrixBase<T, N> &matrix, T scalar) {
+    //    MatrixBase<T, N> result;
+    //    for (size_t i = 0; i < N; ++i) {
+    //        for (size_t j = 0; j < N; ++j) {
+    //            result.At(i, j) = matrix.At(i, j) * scalar;
+    //        }
+    //    }
+    //    return result;
+    //}
+    //template<MatrixNumerics T, size_t N>
+    //friend MatrixBase<T, N> operator/(const MatrixBase<T, N> &matrix, T scalar) {
+    //    ValidateScalar(scalar);  // Ensure scalar is not zero
+    //    MatrixBase<T, N> result;
+    //    for (size_t i = 0; i < N; ++i) {
+    //        for (size_t j = 0; j < N; ++j) {
+    //            result.At(i, j) = matrix.At(i, j) / scalar;
+    //        }
+    //    }
+    //    return result;
+    //}
+
+    // Negates the matrix.
+    MatrixBase operator-() const {
+        MatrixBase result;
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                result[i][j] = -Data[i][j];
+            }
+        }
+        return result;
+    }
+
+    /// Assignment
+    MatrixBase &operator+=(const MatrixBase &other) {
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                Data[i][j] += other[i][j];
+            }
+        }
+        return *this;
+    }
+    MatrixBase &operator-=(const MatrixBase &other) {
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                Data[i][j] -= other[i][j];
+            }
+        }
+        return *this;
+    }
+    MatrixBase &operator*=(const MatrixBase &other) {
+        *this = *this * other;
+        return *this;
+    }
+    MatrixBase &operator*=(T scalar) {
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                Data[i][j] *= scalar;
+            }
+        }
+        return *this;
+    }
+    MatrixBase &operator/=(T scalar) {
+        ValidateScalar(scalar);
+        for (size_t i = 0; i < N; i++) {
+            for (size_t j = 0; j < N; j++) {
+                Data[i][j] /= scalar;
+            }
+        }
+        return *this;
+    }
 
     ///
     /// Methods
@@ -162,7 +282,7 @@ struct MatrixBase {
         return *this * result;
     }
 
-        // Rotate the matrix by a vector of Euler angles (rotation order: XYZ)
+    // Rotate the matrix by a vector of Euler angles (rotation order: XYZ)
     MatrixBase Rotate(const Vector3 &euler_angles) requires (N == 4) {
         float cosX = std::cos(euler_angles.X);
         float sinX = std::sin(euler_angles.X);
@@ -215,129 +335,8 @@ struct MatrixBase {
         return result;
     }
 
-    // Arithmetic
-    MatrixBase operator+(const MatrixBase &other) {
-        MatrixBase result;
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                result.Data[i][j] = Data[i][j] + other.Data[i][j];
-            }
-        }
-        return result;
-    }
-    MatrixBase operator-(const MatrixBase &other) {
-        MatrixBase result;
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                result.Data[i][j] = Data[i][j] - other.Data[i][j];
-            }
-        }
-        return result;
-    }
-    MatrixBase operator*(const MatrixBase &other) const {
-        MatrixBase result;
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                for (size_t k = 0; k < N; k++) {
-                    result.Data[i][j] += Data[i][k] * other.Data[k][j];
-                }
-            }
-        }
-        return result;
-    }
-    MatrixBase operator*(T scalar)  {
-        MatrixBase result;
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                result.Data[i][j] = Data[i][j] * scalar;
-            }
-        }
-        return result;
-    }
-    MatrixBase operator/(T scalar)  {
-        ValidateScalar(scalar);
-        MatrixBase result;
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                result.Data[i][j] = Data[i][j] / scalar;
-            }
-        }
-        return result;
-    }
-
-    //template<MatrixNumerics T, size_t N>
-    //friend MatrixBase<T, N> operator*(const MatrixBase<T, N> &matrix, T scalar) {
-    //    MatrixBase<T, N> result;
-    //    for (size_t i = 0; i < N; ++i) {
-    //        for (size_t j = 0; j < N; ++j) {
-    //            result.At(i, j) = matrix.At(i, j) * scalar;
-    //        }
-    //    }
-    //    return result;
-    //}
-    //template<MatrixNumerics T, size_t N>
-    //friend MatrixBase<T, N> operator/(const MatrixBase<T, N> &matrix, T scalar) {
-    //    ValidateScalar(scalar);  // Ensure scalar is not zero
-    //    MatrixBase<T, N> result;
-    //    for (size_t i = 0; i < N; ++i) {
-    //        for (size_t j = 0; j < N; ++j) {
-    //            result.At(i, j) = matrix.At(i, j) / scalar;
-    //        }
-    //    }
-    //    return result;
-    //}
-    
-    // Assignment
-    MatrixBase &operator+=(const MatrixBase &other) {
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                Data[i][j] += other[i][j];
-            }
-        }
-        return *this;
-    }
-    MatrixBase &operator-=(const MatrixBase &other) {
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                Data[i][j] -= other[i][j];
-            }
-        }
-        return *this;
-    }
-    MatrixBase &operator*=(const MatrixBase &other) {
-        *this = *this * other;
-        return *this;
-    }
-    MatrixBase &operator*=(T scalar) {
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                Data[i][j] *= scalar;
-            }
-        }
-        return *this;
-    }
-    MatrixBase &operator/=(T scalar) {
-        ValidateScalar(scalar);
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                Data[i][j] /= scalar;
-            }
-        }
-        return *this;
-    }
-
-    // Negation
-    MatrixBase operator-() const {
-        MatrixBase result;
-        for (size_t i = 0; i < N; i++) {
-            for (size_t j = 0; j < N; j++) {
-                result[i][j] = -Data[i][j];
-            }
-        }
-        return result;
-    }
-
 public:
+    /// Helpers
     void ValidateScalar(T scalar) {
         if (std::abs(scalar) < std::numeric_limits<T>::epsilon()) {
             throw std::invalid_argument("Cannot divide by zero.");
@@ -348,6 +347,7 @@ public:
 #pragma warning(pop)
 #pragma pack(pop)
 
+// Aliases
 using Matrix2 = MatrixBase<float, 2>;
 using Matrix3 = MatrixBase<float, 3>;
 using Matrix4 = MatrixBase<float, 4>;
@@ -368,10 +368,24 @@ void MatrixTests();
 
 }
 
+///
+/// @brief Global Overloads
+/// @todo Implement
+///
+namespace std {}
+
+
+///
+/// @brief Tests
+///
+
 module: private;
 
 namespace Hedron::TestA {
 
+///
+/// @brief These tests are executed during the compilation phase, so no need to call them.
+///
 void Compiler() {
     // Ensure that the sizes are correct
     static_assert( 32 == sizeof(MatrixBase<double,  2>), "MatrixBase<double>[2]: The type size should be 32 byte(s)!");
@@ -380,9 +394,11 @@ void Compiler() {
     static_assert( 16 == sizeof(MatrixBase<float,   2>), "MatrixBase<float>[2]:  The type size should be 16 byte(s)!");
     static_assert( 36 == sizeof(MatrixBase<float,   3>), "MatrixBase<float>[3]:  The type size should be 36 byte(s)!");
     static_assert( 64 == sizeof(MatrixBase<float,   4>), "MatrixBase<float>[4]:  The type size should be 64 byte(s)!");
-
 }
 
+///
+/// @brief These tests are executed during the runtime phase, so they need to be called.
+///
 void MatrixTests() {
     //// Preparation
     //LogInfo("Testing Matrix");

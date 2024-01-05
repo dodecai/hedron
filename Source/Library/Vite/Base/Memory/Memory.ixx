@@ -11,6 +11,7 @@ import std.compat;
 /// @brief Properties
 ///
 
+// Allocation Metrics: holds the current memory usage
 struct AllocationMetrics {
     size_t TotalAllocated {};
     size_t TotalFreed {};
@@ -54,6 +55,9 @@ export namespace Hedron::Memory::Debug {
 
 constexpr auto caption = "Hedron::Memory::Debug";
 
+///
+/// @brief Print the current memory usage
+/// 
 inline void VerifyUsage() {
     std::print("Current Memory Usage: {} bytes\n - Total Allocated: {} bytes\n - Total Deallocated: {} bytes\n",
         sAllocationMetrics.CurrentUsage(),
@@ -62,6 +66,10 @@ inline void VerifyUsage() {
     );
 }
 
+///
+/// @brief Detect memory leaks and print the result
+/// @note Must be called with std::atexit
+/// 
 inline void DetectLeaks() {
     auto freed = ::sAllocationMetrics.TotalFreed;
     auto total = ::sAllocationMetrics.TotalAllocated;

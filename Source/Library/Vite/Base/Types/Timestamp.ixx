@@ -10,15 +10,15 @@ export namespace Hedron {
 template <typename_floating_point T = double>
 class Timestamp {
 public:
-    // Default
+    /// Default
     Timestamp(T time = 0.0): mTime { time } {}
     ~Timestamp() = default;
 
-    // Accessors
+    /// Accessors
     inline const T GetSeconds() const { return mTime / 1000.0; }
     inline const T GetMilliseconds() const { return mTime; }
 
-    // Operators
+    /// Operators
     inline operator T() { return GetSeconds(); }
 
 private:

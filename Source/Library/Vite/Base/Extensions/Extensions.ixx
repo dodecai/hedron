@@ -1,9 +1,9 @@
-﻿export module Vite.Base.Helpers;
+﻿export module Vite.Extensions;
 
 import std;
 
 ///
-/// @brief These little helpers can be very useful in some cases.
+/// @brief These little extensions can be very useful in some cases.
 ///
 
 export namespace Hedron {
@@ -31,19 +31,24 @@ constexpr auto GetEnumType(E e) noexcept {
 /// @note  The value is declared as a union mainly for as a debugging aid. If the union is undesired and you have other methods of debugging,
 /// change it to either of EnumT and do a cast for the constructor that accepts BaseEnumT.
 ///
-template <typename derivedT, typename baseT>
+template <typename DerivedT, typename BaseT>
 class DeriveEnum {
-    union {
-        derivedT Derived;
-        baseT Base;
-    };
-
 public:
+    /// Default
     DeriveEnum() {}
-    DeriveEnum(derivedT e): Derived(e) {}
-    DeriveEnum(baseT e): Base(e) {}
-    explicit DeriveEnum(int val): Derived(static_cast<derivedT>(val)) {}
-    operator derivedT() const { return Derived; }
+    DeriveEnum(DerivedT e): Derived(e) {}
+    DeriveEnum(BaseT e): Base(e) {}
+    explicit DeriveEnum(int val): Derived(static_cast<DerivedT>(val)) {}
+
+    /// Casts
+    operator DerivedT() const { return Derived; }
+
+private:
+    // Properties
+    union {
+        DerivedT Derived;
+        BaseT Base;
+    };
 };
 
 

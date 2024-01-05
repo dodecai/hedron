@@ -4,9 +4,13 @@ import Vite.Type.Standard;
 
 ///
 /// @brief File System Helpers
+/// @todo Add more features and fix error handling, which I introduced with the new architecture.
 ///
 export namespace Hedron {
 
+///
+/// @brief Directory Helpers
+///
 class Directory {
 public:
     // Check if a given directory exists.
@@ -44,6 +48,9 @@ public:
     }
 };
 
+///
+/// @brief File Helpers
+///
 class File {
 public:
     // Check if a given file exists.
@@ -145,6 +152,9 @@ public:
     }
 };
 
+///
+/// @brief Tests
+///
 void TestFileSystem() {
     // Setup
     const string directory = "Test";

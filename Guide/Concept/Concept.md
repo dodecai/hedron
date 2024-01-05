@@ -41,8 +41,8 @@ Vite/ [Library]
 │  │  ├─ Display
 │  │  ├─ GFXContext
 │  │  └─ SFXContext
-│  ├─ Helpers/
-│  │  └─ Helpers
+│  ├─ Extensions/
+│  │  └─ Extensions
 │  ├─ Memory/
 │  │  └─ Memory
 │  ├─ Platform/
@@ -58,7 +58,6 @@ Vite/ [Library]
 │  │  ├─ Component
 │  │  ├─ Concepts
 │  │  ├─ Entity
-│  │  ├─ Future
 │  │  ├─ Literals
 │  │  ├─ Object
 │  │  ├─ Property
