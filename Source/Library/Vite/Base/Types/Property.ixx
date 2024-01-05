@@ -19,17 +19,22 @@ class Property {
     using Setter = std::function<T(const T &)>;
 
 public:
+    /// Default
     Property(): mValue(T()), mSetter(nullptr) {}
     Property(T value, const Setter &setter = nullptr): mValue(value), mSetter(setter) {}
     
+    /// Casts
     operator T () { return mValue; }
     operator T const &() const { return mValue; }
+
+    /// Operators
     Property<T> &operator=(const T &value) {
         mValue = mSetter ? mSetter(value) : value;
         return *this;
     }
 
 private:
+    // Properties
     T mValue;
     Setter mSetter;
 };
@@ -43,12 +48,8 @@ private:
 ///
 template <typename_arithmetic T>
 class ArithmeticProperty {
-    T Value {};
-    T Minimum {};
-    T Maximum {};
-    T Step = {};
-
 public:
+    /// Default
     // Predefined values {0}
     ArithmeticProperty() = default;
     // Define min and max (value = max)
@@ -56,6 +57,10 @@ public:
     // Define value, min and max
     ArithmeticProperty(T value, T min, T max): Value {value}, Minimum {min}, Maximum {max} {};
 
+    /// Casts
+    operator T const &() const { return Value; }
+
+    /// Operators
     T &operator=(const T &value) {
         if (!Minimum && !Maximum) {
             return Value;
@@ -81,7 +86,13 @@ public:
         --(*this);
         return temp;
     }
-    operator T const &() const { return Value; }
+
+private:
+    // Properties
+    T Value {};
+    T Minimum {};
+    T Maximum {};
+    T Step = {};
 };
 
 }

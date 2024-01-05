@@ -8,24 +8,28 @@ export namespace Hedron {
 
 using EntityID = size;
 
+///
+/// @brief Entity: Base class for all entities.
+///
 class Entity {
     // Types
     using ComponentList = vector<Reference<Component>>;
 
 public:
+    /// Default
     Entity(string_view name): mID(std::hash<string_view>{}(name)), mName(name) {};
     virtual ~Entity() = default;
 
     /// Methods
-
     void AddComponent(Reference<Component> component) {
         mComponents.push_back(component);
     }
-
     Reference<Component> GetComponent() {
         return {};
     }
-
+    bool HasComponent() {
+        return {};
+    }
     void RemoveComponent(Reference<Component> component) {
         mComponents.erase(std::remove(mComponents.begin(), mComponents.end(), component), mComponents.end());
     }

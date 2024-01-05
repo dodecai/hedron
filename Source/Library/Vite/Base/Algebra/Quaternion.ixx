@@ -1,7 +1,8 @@
 ﻿export module Vite.Algebra.Quaternion;
 
-import Vite.Type.Standard;
 import Vite.Algebra.Vector;
+import Vite.Type.Standard;
+
 export namespace Hedron {
 
 #pragma pack(push, 1)
@@ -10,11 +11,12 @@ export namespace Hedron {
 
 ///
 /// @brief Quaternion
+/// @todo Fix tests, which I broke with the new architecture, also finishing the comments would help.
 ///
 template<typename T>
     requires std::is_floating_point_v<T>
 struct QuaternionBase {
-    // Properties
+    /// Data
     union {
         array<T, 4> Data;
         struct {
@@ -22,7 +24,7 @@ struct QuaternionBase {
         };
     };
 
-    // Constructors
+    /// Default
     QuaternionBase(): w(1), x(0), y(0), z(0) {}
     QuaternionBase(T w, T x, T y, T z): w(w), x(x), y(y), z(z) {}
     QuaternionBase(const Vector3 &source) {
@@ -73,100 +75,7 @@ struct QuaternionBase {
     //    }
     //}
 
-    // Comparison
-    auto operator<=>(const QuaternionBase &other) const {
-        if (auto cmp = w <=> other.w; cmp != 0) return cmp;
-        if (auto cmp = x <=> other.x; cmp != 0) return cmp;
-        if (auto cmp = y <=> other.y; cmp != 0) return cmp;
-        return z <=> other.z;
-    }
-    auto operator==(const QuaternionBase &other) const {
-        return (*this <=> other) == 0;
-    }
-
-    // Conversions
-    /*MatrixBase<T, 4> ToMatrix() const {
-        MatrixBase<T, 4> mat;
-        mat(0, 0) = 1 - 2 * y * y - 2 * z * z;
-        mat(0, 1) = 2 * x * y - 2 * z * w;
-        mat(0, 2) = 2 * x * z + 2 * y * w;
-        mat(1, 0) = 2 * x * y + 2 * z * w;
-        mat(1, 1) = 1 - 2 * x * x - 2 * z * z;
-        mat(1, 2) = 2 * y * z - 2 * x * w;
-        mat(2, 0) = 2 * x * z - 2 * y * w;
-        mat(2, 1) = 2 * y * z + 2 * x * w;
-        mat(2, 2) = 1 - 2 * x * x - 2 * y * y;
-        return mat;
-    }*/
-    Vector3 ToEuler() const {
-        T roll, pitch, yaw;
-        T sinr_cosp = 2 * (w * x + y * z);
-        T cosr_cosp = 1 - 2 * (x * x + y * y);
-        roll = std::atan2(sinr_cosp, cosr_cosp);
-
-        T sinp = 2 * (w * y - z * x);
-        if (std::abs(sinp) >= 1)
-            pitch = std::copysign(std::numbers::pi / 2, sinp); // use 90 degrees if out of range
-        else
-            pitch = std::asin(sinp);
-
-        T siny_cosp = 2 * (w * z + x * y);
-        T cosy_cosp = 1 - 2 * (y * y + z * z);
-        yaw = std::atan2(siny_cosp, cosy_cosp);
-
-        return Vector3<T>(pitch, yaw, roll);
-    }
-
-    // Methods
-    QuaternionBase Conjugate() const {
-        return { w, -x, -y, -z };
-    }
-
-    T Dot(const QuaternionBase &q) const {
-        return w * q.w + x * q.x + y * q.y + z * q.z;
-    }
-
-    T Length() const {
-        return std::sqrt(w * w + x * x + y * y + z * z);
-    }
-
-    T Magnitude() const {
-        return std::sqrt(w * w + x * x + y * y + z * z);
-    }
-
-    T Max() {
-        return std::max({ w, y, z, x });
-    }
-
-    T Min() {
-        return std::min({ w, y, z, x });
-    }
-
-    QuaternionBase Normalized() const {
-        T mag = Magnitude();
-        return { w / mag, x / mag, y / mag, z / mag };
-    }
-
-    QuaternionBase Slerp(const QuaternionBase &q, T t) const {
-        T dot = Dot(q);
-        T theta = std::acos(dot);
-        T sin_theta = std::sin(theta);
-
-        if (std::abs(sin_theta) < 0.001) {
-            return (*this + (q - *this) * t).Normalized();
-        }
-
-        T scale1 = std::sin((1.0 - t) * theta) / sin_theta;
-        T scale2 = std::sin(t * theta) / sin_theta;
-
-        return (*this * scale1 + q * scale2).Normalized();
-    }
-
-    T SquaredLength() const {
-        return w * w + x * x + y * y + z * z;
-    }
-
-    // Arithmetic
+    /// Arithmetic
     QuaternionBase operator+(const QuaternionBase &q) const {
         return {
             w + q.w,
@@ -200,14 +109,119 @@ struct QuaternionBase {
         };
     }
 
-    // Assignment
+    /// Assignment
     QuaternionBase &operator*=(const QuaternionBase &q) {
         *this = *this * q;
         return *this;
     }
 
+    /// Comparison
+    auto operator<=>(const QuaternionBase &other) const {
+        if (auto cmp = w <=> other.w; cmp != 0) return cmp;
+        if (auto cmp = x <=> other.x; cmp != 0) return cmp;
+        if (auto cmp = y <=> other.y; cmp != 0) return cmp;
+        return z <=> other.z;
+    }
+    auto operator==(const QuaternionBase &other) const {
+        return (*this <=> other) == 0;
+    }
+
+    /// Casts
+    /*MatrixBase<T, 4> ToMatrix() const {
+        MatrixBase<T, 4> mat;
+        mat(0, 0) = 1 - 2 * y * y - 2 * z * z;
+        mat(0, 1) = 2 * x * y - 2 * z * w;
+        mat(0, 2) = 2 * x * z + 2 * y * w;
+        mat(1, 0) = 2 * x * y + 2 * z * w;
+        mat(1, 1) = 1 - 2 * x * x - 2 * z * z;
+        mat(1, 2) = 2 * y * z - 2 * x * w;
+        mat(2, 0) = 2 * x * z - 2 * y * w;
+        mat(2, 1) = 2 * y * z + 2 * x * w;
+        mat(2, 2) = 1 - 2 * x * x - 2 * y * y;
+        return mat;
+    }*/
+    Vector3 ToEuler() const {
+        T roll, pitch, yaw;
+        T sinr_cosp = 2 * (w * x + y * z);
+        T cosr_cosp = 1 - 2 * (x * x + y * y);
+        roll = std::atan2(sinr_cosp, cosr_cosp);
+
+        T sinp = 2 * (w * y - z * x);
+        if (std::abs(sinp) >= 1)
+            pitch = std::copysign(std::numbers::pi / 2, sinp); // use 90 degrees if out of range
+        else
+            pitch = std::asin(sinp);
+
+        T siny_cosp = 2 * (w * z + x * y);
+        T cosy_cosp = 1 - 2 * (y * y + z * z);
+        yaw = std::atan2(siny_cosp, cosy_cosp);
+
+        return Vector3<T>(pitch, yaw, roll);
+    }
+
+    ///
+    /// Methods
+    ///
+
+    // 
+    QuaternionBase Conjugate() const {
+        return { w, -x, -y, -z };
+    }
+
+    // 
+    T Dot(const QuaternionBase &q) const {
+        return w * q.w + x * q.x + y * q.y + z * q.z;
+    }
+
+    // 
+    T Length() const {
+        return std::sqrt(w * w + x * x + y * y + z * z);
+    }
+
+    // 
+    T Magnitude() const {
+        return std::sqrt(w * w + x * x + y * y + z * z);
+    }
+
+    // 
+    T Max() {
+        return std::max({ w, y, z, x });
+    }
+
+    // 
+    T Min() {
+        return std::min({ w, y, z, x });
+    }
+
+    // 
+    QuaternionBase Normalized() const {
+        T mag = Magnitude();
+        return { w / mag, x / mag, y / mag, z / mag };
+    }
+
+    // 
+    QuaternionBase Slerp(const QuaternionBase &q, T t) const {
+        T dot = Dot(q);
+        T theta = std::acos(dot);
+        T sin_theta = std::sin(theta);
+
+        if (std::abs(sin_theta) < 0.001) {
+            return (*this + (q - *this) * t).Normalized();
+        }
+
+        T scale1 = std::sin((1.0 - t) * theta) / sin_theta;
+        T scale2 = std::sin(t * theta) / sin_theta;
+
+        return (*this * scale1 + q * scale2).Normalized();
+    }
+
+    // 
+    T SquaredLength() const {
+        return w * w + x * x + y * y + z * z;
+    }
+
 private:
-    // Helpers
+    /// Helpers
     bool AlmostEqual(float a, float b, float epsilon = 0.000001f) {
         return std::abs(a - b) < epsilon;
     }
@@ -216,9 +230,10 @@ private:
 #pragma pack(pop)
 #pragma warning(pop)
 
-
+// Aliases
 using Quaternion = QuaternionBase<float>;
 using DQuaternion = QuaternionBase<double>;
+
 
 ///
 /// @brief Test Interface
@@ -231,17 +246,35 @@ void QuaternionTests();
 
 }
 
+///
+/// @brief Global Overloads
+/// @todo Implement
+///
+namespace std {}
+
+
+///
+/// @brief Tests
+///
+
 module: private;
 
 namespace Hedron::TestA {
 
+///
+/// @brief These tests are executed during the compilation phase, so no need to call them.
+///
 void Compiler() {
     // Ensure that the sizes are correct
     static_assert(16 == sizeof(QuaternionBase<float>),  "Quaternion<float>:   The type size should be 16 byte(s)!");
     static_assert(32 == sizeof(QuaternionBase<double>), "Quaternion<double>:  The type size should be 32 byte(s)!");
 }
 
-void QuaternionTests() {// Preparation
+///
+/// @brief These tests are executed during the runtime phase, so they need to be called.
+///
+void QuaternionTests() {
+    //// Preparation
     //LogInfo("Testing Quaternion");
     //Quaternion q0 { 1, 0, 0, 0 };
     //Quaternion q1 { 1, 0, 0, 0 };

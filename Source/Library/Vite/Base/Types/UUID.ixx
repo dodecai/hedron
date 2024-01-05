@@ -29,7 +29,7 @@ import std;
 export namespace Hedron {
 
 ///
-/// @brief Currently we use a string to hold the 128-Bit value, cause in our usecase it doesn't really matter
+/// @brief Currently we use a string to hold the 128-Bit value, cause in our use case it doesn't really matter
 /// All other unsigned integers hold a basic random number, but we are ready for the future, if a build-in 128-Bit sized integer arrives.
 /// 
 template<typename T>
@@ -43,34 +43,34 @@ concept typename_uuid = std::is_same_v<std::string, T> || (std::is_unsigned_v<T>
 template<typename_uuid T = std::string>
 class UUID {
 public:
-    // Default
+    /// Default
     UUID() { Generate(); }
     UUID(const T &value): Value(value) {}
     UUID(const UUID &other): Value(other.Value) {}
     UUID(UUID &&other): Value(std::move(other.Value)) {}
     ~UUID() = default;
 
-    // Accessors
+    /// Accessors
     operator T() { return Value; }
     operator UUID() { return *this; }
 
-    // Mutators
+    /// Mutators
     T &operator=(const T &rhs) { Value = rhs; return Value; }
     UUID &operator=(const UUID &rhs) { Value = rhs.Value; return *this; }
     UUID &operator=(UUID &&rhs) { Value = std::move(rhs.Value); return *this; }
 
-    // Comparisions
+    /// Comparisons
     bool operator==(const T &rhs) const { return Value == rhs; }
     bool operator!=(const T &rhs) const { return Value != rhs; }
     bool operator==(const UUID &rhs) const { return Value == rhs.Value; }
     bool operator!=(const UUID &rhs) const { return Value != rhs.Value; }
 
-    // Stream Support
+    /// Stream Support
     template<typename T>
     friend std::ostream &operator <<(std::ostream &os, const UUID<T> &rhs);
 
 private:
-    // Methods
+    /// Methods
     void Generate() {
         if constexpr (std::is_unsigned_v<T>) {
             // >128-Bit with random value (type dependent)
@@ -110,7 +110,7 @@ private:
     static inline std::mt19937_64 sGenerator { sRandomDevice() };
 };
 
-// Allow ostream to ouptut UUIDs without conversations
+// Overloads: allows ostream to output UUIDs without conversations
 template<typename T>
 std::ostream &operator <<(std::ostream &os, const UUID<T> &rhs) {
     os << rhs.Value;

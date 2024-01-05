@@ -10,29 +10,34 @@ import Vite.Type.Standard;
 export namespace Hedron {
 
 class Input {
-    static Scope<Input> Instance;
-
 public:
+    /// Default
     virtual ~Input() {}
     static Scope<Input> Create();
 
-    //static bool GetKeyState(KeyCode code);
-    //static bool GetMouseButtonState(MouseButton button);
-    //static bool GetMouseButtonStateDelta(MouseButton button);
-    //static std::pair<float, float> GetMousePosition();
-    //static std::pair<float, float> GetMousePositionDelta();
-    //static float GetMouseWheelDelta();
+    /// Methods
+    static bool GetKeyState(KeyCode code);
+    static bool GetMouseButtonState(MouseButton button);
+    static bool GetMouseButtonStateDelta(MouseButton button);
+    static std::pair<float, float> GetMousePosition();
+    static std::pair<float, float> GetMousePositionDelta();
+    static float GetMouseWheelDelta();
 
 protected:
-    //virtual bool GetKeyStatePlatform(KeyCode code) const = 0;
-    //virtual bool GetMouseButtonStatePlatform(MouseButton button) const = 0;
-    //virtual bool GetMouseButtonStateDeltaPlatform(MouseButton button) const = 0;
-    //virtual std::pair<float, float> GetMousePositionPlatform() const = 0;
-    //virtual std::pair<float, float> GetMousePositionDeltaPlatform() const = 0;
-    //virtual float GetMouseWheelDeltaPlatform() const = 0;
+    /// Platform
+    virtual bool GetKeyStatePlatform(KeyCode code) const = 0;
+    virtual bool GetMouseButtonStatePlatform(MouseButton button) const = 0;
+    virtual bool GetMouseButtonStateDeltaPlatform(MouseButton button) const = 0;
+    virtual std::pair<float, float> GetMousePositionPlatform() const = 0;
+    virtual std::pair<float, float> GetMousePositionDeltaPlatform() const = 0;
+    virtual float GetMouseWheelDeltaPlatform() const = 0;
 
 public:
+    // Properties
     inline static float sMouseWheelDelta {};
+
+private:
+    static Scope<Input> Instance;
 };
 
 }

@@ -1,7 +1,8 @@
 ﻿export module Vite.Base;
 
-// Prevent compilation if the target platform is not supported
+// Platform: Prevent compilation if the target platform is not supported
 import "Vite/Base/Platform/Detection.h";
+import "Vite/Base/Platform/Support.h";
 
 // Algebra: Algorithms and Types
 export import Vite.Algebra.Algorithms;
@@ -13,7 +14,6 @@ export import Vite.Algebra.Vector;
 export import Vite.Type.Component;
 export import Vite.Type.Concepts;
 export import Vite.Type.Entity;
-export import Vite.Type.Future;
 export import Vite.Type.Literals;
 export import Vite.Type.Object;
 export import Vite.Type.Property;
@@ -30,16 +30,14 @@ export import Vite.Device.GFXContext;
 export import Vite.Device.Input;
 export import Vite.Device.SFXContext;
 
-// Entity Component System
-
-// Helpers
-export import Vite.Base.Helpers;
+// Extensions
+export import Vite.Extensions;
 
 // Memory
 //export import Vite.Memory;
 
-// Runtime-Type-Information
-export import Vite.Runtime.RTTI;
+// Runtime-Type-Information (RTTI)
+export import Vite.Runtime.Reflection;
 
 // System
 export import Vite.System.Cli;

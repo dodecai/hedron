@@ -161,22 +161,23 @@ struct VectorData<T, N, VectorAliases::TextureCoordinate> {
 
 ///
 /// @brief VectorBase: Prototype
-/// | This is the vector base aggregation, which is used to implement the Vector class or similar arithmetic classes.
+/// @detail This is the vector base aggregation, which is used to implement the Vector class or similar arithmetic classes.
+/// @todo Fix tests, which I broke with the new architecture.
 ///
 template<VectorNumerics T, size_t N, VectorAliases A = VectorAliases::None>
 struct VectorBase;
 
 ///
 /// @brief VectorBase: Specialization
-/// | This is the specialization for nearly all types (except booleans), which offers everything needed.
+/// @detail This is the specialization for nearly all types (except booleans), which offers everything needed.
 /// @note Not used aliases are set to std::monostate and don't require any storage.
 ///
 template<VectorNumerics T, size_t N, VectorAliases A>
 struct VectorBase: public VectorData<T, N, A> {
-    // Import VectorData
+    /// Data
     using VectorData<T, N, A>::Data;
 
-    // Accessors
+    /// Accessors
     operator T *() {
         return &Data[0];
     }
@@ -190,30 +191,7 @@ struct VectorBase: public VectorData<T, N, A> {
         return Data[index];
     }
 
-    // Comparison
-    auto operator<=>(const VectorBase &other) const {
-        for (size_t i = 0; i < N; ++i) {
-            if (auto cmp = std::compare_strong_order_fallback(Data[i], other.Data[i]); cmp != 0) {
-                return cmp;
-            }
-        }
-        return std::strong_ordering::equal;
-    }
-    auto operator==(const VectorBase &other) const {
-        return (*this <=> other) == 0;
-    }
-
-    // Conversion
-    template <VectorNumerics U>
-    array<U, N> ToArray() const {
-        array<U, N> result;
-        std::transform(Data.begin(), Data.end(), result.begin(), [](bool b) {
-            return static_cast<U>(b);
-        });
-        return result;
-    }
-
-    // Arithmetic
+    /// Arithmetic
     auto operator+(const VectorBase &other) {
         VectorBase result = *this;
         return result += other;
@@ -251,6 +229,13 @@ struct VectorBase: public VectorData<T, N, A> {
         return result /= scalar;
     }
 
+    // Negates this vector.
+    auto operator-() const {
+        VectorBase result;
+        for (size_t i = 0; i < N; i++) { result.Data[i] = -Data[i]; }
+        return result;
+    }
+
     // - Allow scalar additions and multiplications from the left and right
     template<VectorNumerics S = T>
     friend VectorBase operator+(S scalar, const VectorBase &v) {
@@ -265,7 +250,7 @@ struct VectorBase: public VectorData<T, N, A> {
         return result;
     }
 
-    // Assignment
+    /// Assignment
     VectorBase &operator=(const VectorBase &) = default;
     VectorBase &operator+=(const VectorBase &other) {
         for (size_t i = 0; i < N; i++) { Data[i] += other.Data[i]; }
@@ -312,7 +297,30 @@ struct VectorBase: public VectorData<T, N, A> {
         return *this;
     }
 
-    // Iterators
+    /// Comparison
+    auto operator<=>(const VectorBase &other) const {
+        for (size_t i = 0; i < N; ++i) {
+            if (auto cmp = std::compare_strong_order_fallback(Data[i], other.Data[i]); cmp != 0) {
+                return cmp;
+            }
+        }
+        return std::strong_ordering::equal;
+    }
+    auto operator==(const VectorBase &other) const {
+        return (*this <=> other) == 0;
+    }
+
+    /// Casts
+    template <VectorNumerics U>
+    array<U, N> ToArray() const {
+        array<U, N> result;
+        std::transform(Data.begin(), Data.end(), result.begin(), [](bool b) {
+            return static_cast<U>(b);
+        });
+        return result;
+    }
+
+    /// Iterators
     auto begin() { return Data.begin(); }
     auto end() { return Data.end(); }
     auto rbegin() { return Data.rbegin(); }
@@ -322,13 +330,6 @@ struct VectorBase: public VectorData<T, N, A> {
     auto end() const { return Data.end(); }
     auto rbegin() const { return Data.rbegin(); }
     auto rend() const { return Data.rend(); }
-
-    // Negates this vector.
-    auto operator-() const {
-        VectorBase result;
-        for (size_t i = 0; i < N; i++) { result.Data[i] = -Data[i]; }
-        return result;
-    }
 
     ///
     /// Methods
@@ -537,10 +538,10 @@ struct VectorBase: public VectorData<T, N, A> {
 ///
 template<size_t N>
 struct VectorBase<bool, N, VectorAliases::None>: public VectorData<bool, N, VectorAliases::None> {
-    // Import VectorData
+    /// Data
     using VectorData<bool, N, VectorAliases::None>::Data;
 
-    // Accessors
+    /// Accessors
     operator bool *() {
         return &Data[0];
     }
@@ -554,7 +555,7 @@ struct VectorBase<bool, N, VectorAliases::None>: public VectorData<bool, N, Vect
         return Data[index];
     }
 
-    // Comparison
+    /// Comparison
     auto operator<=>(const VectorBase &other) const {
         for (size_t i = 0; i < N; ++i) {
             if (auto cmp = std::compare_strong_order_fallback(Data[i], other.Data[i]); cmp != 0) {
@@ -567,7 +568,7 @@ struct VectorBase<bool, N, VectorAliases::None>: public VectorData<bool, N, Vect
         return (*this <=> other) == 0;
     }
 
-    // Conversion
+    /// Casts
     template <VectorNumerics U>
     array<U, N> ToArray() const {
         array<U, N> result;
@@ -577,7 +578,7 @@ struct VectorBase<bool, N, VectorAliases::None>: public VectorData<bool, N, Vect
         return result;
     }
 
-    // Iterators
+    /// Iterators
     auto begin() { return Data.begin(); }
     auto end() { return Data.end(); }
     auto rbegin() { return Data.rbegin(); }
@@ -627,6 +628,7 @@ using TextureCoord3D = VectorBase<float, 3, VectorAliases::TextureCoordinate>;
 using Velocity2D = VectorBase<float, 2, VectorAliases::None>;
 using Velocity3D = VectorBase<float, 3, VectorAliases::None>;
 
+
 ///
 /// @brief Test Interface
 ///
@@ -639,9 +641,8 @@ void VectorTests();
 }
 
 ///
-/// @brief Conversions
+/// @brief Global Overloads
 ///
-
 namespace std {
 
 template<Hedron::VectorNumerics T, size_t N, Hedron::VectorAliases A>
@@ -676,6 +677,7 @@ struct std::formatter<Hedron::VectorBase<T, N, A>> {
 
 }
 
+
 ///
 /// @brief Tests
 ///
@@ -685,7 +687,7 @@ module: private;
 namespace Hedron::TestA {
 
 ///
-/// @brief: These tests are executed during the compilation phase, so no need to call them.
+/// @brief These tests are executed during the compilation phase, so no need to call them.
 ///
 void Compiler() {
     // Ensure that the sizes are correct
@@ -707,7 +709,7 @@ void Compiler() {
 }
 
 ///
-/// @brief Vector Tests
+/// @brief These tests are executed during the runtime phase, so they need to be called.
 ///
 void VectorTests() {
     //// Preparation

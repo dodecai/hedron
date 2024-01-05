@@ -1,7 +1,7 @@
 ﻿export module Vite.Type.SourceLocation;
 
 import std;
-import Vite.Base.Helpers;
+import Vite.Extensions;
 
 // Helpers
 namespace Hedron {
@@ -26,8 +26,10 @@ export namespace Hedron {
 /// This code is based on the default implementation (source_location), but contains more information.
 ///
 struct SourceLocation {
+    /// Default
     [[nodiscard]] constexpr SourceLocation() noexcept = default;
 
+    /// Methods
     [[nodiscard]] static consteval SourceLocation Current(
             const std::string_view file = __builtin_FILE(),
             const std::string_view function = __builtin_FUNCTION(),
@@ -45,6 +47,7 @@ struct SourceLocation {
         return result;
     }
 
+    // Properties
     std::string_view File {};
     std::string_view Class {};
     std::string_view Function {};

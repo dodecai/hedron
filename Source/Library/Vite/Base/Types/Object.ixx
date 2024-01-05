@@ -15,6 +15,7 @@ export namespace Hedron {
 ///
 class CopyableObject {
 protected:
+    /// Default
     CopyableObject() = default;
     virtual ~CopyableObject() = default;
 
@@ -28,6 +29,7 @@ public:
 ///
 class MoveableObject {
 protected:
+    /// Default
     MoveableObject() = default;
     virtual ~MoveableObject() = default;
 
@@ -41,6 +43,7 @@ public:
 ///
 class SteadyObject {
 protected:
+    /// Default
     SteadyObject() = default;
     virtual ~SteadyObject() = default;
 
@@ -54,17 +57,21 @@ public:
 
 ///
 /// @brief Restricts access to certain methods or properties of objects.
+/// @note Left for future use.
 ///
 class AccessControlledObject {
 protected:
+    /// Default
     AccessControlledObject() = default;
     virtual ~AccessControlledObject() = default;
-
+    
+    /// Methods
     void Restricted() {
         if (!mAllowedAccess) throw std::runtime_error("Access not allowed.");
     }
 
 private:
+    // Properties
     bool mAllowedAccess {};
 };
 
@@ -74,6 +81,7 @@ private:
 ///
 class ConfigurationObject {
 protected:
+    /// Default
     ConfigurationObject() = default;
     virtual ~ConfigurationObject() = default;
 };
@@ -97,9 +105,11 @@ protected:
 template <typename T>
 class SerializableObject {
 public:
+    /// Default
     SerializableObject() = default;
     virtual ~SerializableObject() = default;
 
+    /// Methods
     virtual T Serialize() = 0;
     virtual void Deserialize(const T &data) = 0;
 };
@@ -112,18 +122,24 @@ public:
 ///
 class ThreadSafeObject {
 protected:
-    ThreadSafeObject() = default;
-    virtual ~ThreadSafeObject() = default;
-
+    // Types
     class LockGuard {
     public:
+        /// Default
         LockGuard(ThreadSafeObject &object): mObject(object) { mObject.Lock(); }
         ~LockGuard() { mObject.Unlock(); }
 
     private:
+        // Properties
         ThreadSafeObject &mObject;
     };
 
+protected:
+    /// Default
+    ThreadSafeObject() = default;
+    virtual ~ThreadSafeObject() = default;
+
+    /// Methods
     void Lock() {
         mMutex.lock();
     }
@@ -132,6 +148,7 @@ protected:
     }
 
 private:
+    // Properties
     std::mutex mMutex;
 };
 

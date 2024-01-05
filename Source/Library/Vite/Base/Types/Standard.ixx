@@ -2,6 +2,11 @@
 
 export import std;
 
+///
+/// @brief Standard Library Types
+/// @detail This module imports the standard library types and makes them available to the rest of the library.
+///
+
 export namespace Hedron {
 
 // Concurrency

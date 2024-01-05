@@ -1,5 +1,9 @@
 ﻿export module Vite.Algebra.Algorithms;
 
+export namespace Hedron {
+
+#ifdef LEGACY_CODE
+
 //#pragma warning(push)
 //#pragma warning(disable: 4201)
 //
@@ -17,15 +21,6 @@
 //export import <glm/gtx/string_cast.hpp>;
 //
 //#pragma warning(pop)
-
-import Vite.Type.Standard;
-export import Vite.Algebra.Matrix;
-export import Vite.Algebra.Quaternion;
-export import Vite.Algebra.Vector;
-
-export namespace Hedron {
-
-#ifdef LEGACY_CODE
 
 ///
 /// @brief Migration Section, until everything is implemented, we use the glm Mappings
