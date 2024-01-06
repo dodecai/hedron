@@ -2,34 +2,36 @@
 import <Vite/EntryPoint.h>;
 
 import Vite;
-
 import Vivid.View.Designer;
 
 namespace Hedron {
 
-// Application
+///
+/// @brief Vivid | Designer
+/// @detail This project contains the main editor for the Hedron Engine.
+///
 class Vivid: public Application {
 public:
-    // Default
+    /// Default
     Vivid(const Settings &settings): Application(settings) {}
     ~Vivid() {}
 
-    // Methods
+    /// Methods
 	void Create() override {}
 	void Destroy() override {}
-
-	void Update([[maybe_unused]] DeltaTime deltaTime) override {
+	void Update(DeltaTime deltaTime) override {
         //Aurora::ShowDemo();
         //Aurora::Update(deltaTime);
         //Aurora::Draw();
     }
 
 private:
+    /// Properties
 };
 
 // Application Entry-Point
 Application* CreateApplication() {
-	return new Vivid({ "Vivid", "1280x1024" /*, GraphicsAPI::OpenGL */ });
+	return new Vivid({ "Vivid", "1280x1024" });
 }
 
 }

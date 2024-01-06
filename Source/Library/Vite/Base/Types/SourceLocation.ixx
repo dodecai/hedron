@@ -3,7 +3,7 @@
 import std;
 import Vite.Extension;
 
-// Helpers
+/// Helpers
 namespace Hedron {
 
 // Extracts the pretty class name from a function signature
@@ -23,9 +23,17 @@ export namespace Hedron {
 
 ///
 /// @brief SourceLocation (with more information)
-/// This code is based on the default implementation (source_location), but contains more information.
+/// @detail This code is based on the default implementation (source_location), but contains more information.
 ///
 struct SourceLocation {
+    /// Data
+    std::string_view File {};
+    std::string_view Class {};
+    std::string_view Function {};
+    std::string_view FunctionSignature {};
+    std::uint32_t Line {};
+    std::uint32_t Column {};
+
     /// Default
     [[nodiscard]] constexpr SourceLocation() noexcept = default;
 
@@ -46,14 +54,6 @@ struct SourceLocation {
         result.Column = column;
         return result;
     }
-
-    // Properties
-    std::string_view File {};
-    std::string_view Class {};
-    std::string_view Function {};
-    std::string_view FunctionSignature {};
-    std::uint32_t Line {};
-    std::uint32_t Column {};
 };
 
 }

@@ -16,11 +16,13 @@ export namespace Hedron {
 /// faster then string_view, 'cause under the hood it created a temporary string_view.
 ///
 struct LogRecord {
+    /// Properties
     const char *Format;
     mutable LogLevel Level;
     SourceLocation Location;
     string Timestamp;
 
+    /// Default
     LogRecord(const char *format, const LogLevel &level = LogLevel::Default, const string &timestamp = appchrono.GetTimeStamp(), const SourceLocation &location = SourceLocation::Current()):
         Format(format),
         Level(level),
@@ -28,16 +30,17 @@ struct LogRecord {
         Timestamp(timestamp) {
     }
 
+    /// Comparison
     bool operator==(const LogRecord &other) const {
         return Level == other.Level && Timestamp == other.Timestamp;
     }
 };
 
+/// Overloads
 struct LogRecordHasher {
     size_t operator()(const LogRecord &record) const {
         return std::hash<LogLevel>{}(record.Level) ^ std::hash<string>{}(record.Timestamp);
     }
 };
-
 
 }

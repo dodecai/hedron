@@ -1,29 +1,30 @@
 ﻿export module Vite.Base;
 
-// Platform: Prevent compilation if the target platform is not supported
+/// Platform
+// Prevent compilation if the target platform is not supported
 import "Vite/Base/Platform/Detection.h";
 import "Vite/Base/Platform/Support.h";
 
-// Algebra: Algorithms
+/// Algebra: Algorithms
 export import Vite.Algorithm;
 
-// Devices
+/// Devices
 export import Vite.Device;
 
-// Extensions
+/// Extensions
 export import Vite.Extension;
 
-// Mathematics
+/// Mathematics
 export import Vite.Math;
 
-// Memory
+/// Memory
 export import Vite.Memory;
 
-// Runtime-Type-Information (RTTI)
+/// Runtime-Type-Information (RTTI)
 export import Vite.Runtime;
 
-// System
+/// System
 export import Vite.System;
 
-// [Basic] Types
+/// [Basic] Types
 export import Vite.Type;

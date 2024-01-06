@@ -4,18 +4,15 @@ import "Vite/Base/Platform/Support.h";
 import Vite.Type.Concepts;
 import Vite.Type.Standard;
 
-///
-/// @brief Vector[2-4]D
-///
 export namespace Hedron {
 
 #pragma region Vector Data
 
 ///
-/// @brief Concepts
+/// Concepts
 ///
 
-// VectorTypes: [bool|double|float|int32|uint32]
+// Vector Types [bool|double|float|int32|uint32]
 template<typename T>
 concept VectorNumerics =
 std::is_same_v<T, bool> ||
@@ -24,15 +21,15 @@ std::is_same_v<T, bool> ||
     std::is_same_v<T, int32> ||
     std::is_same_v<T, uint32>;
 
-// VectorSizes: [2|3|4]
+// Vector Sizes [2|3|4]
 template<size_t N>
 concept VectorSizeRange = (N >= 2 && N <= 4);
 
 ///
-/// @brief Enumerations
+/// Enumerations
 ///
 
-// Vector Aliases: [None|Coordinate|Normal|Rotation|TextureCoordinate]
+// Vector Aliases [None|Coordinate|Normal|Rotation|TextureCoordinate]
 enum class VectorAliases {
     Coordinate,
     Normal,
@@ -68,13 +65,13 @@ struct VectorData<T, N, VectorAliases::None> {
 ///
 template<VectorNumerics T, size_t N>
 struct VectorData<T, N, VectorAliases::Coordinate> {
-    // Aliases
+    /// Aliases
     using T1 = typename std::conditional_t<N >= 1, T, std::monostate>;
     using T2 = typename std::conditional_t<N >= 2, T, std::monostate>;
     using T3 = typename std::conditional_t<N >= 3, T, std::monostate>;
     using T4 = typename std::conditional_t<N >= 4, T, std::monostate>;
 
-    // Properties
+    /// Data
     union {
         std::array<T, N> Data;
         struct {
@@ -92,12 +89,12 @@ struct VectorData<T, N, VectorAliases::Coordinate> {
 template<VectorNumerics T, size_t N>
     requires (N <= 3)
 struct VectorData<T, N, VectorAliases::Normal> {
-    // Aliases
+    /// Aliases
     using T1 = typename std::conditional_t<N >= 1, T, std::monostate>;
     using T2 = typename std::conditional_t<N >= 2, T, std::monostate>;
     using T3 = typename std::conditional_t<N >= 3, T, std::monostate>;
 
-    // Properties
+    /// Data
     union {
         std::array<T, N> Data;
         struct {
@@ -114,12 +111,12 @@ struct VectorData<T, N, VectorAliases::Normal> {
 template<VectorNumerics T, size_t N>
     requires (N == 3)
 struct VectorData<T, N, VectorAliases::Rotation> {
-    // Aliases
+    /// Aliases
     using T1 = typename std::conditional_t<N >= 1, T, std::monostate>;
     using T2 = typename std::conditional_t<N >= 2, T, std::monostate>;
     using T3 = typename std::conditional_t<N >= 3, T, std::monostate>;
 
-    // Properties
+    /// Data
     union {
         std::array<T, N> Data;
         struct {
@@ -136,12 +133,12 @@ struct VectorData<T, N, VectorAliases::Rotation> {
 template<VectorNumerics T, size_t N>
     requires (N >= 2 && N <= 3)
 struct VectorData<T, N, VectorAliases::TextureCoordinate> {
-    // Aliases
+    /// Aliases
     using T1 = typename std::conditional_t<N >= 1, T, std::monostate>;
     using T2 = typename std::conditional_t<N >= 2, T, std::monostate>;
     using T3 = typename std::conditional_t<N >= 3, T, std::monostate>;
 
-    // Properties
+    /// Data
     union {
         std::array<T, N> Data;
         struct {
@@ -229,24 +226,26 @@ struct VectorBase: public VectorData<T, N, A> {
         return result /= scalar;
     }
 
-    // Negates this vector.
-    auto operator-() const {
-        VectorBase result;
-        for (size_t i = 0; i < N; i++) { result.Data[i] = -Data[i]; }
-        return result;
-    }
-
-    // - Allow scalar additions and multiplications from the left and right
+    // Allows scalar additions from the left and right
     template<VectorNumerics S = T>
     friend VectorBase operator+(S scalar, const VectorBase &v) {
         VectorBase result = v;
         for (size_t i = 0; i < N; i++) { result.Data[i] += scalar; }
         return result;
     }
+
+    // Allows scalar multiplications from the left and right
     template<VectorNumerics S = T>
     friend VectorBase operator*(S scalar, const VectorBase &v) {
         VectorBase result = v;
         for (size_t i = 0; i < N; i++) { result.Data[i] *= scalar; }
+        return result;
+    }
+
+    // Negates this vector.
+    auto operator-() const {
+        VectorBase result;
+        for (size_t i = 0; i < N; i++) { result.Data[i] = -Data[i]; }
         return result;
     }
 
@@ -534,7 +533,7 @@ struct VectorBase: public VectorData<T, N, A> {
 
 ///
 /// @brief Vector: Boolean Specialization
-/// | Due to the nature of booleans, this specialization has no arithmetic operators or methods.
+/// @note Due to the nature of booleans, this specialization has no arithmetic operators or methods.
 ///
 template<size_t N>
 struct VectorBase<bool, N, VectorAliases::None>: public VectorData<bool, N, VectorAliases::None> {
@@ -593,9 +592,8 @@ struct VectorBase<bool, N, VectorAliases::None>: public VectorData<bool, N, Vect
 #pragma endregion
 
 ///
-/// @brief Aliases
+/// Aliases
 ///
-
 using Vector2 = VectorBase<float, 2, VectorAliases::Coordinate>;
 using Vector3 = VectorBase<float, 3, VectorAliases::Coordinate>;
 using Vector4 = VectorBase<float, 4, VectorAliases::Coordinate>;
@@ -630,9 +628,9 @@ using Velocity3D = VectorBase<float, 3, VectorAliases::None>;
 
 
 ///
-/// @brief Test Interface
+/// Tests
 ///
-export namespace TestA {
+export namespace Test {
 
 void VectorTests();
 
@@ -641,7 +639,7 @@ void VectorTests();
 }
 
 ///
-/// @brief Global Overloads
+/// Global Overloads
 ///
 namespace std {
 
@@ -679,16 +677,13 @@ struct std::formatter<Hedron::VectorBase<T, N, A>> {
 
 
 ///
-/// @brief Tests
+/// Implementation
 ///
-
 module: private;
 
-namespace Hedron::TestA {
+namespace Hedron::Test {
 
-///
-/// @brief These tests are executed during the compilation phase, so no need to call them.
-///
+// These tests are executed during the compilation phase, so no need to call them.
 void Compiler() {
     // Ensure that the sizes are correct
     static_assert( 2 == sizeof(VectorBase<bool,    2>), "VectorBase<bool>[2]:   The type size should be 2 byte(s)!");
@@ -708,9 +703,7 @@ void Compiler() {
     static_assert(16 == sizeof(VectorBase<uint32_t,4>), "VectorBase<uint32>[4]: The type size should be 16 bytes(s)!");
 }
 
-///
-/// @brief These tests are executed during the runtime phase, so they need to be called.
-///
+// These tests are executed during the runtime phase, so they need to be called.
 void VectorTests() {
     //// Preparation
     //LogInfo("Testing Vector");

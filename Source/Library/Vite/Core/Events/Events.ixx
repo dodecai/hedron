@@ -9,13 +9,16 @@ export import Vite.Event.Emitter;
 import Vite.Base;
 
 ///
-/// @brief Event Data
+/// Event Data
+/// @todo: Move to appropriate module
 ///
+
 export namespace Hedron {
 
 ///
-/// @brief Event Specifications
+/// Enumerations
 ///
+
 // Category
 enum class EventCategory {
 	Default		= 0x00,
@@ -118,16 +121,17 @@ inline std::ostream &operator<<(std::ostream &stream, EventSource source) {
     return stream;
 }
 
-// Helpers
+///
+/// Helpers
+///
+
 inline bool IsEventCategory(EventSource source, EventCategory category) {
     if (GetEnumType(source) & 1 << GetEnumType(category)) { return true; }
     return false;
 }
 
-
 ///
-/// @brief Actions
-/// @todo: Move to appropriate module
+/// Actions
 ///
 enum class WindowAction {
     Null		= 0x00,
@@ -201,10 +205,8 @@ inline std::ostream &operator<<(std::ostream &stream, ContextAction action) {
     return stream;
 }
 
-
 ///
-/// @brief States
-/// @todo: Move to appropriate module
+/// States
 ///
 struct ModifierState {
 	bool Alt        = false;
@@ -250,10 +252,10 @@ inline std::ostream &operator<<(std::ostream &stream, ModifierStateMask state) {
 	return stream;
 }
 
+///
+/// Data
+///
 
-///
-/// @brief Event Data
-///
 // Interface
 struct EventData {
     bool Handled = false;
@@ -387,11 +389,11 @@ struct TouchEventData: public EventData {
 
 }
 
+export namespace Hedron {
+
 ///
 /// @brief Event Listener
 ///
-export namespace Hedron {
-
 class EventListener {
 public:
     // Default
@@ -407,8 +409,9 @@ public:
     //struct EventEmitter: public Emitter<EventEmitter> {} Emitter;
 };
 
-/// Interfaces
-// Event-Data
+///
+/// Event Interface
+///
 struct Event {
     // Constructors and Deconstructor
     Event() = delete;

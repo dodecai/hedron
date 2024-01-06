@@ -1,8 +1,7 @@
 ﻿export module Vite.App.Layers;
 
 import Vite.Base;
-//import Vite.Core.Event.Data;
-//import Vite.System.Event;
+import Vite.Event;
 
 export namespace Hedron {
 
@@ -11,29 +10,36 @@ export namespace Hedron {
 ///
 class Layer {
 public:
+    /// Default
     Layer(const string &name = "Layer"): mName(name) {}
     virtual ~Layer() = default;
 
-    virtual void Attach() {}
-    virtual void Detach() {}
-
+    ///
+    /// Interface
+    ///
+    
     virtual void Create() {}
     virtual void Destroy() {}
+    virtual void Attach() {}
+    virtual void Detach() {}
     virtual void GuiUpdate() {}
     virtual void Update([[maybe_unused]] DeltaTime deltaTime) {}
 
-    inline const string &GetName() const { return mName; }
-
-    // EventListener
-    virtual void OnControllerEvent(/*[[maybe_unused]] ControllerEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
-    virtual void OnDeviceEvent(/*[[maybe_unused]] DeviceEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
-    virtual void OnKeyboardEvent(/*[[maybe_unused]] KeyboardEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
-    virtual void OnMouseEvent(/*[[maybe_unused]] MouseEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
-    virtual void OnPowerEvent(/*[[maybe_unused]] PowerEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter*/) {}
-    virtual void OnTouchEvent(/*[[maybe_unused]] TouchEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
-    virtual void OnWindowEvent(/*[[maybe_unused]] WindowEventData &data, [[maybe_unused]] const EventListener::EventEmitter &emitter */ ) {}
-
+    ///
+    /// Event Interface
+    ///
+    
+    virtual void OnAppEvent([[maybe_unused]] WindowEventData &data /*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
+    virtual void OnControllerEvent([[maybe_unused]] ControllerEventData &data /*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
+    virtual void OnKeyboardEvent([[maybe_unused]] KeyboardEventData &data /*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
+    virtual void OnMouseEvent([[maybe_unused]] MouseEventData &data/*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
+    virtual void OnTouchEvent([[maybe_unused]] TouchEventData &data /*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
+    
+    /// Accessors
+    const string &GetName() const { return mName; }
+    
 protected:
+    /// Properties
     string mName;
 };
 
@@ -42,53 +48,56 @@ protected:
 ///
 class LayerStack {
 public:
+    /// Default
     LayerStack() = default;
     ~LayerStack() {
-        for (auto *layer : Layers) {
+        for (auto *layer : mLayers) {
             layer->Detach();
             delete layer;
         }
     }
 
+    /// Methods
     void PushLayer(Layer *layer) {
-        Layers.emplace(Layers.begin() + LayerInsertIndex, layer);
-        LayerInsertIndex++;
+        mLayers.emplace(mLayers.begin() + mLayerInsertIndex, layer);
+        mLayerInsertIndex++;
         layer->Attach();
     }
     void PushOverlay(Layer *overlay) {
-        Layers.emplace_back(overlay);
+        mLayers.emplace_back(overlay);
         overlay->Attach();
     }
     void PopLayer(Layer *layer) {
-        auto it = std::find(Layers.begin(), Layers.begin() + LayerInsertIndex, layer);
-        if (it != Layers.begin() + LayerInsertIndex) {
+        auto it = std::find(mLayers.begin(), mLayers.begin() + mLayerInsertIndex, layer);
+        if (it != mLayers.begin() + mLayerInsertIndex) {
             layer->Detach();
-            Layers.erase(it);
-            LayerInsertIndex--;
+            mLayers.erase(it);
+            mLayerInsertIndex--;
         }
     }
     void PopOverlay(Layer *overlay) {
-        auto it = std::find(Layers.begin() + LayerInsertIndex, Layers.begin(), overlay);
-        if (it != Layers.begin() + LayerInsertIndex) {
+        auto it = std::find(mLayers.begin() + mLayerInsertIndex, mLayers.begin(), overlay);
+        if (it != mLayers.begin() + mLayerInsertIndex) {
             overlay->Detach();
-            Layers.erase(it);
+            mLayers.erase(it);
         }
     }
 
-    auto begin() { return Layers.begin(); }
-    auto end() { return Layers.end(); }
-    auto rbegin() { return Layers.rbegin(); }
-    auto rend() { return Layers.rend(); }
+    /// Iterators
+    auto begin() { return mLayers.begin(); }
+    auto end() { return mLayers.end(); }
+    auto rbegin() { return mLayers.rbegin(); }
+    auto rend() { return mLayers.rend(); }
 
-    auto begin() const { return Layers.begin(); }
-    auto end() const { return Layers.end(); }
-    auto rbegin() const { return Layers.rbegin(); }
-    auto rend() const { return Layers.rend(); }
+    auto begin() const { return mLayers.begin(); }
+    auto end() const { return mLayers.end(); }
+    auto rbegin() const { return mLayers.rbegin(); }
+    auto rend() const { return mLayers.rend(); }
 
 private:
-    uint32 LayerInsertIndex = 0;
-    vector<Layer *> Layers;
-    vector<Layer *>::iterator LayerInsert;
+    /// Properties
+    uint32 mLayerInsertIndex = 0;
+    vector<Layer *> mLayers;
 };
 
 }

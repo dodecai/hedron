@@ -2,9 +2,6 @@
 
 import Vite.Base;
 
-///
-/// Log Level
-///
 export namespace Hedron {
 
 ///
@@ -13,7 +10,7 @@ export namespace Hedron {
 /// Structuring: Caption and Delimiter
 ///
 enum class LogLevel {
-    // Log Levels
+    /// Log Levels
     Trace   = 0x1,	// Message (Level 1): Everything that could be interesting in the future.
     Debug   = 0x2,	// Message (Level 2): Debugging messages, which can help at parts, where we are unsure if the code will ever fail.
     Info    = 0x3,	// Message (Level 3): Information that is maybe useful for gathering basic system data.
@@ -22,17 +19,17 @@ enum class LogLevel {
     Fatal   = 0x6,	// Message (Level 6): Critical messages which will break runtime execution.
     Default = 0x7,	// Message (Level 7): Default output with nothing added
 
-    // Structuring
+    /// Structuring
     Caption     = 0x20,	// Structure the log by a given caption
     Delimiter   = 0x21,	// Structure the log with a delimiter
 };
 
-// Concepts
+/// Concepts
 template <typename T>
 concept typename_logmodifier =
     std::is_same_v<std::decay_t<T>, LogLevel>;
 
-// Overloads
+/// Overloads
 template <typename_logmodifier T>
 inline auto &operator<<(ostream &os, const T &level) {
     switch (level) {
@@ -77,7 +74,7 @@ inline auto &operator<<(wostream &os, const T &level) {
 
 }
 
-// Global Overloads
+/// Global Overloads
 namespace std {
 
 template <>

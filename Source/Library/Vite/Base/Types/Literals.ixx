@@ -2,10 +2,6 @@
 
 import std;
 
-///
-/// @brief Literals
-///
-
 export namespace Hedron {
 
 ///

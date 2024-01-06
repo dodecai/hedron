@@ -1,6 +1,7 @@
 ﻿export module Vite.Math.Quaternion;
 
 import Vite.Math.Vector;
+import Vite.Type.Concepts;
 import Vite.Type.Standard;
 
 export namespace Hedron {
@@ -11,10 +12,10 @@ export namespace Hedron {
 
 ///
 /// @brief Quaternion
-/// @todo Fix tests, which I broke with the new architecture, also finishing the comments would help.
+/// @todo Implement global overloads and fix tests, which I broke with the new architecture,
+/// also finishing the comments would help.
 ///
-template<typename T>
-    requires std::is_floating_point_v<T>
+template<typename_floating_point T>
 struct QuaternionBase {
     /// Data
     union {
@@ -230,15 +231,16 @@ private:
 #pragma pack(pop)
 #pragma warning(pop)
 
-// Aliases
+///
+/// Aliases
+///
 using Quaternion = QuaternionBase<float>;
 using DQuaternion = QuaternionBase<double>;
 
-
 ///
-/// @brief Test Interface
+/// Tests
 ///
-export namespace TestA {
+export namespace Test {
 
 void QuaternionTests();
 
@@ -247,32 +249,25 @@ void QuaternionTests();
 }
 
 ///
-/// @brief Global Overloads
-/// @todo Implement
+/// Global Overloads
 ///
 namespace std {}
 
-
 ///
-/// @brief Tests
+/// Implementation
 ///
-
 module: private;
 
-namespace Hedron::TestA {
+namespace Hedron::Test {
 
-///
-/// @brief These tests are executed during the compilation phase, so no need to call them.
-///
+// These tests are executed during the compilation phase, so no need to call them.
 void Compiler() {
     // Ensure that the sizes are correct
     static_assert(16 == sizeof(QuaternionBase<float>),  "Quaternion<float>:   The type size should be 16 byte(s)!");
     static_assert(32 == sizeof(QuaternionBase<double>), "Quaternion<double>:  The type size should be 32 byte(s)!");
 }
 
-///
-/// @brief These tests are executed during the runtime phase, so they need to be called.
-///
+// These tests are executed during the runtime phase, so they need to be called.
 void QuaternionTests() {
     //// Preparation
     //LogInfo("Testing Quaternion");

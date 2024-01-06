@@ -14,6 +14,6 @@
     #include <imgui/../../source/backends/imgui_impl_win32-patch.cpp>
 #endif
 
-module Vite.ImGuiBuilder;
+module Vite.DearImGui.Builder;
 
 namespace Hedron {}

@@ -2,24 +2,19 @@
 
 import Vite.Math.Quaternion;
 import Vite.Math.Vector;
+import Vite.Type.Concepts;
 import Vite.Type.Standard;
 
 export namespace Hedron {
-
-// Concepts
-template<typename T>
-concept MatrixNumerics = 
-    std::is_same_v<T, double> ||
-    std::is_same_v<T, float>;
 
 #pragma pack(push, 1)
 #pragma warning(push, 1)
 
 ///
 /// @brief Matrix[2-4 x 2-4]D
-/// @todo Fix tests, which I broke with the new architecture.
+/// @todo Implement global overloads and fix tests, which I broke with the new architecture.
 ///
-template<MatrixNumerics T, size_t N>
+template<typename_floating_point T, size_t N>
 struct MatrixBase {
     /// Data
     array<array<T, N>, N> Data {};
@@ -335,7 +330,7 @@ struct MatrixBase {
         return result;
     }
 
-public:
+private:
     /// Helpers
     void ValidateScalar(T scalar) {
         if (std::abs(scalar) < std::numeric_limits<T>::epsilon()) {
@@ -347,7 +342,9 @@ public:
 #pragma warning(pop)
 #pragma pack(pop)
 
-// Aliases
+///
+/// Aliases
+///
 using Matrix2 = MatrixBase<float, 2>;
 using Matrix3 = MatrixBase<float, 3>;
 using Matrix4 = MatrixBase<float, 4>;
@@ -356,12 +353,14 @@ using DMatrix2 = MatrixBase<double, 2>;
 using DMatrix3 = MatrixBase<double, 3>;
 using DMatrix4 = MatrixBase<double, 4>;
 
+///
+/// Tests
+///
+export namespace Test {
 
 ///
 /// @brief Test Interface
 ///
-export namespace TestA {
-
 void MatrixTests();
 
 }
@@ -369,23 +368,18 @@ void MatrixTests();
 }
 
 ///
-/// @brief Global Overloads
-/// @todo Implement
+/// Global Overloads
 ///
 namespace std {}
 
-
 ///
-/// @brief Tests
+/// Implementation
 ///
-
 module: private;
 
-namespace Hedron::TestA {
+namespace Hedron::Test {
 
-///
-/// @brief These tests are executed during the compilation phase, so no need to call them.
-///
+// These tests are executed during the compilation phase, so no need to call them.
 void Compiler() {
     // Ensure that the sizes are correct
     static_assert( 32 == sizeof(MatrixBase<double,  2>), "MatrixBase<double>[2]: The type size should be 32 byte(s)!");
@@ -396,9 +390,7 @@ void Compiler() {
     static_assert( 64 == sizeof(MatrixBase<float,   4>), "MatrixBase<float>[4]:  The type size should be 64 byte(s)!");
 }
 
-///
-/// @brief These tests are executed during the runtime phase, so they need to be called.
-///
+// These tests are executed during the runtime phase, so they need to be called.
 void MatrixTests() {
     //// Preparation
     //LogInfo("Testing Matrix");

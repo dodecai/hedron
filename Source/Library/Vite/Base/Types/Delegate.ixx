@@ -1,11 +1,13 @@
-﻿///
-/// @brief Delegate
-/// Base: https://github.com/skypjack/entt/blob/master/src/entt/signal/delegate.hpp
-///
-export module Vite.Event.Delegate;
+﻿export module Vite.Type.Delegate;
 
 import <entt/entt.hpp>;
 
+///
+/// @brief Delegate
+/// @base https://github.com/skypjack/entt/blob/master/src/entt/signal/delegate.hpp
+///
+
+/// Helpers
 namespace {
 
 template<typename Ret, typename... Args>

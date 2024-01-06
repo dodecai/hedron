@@ -22,11 +22,11 @@ public:
     inline operator T() { return GetSeconds(); }
 
 private:
-    // Properties
+    /// Properties
     T mTime;
 };
 
-// Aliases
+/// Aliases
 using DeltaTime = Timestamp<double>;
 
 }

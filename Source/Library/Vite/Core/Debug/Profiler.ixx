@@ -9,13 +9,8 @@ import Vite.Logger;
 
 namespace Hedron::Debug::Profiler {
 
-// Forward declarations
+/// Forward Declarations
 void Stop();
-
-// Types
-using SteadyClock = std::chrono::steady_clock;
-using Duration = std::chrono::microseconds;
-using TimeStep = std::chrono::duration<double, std::micro>;
 
 // ToDo: Hold all results in memory, later for the UI
 struct ProfilerResult {
@@ -133,9 +128,18 @@ private:
 };
 
 ///
-/// @brief: Internal scoped timer
+/// @brief: Scoped Timer
+/// @detail Destroys itself when it goes out of scope
+/// 
+/// @example
+/// ScopedTimer timer("Test");
 ///
 class ScopedTimer {
+    // Types
+    using SteadyClock = std::chrono::steady_clock;
+    using Duration = std::chrono::microseconds;
+    using TimeStep = std::chrono::duration<double, std::micro>;
+
 public:
     ScopedTimer(const char *name, const function<void(const string &, double duration)> &function = nullptr):
         mName(name),
@@ -184,4 +188,3 @@ void Stop() {
 }
 
 }
-

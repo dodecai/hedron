@@ -15,7 +15,7 @@ export namespace Hedron {
 ///
 template <typename T>
 class Property {
-    // Types
+    /// Types
     using Setter = std::function<T(const T &)>;
 
 public:
@@ -34,7 +34,7 @@ public:
     }
 
 private:
-    // Properties
+    /// Properties
     T mValue;
     Setter mSetter;
 };
@@ -88,7 +88,7 @@ public:
     }
 
 private:
-    // Properties
+    /// Properties
     T Value {};
     T Minimum {};
     T Maximum {};

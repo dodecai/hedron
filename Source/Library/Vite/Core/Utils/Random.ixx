@@ -10,16 +10,17 @@ export namespace Hedron {
 /// @note The functions and utilities here are useful for creating random data within the application.
 ///
 class Random {
+public:
+    /// Methods
     static void Load() {
         sRandomEngine.seed(std::random_device()());
     }
-
-
     static float Float() {
         return (float)sRandomsDistribution(sRandomEngine) / (float)std::numeric_limits<uint32>::max();
     }
 
 private:
+    /// Properties
     static inline std::mt19937 sRandomEngine;
     static inline std::uniform_int_distribution<std::mt19937::result_type> sRandomsDistribution;
 };

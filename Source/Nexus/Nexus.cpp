@@ -3,51 +3,59 @@ import <Vite/EntryPoint.h>;
 
 import Vite;
 import Vite.Util.ThreadPool;
-
 //import Vite.Test.Core;
 //import Vite.Test.Engine;
 //import Vite.Test.Research;
 
 // Switches
 //#define CORE_TESTS
+//#define ENGINE_TESTS
 //#define RESEARCH_TESTS
-//#define SYSTEMS_TESTS
 
 namespace Hedron {
 
+#pragma region /// Functions
+
 // Performance Test
-long long Fibonacci(int n) {
+inline long long Fibonacci(int n) {
     if (n <= 1) return n;
     return Fibonacci(n - 1) + Fibonacci(n - 2);
 }
 
-// Application
+#pragma endregion
+
+///
+/// @brief Nexus | Test me if you can!
+/// @note This project is used to test the whole Hedron framework.
+///
 class Nexus: public Application {
 public:
-    // Constructors and Destructor
+    /// Default
     Nexus() = default;
     ~Nexus() = default;
 
-    // Methods
+    /// Methods
     void Create() override {
-        mThreadPool = CreateScope<ThreadPool>();
+        Debug::DisplayCompileInformation();
+
         #ifdef CORE_TESTS
-            mCore = CreateReference<Test::Core>();
+            mCore = CreateScope<Test::Core>();
         #endif
-        #ifdef SYSTEMS_TESTS
+        #ifdef ENGINE_TESTS
+            // ToDo: A layer should be also created from an reference pointer.
             mEngine = new Test::Engine();
             PushLayer(mEngine);
-            mEngine = CreateReference<Test::Engine>();
+            mEngine = CreateScope<Test::Engine>();
         #endif
         #ifdef RESEARCH_TESTS
-            mResearch = CreateReference<Test::Research>();
+            mResearch = CreateScope<Test::Research>();
         #endif
-    }
 
+        mThreadPool = CreateScope<ThreadPool>();
+    }
 	void Destroy() override {
     }
-
-	void Update([[maybe_unused]] DeltaTime deltaTime) override {
+	void Update(DeltaTime deltaTime) override {
         #ifdef SYSTEMS_TESTS
             mEngine->Test(deltaTime);
         #endif
@@ -56,8 +64,6 @@ public:
             Exit();
         }
         
-        
-
         static double delay = 0.0;
         delay += deltaTime.GetMilliseconds();
 
@@ -78,11 +84,11 @@ public:
     }
 
 private:
-    //
+    /// Properties
+    //Scope<Test::Core> mCore;
+    //Scope<Test::Engine> mEngine;
+    //Scope<Test::Research> mResearch;
     Scope<ThreadPool> mThreadPool;
-    //Reference<Test::Core> mCore;
-    //Test::Engine *mEngine;
-    //Reference<Test::Research> mResearch;
 };
 
 // Application Entry-Point

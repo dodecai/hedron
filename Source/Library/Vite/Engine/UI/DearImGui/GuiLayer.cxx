@@ -5,10 +5,10 @@
     #include <imgui/imgui_internal.h>
 #pragma warning(pop)
 
-module Vite.ImGui.Layer;
+module Vite.DearImGui.Layer;
 
 import Vite.App;
-import Vite.ImGuiBuilder;
+import Vite.DearImGui.Builder;
 
 import Vite.Platform.VKContext;
 

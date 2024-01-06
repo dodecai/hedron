@@ -20,12 +20,16 @@ enum class LoggerType {
 ///
 class ILogger {
 public:
+    /// Default
+    ILogger() = default;
     virtual ~ILogger() = default;
 
-    virtual void operator()(const LogRecord &record, std::format_args arguments) = 0;
-
+    /// Accessors
     virtual const string &GetName() const = 0;
     virtual LoggerType GetType() const = 0;
+
+    /// Operators
+    virtual void operator()(const LogRecord &record, std::format_args arguments) = 0;
 };
 
 ///
@@ -33,8 +37,10 @@ public:
 ///
 class ConsoleLogger: public ILogger {
 public:
+    /// Default
     ConsoleLogger(const string &name = "Console"): mName(name) {}
 
+    /// Operators
     void operator()(const LogRecord &record, std::format_args arguments) override {
         std::lock_guard<std::mutex> lock(mMutex);
 
@@ -78,9 +84,11 @@ public:
         }
     }
 
+    /// Accessors
     const string &GetName() const override { return mName; }
     LoggerType GetType() const override { return mType; }
 
+    /// Methods
 private: 
     Cli::Color GetLogLevelColor(LogLevel level) {
         switch (level) {
@@ -99,10 +107,10 @@ private:
     }
 
 private:
+    /// Properties
+    mutex mMutex;
     string mName {};
     LoggerType mType { LoggerType::Console };
-
-    mutex mMutex;
     ostream &mStream = std::cout;
     wostream &mWStream = std::wcout;
 };
@@ -112,10 +120,16 @@ private:
 ///
 class FileLogger: public ILogger {
 public:
+    /// Default
     FileLogger(const string &file, const string &name = "File"): mStream(file), mName(name) {
         //throw std::runtime_error("Failed to open log file");
     }
 
+    /// Accessors
+    const string &GetName() const override { return mName; }
+    LoggerType GetType() const override { return mType; }
+
+    /// Operators
     void operator()(const LogRecord &record, std::format_args arguments) override {
         std::lock_guard<std::mutex> lock(mMutex);
 
@@ -156,14 +170,11 @@ public:
         mStream.flush();
     }
 
-    const string &GetName() const override { return mName; }
-    LoggerType GetType() const override { return mType; }
-
 private:
+    /// Properties
+    mutex mMutex;
     string mName {};
     LoggerType mType { LoggerType::File };
-
-    mutex mMutex;
     ofstream mStream;
 };
 
@@ -171,12 +182,19 @@ private:
 /// @brief Memory Sink
 ///
 class MemoryLogger: public ILogger {
-private:
+    /// Types
     using Messages = unordered_map<LogRecord, string, LogRecordHasher>;
 
 public:
+    /// Default
     MemoryLogger(const string &name = "Memory"): mName(name) {}
 
+    /// Accessors
+    const string &GetName() const override { return mName; }
+    LoggerType GetType() const override { return mType; }
+    const Messages &GetMessages() const { return mMessages; }
+
+    /// Operators
     void operator()(const LogRecord &record, std::format_args arguments) override {
         std::lock_guard<mutex> lock(mMutex);
         string buffer {};
@@ -184,21 +202,18 @@ public:
         mMessages.emplace(record, buffer);
     }
 
-    const string &GetName() const override { return mName; }
-    LoggerType GetType() const override { return mType; }
-    const Messages &GetMessages() const { return mMessages; }
-
+    /// Methods
     void Clear() {
         std::lock_guard<mutex> lock(mMutex);
         mMessages.clear();
     }
 
 private:
+    /// Properties
+    Messages mMessages;
+    mutex mMutex;
     string mName {};
     LoggerType mType { LoggerType::Memory };
-
-    mutex mMutex;
-    Messages mMessages;
 };
 
 }

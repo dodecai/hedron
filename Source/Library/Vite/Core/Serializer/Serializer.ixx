@@ -198,13 +198,20 @@ namespace Hedron {
 //    out << YAML::EndMap;
 //}
 }
+
 export namespace Hedron {
 
+///
+/// @brief Serializer: Serializes/Deserializes objects.
+///
 class Serializer {
 public:
-    //Serializer(const Reference<Scene> &scene): mScene(scene) {}
+    /// Default
+    Serializer() = default;
     ~Serializer() = default;
+    //Serializer(const Reference<Scene> &scene): mScene(scene) {}
 
+    /// Methods
     void Serialize([[maybe_unused]] const string &path) {
         //YAML::Emitter out;
         //out << YAML::BeginMap;
@@ -289,6 +296,7 @@ public:
     }
 
 private:
+    /// Properties
     //Reference<Scene> mScene;
 };
 

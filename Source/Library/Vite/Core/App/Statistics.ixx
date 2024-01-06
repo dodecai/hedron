@@ -4,13 +4,15 @@ import Vite.Base;
 
 export namespace Hedron {
 
+///
+/// @brief Holds statistics about the application.
+///
 struct Statistics {
-    // Properties
     double fps = {};
     double msPF = {};
 
-    queue<float> fpsData;
-    queue<float> msPFData;
+    queue<float> fpsHistory;
+    queue<float> msPFHistory;
 };
 
 }

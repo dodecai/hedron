@@ -4,7 +4,7 @@
 
 ///
 /// @brief Library Support
-/// Due to some differences between compilers, we need to define some macros to support the library.
+/// @detail Due to some differences between compilers, we need to define some macros to support the library.
 ///
 
 // Compiler Specifics

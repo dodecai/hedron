@@ -1,12 +1,13 @@
-﻿///
-/// @brief Event Dispatcher
-/// Base: https://github.com/skypjack/entt/blob/master/src/entt/signal/dispatcher.hpp
-///
-export module Vite.Event.Dispatcher;
+﻿export module Vite.Event.Dispatcher;
+
+import <entt/entt.hpp>;
 
 import Vite.Event.Signal;
 
-import <entt/entt.hpp>;
+///
+/// @brief Event Dispatcher
+/// @base https://github.com/skypjack/entt/blob/master/src/entt/signal/dispatcher.hpp
+///
 
 namespace {
 

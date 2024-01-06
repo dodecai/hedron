@@ -4,7 +4,7 @@ import std;
 
 ///
 /// @brief The following definitions serve as replacement possibilities for standard smart pointers.
-/// 
+///
 
 export namespace Hedron {
 

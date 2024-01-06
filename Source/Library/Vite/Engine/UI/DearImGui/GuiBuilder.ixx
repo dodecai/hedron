@@ -6,7 +6,7 @@ module;
 
 #include "Vite/Base/Platform/Detection.h"
 
-export module Vite.ImGuiBuilder;
+export module Vite.DearImGui.Builder;
 
 // We are not interested in warnings related to DearImGui
 #pragma warning(push, 0)

@@ -5,24 +5,30 @@ import Vite;
 
 namespace Hedron {
 
-// Application
+///
+/// @brief Gaia | Example Game
+/// @note This project is used to showcase the Hedron Engine.
+///
 class Gaia: public Application {
 public:
-    // Constructors and Destructor
-    Gaia() = default;
-    ~Gaia() = default;
+    /// Default
+    Gaia(const Settings &settings): Application(settings) {}
+    ~Gaia() {}
 
-    // Methods
+    /// Methods
     void Create() {}
     void Destroy() {}
-    void Update([[maybe_unused]] DeltaTime deltaTime) {
+    void Update(DeltaTime deltaTime) {
         Exit();
     }
+
+private:
+    /// Properties
 };
 
 // Application Entry-Point
 Application *CreateApplication() {
-    return new Gaia();
+    return new Gaia({ "Gaia", "1280x1024"});
 }
 
 }
