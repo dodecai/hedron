@@ -612,9 +612,9 @@ using Force3D = VectorBase<float, 3, VectorAliases::None>;
 using Normal2D = VectorBase<float, 2, VectorAliases::Normal>;
 using Normal3D = VectorBase<float, 3, VectorAliases::Normal>;
 
-using Position2D = VectorBase<float, 2, VectorAliases::Coordinate>;
-using Position3D = VectorBase<float, 3, VectorAliases::Coordinate>;
-using Position4D = VectorBase<float, 4, VectorAliases::Coordinate>;
+using VPosition2D = VectorBase<float, 2, VectorAliases::Coordinate>;
+using VPosition3D = VectorBase<float, 3, VectorAliases::Coordinate>;
+using VPosition4D = VectorBase<float, 4, VectorAliases::Coordinate>;
 
 using Rotation2D = VectorBase<float, 2, VectorAliases::None>; // ToDo: Are two components needed here?
 using Rotation3D = VectorBase<float, 3, VectorAliases::Rotation>;

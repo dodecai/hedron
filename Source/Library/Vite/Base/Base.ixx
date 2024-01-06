@@ -17,7 +17,7 @@ export import Vite.Extension;
 export import Vite.Math;
 
 // Memory
-//export import Vite.Memory;
+export import Vite.Memory;
 
 // Runtime-Type-Information (RTTI)
 export import Vite.Runtime;

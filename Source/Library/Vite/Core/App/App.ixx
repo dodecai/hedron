@@ -1,23 +1,23 @@
-﻿export module Vite.App.Application;
-
-import Vite.Core;
-import Vite.Util.Chrono;
-import Vite.Util.Timer;
-
-import Vite.Aurora;
-import Vite.Device.GFXContext;
-import Vite.Event;
-import Vite.UI.Dialog;
-import Vite.UI.Window;
+﻿export module Vite.App;
 
 export import Vite.App.Arguments;
 export import Vite.App.Layers;
 export import Vite.App.Settings;
 export import Vite.App.States;
 export import Vite.App.Statistics;
+
+import Vite.Base;
+import Vite.Config;
+import Vite.Event;
+import Vite.Logger;
+import Vite.Util.Chrono;
+import Vite.Util.Timer;
 import Vite.Util.ThreadPool;
 
-export import Vite.ImGui.Layer;
+import Vite.Aurora;
+import Vite.UI.Dialog;
+import Vite.ImGui.Layer;
+import Vite.UI.Window;
 
 int main(int, char **);
 
@@ -116,55 +116,55 @@ public:
     // This method executes your main logic code.
     virtual void Update([[maybe_unused]] DeltaTime deltaTime) {};
 
-    /// - Events
+    /// Events
 
     virtual void OnControllerEvent() {
-        //for (auto layer : mLayers) {
+        for (auto layer : mLayers) {
         //    if (data.Handled) break;
         //    layer->OnControllerEvent(data, emitter);
-        //}
+        }
     }
     
     virtual void OnDeviceEvent() {
-        //for (auto layer : mLayers) {
+        for (auto layer : mLayers) {
         //    if (data.Handled) break;
         //    layer->OnDeviceEvent(data, emitter);
-        //}
+        }
     }
     
     virtual void OnKeyboardEvent() {
-        //for (auto layer : mLayers) {
+        for (auto layer : mLayers) {
         //    if (data.Handled) break;
         //    layer->OnKeyboardEvent(data, emitter);
-        //}
+        }
     }
     
     virtual void OnMouseEvent() {
-        //for (auto layer : mLayers) {
+        for (auto layer : mLayers) {
         //    if (data.Handled) break;
         //    layer->OnMouseEvent(data, emitter);
-        //}
+        }
     }
     
     virtual void OnPowerEvent() {
-        //for (auto layer : mLayers) {
+        for (auto layer : mLayers) {
         //    if (data.Handled) break;
         //    layer->OnPowerEvent(data, emitter);
-        //}
+        }
     }
     
     virtual void OnTouchEvent() {
-        //for (auto layer : mLayers) {
+        for (auto layer : mLayers) {
         //    if (data.Handled) break;
         //    layer->OnTouchEvent(data, emitter);
-        //}
+        }
     }
     
     virtual void OnWindowEvent() {
-        //for (auto layer : mLayers) {
+        for (auto layer : mLayers) {
         //    if (data.Handled) break;
         //    layer->OnWindowEvent(data, emitter);
-        //}
+        }
 
         //switch (data.Action) {
         //    case WindowAction::Destroy: {
@@ -229,7 +229,7 @@ private:
 
         // Creation
         Create();
-        //for (Layer *layer : mLayers) layer->Create();
+        for (auto *layer : mLayers) layer->Create();
 
         // Runtime Properties
         double delay {};
@@ -268,7 +268,7 @@ private:
             // Update application
             //mContext->Attach();
             //mRenderer->RenderFrame();
-            //for (Layer *layer : mLayers) layer->Update(deltaTime);
+            for (auto *layer : mLayers) layer->Update(deltaTime);
             Update(deltaTime);
             //if (mWindow->GetState(WindowState::Alive)) {
             //    mListener->Update();
@@ -282,7 +282,7 @@ private:
 
         // Termination
         LogCaption("Termination");
-        //for (Layer *layer : mLayers) layer->Destroy();
+        for (auto *layer : mLayers) layer->Destroy();
 		Destroy();
     };
 

@@ -7,7 +7,7 @@
 
 module Vite.ImGui.Layer;
 
-import Vite.App.Application;
+import Vite.App;
 import Vite.ImGuiBuilder;
 
 import Vite.Platform.VKContext;
