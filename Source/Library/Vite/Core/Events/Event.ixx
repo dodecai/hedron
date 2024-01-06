@@ -1,11 +1,12 @@
 ﻿export module Vite.Event;
 
+export import Vite.Device.Input.Controller;
+export import Vite.Device.Input.Keyboard;
+export import Vite.Device.Input.Mouse;
+export import Vite.Device.Input.Touch;
+export import Vite.Event.Emitter;
+
 import Vite.Base;
-import Vite.Device.Input.Controller;
-import Vite.Device.Input.Keyboard;
-import Vite.Device.Input.Mouse;
-import Vite.Device.Input.Touch;
-import Vite.Event.Emitter;
 
 ///
 /// @brief Event Data

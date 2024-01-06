@@ -5,7 +5,6 @@
 import Vite.Base;
 import Vite.Logger;
 
-
 export namespace Hedron {
 
 ///

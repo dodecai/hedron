@@ -4,25 +4,23 @@
 export import Vite.Base;
 
 // Prime (Config and Logger)
-export import Vite.Logger;
 export import Vite.Config;
+export import Vite.Logger;
 
-// Debug
-//export import Vite.Debug.Profiler;
+// App (exposed by default over EntryPoint)
+//export import Vite.App;
+
+// Debug (exposed in debug mode by default over EntryPoint)
+//export import Vite.Debug;
 
 // Events
-//export import Vite.Event;
-//export import Vite.Event.Delegate;
-//export import Vite.Event.Dispatcher;
-//export import Vite.Event.Emitter;
-//export import Vite.Event.Signal
+export import Vite.Event;
+
+// Network
+export import Vite.Network;
 
 // Serializer / Deserializer
 export import Vite.Serializer;
 
 // Utils
-//export import Vite.Core.Chrono;
-//export import Vite.Core.Random;
-//export import Vite.Core.String;
-//export import Vite.Core.ThreadPool;
-//export import Vite.Core.Timer;
+export import Vite.Util;

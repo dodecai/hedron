@@ -3,11 +3,10 @@
 // Library
 import <Vite/Base/Platform/Support.h>;
 
+import Vite.App;
 import Vite.Base;
-import Vite.App.Application;
 #ifdef APP_MODE_DEBUG
-    import Vite.Debug.Profiler;
-    import Vite.Memory;
+    import Vite.Debug;
 #endif
 
 ///
@@ -15,7 +14,7 @@ import Vite.App.Application;
 ///
 void HedronExit() {
     #if APP_MODE_DEBUG
-        Hedron::Memory::Debug::DetectLeaks();
+        Hedron::Debug::Memory::DetectLeaks();
     #endif
 }
 
