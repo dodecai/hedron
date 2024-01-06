@@ -32,13 +32,13 @@ export namespace Hedron {
 //    Test		= WS_EX_APPWINDOW | WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE,
 //};
 //
-//
-//class WinWindow: public Window {
-//public:
-//    // Default
-//    WinWindow(const WindowProperties &properties);
-//    virtual ~WinWindow() override;
-//
+
+class WinWindow: public Window {
+public:
+    /// Default
+    WinWindow(const WindowProperties &properties);
+    virtual ~WinWindow() override;
+
 //    // Methods
 //    //Subject<bool &, void *> EventCallback;
 //    virtual void Update() override;
@@ -80,6 +80,6 @@ export namespace Hedron {
 //    HICON AppIcon = {};
 //
 //    HWND ParentWindowHandle = nullptr;
-//};
+};
 
 }

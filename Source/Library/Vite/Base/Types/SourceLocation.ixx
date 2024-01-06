@@ -1,7 +1,7 @@
 ﻿export module Vite.Type.SourceLocation;
 
 import std;
-import Vite.Extensions;
+import Vite.Extension;
 
 // Helpers
 namespace Hedron {

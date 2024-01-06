@@ -26,11 +26,8 @@ classDiagram
 
 Vite/ [Library]
 ├─ Base/
-│  ├─ Algebra/
+|  ├─ Algorithms/
 │  │  ├─ Algorithms
-│  │  ├─ Matrix
-│  │  ├─ Quaternion
-│  │  └─ Vector
 │  ├─ Devices/
 │  │  ├─ Input/
 │  │  │  ├─ Controller
@@ -38,22 +35,30 @@ Vite/ [Library]
 │  │  │  ├─ Keyboard
 │  │  │  ├─ Mouse
 │  │  │  └─ Touch
+│  │  ├─ Devices
 │  │  ├─ Display
 │  │  ├─ GFXContext
 │  │  └─ SFXContext
 │  ├─ Extensions/
 │  │  └─ Extensions
+│  ├─ Mathematics/
+│  │  ├─ Mathematics
+│  │  ├─ Matrix
+│  │  ├─ Quaternion
+│  │  └─ Vector
 │  ├─ Memory/
 │  │  └─ Memory
 │  ├─ Platform/
 │  │  ├─ Detection
 │  │  └─ Support
 │  ├─ Runtime/
-│  │  └─ RTTI
+│  │  ├─ Reflection
+│  │  └─ Runtime
 │  ├─ System/
 │  │  ├─ Cli
 │  │  ├─ FileSystem
-│  │  └─ Module
+│  │  ├─ Module
+│  │  └─ System
 │  ├─ Types/
 │  │  ├─ Component
 │  │  ├─ Concepts
@@ -66,6 +71,7 @@ Vite/ [Library]
 │  │  ├─ SourceLocation
 │  │  ├─ System
 │  │  ├─ Timestamp
+│  │  ├─ Types
 │  │  └─ UUID
 │  └─ Wrappers/
 │     └─ 3rd-Party

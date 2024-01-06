@@ -116,8 +116,8 @@ namespace Hedron {
 //static bool CustomTitleBar = false;
 //
 //
-//
-//// Default
+
+// Default
 //WinWindow::WinWindow(const WindowProperties &properties):
 //    Properties{ properties } {
 //    // Properties

@@ -33,22 +33,22 @@ private:
 
 public:
     /// Methods
-    [[no_discard]] static inline bool GetKeyState(KeyCode code) {
+    [[nodiscard]] static inline bool GetKeyState(KeyCode code) {
         return mCaptureInput ? Instance->GetKeyStatePlatform(code) : bool {};
     }
-    [[no_discard]] static inline bool GetMouseButtonState(MouseButton button) {
+    [[nodiscard]] static inline bool GetMouseButtonState(MouseButton button) {
         return mCaptureInput ? Instance->GetMouseButtonStatePlatform(button) : bool {};
     }
-    [[no_discard]] static inline bool GetMouseButtonStateDelta(MouseButton button) {
+    [[nodiscard]] static inline bool GetMouseButtonStateDelta(MouseButton button) {
         return mCaptureInput ? Instance->GetMouseButtonStateDeltaPlatform(button) : bool {};
     }
-    [[no_discard]] static inline pair<float, float> GetMousePosition() {
+    [[nodiscard]] static inline pair<float, float> GetMousePosition() {
         return mCaptureInput ? Instance->GetMousePositionPlatform() : pair<float, float> {};
     }
-    [[no_discard]] static inline pair<float, float> GetMousePositionDelta() {
+    [[nodiscard]] static inline pair<float, float> GetMousePositionDelta() {
         return mCaptureInput ? Instance->GetMousePositionDeltaPlatform() : pair<float, float> {};
     }
-    [[no_discard]] static inline float GetMouseWheelDelta() {
+    [[nodiscard]] static inline float GetMouseWheelDelta() {
         return mCaptureInput ? Instance->GetMouseWheelDeltaPlatform() : float {};
     }
 

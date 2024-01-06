@@ -1,6 +1,13 @@
-﻿-- Visual Studio: Solution Items (multiple folders)
--- Source: https://github.com/premake/premake-core/issues/1061
+﻿--
+-- @brief Premake5 Visual Studio Module Extensions
+--
 require("vstudio")
+
+
+--
+-- @brief  Visual Studio: Solution Items (multiple folders)
+-- @detail https://github.com/premake/premake-core/issues/1061
+--
 premake.api.register {
 	name = "solutionitems",
 	scope = "workspace",
@@ -81,84 +88,105 @@ premake.override(premake.vstudio.sln2005, "nestedProjects", function(base, wks)
 	premake.pop("EndGlobalSection")
 end)
 
--- Visual Studio: C/C++ 20 Conformance Mode Support (was fixed since 5.0-beta.1)
-----require('vstudio')
-----premake.api.register {
-----  name = "confromancemode",
-----  scope = "project",
-----  kind = "boolean",
-----}
-----premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
-----	local m = premake.vstudio.vc2010
-----	local calls = base(prj)
-----
-----	if premake.project.iscpp(prj) then
-----		if prj.confromancemode then
-----			table.insertafter(calls, premake.xmlDeclaration,  function()
-----				premake.w('<ConformanceMode>true</ConformanceMode>')
-----			end)
-----		else
-----			table.insertafter(calls, premake.xmlDeclaration,  function()
-----				premake.w('<ConformanceMode>false</ConformanceMode>')
-----			end)
-----		end
-----	end
-----	return calls
-----end)
 
--- Visual Studio: C 17 Dialect Support (was fixed since 5.0-beta.2)
-----require('vstudio')
-----premake.api.register {
-----  name = "cdialectx",
-----  scope = "project",
-----  kind = "string",
-----}
-----premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
-----	local m = premake.vstudio.vc2010
-----	local calls = base(prj)
-----
-----	if premake.project.iscpp(prj) then
-----		if prj.cdialectx then
-----			table.insertafter(calls, premake.xmlDeclaration,  function()
-----				premake.w('<LanguageStandard_C>stdc17</LanguageStandard_C>')
-----			end)
-----		end
-----	end
-----	return calls
-----end)
+--
+-- @brief Visual Studio: C/C++ 20 Conformance Mode Support
+-- @note  Fixed since 5.0.0-beta.1
+--
+--[[
+premake.api.register {
+  name = "confromancemode",
+  scope = "project",
+  kind = "boolean",
+}
 
--- Visual Studio: C++ 20 Dialect Support (was fixed since 5.0-beta.2)
-----require('vstudio')
-----premake.api.register {
-----  name = "cppdialectx",
-----  scope = "project",
-----  kind = "string",
-----}
-----premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
-----	local m = premake.vstudio.vc2010
-----	local calls = base(prj)
-----
-----	if premake.project.iscpp(prj) then
-----		if prj.cdialectx then
-----			table.insertafter(calls, premake.xmlDeclaration,  function()
-----				premake.w('<LanguageStandard>stdcpp20</LanguageStandard>')
-----			end)
-----		end
-----	end
-----	return calls
-----end)
+premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
+	local m = premake.vstudio.vc2010
+	local calls = base(prj)
 
--- Visual Studio: C++ 20 Modules Support
+	if premake.project.iscpp(prj) then
+		if prj.confromancemode then
+			table.insertafter(calls, premake.xmlDeclaration,  function()
+				premake.w('<ConformanceMode>true</ConformanceMode>')
+			end)
+		else
+			table.insertafter(calls, premake.xmlDeclaration,  function()
+				premake.w('<ConformanceMode>false</ConformanceMode>')
+			end)
+		end
+	end
+	return calls
+end)
+--]]
+
+
+--
+-- @brief Visual Studio: C 17 Dialect Support (was fixed since 5.0-beta.2)
+-- @note  Fixed since 5.0.0-beta.2
+--
+--[[
+premake.api.register {
+  name = "cdialectx",
+  scope = "project",
+  kind = "string",
+}
+
+premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
+	local m = premake.vstudio.vc2010
+	local calls = base(prj)
+
+	if premake.project.iscpp(prj) then
+		if prj.cdialectx then
+			table.insertafter(calls, premake.xmlDeclaration,  function()
+				premake.w('<LanguageStandard_C>stdc17</LanguageStandard_C>')
+			end)
+		end
+	end
+	return calls
+end)
+--]]
+
+
+--
+-- @brief Visual Studio: C++ 20 Dialect Support
+-- @note  Fixed since 5.0.0-beta.2
+--
+--[[
+premake.api.register {
+  name = "cppdialectx",
+  scope = "project",
+  kind = "string",
+}
+
+premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
+	local m = premake.vstudio.vc2010
+	local calls = base(prj)
+
+	if premake.project.iscpp(prj) then
+		if prj.cdialectx then
+			table.insertafter(calls, premake.xmlDeclaration,  function()
+				premake.w('<LanguageStandard>stdcpp20</LanguageStandard>')
+			end)
+		end
+	end
+	return calls
+end)
+--]]
+
+
+--
+-- @brief Visual Studio: C++ 20 Modules Support
+--
 table.insert(premake.vstudio.vc2010.categories.ClCompile.extensions, ".cppm")
 table.insert(premake.vstudio.vc2010.categories.ClCompile.extensions, ".cxx")
 table.insert(premake.vstudio.vc2010.categories.ClCompile.extensions, ".ixx")
 
-require('vstudio')
 premake.api.register {
   name = "cppmodules",
   scope = "project",
   kind = "boolean",
 }
+
 premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
 	local m = premake.vstudio.vc2010
 	local calls = base(prj)
@@ -178,13 +206,16 @@ premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, pr
 	return calls
 end)
 
--- Visual Studio: Build STL Modules C++ 23
-require('vstudio')
+
+--
+-- @brief Visual Studio: C++ 23 Build STL Modules
+--
 premake.api.register {
   name = "buildstlmodules",
   scope = "project",
   kind = "boolean",
 }
+
 premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
 	local m = premake.vstudio.vc2010
 	local calls = base(prj)
@@ -202,4 +233,23 @@ premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, pr
 		base(prj)
 	end
 	return calls
+end)
+
+
+--
+-- @brief Visual Studio: Bugfix for C++ Modules (same module file name per project)
+--
+premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
+    local m = premake.vstudio.vc2010
+    local calls = base(prj)
+
+    if premake.project.iscpp(prj) then
+		table.insertafter(calls, premake.xmlDeclaration,  function()
+			premake.w('<ModuleDependenciesFile>$(IntDir)\\%%(RelativeDir)</ModuleDependenciesFile>')
+			premake.w('<ModuleOutputFile>$(IntDir)\\%%(RelativeDir)</ModuleOutputFile>')
+			premake.w('<ObjectFileName>$(IntDir)\\%%(RelativeDir)</ObjectFileName>')
+		end)
+    end
+
+    return calls
 end)
