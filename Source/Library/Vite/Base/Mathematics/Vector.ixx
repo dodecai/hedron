@@ -1,4 +1,4 @@
-﻿export module Vite.Algebra.Vector;
+﻿export module Vite.Math.Vector;
 
 import "Vite/Base/Platform/Support.h";
 import Vite.Type.Concepts;

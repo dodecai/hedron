@@ -1,4 +1,9 @@
-﻿export module Vite.Algebra.Algorithms;
+﻿export module Vite.Math;
+
+export import Vite.Math.Geometry;
+export import Vite.Math.Matrix;
+export import Vite.Math.Quaternion;
+export import Vite.Math.Vector;
 
 export namespace Hedron {
 

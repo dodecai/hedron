@@ -10,7 +10,8 @@ workspace "Hedron"
     systemversion "latest"
 
     includedirs { "Source" }
-    objdir "Cache/"
+    debugdir "%{wks.location}/Build/%{cfg.buildcfg}"
+    objdir "%{wks.location}/Cache/%{prj.name}/%{cfg.buildcfg}"
     targetdir "Build/%{cfg.buildcfg}"
 	
     Headers = {}

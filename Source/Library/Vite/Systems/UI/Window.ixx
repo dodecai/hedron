@@ -4,10 +4,10 @@ import Vite.Core;
 
 export namespace Hedron {
 
-/////
-///// @brief  Collection of platform independet window related types
-/////
-//
+///
+/// @brief  Collection of platform independet window related types
+///
+
 //struct WindowPosition {
 //	int32_t X;	// Display position from the left
 //	int32_t Y;	// Display position form the top
@@ -138,36 +138,59 @@ export namespace Hedron {
 
 export namespace Hedron {
 
-//class Window {
-//public:
-//    // Constructors and Deconstructor
-//    Window() = default;
-//    virtual ~Window() = default;
-//
-//    // Methods
-//    static Scope<Window> Create(const WindowProperties &properties = WindowProperties());
-//    virtual void Update() = 0;
-//
-//    // Accessors
-//    virtual void *GetNativeWindow() = 0;
-//    virtual const WindowProperties &GetProperties() const = 0;
-//    virtual const WindowSize GetContextSize() const = 0;
-//    virtual const WindowPosition GetDisplayPosition() const = 0;
-//    virtual const WindowSize GetDisplaySize() const = 0;
-//    virtual const WindowSize GetScreenSize() const = 0;
-//    virtual const bool GetState(WindowState state) const = 0;
-//    virtual const string GetTitle() const = 0;
-//
-//    // Modifiers
-//    virtual void SetProperties(const WindowProperties &properties) = 0;
-//    virtual void SetCursorPosition(const int32_t x, const int32_t y) = 0;
-//    virtual void SetDisplayPosition(const int32_t x, const int32_t y) = 0;
-//    virtual void SetDisplaySize(const uint32_t width, const uint32_t height) = 0;
-//    virtual void SetProgress(const float progress) = 0;
-//    virtual void SetTitle(const string_view title) = 0;
-//
-//    // Properties
-//    std::function<bool(void *)> mExternalInputEventListener = {};
-//};
+struct ViewState {
+    bool Active;
+    bool Alive;
+    bool Cursor;
+    bool Decorated;
+    bool Focused;
+    bool FullScreen;
+    bool Maximized;
+    bool Minimized;
+    bool Visible;
+};
+
+struct WindowProperties {
+    //string Title;
+
+    //WindowState State;
+    //Position2D Position;
+    //Size2D Size;
+    //Size2D MaxSize;
+    //Size2D MinSize;
+};
+
+class Window {
+public:
+    /// Default
+    Window() = default;
+    virtual ~Window() = default;
+
+    /// Methods
+    static Scope<Window> Create(const WindowProperties &properties = WindowProperties());
+    virtual void Update() = 0;
+
+    ///// Accessors
+    //virtual void *GetNativeWindow() = 0;
+    //virtual WindowPosition GetDisplayPosition() const = 0;
+    //virtual WindowSize GetDisplaySize() const = 0;
+    //virtual WindowSize GetContextSize() const = 0;
+    //virtual WindowProperties &GetProperties() const = 0;
+    //virtual WindowSize GetScreenSize() const = 0;
+    //virtual bool GetState(WindowState state) const = 0;
+    //virtual string GetTitle() const = 0;
+
+    ///// Mutators
+    //virtual void SetProperties(const WindowProperties &properties) = 0;
+    //virtual void SetCursorPosition(const int32_t x, const int32_t y) = 0;
+    //virtual void SetDisplayPosition(const int32_t x, const int32_t y) = 0;
+    //virtual void SetDisplaySize(const uint32_t width, const uint32_t height) = 0;
+    //virtual void SetProgress(const float progress) = 0;
+    //virtual void SetTitle(const string_view title) = 0;
+
+private:
+    // Callbacks
+    function<bool(void *)> mExternalInputEventListener = {};
+};
 
 }

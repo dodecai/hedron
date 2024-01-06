@@ -1,4 +1,4 @@
-﻿export module Vite.Extensions;
+﻿export module Vite.Extension;
 
 import std;
 

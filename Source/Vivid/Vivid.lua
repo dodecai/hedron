@@ -6,7 +6,7 @@
     cdialect "C17"
     cppdialect "C++latest"
     cppmodules "true"
-    buildstlmodules "true"
+    buildstlmodules "false"
     externalanglebrackets "on"
     externalwarnings "Off"
     nativewchar "on"

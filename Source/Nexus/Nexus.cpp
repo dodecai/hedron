@@ -52,10 +52,10 @@ public:
             mEngine->Test(deltaTime);
         #endif
         
-        Input::GetKeyState(KeyCode::Escape);
         if (Input::GetKeyState(KeyCode::Escape)) {
             Exit();
         }
+        
         
 
         static double delay = 0.0;

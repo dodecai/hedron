@@ -1,6 +1,6 @@
-﻿export module Vite.Algebra.Quaternion;
+﻿export module Vite.Math.Quaternion;
 
-import Vite.Algebra.Vector;
+import Vite.Math.Vector;
 import Vite.Type.Standard;
 
 export namespace Hedron {
