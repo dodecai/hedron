@@ -42,6 +42,7 @@ Vite/ [Library]
 │  ├─ Extensions/
 │  │  └─ Extensions
 │  ├─ Mathematics/
+│  │  ├─ Geometry
 │  │  ├─ Mathematics
 │  │  ├─ Matrix
 │  │  ├─ Quaternion
@@ -62,6 +63,7 @@ Vite/ [Library]
 │  ├─ Types/
 │  │  ├─ Component
 │  │  ├─ Concepts
+│  │  ├─ Delegate
 │  │  ├─ Entity
 │  │  ├─ Literals
 │  │  ├─ Object
@@ -73,11 +75,12 @@ Vite/ [Library]
 │  │  ├─ Timestamp
 │  │  ├─ Types
 │  │  └─ UUID
-│  └─ Wrappers/
-│     └─ 3rd-Party
+│  ├─ Wrappers/
+│  │  └─ 3rd-Party
+│  └─ Base
 ├─ Core/
 │  ├─ App/
-│  │  ├─ Application
+│  │  ├─ App
 │  │  ├─ Arguments
 │  │  ├─ Layers (or Composition?)
 │  │  ├─ Settings
@@ -86,61 +89,53 @@ Vite/ [Library]
 │  ├─ Config/
 │  │  └─ Config
 │  ├─ Debug/
+│  │  ├─ Debug
+│  │  ├─ Memory
 │  │  └─ Profiler
 │  ├─ Events/
-│  │  ├─ Delegate
 │  │  ├─ Dispatcher
 │  │  ├─ Emitter
-│  │  ├─ Event
+│  │  ├─ Events
 │  │  └─ Signal
 │  ├─ Logger/
-│  │  └─ Logger
+│  │  ├─ Logger
+│  │  ├─ LogLevel
+│  │  ├─ LogRecord
+│  │  └─ LogSink
 │  ├─ Network/
 │  │  └─ Network
 │  ├─ Serializer/
 │  │  └─ Serializer
-│  └─ Utils/
-│     ├─ Chrono
-│     ├─ Random
-│     ├─ String
-│     ├─ ThreadPool
-│     └─ Timer
-├─ Platform/
-│  ├─ DirectX/
-│  │  ├─ DXContext
-│  │  ├─ DXRenderer
-│  │  └─ ...
-│  ├─ OpenGL/
-│  │  ├─ GLContext
-│  │  ├─ GLRenderer
-│  │  └─ ...
-│  ├─ Vulkan/
-│  │  ├─ VKContext
-│  │  ├─ VKRenderer
-│  │  └─ ...
-│  └─ WinAPI/
-│     ├─ WinDialog
-│     ├─ WinDisplay
-│     ├─ WinEvent
-│     ├─ WinInput
-│     └─ WinWindow
-├─ Systems/
+│  ├─ Utils/
+│  │  ├─ Chrono
+│  │  ├─ Random
+│  │  ├─ String
+│  │  ├─ ThreadPool
+│  │  ├─ Timer
+│  │  └─ Util
+│  └─ Core
+├─ Engine/
 │  ├─ Animation/
 │  │  └─ Animation
 │  ├─ Asset/
-│  │  ├─ Asset
 │  │  ├─ AssetManager
+│  │  ├─ Assets
 │  │  ├─ Font
 │  │  ├─ Material
 │  │  ├─ Mesh
 │  │  └─ Sprite
-│  └─ Effects/
+│  ├─ Effects/
 │  │  ├─ Particles/
-│  │  └─ PostProcessing/
+│  │  │  └─ Particles
+│  │  ├─ PostProcessing/
+│  │  │  └─ PostProcessing
+│  │  └─ Effects
 │  ├─ Media/
-│  │  ├─ Audio
-│  │  ├─ Media
-│  │  └─ Video
+│  │  ├─ Audio/
+│  │  │  └─ Audio
+│  │  ├─ Video/
+│  │  │  └─ Video
+│  │  └─ Media
 │  ├─ Networking/
 │  │  └─ Networking
 │  ├─ Physics/
@@ -157,36 +152,65 @@ Vite/ [Library]
 │  │  │  └─ UIRenderer
 │  │  ├─ Buffer
 │  │  ├─ CommandBuffer
-│  │  ├─ FontRenderer
 │  │  ├─ FrameBuffer
-│  │  ├─ MeshRenderer
 │  │  ├─ PipelineState
 │  │  ├─ RenderDevice
 │  │  ├─ Renderer
-│  │  ├─ SceneRenderer
 │  │  ├─ Shader
 │  │  ├─ ShaderCompiler
-│  │  ├─ SpriteRenderer
 │  │  ├─ SwapChain
 │  │  ├─ Texture
-│  │  ├─ UIRenderer
 │  │  └─ Viewport
 │  ├─ Scene/
+│  │  ├─ Components
 │  │  ├─ Scene
 │  │  └─ SceneCamera
 │  ├─ Scripting/
+│  │  ├─ CameraController
 │  │  └─ Scripting
-│  └─ UI/
-|     ├─ Components/
-│     │  ├─ Containers
-│     │  └─ Controls
-│     ├─ Aurora
-│     ├─ Dialog
-│     ├─ ImGuiBuilder
-│     ├─ ImGuiLayer
-│     └─ Window
+│  ├─ UI/
+|  │  ├─ Aurora/
+│  │  │  ├─ Aurora
+│  │  │  ├─ Components
+│  │  │  ├─ Containers
+│  │  │  └─ Controls
+|  │  ├─ DearImGui/
+|  │  │  ├─ Styles/
+│  │  │  │  ├─ MaterialDesign
+│  │  │  │  └─ Styles
+│  │  │  ├─ GuiBuilder
+│  │  │  └─ GuiLayer
+│  │  ├─ Dialog
+│  │  ├─ UI
+│  │  └─ Window
+│  └─ Engine
+├─ Platform/
+│  ├─ DirectX/
+│  │  ├─ DXContext
+│  │  ├─ DXRenderer
+│  │  ├─ ...
+│  │  └─ DirectX
+│  ├─ OpenGL/
+│  │  ├─ GLContext
+│  │  ├─ GLRenderer
+│  │  ├─ ...
+│  │  └─ OpenGL
+│  ├─ Vulkan/
+│  │  ├─ VKContext
+│  │  ├─ VKRenderer
+│  │  ├─ ...
+│  │  └─ Vulkan
+│  └─ WinAPI/
+│     ├─ WinDialog
+│     ├─ WinDisplay
+│     ├─ WinEvents
+│     ├─ WinInput
+│     └─ WinWindow
 ├─ Tools/
-│  └─ Build
+│  ├─ Build/
+│  │  └─ Build
+│  └─ Tools
+├─ EntryPoint
 └─ Vite
 
 Vivid/ [Editor]

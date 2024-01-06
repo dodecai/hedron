@@ -1,7 +1,5 @@
 ﻿export module Vite.Config;
 
-//import <yaml-cpp/yaml.h>;
-
 import Vite.Base;
 import Vite.Logger;
 
@@ -18,9 +16,15 @@ export namespace Hedron {
 ///
 class Config {
 public:
+    /// Default
     Config() = default;
     ~Config() = default;
 
+    ///
+    /// Methods
+    ///
+
+    // Load a config file
     void Load(const string &file) {
         mConfigFile = file;
         try {
@@ -48,6 +52,9 @@ public:
             std::cout << "Something went wrong!" << "\n";
         }
     }
+
+    // Retrieve a setting as desired type
+    // @return The setting value or default value if not found
     template <typename T = string>
     T GetSetting(const string &key, const string &value) const {
         //if (mConfigData["Settings"][key][value].IsDefined()) {
@@ -64,15 +71,9 @@ public:
     }
 
 private:
+    /// Properties
     string mConfigFile {};
     //YAML::Node mConfigData;
-
-    string AppCaption {};
-    string AppDescription {};
-    string AppVersion {};
-
-    size_t WindowHeight {};
-    size_t WindowWidth {};
 };
 
 }

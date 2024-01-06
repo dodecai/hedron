@@ -7,7 +7,7 @@
 // Application Information (the solution name will be replaced by preprocessor!)
 export namespace SOLUTION_NAME {
 
-// Information
+/// Information
 inline constexpr auto AppCaption        = "Hedron";
 inline constexpr auto AppDescription    = "Game Engine Framework";
 inline constexpr auto AppRelease        = "2024-07-01";
@@ -16,7 +16,7 @@ inline constexpr auto AppVersionMajor   = 0u;
 inline constexpr auto AppVersionMinor   = 0u;
 inline constexpr auto AppVersionPatch   = 0u;
 
-// Switches
+/// Switches
 #ifdef APP_MODE_DEBUG
     inline constexpr bool DebugMode = true;
 #else

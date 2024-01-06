@@ -1,28 +1,31 @@
-﻿module Vite.Device.GFXContext;
+﻿module;
 
-import "Vite/Base/Platform/Detection.h";
+#include "Vite/Base/Platform/Detection.h"
+
+module Vite.Device.GFXContext;
+
 import Vite.Logger;
 
 #if defined APP_PLATFORM_WINDOWS
-    //import Vite.Platform.DXContext;
-    //import Vite.Platform.GLContext;
-    //import Vite.Platform.VKContext;
+    import Vite.Platform.DXContext;
+    import Vite.Platform.GLContext;
+    import Vite.Platform.VKContext;
 #endif
 
 namespace Hedron {
 
 Reference<Context> Context::Create(void *window) {
-    #ifdef APP_PLATFORM_WINDOWS
+#ifdef APP_PLATFORM_WINDOWS
     switch (API) {
         case GraphicsAPI::OpenGL: {
-        //    LogDebug("Application: Created context for 'OpenGL'");
-        //    return CreateReference<GLContext>(window);
+            LogDebug("Created context for 'OpenGL'");
+            //return CreateReference<GLContext>(window);
             return {};
         }
 
         case GraphicsAPI::Vulkan: {
-        //    LogDebug("Application: Created context for 'Vulkan'");
-        //    return CreateReference<VKContext>(window);
+            LogDebug("Created context for 'Vulkan'");
+            //return CreateReference<VKContext>(window);
             return {};
         }
 
@@ -31,10 +34,10 @@ Reference<Context> Context::Create(void *window) {
             return nullptr;
         }
     }
-    #else
+#else
     AppAssert(false, "The selected platform is currently not supported!");
     return nullptr;
-    #endif
+#endif
 }
 
 void Context::Destroy() {}

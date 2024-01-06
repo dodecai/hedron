@@ -4,8 +4,10 @@ import Vite.Base;
 
 export namespace Hedron {
 
+///
+/// @brief Holds the states of the application.
+///
 struct States {
-    // Properties
     bool Active {};
     bool Paused {};
     bool Reloading {};

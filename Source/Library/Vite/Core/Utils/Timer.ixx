@@ -21,18 +21,18 @@ enum class TimerUnit {
 /// 
 class Timer {
 public:
-    // Default
+    /// Default
     Timer(): mStartTime(std::chrono::steady_clock::now()) {}
     ~Timer() = default;
 
-    // Accessors
-    /// Retrieve delta time in ms
+    /// Accessors
+    // Retrieve delta time in ms
     inline const float GetDeltaTime() {
         std::chrono::duration<float, std::milli> duration = CalculateDuration();
         Reset();
         return duration.count();
     }
-    /// Retrieve delta time in specified unit (s = default, ms, µs, ns)
+    // Retrieve delta time in specified unit (s = default, ms, µs, ns)
     inline const float GetDeltaTimeAs(TimerUnit unit = TimerUnit::Seconds) {
         float duration {};
         switch (unit) {
@@ -45,18 +45,18 @@ public:
         Reset();
         return std::move(duration);
     }
-    /// Retrieve a delta time slice in ms
+    // Retrieve a delta time slice in ms
     inline const float Now() {
         return (std::chrono::duration<float, std::milli>{ CalculateDuration() }).count();
     }
 
 private:
-    // Methods
+    /// Methods
     inline std::chrono::duration<float, std::milli> CalculateDuration() { return { std::chrono::steady_clock::now() - mStartTime }; }
     inline void Reset() { mStartTime = std::chrono::steady_clock::now(); }
 
 private:
-    // Properties
+    /// Properties
     std::chrono::time_point<std::chrono::steady_clock> mStartTime;
 };
 

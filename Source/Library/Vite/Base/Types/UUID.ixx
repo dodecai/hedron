@@ -20,10 +20,8 @@
 
 #pragma endregion
 
-// Module
 export module Vite.Type.UUID;
 
-// Library
 import std;
 
 export namespace Hedron {
@@ -104,13 +102,13 @@ private:
     }
 
 private:
-    // Properties
+    /// Properties
     T Value;
     static inline std::random_device sRandomDevice;
     static inline std::mt19937_64 sGenerator { sRandomDevice() };
 };
 
-// Overloads: allows ostream to output UUIDs without conversations
+/// Overloads: allows ostream to output UUIDs without conversations
 template<typename T>
 std::ostream &operator <<(std::ostream &os, const UUID<T> &rhs) {
     os << rhs.Value;

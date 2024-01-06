@@ -71,7 +71,7 @@ protected:
     }
 
 private:
-    // Properties
+    /// Properties
     bool mAllowedAccess {};
 };
 
@@ -130,7 +130,7 @@ protected:
         ~LockGuard() { mObject.Unlock(); }
 
     private:
-        // Properties
+        /// Properties
         ThreadSafeObject &mObject;
     };
 

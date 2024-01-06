@@ -4,11 +4,8 @@ import Vite.Type.Standard;
 
 export namespace Hedron {
 
-/// Forward Declarations
-struct EventData;
-
 ///
-/// @brief Actions
+/// @brief Touch Actions
 ///
 enum class TouchAction {
     Null		= 0x00,
@@ -32,7 +29,7 @@ inline std::ostream &operator<<(std::ostream &stream, TouchAction action) {
 }
 
 ///
-/// @brief Styles
+/// @brief Touch Styles
 ///
 enum class TouchStyle {
 	Null		= 0x00,

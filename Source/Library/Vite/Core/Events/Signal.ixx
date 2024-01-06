@@ -1,12 +1,13 @@
-﻿///
-/// @brief Signal/Slot System
-/// Base: https://github.com/skypjack/entt/blob/master/src/entt/signal/sigh.hpp
-///
-export module Vite.Event.Signal;
-
-import Vite.Event.Delegate;
+﻿export module Vite.Event.Signal;
 
 import <entt/entt.hpp>;
+
+import Vite.Type.Delegate;
+
+///
+/// @brief Signal/Slot System
+/// @base https://github.com/skypjack/entt/blob/master/src/entt/signal/sigh.hpp
+///
 
 export namespace Hedron {
 

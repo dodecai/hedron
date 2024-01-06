@@ -1,7 +1,5 @@
-﻿// Module
-export module Vite.Util.Chrono;
+﻿export module Vite.Util.Chrono;
 
-// Library
 import Vite.Base;
 
 export namespace Hedron {
@@ -11,16 +9,16 @@ export namespace Hedron {
 /// Simply use 'appchrono' under the Vite Namespace to retrieve the desired information.
 /// 
 class Chrono: public SteadyObject {
-    // Friends
+    /// Friends
     friend class Application;
 
-private:
-    // Types
+    /// Types
     using SystemClock = std::chrono::system_clock;
     using Timespan = std::chrono::duration<double, std::micro>;
     using Timestamp = std::chrono::time_point<std::chrono::system_clock>;
 
-    // Default
+private:
+    /// Default
     Chrono(): mStartTime(SystemClock::now()) {}
     ~Chrono() = default;
 
@@ -36,18 +34,18 @@ public:
         return *instance;
     }
 
-    // Accessors
-    /// Retrieve current date in ISO 8601 format 'YYYY-mm-dd'
+    /// Accessors
+    // Retrieve current date in ISO 8601 format 'YYYY-mm-dd'
     inline string GetDate() const { return GetTicks("{:%Y-%m-%d}"); }
-    /// Retrieve current time in ISO 8601 format 'HH:mm:ss.cccccc'
+    // Retrieve current time in ISO 8601 format 'HH:mm:ss.cccccc'
     inline string GetTime() const { return GetTicks("{:%H:%M:%S}"); }
-    /// Retrieve runtime in ISO 8601 format 'PddTHH:mm:ss'
+    // Retrieve runtime in ISO 8601 format 'PddTHH:mm:ss'
     inline string GetRuntime() const { return GetRuntimeTicks(); }
-    /// Retrieve timestamp in ISO 8601 format 'YYYY-mm-ddTHH:mm:ss.cccccc'
+    // Retrieve timestamp in ISO 8601 format 'YYYY-mm-ddTHH:mm:ss.cccccc'
     inline string GetTimeStamp() const { return GetTicks(); }
 
 private:
-    // Methods
+    /// Methods
     inline string GetTicks (const string_view &format = "{:%Y-%m-%dT%H:%M:%S}") const {
         auto args = std::make_format_args(SystemClock::now());
         try {
@@ -93,10 +91,11 @@ private:
     }
 
 private:
-    // Properties
+    /// Properties
     const Timestamp mStartTime;
 };
 
+// Global Chrono Instance
 inline Chrono &appchrono = Chrono::Instance();
 
 }

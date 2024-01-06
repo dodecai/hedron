@@ -1,5 +1,4 @@
-﻿// Module
-export module Vite.System.Cli;
+﻿export module Vite.System.Cli;
 
 import Vite.Type.Standard;
 
@@ -7,9 +6,11 @@ import Vite.Type.Standard;
 /// @brief Cli Modifiers: These extend the output stream with backgrounds, colors and styles.
 /// @note Tested with Windows Terminal
 /// @source https://en.wikipedia.org/wiki/ANSI_escape_code
-/// 
+///
+
 export namespace Hedron::Cli {
 
+/// Definitions
 // Background Colors
 enum class Background {
     Default         = 49,
@@ -87,14 +88,14 @@ enum class Style {
     Reset           = 0,
 };
 
-// Concepts
+/// Concepts
 template <typename T>
 concept typename_climodifier =
     std::is_same_v<std::decay_t<T>, Hedron::Cli::Background> ||
     std::is_same_v<std::decay_t<T>, Hedron::Cli::Color> ||
     std::is_same_v<std::decay_t<T>, Hedron::Cli::Style>;
 
-// Overloads
+/// Overloads
 template <typename_climodifier T>
 constexpr inline auto &operator<<(std::ostream &stream, const T &type) noexcept {
     return stream << "\x1b[" << static_cast<int>(type) << "m";
@@ -105,8 +106,42 @@ constexpr inline auto &operator<<(std::wostream &stream, const T &type) noexcept
     return stream << "\x1b[" << static_cast<int>(type) << "m";
 }
 
-// Show me what you can do...
-void Test() {
+/// Tests
+namespace Test {
+
+void TestCli();
+
+}
+
+}
+
+///
+/// Global Overloads
+///
+export namespace std {
+
+template <Hedron::Cli::typename_climodifier T>
+struct formatter<T> {
+    constexpr auto parse(format_parse_context &ctx) {
+        return ctx.begin();
+    }
+
+    auto format(const T &modifier, format_context &ctx) const {
+        return format_to(ctx.out(), "\x1b[{:d}m", static_cast<int>(modifier));
+    }
+};
+
+}
+
+///
+/// Implementation
+///
+module: private;
+
+namespace Hedron::Cli::Test {
+
+// Show me what you got!
+void TestCli() {
     using std::cout;
     using std::endl;
 
@@ -151,21 +186,5 @@ void Test() {
     std::cout << Style::Subscript       << "Subscript       " << Style::NotScripted     << "\n";
     std::cout << Style::Reset << endl;
 }
-
-}
-
-// Global Overloads
-export namespace std {
-
-template <Hedron::Cli::typename_climodifier T>
-struct formatter<T> {
-    constexpr auto parse(format_parse_context &ctx) {
-        return ctx.begin();
-    }
-
-    auto format(const T &modifier, format_context &ctx) const {
-        return format_to(ctx.out(), "\x1b[{:d}m", static_cast<int>(modifier));
-    }
-};
 
 }

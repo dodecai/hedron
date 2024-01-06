@@ -11,13 +11,12 @@ import Vite.Type.Standard;
 export namespace Hedron {
 
 ///
-/// @brief Asynchronous Input
+/// @brief Input | Retrieve real-time input data (per frame).
 /// @todo Disable Input when the window is not active
-/// @example
-/// if (!Application::GetWindow().GetState(WindowState::Active)) return {};
+/// example: if (!Application::GetWindow().GetState(WindowState::Active)) return {};
 ///
 class Input {
-    // Friends
+    /// Friends
     friend class Application;
 
 public:
@@ -53,7 +52,7 @@ public:
     }
 
 protected:
-    /// Platform
+    /// Platform Interface
     virtual bool GetKeyStatePlatform(KeyCode code) const = 0;
     virtual bool GetMouseButtonStatePlatform(MouseButton button) const = 0;
     virtual bool GetMouseButtonStateDeltaPlatform(MouseButton button) const = 0;
@@ -62,7 +61,7 @@ protected:
     virtual float GetMouseWheelDeltaPlatform() const = 0;
 
 protected:
-    // Properties
+    /// Properties
     inline static float sMouseWheelDelta {};
 
 private:

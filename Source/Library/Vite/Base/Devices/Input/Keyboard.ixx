@@ -4,11 +4,8 @@ import Vite.Type.Standard;
 
 export namespace Hedron {
 
-/// Forward Declarations
-struct EventData;
-
 ///
-/// @brief Actions
+/// @brief Keyboard Key Actions
 ///
 enum class KeyboardAction {
     Null		= 0x00,
@@ -28,7 +25,7 @@ inline std::ostream &operator<<(std::ostream &stream, KeyboardAction action) {
 }
 
 ///
-/// @brief Key Codes
+/// @brief Keyboard Key Codes
 ///
 enum class KeyCode {
 	// Source:	https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
@@ -468,7 +465,7 @@ inline std::ostream &operator<<(std::ostream &stream, KeyCode code) {
 }
 
 ///
-/// @brief Key States
+/// @brief Keyboard Key States
 ///
 enum class KeyState {
 	Null		= 0x00,

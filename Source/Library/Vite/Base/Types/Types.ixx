@@ -2,6 +2,7 @@
 
 export import Vite.Type.Component;
 export import Vite.Type.Concepts;
+//export import Vite.Type.Delegate;
 export import Vite.Type.Entity;
 export import Vite.Type.Literals;
 export import Vite.Type.Object;

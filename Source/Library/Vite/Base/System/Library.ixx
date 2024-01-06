@@ -25,7 +25,7 @@ public:
     }
 
 protected:
-    /// Protected Accessors
+    /// Platform Accessors
     virtual void *GetFunctionImpl(const string &name) = 0;
 };
 

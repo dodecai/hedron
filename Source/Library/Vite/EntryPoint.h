@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-// Library
 import <Vite/Base/Platform/Support.h>;
 
 import Vite.App;

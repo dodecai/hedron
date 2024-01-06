@@ -6,6 +6,7 @@ import Vite.Type.Standard;
 /// @brief File System Helpers
 /// @todo Add more features and fix error handling, which I introduced with the new architecture.
 ///
+
 export namespace Hedron {
 
 ///
@@ -153,8 +154,24 @@ public:
 };
 
 ///
-/// @brief Tests
+/// Tests
 ///
+namespace Test {
+
+void TestFileSystem();
+
+}
+
+}
+
+///
+/// Implementation
+///
+module: private;
+
+namespace Hedron::Test {
+
+// Show me what you got!
 void TestFileSystem() {
     // Setup
     const string directory = "Test";

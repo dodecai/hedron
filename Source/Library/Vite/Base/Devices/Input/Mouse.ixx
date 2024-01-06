@@ -4,11 +4,8 @@ import Vite.Type.Standard;
 
 export namespace Hedron {
 
-/// Forward Declarations
-struct EventData;
-
 ///
-/// @brief Actions
+/// @brief Mouse Actions
 ///
 enum class MouseAction {
     Null		= 0x00,
@@ -34,7 +31,7 @@ inline std::ostream &operator<<(std::ostream &stream, MouseAction action) {
 }
 
 ///
-/// @brief Buttons
+/// @brief Mouse Buttons
 ///
 enum class MouseButton {
     Null		= 0x00,
@@ -68,7 +65,7 @@ inline std::ostream &operator<<(std::ostream &stream, MouseButton button) {
 }
 
 ///
-/// @brief Button States
+/// @brief Mouse Button States
 ///
 enum class MouseButtonState {
 	Null		= 0x00,

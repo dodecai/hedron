@@ -1,26 +1,30 @@
 ﻿export module Vite.Core;
 
-// Base
+/// Base
 export import Vite.Base;
 
-// Prime (Config and Logger)
-export import Vite.Config;
-export import Vite.Logger;
-
-// App (exposed by default over EntryPoint)
+/// App
+// Exposed by default over EntryPoint.
 //export import Vite.App;
 
-// Debug (exposed in debug mode by default over EntryPoint)
+/// Config
+export import Vite.Config;
+
+/// Debug
+// Exposed in debug mode by default over EntryPoint.
 //export import Vite.Debug;
 
-// Events
+/// Events
 export import Vite.Event;
 
-// Network
+/// Logger
+export import Vite.Logger;
+
+/// Network
 export import Vite.Network;
 
-// Serializer / Deserializer
+/// Serializer / Deserializer
 export import Vite.Serializer;
 
-// Utils
+/// Utils
 export import Vite.Util;

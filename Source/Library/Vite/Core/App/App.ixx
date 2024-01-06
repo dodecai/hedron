@@ -15,8 +15,8 @@ import Vite.Util.Timer;
 import Vite.Util.ThreadPool;
 
 import Vite.Aurora;
+import Vite.DearImGui.Layer;
 import Vite.UI.Dialog;
-import Vite.ImGui.Layer;
 import Vite.UI.Window;
 
 int main(int, char **);
@@ -27,11 +27,11 @@ export namespace Hedron {
 /// @brief This is the main class which controls the workflow during runtime.
 ///
 class Application {
-    // Friends
+    /// Friends
     friend int ::main(int, char**);
 
 public:
-    // Constructors and Destructor
+    /// Default
     Application(const Settings &settings = {}): mSettings(settings) {
         if (pAppInstance) { throw std::runtime_error("Application already initialized!"); }
         // Preparation
@@ -44,9 +44,9 @@ public:
 
         // Configure Logger
         logger.SetLevel(mSettings.LogLevel);
-        if (mSettings.EnableConsoleLogging) logger.Attach(CreateScope<ConsoleLogger>());
-        if (mSettings.EnableFileLogging) logger.Attach(CreateScope<FileLogger>(mSettings.Title + ".log"));
-        if (mSettings.EnableMemoryLogging) logger.Attach(CreateScope<MemoryLogger>());
+        if (mSettings.ConsoleLogging) logger.Attach(CreateScope<ConsoleLogger>());
+        if (mSettings.FileLogging) logger.Attach(CreateScope<FileLogger>(mSettings.Title + ".log"));
+        if (mSettings.MemoryLogging) logger.Attach(CreateScope<MemoryLogger>());
 
         // Initialization
         LogCaption("{}", mSettings.Title);
@@ -96,71 +96,25 @@ public:
 		pAppInstance = nullptr;
     }
 
-    // Accessors
-    static Application &Instance() { return *pAppInstance; }
-    const Arguments &GetArguments() const { return mArguments; }
-    const Settings &GetSettings() const { return mSettings; }
-    const States &GetStates() const { return mStates; }
-    const Statistics &GetStatistics() const { return mStatistics; }
-
     ///
     /// Interface
     ///
-    
+
     // This method executes your initialization code.
     virtual void Create() {};
-    
+
     // This method executes your termination code
     virtual void Destroy() {};
-    
+
     // This method executes your main logic code.
     virtual void Update([[maybe_unused]] DeltaTime deltaTime) {};
 
-    /// Events
+    ///
+    /// Event Interface
+    ///
 
-    virtual void OnControllerEvent() {
-        for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnControllerEvent(data, emitter);
-        }
-    }
-    
-    virtual void OnDeviceEvent() {
-        for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnDeviceEvent(data, emitter);
-        }
-    }
-    
-    virtual void OnKeyboardEvent() {
-        for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnKeyboardEvent(data, emitter);
-        }
-    }
-    
-    virtual void OnMouseEvent() {
-        for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnMouseEvent(data, emitter);
-        }
-    }
-    
-    virtual void OnPowerEvent() {
-        for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnPowerEvent(data, emitter);
-        }
-    }
-    
-    virtual void OnTouchEvent() {
-        for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnTouchEvent(data, emitter);
-        }
-    }
-    
-    virtual void OnWindowEvent() {
+    // This method is triggered when a app event occurs.
+    virtual void OnAppEvent() {
         for (auto layer : mLayers) {
         //    if (data.Handled) break;
         //    layer->OnWindowEvent(data, emitter);
@@ -182,6 +136,47 @@ public:
         //    }
         //}
     }
+
+    // This method is triggered when a controller input event occurs.
+    virtual void OnControllerEvent(ControllerEventData &data) {
+        for (auto layer : mLayers) {
+        //    if (data.Handled) break;
+        //    layer->OnControllerEvent(data, emitter);
+        }
+    }
+    
+    // This method is triggered when a keyboard input event occurs.
+    virtual void OnKeyboardEvent(KeyboardEventData &data) {
+        for (auto layer : mLayers) {
+        //    if (data.Handled) break;
+        //    layer->OnKeyboardEvent(data, emitter);
+        }
+    }
+    
+    // This method is triggered when a mouse input event occurs.
+    virtual void OnMouseEvent(MouseEventData &data) {
+        for (auto layer : mLayers) {
+        //    if (data.Handled) break;
+        //    layer->OnMouseEvent(data, emitter);
+        }
+    }
+    
+    // This method is triggered when a touch input event occurs.
+    virtual void OnTouchEvent(TouchEventData &data) {
+        for (auto layer : mLayers) {
+        //    if (data.Handled) break;
+        //    layer->OnTouchEvent(data, emitter);
+        }
+    }
+
+    ///
+    /// Accessors
+    ///
+    static Application &Instance() { return *pAppInstance; }
+    const Arguments &GetArguments() const { return mArguments; }
+    const Settings &GetSettings() const { return mSettings; }
+    const States &GetStates() const { return mStates; }
+    const Statistics &GetStatistics() const { return mStatistics; }
 
     ///
     /// Methods
@@ -327,23 +322,25 @@ private:
         // Termination
         Destroy();
     }
-
-    // Mutators
+    
+    ///
+    /// Mutators
+    ///
+    
+    // This method sets the arguments of the application (only allowed through main).
     void SetArguments(const Arguments &arguments) { mArguments = arguments; }
 
 private:
-    // Instance
-    static inline Application *pAppInstance = nullptr;
-
-    // Properties
+    /// Properties
     Arguments mArguments;
     Settings mSettings;
     States mStates;
     Statistics mStatistics;
 
-    // Systems
-    Scope<ThreadPool> mThreadPool;
+    /// Systems
+    static inline Application *pAppInstance = nullptr;
     LayerStack mLayers;
+    Scope<ThreadPool> mThreadPool;
     //Reference<Config> mConfig;
     //Reference<Context> mContext;
     //Reference<Dialog> mDialog;

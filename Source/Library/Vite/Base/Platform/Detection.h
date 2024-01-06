@@ -2,15 +2,12 @@
 
 ///
 /// @brief Preprocessor Utilities
+/// @detail These properties are used to control platform specific features during compilation.
 ///
 
 // String
 #define STRINGIZE(s) #s
 #define TOSTRING(s) STRINGIZE(s)
-
-///
-/// @brief These properties are used to control platform specific features during compilation.
-///
 
 // Compiler Detection
 #if defined _MSC_VER

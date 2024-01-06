@@ -5,7 +5,7 @@
     #include <imgui/imgui_internal.h>
 #pragma warning(pop)
 
-export module Vite.ImGui.Layer;
+export module Vite.DearImGui.Layer;
 
 //#include <Ultra/UI/ImGui/Styles/Styles.h>
 

@@ -2,43 +2,14 @@
 
 import std;
 
-///
-/// @brief Concepts
-///
-
 export namespace Hedron {
 
 ///
-/// @brief Concepts for Arithmetic Types
+/// Alias-Templates
 ///
 
-// Detects: All Arithmetic Types
-template <typename T>
-concept typename_arithmetic = std::is_arithmetic_v<T>;
-
-
 ///
-/// @brief Concepts for Floating-Point Types
-///
-
-// Detects: Default Floating-Point Types
-template <typename T>
-concept typename_floating_point = std::is_floating_point_v<T>;
-
-
-///
-/// @brief Concepts for hash-able Types
-///
-
-// Detects: All size_t convertible Types (hash-able)
-template<typename T>
-concept typename_hashable = requires(T a) {
-    { std::hash<T>{}(a) } -> std::convertible_to<std::size_t>;
-};
-
-
-///
-/// @brief Alias-Templates for String Types
+/// @brief Category String Types
 ///
 
 // Detects: All String Types
@@ -91,9 +62,40 @@ using is_wstring = std::disjunction<
 template<typename T>
 constexpr bool is_wstring_v = is_wstring<T>::value;
 
+///
+/// Concepts
+///
 
 ///
-/// @brief Concepts for String Types
+/// @brief Category: Arithmetic Types
+///
+
+// Detects: All Arithmetic Types
+template <typename T>
+concept typename_arithmetic = std::is_arithmetic_v<T>;
+
+
+///
+/// @brief Category: Floating-Point Types
+///
+
+// Detects: Default Floating-Point Types
+template <typename T>
+concept typename_floating_point = std::is_floating_point_v<T>;
+
+
+///
+/// @brief Category: Hash-able Types
+///
+
+// Detects: All size_t convertible Types (hash-able)
+template<typename T>
+concept typename_hashable = requires(T a) {
+    { std::hash<T>{}(a) } -> std::convertible_to<std::size_t>;
+};
+
+///
+/// @brief Category: String Types
 ///
 
 // All String Types

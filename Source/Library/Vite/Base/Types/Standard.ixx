@@ -9,7 +9,7 @@ export import std;
 
 export namespace Hedron {
 
-// Concurrency
+/// Concurrency
 using std::atomic;
 using std::condition_variable;
 using std::future;
@@ -17,7 +17,7 @@ using std::packaged_task;
 using std::mutex;
 using std::thread;
 
-// Container
+/// Container
 using std::array;
 using std::byte;
 using std::function;
@@ -32,7 +32,7 @@ using std::vector;
 using std::wstring;
 using std::wstring_view;
 
-// Stream
+/// Stream
 using std::ifstream;
 using std::ofstream;
 using std::ostream;
@@ -43,7 +43,7 @@ using std::wofstream;
 using std::wostream;
 using std::wostringstream;
 
-// Types
+/// Types
 using empty = std::monostate;
 using int8 = std::int8_t;
 using int16 = std::int16_t;

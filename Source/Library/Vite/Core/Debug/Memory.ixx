@@ -1,15 +1,16 @@
-﻿///
-/// @brief: This module serves something like a memory allocation/deallocation watcher.
-///         It will notify the application, if possible memory leaks are detected.
-/// @note:  Currently this is only the barebone, there is still some work to be done.
-/// 
-export module Vite.Debug.Memory;
+﻿export module Vite.Debug.Memory;
 
 import std.compat;
 import Vite.Base;
 
 ///
-/// @brief Properties
+/// @brief: This module serves something like a memory allocation/deallocation watcher.
+///         It will notify the application, if possible memory leaks are detected.
+/// @note:  Currently this is only the barebone, there is still some work to be done.
+/// 
+
+///
+/// Properties
 ///
 
 // Allocation Metrics: holds the current memory usage
@@ -21,7 +22,7 @@ struct AllocationMetrics {
 } inline sAllocationMetrics {};
 
 ///
-/// @brief Overrides
+/// Overrides
 ///
 
 export {
@@ -53,7 +54,7 @@ void operator delete[](void *memory, size_t size) noexcept {
 }
 
 ///
-/// @brief Functions
+/// Functions
 ///
 
 export namespace Hedron::Debug::Memory {
