@@ -8,6 +8,7 @@
     cppdialect "C++latest"
     cppmodules "true"
     buildstlmodules "true"
+    disablewarnings { "4189", "4100" }
     externalanglebrackets "on"
     externalwarnings "Off"
     nativewchar "on"

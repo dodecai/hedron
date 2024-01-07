@@ -1,6 +1,7 @@
 ﻿export module Vite.System.Window;
 
-import Vite.Base;
+import Vite.Math;
+import Vite.Type;
 
 export namespace Hedron {
 
@@ -8,56 +9,6 @@ export namespace Hedron {
 /// @brief  Collection of platform independet window related types
 ///
 
-//struct WindowPosition {
-//	int32_t X;	// Display position from the left
-//	int32_t Y;	// Display position form the top
-//
-//	uint8_t Monitor; // Monitor identifier
-//
-//	bool Centered;
-//
-//	// Window centered on main monitor
-//	WindowPosition():
-//		X {-1},
-//		Y {-1},
-//		Monitor {0},
-//		Centered {true} {
-//	};
-//
-//	// Window centered on specified monitor
-//	WindowPosition(uint8_t monitor):
-//		X {-1},
-//		Y {-1},
-//		Monitor {monitor},
-//		Centered {true} {
-//	};
-//
-//	// Window with specified position on main monitor as default
-//	WindowPosition(int32_t x, int32_t y, uint8_t monitor = 0):
-//		X {x},
-//		Y {y},
-//		Monitor {monitor},
-//		Centered {false} {
-//	};
-//};
-//
-//struct WindowSize {
-//	uint32_t Width;		// Display width
-//	uint32_t Height;	// Display height
-//
-//	// Window with default resolution 640x480
-//	WindowSize():
-//		Width {640u},
-//		Height {480u} {
-//	};
-//
-//	// Window with spepcified resolution
-//	WindowSize(uint32_t width, uint32_t height):
-//		Width {width},
-//		Height {height} {
-//	};
-//};
-//
 //enum class WindowState: uint32_t {
 //	Active		= BitMask(0u),
 //	Alive		= BitMask(1u),
@@ -70,127 +21,90 @@ export namespace Hedron {
 //	Visible		= BitMask(8u),
 //};
 //
-//enum class WindowStyle: uint8_t {
-//	Default		= 0x00,
-//	Borderless	= 0x01,
-//	FullScreen	= 0xFF
-//};
-//
-/////
-///// @brief  Collection of platform independet window related data and properties
-/////
-//
-//struct WindowData {
+
+///
+/// @brief  Collection of platform independet window related data and properties
+///
+
+enum class WindowState {
+    Active,
+    Alive,
+    Cursor,
+    Decorated,
+    Focused,
+    FullScreen,
+    Maximized,
+    Minimized,
+    Visible,
+};
+
+enum class WindowStyle {
+	Default,
+	Borderless,
+	FullScreen,
+};
+
+struct WindowSettings {
+    /// Properties
+    //string Title { "Hedron" };
+    //Size2D<float> Size { 1280.0f, 1024.0f };
+    //Position2D<float> Position { 0.0f, 0.0f };
+
+    //string Icon { "Hedron" };
+
+    //string ID { "Hedron" };
+    //Size2D<float> MaxSize { 0.0f, 0.0f };
+    //Size2D<float> MinSize { 640.0f, 512.0f };
+
+    /// States
+    //WindowState State {};
+    //WindowStyle Style { WindowStyle::Default };
+
 //	// Static
 //	static constexpr uint32_t BorderWidth = 12;
 //	static constexpr uint32_t TitleBarWidth = 5;
-//
-//	// States
-//	bool Active = false;
-//	bool Alive = false;
-//	bool Cursor = false;
-//	bool Decorated = false;
-//	bool Focused = false;
-//	bool FullScreen = false;
-//	bool Maximized = false;
-//	bool Minimized = false;
-//	bool Visible = true;
-//};
-//
-//struct WindowProperties {
-//	string ID;
-//	string Title;
-//	string Icon;
-//
-//	WindowPosition Position;
-//	WindowSize Size;
-//	WindowStyle Style;
-//
-//	WindowSize MaxSize;
-//	WindowSize MinSize;
-//
-//	// Window with predefined values (can be used only once for now...)
-//	WindowProperties():
-//		ID {"Window[App]"},
-//		Title {"App"},
-//		Icon {"Data/App.ico"},
-//		Position {},
-//		Size {},
-//		Style {WindowStyle::Default},
-//		MaxSize {0, 0},
-//		MinSize {} {
-//	};
-//
-//	// Window with recommended values
-//	WindowProperties(const string &title, uint32_t width = 640u, uint32_t height = 480u, WindowStyle style = WindowStyle::Default):
-//		ID {"Window[" + title + "]"},
-//		Title {title},
-//		Icon {"Data/" + title + ".ico"},
-//		Position {},
-//		Size {width, height},
-//		Style {style},
-//		MaxSize {0, 0},
-//		MinSize {width / 2, height / 2} {
-//	};
-//};
+
+};
 
 }
 
 export namespace Hedron {
 
-struct WindowState {
-    bool Active;
-    bool Alive;
-    bool Cursor;
-    bool Decorated;
-    bool Focused;
-    bool FullScreen;
-    bool Maximized;
-    bool Minimized;
-    bool Visible;
-};
-
-struct WindowProperties {
-    //string Title;
-
-    //WindowState State;
-    //Position2D Position;
-    //Size2D Size;
-    //Size2D MaxSize;
-    //Size2D MinSize;
-};
-
+///
+/// @brief Window Interface
+///
 class Window {
+    /// Friends
+    friend class Application;
+
 public:
     /// Default
     Window() = default;
     virtual ~Window() = default;
-
-    /// Methods
-    static Scope<Window> Create(const WindowProperties &properties = WindowProperties());
+    static Scope<Window> Create(const WindowSettings &settings = WindowSettings());
     virtual void Update() = 0;
 
-    ///// Accessors
-    //virtual void *GetNativeWindow() = 0;
-    //virtual WindowPosition GetDisplayPosition() const = 0;
-    //virtual WindowSize GetDisplaySize() const = 0;
-    //virtual WindowSize GetContextSize() const = 0;
-    //virtual WindowProperties &GetProperties() const = 0;
-    //virtual WindowSize GetScreenSize() const = 0;
-    //virtual bool GetState(WindowState state) const = 0;
-    //virtual string GetTitle() const = 0;
+    /// Accessors
+    virtual Position2D<float> ContentSize() const = 0;
+    //virtual const Position2D<float> &DisplayPosition() const = 0;
+    //virtual const WindowSettings &Settings() const = 0;
+    //virtual bool State(WindowState state) const = 0;
+    //virtual const string &Title() const = 0;
 
-    ///// Mutators
-    //virtual void SetProperties(const WindowProperties &properties) = 0;
-    //virtual void SetCursorPosition(const int32_t x, const int32_t y) = 0;
-    //virtual void SetDisplayPosition(const int32_t x, const int32_t y) = 0;
-    //virtual void SetDisplaySize(const uint32_t width, const uint32_t height) = 0;
-    //virtual void SetProgress(const float progress) = 0;
-    //virtual void SetTitle(const string_view title) = 0;
+    /// Mutators
+    //virtual void CursorPosition(const Position2D<float> &position) = 0;
+    //virtual void DisplayPosition(const Position2D<float> &position) = 0;
+    //virtual void Progress(float progress) = 0;
+    //virtual void Settings(const WindowSettings &properties) = 0;
+    //virtual void Title(string_view title) = 0;
 
-private:
-    // Callbacks
-    function<bool(void *)> mExternalInputEventListener = {};
+protected:
+    /// Casts
+    virtual void *AsPlatformHandle() = 0;
+
+protected:
+    /// Callbacks
+    //function<bool(void *)> mExternalInputEventListener = {};
 };
 
 }

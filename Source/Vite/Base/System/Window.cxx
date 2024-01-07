@@ -1,6 +1,10 @@
-﻿module Vite.System.Window;
+﻿module;
+
+module Vite.System.Window;
 
 #include "Vite/Base/Platform/Detection.h"
+
+import Vite.Logger;
 
 #ifdef APP_PLATFORM_WINDOWS
     import Vite.Platform.WinWindow;
@@ -8,14 +12,13 @@
 
 namespace Hedron {
 
-//Scope<Window> Window::Create(const WindowProperties &properties) {
-//    #ifdef APP_PLATFORM_WINDOWS
-//        //return CreateScope<WinWindow>(properties);
-//        return nullptr;
-//    #else
-//        AppAssert(nullptr, "The current platform isn't supported!");
-//        return nullptr;
-//    #endif
-//}
+Scope<Window> Window::Create(const WindowSettings &settings) {
+    #ifdef APP_PLATFORM_WINDOWS
+        return CreateScope<WinWindow>(settings);
+    #else
+        AppAssert(nullptr, "The current platform isn't supported!");
+        return nullptr;
+    #endif
+}
 
 }

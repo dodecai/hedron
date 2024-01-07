@@ -9,7 +9,7 @@ export namespace Hedron {
 /// They can be used to support various aspects of your framework.
 /// @note The functions and utilities here are useful for creating random data within the application.
 ///
-class Random {
+class Random: public StaticObject {
 public:
     /// Methods
     static void Load() {

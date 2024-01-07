@@ -39,6 +39,20 @@ public:
 };
 
 ///
+/// @brief Removes all constructors and the destructor to prevent instantiation and inheritance.
+///
+class StaticObject {
+public:
+    /// Default
+    StaticObject() = delete;
+    virtual ~StaticObject() = delete;
+    StaticObject(const StaticObject &) = delete;
+    StaticObject(StaticObject &&) noexcept = delete;
+    StaticObject &operator=(const StaticObject &) = delete;
+    StaticObject &operator=(StaticObject &&) noexcept = delete;
+};
+
+///
 /// @brief Removes the copy and move constructer/operator from derived class.
 ///
 class SteadyObject {

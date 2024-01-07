@@ -23,7 +23,7 @@ struct LogRecord {
     string Timestamp;
 
     /// Default
-    LogRecord(const char *format, const LogLevel &level = LogLevel::Default, const string &timestamp = appchrono.GetTimeStamp(), const SourceLocation &location = SourceLocation::Current()):
+    LogRecord(const char *format, const LogLevel &level = LogLevel::Default, const string &timestamp = Chrono::Timestamp(), const SourceLocation &location = SourceLocation::Current()):
         Format(format),
         Level(level),
         Location(location),

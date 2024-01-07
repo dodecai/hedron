@@ -117,20 +117,19 @@ namespace Hedron {
 //
 //
 
-// Default
-//WinWindow::WinWindow(const WindowProperties &properties):
-//    Properties{ properties } {
-//    // Properties
+WinWindow::WinWindow(const WindowSettings &settings):  Properties{ settings } {
+    // Application Information
+    mApplicationHandle = GetModuleHandle(NULL);
+    LPWSTR lpCmdLine = GetCommandLine();
+    STARTUPINFO StartupInfo {};
+    GetStartupInfo(&StartupInfo);
+    
+    auto Test = true;
+
 //    PlatformWindowStyle windowStyle = {};
 //    wstring id = ConvertChar2WChar(Properties.ID);
 //    wstring title = ConvertChar2WChar(Properties.Title);
-//
-//    // Get Application Information
-//    ApplicationHandle = GetModuleHandle(NULL);
-//    [[maybe_unused]] LPWSTR lpCmdLine = GetCommandLine();
-//    STARTUPINFOA StartupInfo;
-//    GetStartupInfoA(&StartupInfo);
-//
+
 //    // Settings
 //    windowStyle.ClassStyle = (DWORD)ClassStyle::Application;
 //    //SetThreadExecutionState(ES_DISPLAY_REQUIRED && ES_SYSTEM_REQUIRED);
@@ -290,9 +289,9 @@ namespace Hedron {
 //
 //    // Flash on Taskbar
 //    FlashWindow(WindowHandle, true);
-//}
-//
-//WinWindow::~WinWindow() {
+}
+
+WinWindow::~WinWindow() {
 //    // Switch back to Standard mode if in FullScreen mode
 //    if (Properties.Style == WindowStyle::FullScreen) {
 //        ChangeDisplaySettings(NULL, NULL);
@@ -306,9 +305,9 @@ namespace Hedron {
 //            Log("{}", GetLastErrorAsString());
 //        }
 //    }
-//}
-//
-//
+}
+
+
 //// Callbacks
 //LRESULT CALLBACK WinWindow::MessageCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 //	// Properties
@@ -348,16 +347,16 @@ namespace Hedron {
 //	// ... return it as unhandled
 //	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 //}
-//
-//// Methods
-//void WinWindow::Update() {
-//	MSG message = {};
-//	while (PeekMessage(&message, nullptr, 0, 0, PM_NOREMOVE)) {
-//		TranslateMessage(&message);
-//		DispatchMessage(&message);
-//	}
-//}
-//
+
+/// Methods
+void WinWindow::Update() {
+	MSG message {};
+	while (PeekMessage(&message, nullptr, 0, 0, PM_NOREMOVE)) {
+		TranslateMessage(&message);
+		DispatchMessage(&message);
+	}
+}
+
 //intptr_t WinWindow::Message(void *event) {
 //    // Properties
 //    LRESULT result = 1;
@@ -605,13 +604,9 @@ namespace Hedron {
 //    if (!result) return result;
 //    return DefWindowProc(msg.hwnd, msg.message, msg.wParam, msg.lParam);
 //}
-//
-//
-//// Accessors
-//void *WinWindow::GetNativeWindow() {
-//	return reinterpret_cast<void *>(WindowHandle);
-//}
-//
+
+/// Accessors
+
 //const WindowProperties &WinWindow::GetProperties() const {
 //	return Properties;
 //}
@@ -668,8 +663,14 @@ namespace Hedron {
 //	//GetWindowText(WindowHandle, title, sizeof(char) * 1024);
 //	return Properties.Title;
 //}
-//
-//
+
+/// Casts
+void *WinWindow::AsPlatformHandle() {
+    //AppAssert(mWindowHandle, "The requested platform handle is null!");
+    return reinterpret_cast<void *>(mWindowHandle);
+}
+
+
 //// Mutators
 //void WinWindow::SetProperties(const WindowProperties &properties) {
 //	string id = Properties.ID;

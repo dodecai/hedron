@@ -6,6 +6,7 @@
     cdialect "C17"
     cppdialect "C++latest"
     cppmodules "true"
+    disablewarnings { "4189", "4100" }
     buildstlmodules "false"
     externalanglebrackets "on"
     externalwarnings "Off"
