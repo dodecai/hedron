@@ -6,15 +6,13 @@ import Vite.Base;
 export namespace Hedron {
 
 ///
-/// @brief This util offers easy to use string extensions
+/// @brief String: This util offers easy to use string extensions
+/// @todo Port to C++20 with latest features
 ///
 class String: public StaticObject {
 public:
-    template <typename CharT, typename Traits, typename Allocator>
-    static bool ContainsW(const std::basic_string<CharT, Traits, Allocator> &value, const std::basic_string<CharT, Traits, Allocator> &token) {
-        return std::ranges::search(string, token) != value.end();
-    }
-
+    /// Methods
+    // Checks if the given string contains the given token
     static bool Contains(const string_view &value, const string_view &token, bool caseSensitive = false) noexcept {
         if (value.length() < token.length()) return false;
         if (caseSensitive) {
@@ -26,6 +24,14 @@ public:
             return (it != value.end());
         }
     }
+
+    // Checks if the given string contains the given token
+    template <typename CharT, typename Traits, typename Allocator>
+    static bool ContainsW(const std::basic_string<CharT, Traits, Allocator> &value, const std::basic_string<CharT, Traits, Allocator> &token) {
+        return std::ranges::search(string, token) != value.end();
+    }
+
+    // Checks if the given string ends with the given token
     static bool EndsWith(string_view value, string_view token, bool caseSensitive = false) noexcept {
         if (value.length() < token.length()) return false;
         if (caseSensitive) {
@@ -37,6 +43,8 @@ public:
             return (it == value.end() - token.length());
         }
     }
+
+    // Checks if the given string starts with the given token
     static bool StartsWith(string_view value, string_view token, bool caseSensitive = false) noexcept {
         if (value.length() < token.length()) return false;
         if (caseSensitive) {
@@ -49,26 +57,35 @@ public:
         }
     }
 
+    // Checks if the given string is a number
     static bool IsNumeric(string_view value) noexcept {
         return std::all_of(value.cbegin(), value.cend(), [](auto c) {
             return (c >= '0' && c <= '9') || c == '-' || c == ',' || c == '.';
         });
     }
+
+    // Checks if the given string is a decimal number
     static bool IsDecimal(string_view value) noexcept {
         return std::all_of(value.cbegin(), value.cend(), [](auto c) {
             return (c >= '0' && c <= '9');
         });
     }
+
+    // Checks if the given string is a hexadecimal number
     static bool IsHexadecimal(string_view value) noexcept {
         return std::all_of(value.cbegin(), value.cend(), [](auto c) {
             return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') || (c == 'x' || c == 'X');
         });
     }
+
+    // Checks if the given string is a octal number
     static bool IsOctal(string_view value) noexcept {
         return std::all_of(value.cbegin(), value.cend(), [](auto c) {
             return (c >= '0' && c <= '7');
         });
     }
+
+    // Joins the given values with the given separator
     static string Join(const vector<string> &values, char separator) {
         std::string result;
         for (auto it = values.begin(); it != values.end(); ++it) {
@@ -80,6 +97,7 @@ public:
         return result;
     }
 
+    // Replaces all occurrences of the given token with the given to
     static string &Replace(string &value, string_view token, string_view to, bool caseSensitive = false) noexcept {
         if (value.empty() || token.empty() || value.length() < token.length()) return value;
         if (caseSensitive) {
@@ -103,6 +121,8 @@ public:
         }
         return value;
     }
+
+    // Splits the given string with the given separator
     static vector<string> Split(const string &value, char seperator) noexcept {
         std::stringstream stream(value);
         string token;
@@ -113,11 +133,15 @@ public:
         }
         return tokens;
     }
+
+    // Converts the given string to lower case
     template<typename T> // ToDo: Concept doesn't work as expected after 16.10 Preview 2
     static T &ToLower(T &value) noexcept {
         std::transform(value.begin(), value.end(), value.begin(), ::tolower);
         return value;
     }
+
+    // Converts the given string to upper case
     template<typename T> // ToDo: Concept doesn't work as expected after 16.10 Preview 2
     static T &ToUpper(T &value) noexcept {
         std::transform(value.begin(), value.end(), value.begin(), ::toupper);

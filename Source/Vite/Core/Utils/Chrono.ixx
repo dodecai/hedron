@@ -8,10 +8,10 @@ export namespace Hedron {
 /// @brief Chrono: Delivers current date/time/runtime/timestamp in ISO 8601 format.
 /// Simply use 'Chrono' under the Hedron namespace to retrieve the desired information.
 /// 
-class Chrono: public SteadyObject {
+class Chrono: public StaticObject {
     /// Types
     using Clock = std::chrono::system_clock;
-    using Timepoint = std::chrono::time_point<std::chrono::system_clock>;
+    using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
 
 public:
     /// Accessors
@@ -72,7 +72,7 @@ private:
 
 private:
     /// Properties
-    static inline const Timepoint sStartTime { Clock::now() };
+    static inline const TimePoint sStartTime { Clock::now() };
 };
 
 }

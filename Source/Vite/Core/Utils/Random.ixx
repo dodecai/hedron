@@ -11,12 +11,23 @@ export namespace Hedron {
 ///
 class Random: public StaticObject {
 public:
-    /// Methods
-    static void Load() {
+    /// Default
+    static void Seed() {
         sRandomEngine.seed(std::random_device()());
     }
+
+    /// Methods
+    static float Double() {
+        return static_cast<double>(sRandomsDistribution(sRandomEngine)) / static_cast<double>(std::numeric_limits<uint32>::max());
+    }
     static float Float() {
-        return (float)sRandomsDistribution(sRandomEngine) / (float)std::numeric_limits<uint32>::max();
+        return static_cast<float>(sRandomsDistribution(sRandomEngine)) / static_cast<float>(std::numeric_limits<uint32>::max());
+    }
+    static float Integer() {
+        return static_cast<int>(sRandomsDistribution(sRandomEngine)) / static_cast<int>(std::numeric_limits<uint32>::max());
+    }
+    static float UnsignedInteger() {
+        return static_cast<unsigned int>(sRandomsDistribution(sRandomEngine)) / static_cast<unsigned int>(std::numeric_limits<uint32>::max());
     }
 
 private:
