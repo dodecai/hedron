@@ -1,4 +1,4 @@
-﻿module Vite.UI.Dialog;
+﻿module Vite.System.Dialog;
 
 #include "Vite/Base/Platform/Detection.h"
 

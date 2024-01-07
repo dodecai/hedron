@@ -6,7 +6,7 @@
 
 //import Vite.Platform.Graphics.Vulkan;
 import Vite.Renderer.ShaderCompiler;
-import Vite.UI.Window;
+import Vite.System.Window;
 
 // Sources: https://alain.xyz/blog/raw-vulkan | https://gist.github.com/graphitemaster/e162a24e57379af840d4
 

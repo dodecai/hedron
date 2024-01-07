@@ -1,6 +1,6 @@
-﻿export module Vite.UI.Window;
+﻿export module Vite.System.Window;
 
-import Vite.Core;
+import Vite.Base;
 
 export namespace Hedron {
 
@@ -138,7 +138,7 @@ export namespace Hedron {
 
 export namespace Hedron {
 
-struct ViewState {
+struct WindowState {
     bool Active;
     bool Alive;
     bool Cursor;

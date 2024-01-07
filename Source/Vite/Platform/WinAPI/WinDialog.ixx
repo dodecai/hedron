@@ -1,7 +1,7 @@
 ﻿export module Vite.Platform.WinDialog;
 
 import Vite.Core;
-import Vite.UI.Dialog;
+import Vite.System.Dialog;
 
 export namespace Hedron {
 

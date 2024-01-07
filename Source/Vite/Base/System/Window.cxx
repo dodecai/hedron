@@ -1,4 +1,4 @@
-﻿module Vite.UI.Window;
+﻿module Vite.System.Window;
 
 #include "Vite/Base/Platform/Detection.h"
 
