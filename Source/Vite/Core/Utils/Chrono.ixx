@@ -6,57 +6,37 @@ export namespace Hedron {
 
 ///
 /// @brief Chrono: Delivers current date/time/runtime/timestamp in ISO 8601 format.
-/// Simply use 'appchrono' under the Vite Namespace to retrieve the desired information.
+/// Simply use 'Chrono' under the Hedron namespace to retrieve the desired information.
 /// 
 class Chrono: public SteadyObject {
-    /// Friends
-    friend class Application;
-
     /// Types
-    using SystemClock = std::chrono::system_clock;
-    using Timespan = std::chrono::duration<double, std::micro>;
-    using Timestamp = std::chrono::time_point<std::chrono::system_clock>;
-
-private:
-    /// Default
-    Chrono(): mStartTime(SystemClock::now()) {}
-    ~Chrono() = default;
-
-    // Destroy the global instance
-    static void Destroy() {
-        delete &Instance();
-    }
+    using Clock = std::chrono::system_clock;
+    using Timepoint = std::chrono::time_point<std::chrono::system_clock>;
 
 public:
-    // Returns an instance to the global static object
-    static Chrono &Instance() {
-        static Chrono *instance = new Chrono();
-        return *instance;
-    }
-
     /// Accessors
     // Retrieve current date in ISO 8601 format 'YYYY-mm-dd'
-    inline string GetDate() const { return GetTicks("{:%Y-%m-%d}"); }
+    static inline string Date() { return Ticks("{:%Y-%m-%d}"); }
     // Retrieve current time in ISO 8601 format 'HH:mm:ss.cccccc'
-    inline string GetTime() const { return GetTicks("{:%H:%M:%S}"); }
+    static inline string Time() { return Ticks("{:%H:%M:%S}"); }
     // Retrieve runtime in ISO 8601 format 'PddTHH:mm:ss'
-    inline string GetRuntime() const { return GetRuntimeTicks(); }
+    static inline string Runtime() { return RuntimeTicks(); }
     // Retrieve timestamp in ISO 8601 format 'YYYY-mm-ddTHH:mm:ss.cccccc'
-    inline string GetTimeStamp() const { return GetTicks(); }
+    static inline string Timestamp() { return Ticks(); }
 
 private:
     /// Methods
-    inline string GetTicks (const string_view &format = "{:%Y-%m-%dT%H:%M:%S}") const {
-        auto args = std::make_format_args(SystemClock::now());
+    static inline string Ticks (const string_view &format = "{:%Y-%m-%dT%H:%M:%S}") {
+        auto args = std::make_format_args(Clock::now());
         try {
             return std::vformat(format, args);
         } catch (const std::exception &ex) {
             return ex.what();
         }
     }
-    inline string GetRuntimeTicks (const string_view &format = "P{:02d}DT{:02d}:{:02d}:{:02d}.{:06d}") const {
-        //// Option A: "P{:%H:%M:%S}" (lacks support for years, months and days)
-        //auto elapsed = SystemClock::now() - mStartTime;
+    static inline string RuntimeTicks (const string_view &format = "P{0:02d}DT{1:02d}:{2:02d}:{3:02d}") {
+        /// Option A: "P{:%H:%M:%S}" (lacks support for years, months and days)
+        //auto elapsed = Clock::now() - mStartTime;
         //auto args = std::make_format_args(elapsed);
         //try {
         //    return std::vformat(format, args);
@@ -64,9 +44,9 @@ private:
         //    return ex.what();
         //}
 
-        // Option B: "P{0:02d}DT{1:02d}:{2:02d}:{3:02d}"
+        /// Option B: "P{0:02d}DT{1:02d}:{2:02d}:{3:02d}"
         using namespace std::chrono;
-        auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(SystemClock::now() - mStartTime);
+        auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - sStartTime);
 
         auto year = duration_cast<years>(elapsed);
         elapsed -= year;
@@ -92,10 +72,7 @@ private:
 
 private:
     /// Properties
-    const Timestamp mStartTime;
+    static inline const Timepoint sStartTime { Clock::now() };
 };
-
-// Global Chrono Instance
-inline Chrono &appchrono = Chrono::Instance();
 
 }

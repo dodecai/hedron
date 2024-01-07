@@ -239,9 +239,6 @@ namespace Hedron::Test {
 
 // Show me what you got!
 void TestLogger() {
-    // Preparation
-    auto &logger = Logger::Instance();
-
     // LogLevels
     logger(LogLevel::Caption, "Caption");
     logger(LogLevel::Default, "Default\n");

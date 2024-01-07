@@ -50,7 +50,7 @@ public:
 
         // Initialization
         LogCaption("{}", mSettings.Title);
-        Log("{} started ...\n  on: '{}'\n  at: '{}'", mSettings.Title, appchrono.GetDate(), appchrono.GetTime());
+        Log("{} started ...\n  on: '{}'\n  at: '{}'", mSettings.Title, Chrono::Date(), Chrono::Time());
         if (mSettings.ExternalLoop) return;
         LogCaption("Initialization");
 
@@ -60,7 +60,7 @@ public:
         // Load and configure Systems
         LogInfo("Loading Systems");
         //mListener = EventListener::Craate();
-        //mWindow = Window::Create({ mSettings.Title, mSettings.Width, mSettings.Height });
+        mCoreWindow = Window::Create({ /* mSettings.Title, mSettings.Width, mSettings.Height*/ });
         //mWindow->SetEventListener(mListener); || mWindow->mExternalInputEventListener = [&](auto value) -> bool { return mListener->Callback(value); };
         //mListener->Emitter.on<KeyboardEventData>([&](auto &data, const auto &emitter) { OnKeyboardEvent(data, emitter); });
         //mListener->Emitter.on<MouseEventData>([&](auto &data, const auto &emitter) { OnMouseEvent(data, emitter); });
@@ -89,8 +89,7 @@ public:
 	}
     virtual ~Application() {
         // Destruction
-        Log("{} finished ...\n  on: '{}'\n  at: '{}'\n", mSettings.Title, appchrono.GetDate(), appchrono.GetTime());
-        Chrono::Destroy();
+        Log("{} finished ...\n  on: '{}'\n  at: '{}'\n", mSettings.Title, Chrono::Date(), Chrono::Time());
         Logger::Destroy();
         Input::Destroy();
 		pAppInstance = nullptr;
@@ -177,6 +176,7 @@ public:
     const Settings &GetSettings() const { return mSettings; }
     const States &GetStates() const { return mStates; }
     const Statistics &GetStatistics() const { return mStatistics; }
+    const Scope<Window> &GetWindow() { return mCoreWindow; }
 
     ///
     /// Methods
@@ -341,12 +341,13 @@ private:
     static inline Application *pAppInstance = nullptr;
     LayerStack mLayers;
     Scope<ThreadPool> mThreadPool;
+    Scope<Window> mCoreWindow;
     //Reference<Config> mConfig;
     //Reference<Context> mContext;
     //Reference<Dialog> mDialog;
     //Scope<EventListener> mListener;
     //Scope<Renderer> mRenderer;
-    //Scope<Window> mWindow;
+    
     //ImGuiLayer *pImGuiLayer;
 };
 

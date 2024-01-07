@@ -5,14 +5,10 @@ import Vite.Base;
 
 export namespace Hedron {
 
-/// @brief This class offers easy to use string extensions
-class String {
-    // Default
-    String() = delete;
-    String(const String &) = delete;
-    String(String &&) = delete;
-    ~String() = delete;
-
+///
+/// @brief This util offers easy to use string extensions
+///
+class String: public StaticObject {
 public:
     template <typename CharT, typename Traits, typename Allocator>
     static bool ContainsW(const std::basic_string<CharT, Traits, Allocator> &value, const std::basic_string<CharT, Traits, Allocator> &token) {
@@ -127,17 +123,27 @@ public:
         std::transform(value.begin(), value.end(), value.begin(), ::toupper);
         return value;
     }
-
-    static void Test();
 };
+
+///
+/// Tests
+///
+namespace Test {
+
+void TestString();
 
 }
 
+}
+
+///
+/// Implementation
+///
 module: private;
 
-namespace Hedron {
+namespace Hedron::Test {
 
-void String::Test() {
+void TestString() {
     string string00 = "First Second and SeConD Third";
     string string01 = "fiRst";
     string string02 = "second";
