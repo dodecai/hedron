@@ -1,9 +1,34 @@
-﻿module;
+﻿export module Test.Engine;
 
-#define TEST_MESH_RENDERER 1
-#define TEST_SPRITE_RENDERER 0
-#define TEST_UI_RENDERER 0
+import Vite.Core;
+import Vite.Engine;
+import Vite.App.Layers;
 
+export namespace Hedron::Test {
+
+///
+/// @brief Engine | Serves all engine tests for the Hedron Engine.
+///
+class Engine: public Layer {
+public:
+    /// Default
+    Engine() = default;
+    ~Engine() = default;
+
+    /// Methods
+    void Create() override {}
+    void Destroy() override {}
+    void Update(DeltaTime deltaTime) override {}
+
+private:
+    /// Properties
+};
+
+}
+
+//#define TEST_MESH_RENDERER 1
+//#define TEST_SPRITE_RENDERER 0
+//#define TEST_UI_RENDERER 0
 //#pragma warning(push, 0)
 ////https://github.com/nothings/stb/issues/334
 //#ifndef STB_IMAGE_IMPLEMENTATION
@@ -13,9 +38,6 @@
 //#include <stb/stb_image.h>
 ////#define STB_IMAGE_WRITE_IMPLEMENTATION
 //#pragma warning(pop)
-
-export module Vite.Test.Engine;
-
 //import Ultra;
 //import Ultra.Asset;
 //import Ultra.Asset.Model;
