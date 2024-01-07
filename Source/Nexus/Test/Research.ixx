@@ -1,4 +1,29 @@
-﻿export module Vite.Test.Research;
+﻿export module Test.Research;
+
+import Vite;
+import Vite.App.Layers;
+
+export namespace Hedron::Test {
+
+///
+/// @brief Research | Serves as an research facility, to test out the latest features for the Hedron Engine.
+///
+class Research: public Layer {
+public:
+    /// Default
+    Research() = default;
+    ~Research() = default;
+
+    /// Methods
+    void Create() override {}
+    void Destroy() override {}
+    void Update(DeltaTime deltaTime) override {}
+
+private:
+    /// Properties
+};
+
+}
 
 //
 //#include <Ultra/Core/Core.h>

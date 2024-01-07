@@ -3,26 +3,21 @@ import <Vite/EntryPoint.h>;
 
 import Vite;
 import Vite.Util.ThreadPool;
-//import Vite.Test.Core;
-//import Vite.Test.Engine;
-//import Vite.Test.Research;
+
+import Test.Base;
+import Test.Core;
+import Test.Engine;
+import Test.Research;
+import Test.Tool;
 
 // Switches
-//#define CORE_TESTS
-//#define ENGINE_TESTS
-//#define RESEARCH_TESTS
+#define BASE_TESTS
+#define CORE_TESTS
+#define ENGINE_TESTS
+#define RESEARCH_TESTS
+#define TOOL_TESTS
 
 namespace Hedron {
-
-#pragma region /// Functions
-
-// Performance Test
-inline long long Fibonacci(int n) {
-    if (n <= 1) return n;
-    return Fibonacci(n - 1) + Fibonacci(n - 2);
-}
-
-#pragma endregion
 
 ///
 /// @brief Nexus | Test me if you can!
@@ -37,58 +32,33 @@ public:
     /// Methods
     void Create() override {
         Debug::DisplayCompileInformation();
-
+        
+        #ifdef BASE_TESTS
+            PushLayer(new Test::Base());
+        #endif
         #ifdef CORE_TESTS
-            mCore = CreateScope<Test::Core>();
+            PushLayer(new Test::Core());
         #endif
         #ifdef ENGINE_TESTS
-            // ToDo: A layer should be also created from an reference pointer.
-            mEngine = new Test::Engine();
-            PushLayer(mEngine);
-            mEngine = CreateScope<Test::Engine>();
+            PushLayer(new Test::Engine());
         #endif
         #ifdef RESEARCH_TESTS
-            mResearch = CreateScope<Test::Research>();
+            PushLayer(new Test::Research());
         #endif
-
-        mThreadPool = CreateScope<ThreadPool>();
+        #ifdef TOOL_TESTS
+            PushLayer(new Test::Tool());
+        #endif
     }
 	void Destroy() override {
     }
 	void Update(DeltaTime deltaTime) override {
-        #ifdef SYSTEMS_TESTS
-            mEngine->Test(deltaTime);
-        #endif
-        
         if (Input::GetKeyState(KeyCode::Escape)) {
             Exit();
-        }
-        
-        static double delay = 0.0;
-        delay += deltaTime.GetMilliseconds();
-
-        if (delay >= 0.2) {
-            // Thread Pool Tasks
-            const int n = 2;
-            auto fibResultA = mThreadPool->Enqueue([&] {
-                auto result = Fibonacci(n);
-                return result;
-            });
-            auto fibResultB = mThreadPool->Enqueue([&] {
-                auto result = Fibonacci(n);
-                return result;
-            });
-
-            delay = 0.0;
         }
     }
 
 private:
     /// Properties
-    //Scope<Test::Core> mCore;
-    //Scope<Test::Engine> mEngine;
-    //Scope<Test::Research> mResearch;
-    Scope<ThreadPool> mThreadPool;
 };
 
 // Application Entry-Point

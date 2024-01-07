@@ -1,4 +1,63 @@
-﻿export module Vite.Test.Core;
+﻿export module Test.Core;
+
+import Vite.Core;
+import Vite.App.Layers;
+
+export namespace Hedron::Test {
+
+#pragma region /// Functions
+
+// Performance Test
+inline long long Fibonacci(int n) {
+    if (n <= 1) return n;
+    return Fibonacci(n - 1) + Fibonacci(n - 2);
+}
+
+#pragma endregion
+
+///
+/// @brief Core | Serves all core tests for the Hedron Engine.
+///
+class Core: public Layer {
+public:
+    /// Default
+    Core() = default;
+    ~Core() = default;
+
+    /// Methods
+    void Create() override {
+        mThreadPool = CreateScope<ThreadPool>();
+    }
+    void Destroy() override {}
+    void Update(DeltaTime deltaTime) override {
+        ///
+        /// ThreadPool
+        ///
+        static double delay = 0.0;
+        delay += deltaTime.GetMilliseconds();
+
+        if (delay >= 0.2) {
+            // Thread Pool Tasks
+            const int n = 2;
+            auto fibResultA = mThreadPool->Enqueue([&] {
+                auto result = Fibonacci(n);
+                return result;
+            });
+            auto fibResultB = mThreadPool->Enqueue([&] {
+                auto result = Fibonacci(n);
+                return result;
+            });
+
+            delay = 0.0;
+        }
+    }
+
+private:
+    /// Properties
+    Scope<ThreadPool> mThreadPool;
+};
+
+}
 
 //import Ultra;
 //import Ultra.Core.ThreadPool;
