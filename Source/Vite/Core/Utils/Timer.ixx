@@ -1,12 +1,12 @@
 ﻿export module Vite.Util.Timer;
 
 import Vite.Base;
+import Vite.Logger;
 
 export namespace Hedron {
 
 ///
-/// @brief Timer Units:
-/// Seconds (s), Milliseconds (ms), Microseconds (µs), Nanoseconds (ns)
+/// @brief Timer Units: Seconds (s), Milliseconds (ms), Microseconds (µs), Nanoseconds (ns)
 ///
 enum class TimerUnit {
     Seconds,
@@ -16,48 +16,102 @@ enum class TimerUnit {
 };
 
 ///
-/// @brief Timer: Counts ticks until GetDeltaTime or GetDeltaTimeAs is called.
-/// @tparam <T>:  Any supported floating-point type.
-/// 
+/// @brief Timer: Counts ticks until either GetDeltaTime or GetDeltaTimeAs is called.
+///
 class Timer {
+    /// Types
+    using Clock = std::chrono::steady_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using TimeUnit = std::chrono::duration<double, std::milli>;
+
 public:
     /// Default
-    Timer(): mStartTime(std::chrono::steady_clock::now()) {}
+    Timer(): mStartTime(Clock::now()) {}
     ~Timer() = default;
 
     /// Accessors
     // Retrieve delta time in ms
-    inline const float GetDeltaTime() {
-        std::chrono::duration<float, std::milli> duration = CalculateDuration();
+    inline const double DeltaTime() {
+        auto duration = CalculateDuration();
         Reset();
         return duration.count();
     }
     // Retrieve delta time in specified unit (s = default, ms, µs, ns)
-    inline const float GetDeltaTimeAs(TimerUnit unit = TimerUnit::Seconds) {
-        float duration {};
+    inline const double DeltaTimeAs(TimerUnit unit = TimerUnit::Seconds) {
+        double duration {};
         switch (unit) {
-            case TimerUnit::Seconds:		{ duration = std::chrono::duration<float>(CalculateDuration()).count();             break; }
-            case TimerUnit::Milliseconds:	{ duration = std::chrono::duration<float, std::milli>(CalculateDuration()).count(); break; }
-            case TimerUnit::Microseconds:	{ duration = std::chrono::duration<float, std::micro>(CalculateDuration()).count(); break; }
-            case TimerUnit::Nanoseconds:	{ duration = std::chrono::duration<float, std::nano>(CalculateDuration()).count();  break; }
+            case TimerUnit::Seconds:		{ duration = std::chrono::duration<double>(CalculateDuration()).count();             break; }
+            case TimerUnit::Milliseconds:	{ duration = std::chrono::duration<double, std::milli>(CalculateDuration()).count(); break; }
+            case TimerUnit::Microseconds:	{ duration = std::chrono::duration<double, std::micro>(CalculateDuration()).count(); break; }
+            case TimerUnit::Nanoseconds:	{ duration = std::chrono::duration<double, std::nano>(CalculateDuration()).count();  break; }
             default: { break; }
         }
         Reset();
-        return std::move(duration);
+        return duration;
     }
     // Retrieve a delta time slice in ms
-    inline const float Now() {
-        return (std::chrono::duration<float, std::milli>{ CalculateDuration() }).count();
+    inline const double Now() {
+        return CalculateDuration().count();
     }
 
 private:
     /// Methods
-    inline std::chrono::duration<float, std::milli> CalculateDuration() { return { std::chrono::steady_clock::now() - mStartTime }; }
-    inline void Reset() { mStartTime = std::chrono::steady_clock::now(); }
+    inline TimeUnit CalculateDuration() { return { Clock::now() - mStartTime }; }
+    inline void Reset() { mStartTime = Clock::now(); }
 
 private:
     /// Properties
-    std::chrono::time_point<std::chrono::steady_clock> mStartTime;
+    TimePoint mStartTime;
+};
+
+///
+/// @brief: Scoped Timer: Counts ticks until it goes out of scope.
+/// @detail Destroys itself when it goes out of scope.
+/// @example
+/// ScopedTimer timer("Test");
+///
+class ScopedTimer {
+    /// Types
+    using Callback = function<void(const string &, double duration)>;
+    using Clock = std::chrono::steady_clock;
+    using Duration = std::chrono::microseconds;
+    using TimePoint = std::chrono::time_point<Clock>;
+    using TimeStep = std::chrono::duration<double, std::micro>;
+
+public:
+    /// Default
+    ScopedTimer(string_view name, const Callback &callback = nullptr):
+        mName(name),
+        mStopped(false),
+        mStartTime(Clock::now()),
+        mCallback(callback) {
+    }
+    ~ScopedTimer() { if (!mStopped) { Stop(); } };
+
+    /// Methods
+    void Stop() {
+        using namespace std::chrono;
+        mStopped = true;
+
+        auto startTime = time_point_cast<Duration>(mStartTime).time_since_epoch().count();
+        auto stopTime = time_point_cast<Duration>(Clock::now()).time_since_epoch().count();
+        auto duration = (stopTime - startTime) * 0.001f;
+
+        if (mCallback) {
+            mCallback(mName, duration);
+        } else {
+            LogInfo("{} [Duration: {}ms | ThreadID: {}]", mName, duration, std::this_thread::get_id());
+        }
+    }
+
+private:
+    /// Callbacks
+    Callback mCallback;
+
+    /// Properties
+    string mName;
+    TimePoint mStartTime;
+    bool mStopped {};
 };
 
 }

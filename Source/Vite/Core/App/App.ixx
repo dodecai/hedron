@@ -244,7 +244,7 @@ private:
             }
 
             // Calculate delta-time
-            DeltaTime deltaTime = timer.GetDeltaTime();
+            DeltaTime deltaTime = timer.DeltaTime();
             frames++;
             delay += deltaTime;
 
@@ -302,7 +302,7 @@ private:
             }
 
             // Calculate delta-time
-            DeltaTime deltaTime = timer.GetDeltaTime();
+            DeltaTime deltaTime = timer.DeltaTime();
             frames++;
             delay += deltaTime;
 

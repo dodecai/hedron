@@ -28,7 +28,7 @@ export namespace Hedron {
 ///
 class ThreadPool {
 public:
-    // Default
+    /// Default
     ThreadPool(size threads = thread::hardware_concurrency()): mStop(false) {
         for (size i = 0; i < threads; i++) {
             mWorkers.emplace_back([this] {
@@ -59,12 +59,14 @@ public:
             worker.join();
         }
     }
-    
+
     ///
+    /// Methods
+    ///
+    
     /// @brief Enqueue a task
     /// @tparam <F>:    Any supported callable type.
     /// @tparam <Args>: Any supported argument types.
-    ///
     template<typename F, typename ...Args>
     auto Enqueue(F &&f, Args &&...args) -> future<typename std::invoke_result<F, Args...>::type> {
         using return_type = std::invoke_result<F, Args...>::type;
@@ -98,18 +100,18 @@ public:
     }
 
 private:
-    // Data
+    /// Data
     queue<function<void()>> mTasks;
     vector<thread> mWorkers;
 
-    // Limits
+    /// Limits
     static constexpr size mMaxTasks = 2048; // ToDo: Find the optimal value
     static constexpr size mMaxTimeout = 4;  // ToDo: Find the optimal value (4 ms = 240 fps)
 
-    // Properties
-    bool mStop;
+    /// Properties
     condition_variable mCondition;
     mutex mQueueMutex;
+    bool mStop;
 };
 
 }
