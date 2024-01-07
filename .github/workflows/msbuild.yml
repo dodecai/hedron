@@ -20,7 +20,7 @@ env:
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
   
-  SOLUTION_TEST_PROJECT: Test
+  SOLUTION_TEST_PROJECT: Gaia
 
 permissions:
   contents: read
