@@ -158,8 +158,8 @@ filter { "configurations:Distribution" }
     
 filter {}
 
-include "Library/Vite.lua"
-include "Gaia/Gaia.lua"
+include "Vite/Vite.lua"
 include "Nexus/Nexus.lua"
 include "Vivid/Vivid.lua"
+include "Gaia/Gaia.lua"
 include "Phoenix/Phoenix.lua"

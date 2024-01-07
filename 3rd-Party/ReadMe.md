@@ -5,8 +5,6 @@ This project utilizes various third-party libraries to aid in development.
 Some of these libraries are integrated as header-only, while others have been forked and added as submodules, with possible patches for better integration.
 The following is a list of third-party libraries used in this project, along with their respective licenses.
 
-> ToDo
-
 | Project | License |
 | :------ | :-----: |
 | [Dear ImGui](https://github.com/ocornut/imgui "imgui")                                     | MIT                |
