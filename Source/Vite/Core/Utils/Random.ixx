@@ -17,16 +17,16 @@ public:
     }
 
     /// Methods
-    static float Double() {
+    static double Double() {
         return static_cast<double>(sRandomsDistribution(sRandomEngine)) / static_cast<double>(std::numeric_limits<uint32>::max());
     }
     static float Float() {
         return static_cast<float>(sRandomsDistribution(sRandomEngine)) / static_cast<float>(std::numeric_limits<uint32>::max());
     }
-    static float Integer() {
+    static int Integer() {
         return static_cast<int>(sRandomsDistribution(sRandomEngine)) / static_cast<int>(std::numeric_limits<uint32>::max());
     }
-    static float UnsignedInteger() {
+    static unsigned int UnsignedInteger() {
         return static_cast<unsigned int>(sRandomsDistribution(sRandomEngine)) / static_cast<unsigned int>(std::numeric_limits<uint32>::max());
     }
 

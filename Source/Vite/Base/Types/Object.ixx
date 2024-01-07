@@ -42,10 +42,12 @@ public:
 /// @brief Removes all constructors and the destructor to prevent instantiation and inheritance.
 ///
 class StaticObject {
-public:
+protected:
     /// Default
     StaticObject() = delete;
-    virtual ~StaticObject() = delete;
+    virtual ~StaticObject() = default; // Compilers cry if this is deleted, so just leave it.
+
+public:
     StaticObject(const StaticObject &) = delete;
     StaticObject(StaticObject &&) noexcept = delete;
     StaticObject &operator=(const StaticObject &) = delete;
