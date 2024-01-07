@@ -10,14 +10,14 @@ import Vite.Base;
 import Vite.Config;
 import Vite.Event;
 import Vite.Logger;
+import Vite.System.Dialog;
+import Vite.System.Window;
 import Vite.Util.Chrono;
 import Vite.Util.Timer;
 import Vite.Util.ThreadPool;
 
 import Vite.Aurora;
 import Vite.DearImGui.Layer;
-import Vite.UI.Dialog;
-import Vite.UI.Window;
 
 int main(int, char **);
 

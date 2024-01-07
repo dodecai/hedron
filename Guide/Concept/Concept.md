@@ -57,9 +57,11 @@ Vite/ [Library]
 │  │  └─ Runtime
 │  ├─ System/
 │  │  ├─ Cli
+│  │  ├─ Dialog
 │  │  ├─ FileSystem
 │  │  ├─ Module
-│  │  └─ System
+│  │  ├─ System
+│  │  └─ Window
 │  ├─ Types/
 │  │  ├─ Component
 │  │  ├─ Concepts
@@ -180,9 +182,7 @@ Vite/ [Library]
 │  │  │  │  └─ Styles
 │  │  │  ├─ GuiBuilder
 │  │  │  └─ GuiLayer
-│  │  ├─ Dialog
-│  │  ├─ UI
-│  │  └─ Window
+│  │  └─ UI
 │  └─ Engine
 ├─ Platform/
 │  ├─ DirectX/

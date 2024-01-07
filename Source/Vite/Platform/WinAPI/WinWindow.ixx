@@ -3,7 +3,7 @@
 import <Windows.h>;
 
 import Vite.Core;
-import Vite.UI.Window;
+import Vite.System.Window;
 
 export namespace Hedron {
 
