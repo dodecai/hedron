@@ -1,4 +1,6 @@
-#pragma once
+﻿#pragma once
+
+#ifdef LEGACY_CODE
 
 // Material Design
 // Source: https://material.io/design/color/the-color-system.html#tools-for-picking-colors
@@ -569,3 +571,5 @@ static ImVec4 operator*(ImVec4 lhs, ImVec4 rhs) {
     result.w = lhs.w * rhs.w;
     return result;
 }
+
+#endif

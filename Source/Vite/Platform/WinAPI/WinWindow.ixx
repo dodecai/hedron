@@ -41,7 +41,7 @@ public:
     virtual void Update() override;
 
     // Accessors
-    Position2D<float> ContentSize() const override { return { 1.0f, 1.0f }; }
+    //Position2D<float> ContentSize() const override { return { 1.0f, 1.0f }; }
     //const Position2D<float> &DisplayPosition() const override { return {}; }
     //const WindowSettings &Settings() const override { return {}; }
     //bool State(WindowState state) const override { return {}; }

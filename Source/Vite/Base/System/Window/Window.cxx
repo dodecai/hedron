@@ -1,8 +1,8 @@
 ﻿module;
 
-module Vite.System.Window;
+//#include "Vite/Base/Platform/Detection.h"
 
-#include "Vite/Base/Platform/Detection.h"
+module Vite.System.Window;
 
 import Vite.Logger;
 
