@@ -1,6 +1,6 @@
-<mxfile host="Electron" modified="2024-01-07T00:10:46.702Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.16 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="XrIOgV_yRjuIF4wUF2XV" version="22.1.16" type="device">
+<mxfile host="Electron" modified="2024-01-08T21:25:19.240Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.16 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="Zz09EUjFYgxmwBH45kYp" version="22.1.16" type="device">
   <diagram name="Page-1" id="Ch2R5TFC7xsnGBo0b88v">
-    <mxGraphModel dx="2107" dy="1970" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" background="none" math="0" shadow="0">
+    <mxGraphModel dx="1264" dy="1182" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1920" pageHeight="1200" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -19,7 +19,7 @@
         <mxCell id="-hMhD3A6PczAjQAywkGA-3" value="Core" style="rounded=0;whiteSpace=wrap;html=1;spacing=8;fontSize=21;horizontal=1;verticalAlign=top;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="360" y="600" width="1520" height="240" as="geometry" />
         </mxCell>
-        <mxCell id="-hMhD3A6PczAjQAywkGA-5" value="Wrappers&lt;br&gt;(3rd-Party)" style="rounded=1;whiteSpace=wrap;html=1;spacing=8;fontSize=21;horizontal=1;verticalAlign=middle;fillColor=default;" parent="1" vertex="1">
+        <mxCell id="-hMhD3A6PczAjQAywkGA-5" value="Bridges&lt;br&gt;(3rd-Party)" style="rounded=1;whiteSpace=wrap;html=1;spacing=8;fontSize=21;horizontal=1;verticalAlign=middle;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="1080" y="1000" width="200" height="80" as="geometry" />
         </mxCell>
         <mxCell id="-hMhD3A6PczAjQAywkGA-6" value="Algorithms" style="rounded=1;whiteSpace=wrap;html=1;spacing=8;fontSize=21;horizontal=1;verticalAlign=middle;fillColor=default;" parent="1" vertex="1">
@@ -148,7 +148,7 @@
         <mxCell id="-hMhD3A6PczAjQAywkGA-59" value="Network" style="rounded=1;whiteSpace=wrap;html=1;spacing=8;fontSize=21;horizontal=1;verticalAlign=middle;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="1400" y="680" width="200" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="sw7E05EDpamPGSBhLKiU-1" value="Mathematics" style="rounded=1;whiteSpace=wrap;html=1;spacing=8;fontSize=21;horizontal=1;verticalAlign=middle;fillColor=default;" vertex="1" parent="1">
+        <mxCell id="sw7E05EDpamPGSBhLKiU-1" value="Mathematics" style="rounded=1;whiteSpace=wrap;html=1;spacing=8;fontSize=21;horizontal=1;verticalAlign=middle;fillColor=default;" parent="1" vertex="1">
           <mxGeometry x="840" y="900" width="200" height="80" as="geometry" />
         </mxCell>
       </root>

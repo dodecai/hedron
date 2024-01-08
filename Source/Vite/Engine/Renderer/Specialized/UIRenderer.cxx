@@ -1,6 +1,6 @@
 ﻿module Vite.UIRenderer;
 
-import <glad/gl.h>;
+//import <glad/gl.h>;
 
 namespace Hedron {
 

@@ -1,6 +1,9 @@
-﻿module Vite.Event;
+﻿module;
 
-import "Vite/Base/Platform/Detection.h";
+#include "Vite/Base/Platform/Detection.h"
+
+module Vite.Event;
+
 import Vite.Logger;
 
 namespace Hedron {

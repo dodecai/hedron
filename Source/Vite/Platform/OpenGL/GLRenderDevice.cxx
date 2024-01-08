@@ -5,7 +5,7 @@
 #pragma warning(push)
 #pragma warning(disable: 4100)
 
-import <glad/gl.h>;
+//import <glad/gl.h>;
 
 namespace Hedron {
 

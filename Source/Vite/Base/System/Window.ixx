@@ -47,7 +47,7 @@ enum class WindowStyle {
 
 struct WindowSettings {
     /// Properties
-   // string Title { "Hedron" };
+    string Title { "Hedron" };
     //Size2D<float> Size { 1280.0f, 1024.0f };
     //Position2D<float> Position { 0.0f, 0.0f };
 

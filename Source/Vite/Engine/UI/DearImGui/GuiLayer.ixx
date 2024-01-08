@@ -9,7 +9,7 @@ export module Vite.DearImGui.Layer;
 
 //#include <Ultra/UI/ImGui/Styles/Styles.h>
 
-import <glad/gl.h>;
+//import <glad/gl.h>;
 
 import Vite.Core;
 import Vite.App.Layers;

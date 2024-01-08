@@ -1,6 +1,6 @@
 ﻿module Vite.Platform.GLFramebuffer;
 
-import <glad/gl.h>;
+//import <glad/gl.h>;
 
 namespace Hedron {
 

@@ -1,6 +1,6 @@
 ﻿module Vite.Platform.GLViewport;
 
-import <glad/gl.h>;
+//import <glad/gl.h>;
 
 namespace Hedron {
 

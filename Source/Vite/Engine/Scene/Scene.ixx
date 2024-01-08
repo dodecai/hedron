@@ -1,6 +1,6 @@
 ﻿export module Vite.Scene;
 
-import <entt/entt.hpp>;
+//import <entt/entt.hpp>;
 
 import Vite.Core;
 import Vite.Renderer.DesignerCamera;

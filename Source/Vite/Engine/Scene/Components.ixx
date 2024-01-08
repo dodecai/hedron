@@ -3,7 +3,7 @@
 import Vite.Core;
 import Vite.Scene.Camera;
 
-import <entt/entt.hpp>;
+//import <entt/entt.hpp>;
 
 #pragma warning(push)
 #pragma warning(disable: 4201)
