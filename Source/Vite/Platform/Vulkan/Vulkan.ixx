@@ -1,18 +1,20 @@
 ﻿module;
 
-#include "Vite/Base/Platform/Detection.h"
+//#include "Vite/Base/Platform/Detection.h"
 
 #if defined(APP_PLATFORM_WINDOWS)
     #define VK_USE_PLATFORM_WIN32_KHR
 #endif
 
-#include <vulkan/vulkan.hpp>
-#include <vulkan/vulkan_extension_inspection.hpp>
-#include <vulkan/vulkan_format_traits.hpp>
-#include <vulkan/vulkan_hash.hpp>
-#include <vulkan/vulkan_raii.hpp>
+//#include <vulkan/vulkan.hpp>
+//#include <vulkan/vulkan_extension_inspection.hpp>
+//#include <vulkan/vulkan_format_traits.hpp>
+//#include <vulkan/vulkan_hash.hpp>
+//#include <vulkan/vulkan_raii.hpp>
 
 export module Vite.Platform.Graphics.Vulkan;
+
+#ifdef LEGACY_CODE
 
 // ToDo: This is a workaround until it is clear how to use C++ modules from a different project.
 VULKAN_HPP_DEFAULT_DISPATCH_LOADER_DYNAMIC_STORAGE
@@ -3021,3 +3023,5 @@ export namespace VULKAN_HPP_NAMESPACE
 
   }
 }
+
+#endif

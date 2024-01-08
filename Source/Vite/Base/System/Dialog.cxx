@@ -1,6 +1,6 @@
 ﻿module Vite.System.Dialog;
 
-#include "Vite/Base/Platform/Detection.h"
+//#include "Vite/Base/Platform/Detection.h"
 
 #ifdef APP_PLATFORM_WINDOWS
     //import Ultra.Platform.WinDialog;

@@ -1,7 +1,8 @@
 ﻿export module Vite.System.Window;
 
-import Vite.Math;
-import Vite.Type;
+//import Vite.Math;
+import Vite.Type.SmartPointer;
+import Vite.Type.Standard;
 
 export namespace Hedron {
 
@@ -39,14 +40,14 @@ enum class WindowState {
 };
 
 enum class WindowStyle {
-	Default,
-	Borderless,
-	FullScreen,
+    Default,
+    Borderless,
+    FullScreen,
 };
 
 struct WindowSettings {
     /// Properties
-    //string Title { "Hedron" };
+   // string Title { "Hedron" };
     //Size2D<float> Size { 1280.0f, 1024.0f };
     //Position2D<float> Position { 0.0f, 0.0f };
 
@@ -85,7 +86,7 @@ public:
     virtual void Update() = 0;
 
     /// Accessors
-    virtual Position2D<float> ContentSize() const = 0;
+    //virtual Position2D<float> ContentSize() const = 0;
     //virtual const Position2D<float> &DisplayPosition() const = 0;
     //virtual const WindowSettings &Settings() const = 0;
     //virtual bool State(WindowState state) const = 0;

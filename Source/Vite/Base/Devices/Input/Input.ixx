@@ -4,9 +4,7 @@ export import Vite.Device.Input.Controller;
 export import Vite.Device.Input.Keyboard;
 export import Vite.Device.Input.Mouse;
 export import Vite.Device.Input.Touch;
-
-export import Vite.Type.SmartPointer;
-import Vite.Type.Standard;
+import Vite.Type;
 
 export namespace Hedron {
 
