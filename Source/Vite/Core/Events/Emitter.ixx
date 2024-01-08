@@ -1,6 +1,8 @@
 ﻿export module Vite.Event.Emitter;
 
 import <entt/entt.hpp>;
+//import Vite.Bridge.EnTT;
+//import Vite.Type;
 
 ///
 /// @brief Event Emitter

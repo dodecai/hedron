@@ -1,6 +1,6 @@
 ﻿export module Vite.Platform.VKContext;
 
-import <Vite/Base/Platform/Detection.h>;
+//import <Vite/Base/Platform/Detection.h>;
 
 #if defined(APP_PLATFORM_WINDOWS)
     //import <Windows.h>;

@@ -1,6 +1,6 @@
 ﻿export module Vite.Platform.GLBuffer;
 
-import <glad/gl.h>;
+//import <glad/gl.h>;
 
 import Vite.Renderer.Buffer;
 

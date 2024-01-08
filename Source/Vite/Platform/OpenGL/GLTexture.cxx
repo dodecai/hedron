@@ -1,6 +1,6 @@
 ﻿module Vite.Platform.GLTexture;
 
-import <glad/gl.h>;
+//import <glad/gl.h>;
 
 #pragma warning(push, 0)
 //https://github.com/nothings/stb/issues/334
@@ -8,7 +8,7 @@ import <glad/gl.h>;
     #define STB_IMAGE_IMPLEMENTATION
 #endif
 #define STB_IMAGE_STATIC
-import <stb/stb_image.h>;
+//import <stb/stb_image.h>;
 //#define STB_IMAGE_WRITE_IMPLEMENTATION
 #pragma warning(pop)
 

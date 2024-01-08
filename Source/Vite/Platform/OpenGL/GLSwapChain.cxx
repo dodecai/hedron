@@ -1,6 +1,6 @@
 ﻿module Vite.Platform.GLSwapchain;
 
-import <glad/gl.h>;
+//import <glad/gl.h>;
 
 #pragma warning(push)
 #pragma warning(disable: 4100)

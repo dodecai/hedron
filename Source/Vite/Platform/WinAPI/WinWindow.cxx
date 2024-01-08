@@ -1,16 +1,16 @@
 ﻿module;
 
-#pragma comment(lib, "dwmapi.lib")
-#pragma comment(lib, "uxtheme.lib")
+//#pragma comment(lib, "dwmapi.lib")
+//#pragma comment(lib, "uxtheme.lib")
 
 module Vite.Platform.WinWindow;
 
-import <codecvt>;
-import <locale>;
+//import <codecvt>;
+//import <locale>;
 
-import <DwmApi.h>;
+//import <DwmApi.h>;
 import <ShObjIdl.h>;
-import <WindowsX.h>;
+//import <WindowsX.h>;
 
 /////
 ///// @brief Missing types for acrylic background
@@ -123,7 +123,7 @@ WinWindow::WinWindow(const WindowSettings &settings):  Properties{ settings } {
     LPWSTR lpCmdLine = GetCommandLine();
     STARTUPINFO StartupInfo {};
     GetStartupInfo(&StartupInfo);
-    
+
     auto Test = true;
 
 //    PlatformWindowStyle windowStyle = {};

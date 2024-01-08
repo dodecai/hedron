@@ -1,6 +1,6 @@
 ﻿module Vite.Platform.VKAllocator;
 
-import <vulkan/vulkan.hpp>;
+//import <vulkan/vulkan.hpp>;
 
 namespace Hedron {
 

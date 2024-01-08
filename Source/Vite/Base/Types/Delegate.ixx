@@ -1,6 +1,8 @@
 ﻿export module Vite.Type.Delegate;
 
 import <entt/entt.hpp>;
+//import Vite.Bridge.EnTT;
+//import Vite.Type;
 
 ///
 /// @brief Delegate

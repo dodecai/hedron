@@ -1,7 +1,8 @@
 ﻿export module Vite.Event.Signal;
 
 import <entt/entt.hpp>;
-
+//import Vite.Bridge.EnTT;
+//import Vite.Type;
 import Vite.Type.Delegate;
 
 ///

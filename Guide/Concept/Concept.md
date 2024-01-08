@@ -27,7 +27,18 @@ classDiagram
 Vite/ [Library]
 ├─ Base/
 |  ├─ Algorithms/
-│  │  ├─ Algorithms
+│  │  └─ Algorithms
+│  ├─ Bridges/
+│  │  ├─ Assimp
+│  │  ├─ DearImGui
+│  │  ├─ EnTT
+│  │  ├─ FreeType
+│  │  ├─ Glad
+│  │  ├─ GLM
+│  │  ├─ MsdfAtlasGen
+│  │  ├─ ShaderC
+│  │  ├─ STB
+│  │  └─ YamlCpp
 │  ├─ Devices/
 │  │  ├─ Input/
 │  │  │  ├─ Controller

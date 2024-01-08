@@ -1,6 +1,6 @@
 ﻿module Vite.Platform.VKDevice;
 
-import <vulkan/vulkan.hpp>;
+//import <vulkan/vulkan.hpp>;
 
 // ToDo: Feature to support multiple physical devices
 

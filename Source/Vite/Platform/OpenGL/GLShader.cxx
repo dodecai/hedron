@@ -1,6 +1,6 @@
 ﻿module Vite.Platform.GLShader;
 
-import <glad/gl.h>;
+//import <glad/gl.h>;
 
 import Vite.Renderer.ShaderCompiler;
 
