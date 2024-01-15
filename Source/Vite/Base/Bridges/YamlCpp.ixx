@@ -1,5 +1,8 @@
 ﻿module;
 
+#define YAML_CPP_STATIC_DEFINE
+#define YAML_CPP_NO_CONTRIB
+
 #pragma warning(push, 0)
 
 #include <yaml-cpp/yaml.h>

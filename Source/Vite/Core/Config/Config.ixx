@@ -1,6 +1,7 @@
 ﻿export module Vite.Config;
 
 import Vite.Base;
+import Vite.Bridge.YamlCpp;
 import Vite.Logger;
 
 export namespace Hedron {

@@ -5,7 +5,6 @@
 module Vite.System.Window;
 
 import Vite.Logger;
-
 #ifdef APP_PLATFORM_WINDOWS
     import Vite.Platform.WinWindow;
 #endif

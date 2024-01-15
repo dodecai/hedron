@@ -300,30 +300,36 @@ void WinWindow::FullScreen(bool fullScreen) {
     // Switch to FullScreen Mode if requested
     unsigned int screenWidth = GetSystemMetricsForDpi(SM_CXSCREEN, GetDpiForSystem());
     unsigned int screenHeight = GetSystemMetricsForDpi(SM_CYSCREEN, GetDpiForSystem());
-//        // Device Mode
-//        DEVMODE screenProperties = {
-//            .dmSize = sizeof(DEVMODE),				// Structure Size
-//            .dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT,
-//            .dmBitsPerPel = 32,						// Selected Bits Per Pixel
-//            .dmPelsWidth = screenWidth,		// Selected Screen Width
-//            .dmPelsHeight = screenHeight,	// Selected Screen Height
-//        };
+    RECT dimension = {};
+    dimension.left = static_cast<LONG>(mSettings.Position.X);
+    dimension.top = static_cast<LONG>(mSettings.Position.Y);
+    dimension.right = (mSettings.Style == WindowStyle::FullScreen) ? (long)screenWidth : (long)mSettings.Size.Width;
+    dimension.bottom = (mSettings.Style == WindowStyle::FullScreen) ? (long)screenHeight : (long)mSettings.Size.Height;
 
-//        // Try to set selected Fullscreen mode
-//        if ((Properties.Size.Width != screenWidth) && (Properties.Size.Height != screenHeight)) {
-//            // If the switching fails, offer the user an option to switch to windowed mode
-//            if (ChangeDisplaySettings(&screenProperties, CDS_FULLSCREEN) == DISP_CHANGE_SUCCESSFUL) {
-//                if (MessageBox(NULL, (LPCWSTR)L"The requested mode 'FullScreen' isn't supported by\nyour graphics card. Switch to windowed mode Instead?", (LPCWSTR)__FUNCTION__, MB_YESNO | MB_ICONEXCLAMATION) == IDYES) {
-//                    Properties.Style = WindowStyle::Default;
-//                } else {
-//                    LogFatal("[Window]: ", "Switching to Fullscreen mode failed!");
-//                    return;
-//                }
-//            }
-//        }
+    // Device Mode
+    DEVMODE screenProperties = {
+        .dmSize = sizeof(DEVMODE),				// Structure Size
+        .dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT,
+        .dmBitsPerPel = 32,						// Selected Bits Per Pixel
+        .dmPelsWidth = screenWidth,		// Selected Screen Width
+        .dmPelsHeight = screenHeight,	// Selected Screen Height
+    };
+
+    // Try to set selected Fullscreen mode
+    if ((mSettings.Size.Width != screenWidth) && (mSettings.Size.Height != screenHeight)) {
+        // If the switching fails, offer the user an option to switch to windowed mode
+        if (ChangeDisplaySettings(&screenProperties, CDS_FULLSCREEN) == DISP_CHANGE_SUCCESSFUL) {
+            if (MessageBox(NULL, (LPCWSTR)L"The requested mode 'FullScreen' isn't supported by\nyour graphics card. Switch to windowed mode Instead?", (LPCWSTR)__FUNCTION__, MB_YESNO | MB_ICONEXCLAMATION) == IDYES) {
+                mSettings.Style = WindowStyle::Default;
+            } else {
+                LogFatal("[Window]: ", "Switching to Fullscreen mode failed!");
+                return;
+            }
+        }
+    }
 
     // FullScreen more convenient?
-    //Properties.Style = WindowStyle::FullScreen;
+    //mSettings.Style = WindowStyle::FullScreen;
     //HMONITOR hmon = MonitorFromWindow(WindowHandle, MONITOR_DEFAULTTONEAREST);
     //MONITORINFO mi = { sizeof(mi) };
     //GetMonitorInfo(hmon, &mi);
@@ -331,14 +337,14 @@ void WinWindow::FullScreen(bool fullScreen) {
     //dimension.top = mi.rcMonitor.top;
     //dimension.right = mi.rcMonitor.right;
     //dimension.bottom = mi.rcMonitor.bottom;
-    // Configure Window
-    //ShowCursor(!Data.Cursor);
+    //// Configure Window
+    //ShowCursor(!);
 }
 
-void WinWindow::Transparency(bool transparency) {
+void WinWindow::Transparent(bool transparent) {
     // Transparency
     HMODULE hUser = GetModuleHandle(L"user32.dll");
-    if (transparency && hUser) {
+    if (transparent && hUser) {
         auto SetWindowCompositionAttribute = (SetWindowCompositionAttributeFunction)GetProcAddress(hUser, "SetWindowCompositionAttribute");
         if (SetWindowCompositionAttribute) {
             ACCENT_POLICY accent = { // AGBR
@@ -393,7 +399,7 @@ const Size2D &WinWindow::Size() const {
 }
 
 bool WinWindow::State(WindowState state) const {
-    return (mSettings.State & state) == state;
+    return (mState & state) == state;
 }
 
 const string &WinWindow::Title() const {
@@ -593,11 +599,11 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             break;
         }
         case WM_CREATE: {
-            mSettings.State |= WindowState::Alive;
+            mState |= WindowState::Alive;
             break;
         }
         case WM_DESTROY: {
-            mSettings.State &= ~WindowState::Alive;
+            mState &= ~WindowState::Alive;
 
             PostQuitMessage(0);
             result = 0;
@@ -613,13 +619,18 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             if (mSettings.Style == WindowStyle::FullScreen) { break; }
             
             MINMAXINFO *bounds = reinterpret_cast<MINMAXINFO *>(lParam);
-            if (mSettings.MaxSize.Width > 0 && mSettings.MaxSize.Height > 0) {
-                bounds->ptMaxTrackSize.x = mSettings.MaxSize.Width;
-                bounds->ptMaxTrackSize.y = mSettings.MaxSize.Height;
+            auto maxWidth = static_cast<LONG>(mSettings.MaxSize.Width);
+            auto maxHeight = static_cast<LONG>(mSettings.MaxSize.Height);
+            auto minWidth = static_cast<LONG>(mSettings.MinSize.Width);
+            auto minHeight = static_cast<LONG>(mSettings.MinSize.Height);
+
+            if (maxWidth > 0 && maxHeight > 0) {
+                bounds->ptMaxTrackSize.x = maxWidth;
+                bounds->ptMaxTrackSize.y = maxHeight;
             }
-            if (mSettings.MinSize.Width > 0 && mSettings.MinSize.Height > 0) {
-                bounds->ptMinTrackSize.x = mSettings.MinSize.Width;
-                bounds->ptMinTrackSize.y = mSettings.MinSize.Height;
+            if (minWidth > 0 && minHeight > 0) {
+                bounds->ptMinTrackSize.x = minWidth;
+                bounds->ptMinTrackSize.y = minHeight;
             }
             
             result = 0;
@@ -628,7 +639,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
         // Drawing
         case WM_PAINT: {
-            mSettings.State |= WindowState::Drawing;
+            mState |= WindowState::Drawing;
 
             PAINTSTRUCT ps {};
             HDC deviceContext = BeginPaint(hWnd, &ps);
@@ -636,7 +647,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             //FillRect(deviceContext, &ps.rcPaint, ClearColor);
             EndPaint(hWnd, &ps);
 
-            mSettings.State &= ~WindowState::Drawing;
+            mState &= ~WindowState::Drawing;
             break;
         }
         case WM_ERASEBKGND: {
@@ -650,28 +661,28 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         }
         case WM_SHOWWINDOW: {
             if (wParam == TRUE) {
-                mSettings.State |= WindowState::Visible;
+                mState |= WindowState::Visible;
             } else {
-                mSettings.State &= ~WindowState::Visible;
+                mState &= ~WindowState::Visible;
             }
             break;
         }
         case WM_SIZE: {
             switch (wParam) {
                 case SIZE_MAXIMIZED: {
-                    mSettings.State |= WindowState::Maximized;
-                    mSettings.State &= ~WindowState::Minimized;
+                    mState |= WindowState::Maximized;
+                    mState &= ~WindowState::Minimized;
                     break;
                 }
                 case SIZE_MINIMIZED: {
-                    mSettings.State |= WindowState::Minimized;
-                    mSettings.State &= ~WindowState::Maximized;
+                    mState |= WindowState::Minimized;
+                    mState &= ~WindowState::Maximized;
                     break;
                 }
                 case SIZE_RESTORED: {
-                    mSettings.State &= ~WindowState::FullScreen;
-                    mSettings.State &= ~WindowState::Maximized;
-                    mSettings.State &= ~WindowState::Minimized;
+                    mState &= ~WindowState::FullScreen;
+                    mState &= ~WindowState::Maximized;
+                    mState &= ~WindowState::Minimized;
                 }
             }
 
@@ -689,9 +700,9 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         // State
         case WM_ACTIVATE: {
             if (wParam == WA_INACTIVE) {
-                mSettings.State &= ~WindowState::Active;
+                mState &= ~WindowState::Active;
             } else {
-                mSettings.State |= WindowState::Active;
+                mState |= WindowState::Active;
             }
             break;
         }
@@ -699,7 +710,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             break;
         }
         case WM_KILLFOCUS: {
-            mSettings.State &= ~WindowState::Focused;
+            mState &= ~WindowState::Focused;
 
             //POINT position {};
             //if (GetCursorPos(&position)) {
@@ -712,7 +723,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             break;
         }
         case WM_SETFOCUS: {
-            mSettings.State |= WindowState::Focused;
+            mState |= WindowState::Focused;
 
             //auto x = static_cast<LONG>(mSettings.LastMousePosition.X);
             //auto y = static_cast<LONG>(mSettings.LastMousePosition.Y);
@@ -750,9 +761,9 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     }
 
     // Publish events to an external event system
-    if (mExternalInputEventListener) {
+    if (mExternalEventHandler) {
         MSG message = { hWnd, uMsg, wParam, lParam };
-        auto externalResult = mExternalInputEventListener(&message);
+        auto externalResult = mExternalEventHandler(&message);
         if (result && externalResult) result = 0;
     }
 

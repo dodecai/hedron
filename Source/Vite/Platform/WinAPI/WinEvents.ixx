@@ -1,5 +1,6 @@
 ﻿export module Vite.Platform.WinEvent;
 
+import Vite.Bridge.WinAPI;
 import Vite.Core;
 import Vite.Event;
 
@@ -9,11 +10,11 @@ export namespace Hedron {
 /// @brief WinEvents
 /// Source: https://msdn.microsoft.com/en-us/library/windows/desktop/ms644958%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396
 ///
-class WinEventListener: public EventListener {
+class WinEventHandler: public EventHandler {
 public:
     /// Default
-    WinEventListener() = default;
-    virtual ~WinEventListener() = default;
+    WinEventHandler();
+    virtual ~WinEventHandler() = default;
 
     /// Events
     virtual bool Callback(void *event) override;
@@ -21,7 +22,7 @@ public:
 
 private:
     /// Methods
-    //intptr_t Register(void *event);
+    bool Dispatch(MSG message);
 };
 
 }

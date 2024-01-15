@@ -8,9 +8,8 @@ import Vite.Type.Standard;
 export namespace Hedron {
 
 ///
-/// @brief  Collection of platform independet window related types and settings
+/// @brief  Window States [Active|Alive|Focused|Drawing|FullScreen|Maximized|Minimized|Visible]
 ///
-
 enum class WindowState {
     Active      = BitMask(0),
     Alive       = BitMask(1),
@@ -22,32 +21,14 @@ enum class WindowState {
     Visible     = BitMask(7),
 };
 
-inline WindowState operator~(WindowState state) {
-    return static_cast<WindowState>(~static_cast<std::underlying_type<WindowState>::type>(state));
-}
+// Enable BitMask Operators
+template<> struct EnableBitMaskOperators<WindowState> {
+    static const bool enable = true;
+};
 
-inline WindowState operator|(WindowState a, WindowState b) {
-    return static_cast<WindowState>(
-        static_cast<std::underlying_type<WindowState>::type>(a) |
-        static_cast<std::underlying_type<WindowState>::type>(b));
-}
-
-inline WindowState operator&(WindowState a, WindowState b) {
-    return static_cast<WindowState>(
-        static_cast<std::underlying_type<WindowState>::type>(a) &
-        static_cast<std::underlying_type<WindowState>::type>(b));
-}
-
-inline WindowState &operator|=(WindowState &a, WindowState b) {
-    a = a | b;
-    return a;
-}
-
-inline WindowState &operator&=(WindowState &a, WindowState b) {
-    a = a & b;
-    return a;
-}
-
+///
+/// @brief Window Styles [Default|Borderless|FullScreen|Transparent]
+///
 enum class WindowStyle {
     Default,
     Borderless,
@@ -55,24 +36,22 @@ enum class WindowStyle {
     Transparent,
 };
 
+///
+/// @brief Window Settings
+///
 struct WindowSettings {
     /// Properties
     string Title { "Hedron" };
-    Size2D Size { 1280.0f, 1024.0f };
     Position2D Position { 0.0f, 0.0f };
+    Size2D Size { 1280.0f, 1024.0f };
+    WindowStyle Style { WindowStyle::Default };
 
-    string Icon { "Hedron" };
+    /// Limits
     Size2D MinSize { 640.0f, 512.0f };
     Size2D MaxSize { 0.0f, 0.0f };
 
-    /// States
-    WindowState State { WindowState::Alive };
-    WindowStyle Style { WindowStyle::Default };
-    Position2D LastMousePosition { 0.0f, 0.0f };
-
-    // Static
-    const uint32 BorderWidth = 12;
-    const uint32 TitleBarWidth = 5;
+    /// Resources
+    string Icon { "Hedron" };
 };
 
 ///
@@ -90,32 +69,53 @@ public:
     virtual void Update() = 0;
 
     /// Controls
+    // Toggle between full screen and windowed mode
     virtual void FullScreen(bool fullScreen) = 0;
-    virtual void Transparency(bool transparency) = 0;
+    // Toggle the transparency of the window
+    virtual void Transparent(bool transparent) = 0;
 
     /// Accessors
+    // Retrieve the content size of the window
     virtual Size2D ContentSize() const = 0;
+    // Retrieve the position of the window
     virtual const Position2D &Position() const = 0;
+    // Retrieve the settings of the window
     virtual const WindowSettings &Settings() const = 0;
+    // Retrieve the size of the window
     virtual const Size2D &Size() const = 0;
+    // Retrieve the state of the window
     virtual bool State(WindowState state) const = 0;
+    // Retrieve the title of the window
     virtual const string &Title() const = 0;
 
     /// Mutators
+    // Set an external event handler
+    void ExternalEventHandler(function<bool(void *)> handler) { mExternalEventHandler = { handler }; };
+    // Set the cursor position
     virtual void CursorPosition(const Position2D &position) = 0;
+    // Set the position of the window
     virtual void Position(const Position2D &position) = 0;
+    // Update the progress bar in title bar
     virtual void Progress(float progress) = 0;
+    // Set the settings of the window
     virtual void Settings(const WindowSettings &settings) = 0;
+    // Set the size of the window
     virtual void Size(const Size2D &size) = 0;
+    // Set the title of the window
     virtual void Title(string_view title) = 0;
 
 protected:
     /// Casts
+    // Retrieves the platform specific handle.
     virtual void *AsPlatformHandle() = 0;
 
 protected:
     /// Callbacks
-    function<bool(void *)> mExternalInputEventListener = {};
+    function<bool(void *)> mExternalEventHandler = {};
+
+    /// States
+    Position2D mLastMousePosition {};
+    WindowState mState {};
 };
 
 }

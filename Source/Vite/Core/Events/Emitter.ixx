@@ -1,8 +1,11 @@
-﻿export module Vite.Event.Emitter;
+﻿module;
 
-import <entt/entt.hpp>;
+//#include <entt/entt.hpp>
+
+export module Vite.Event.Emitter;
+
 //import Vite.Bridge.EnTT;
-//import Vite.Type;
+import Vite.Base;
 
 ///
 /// @brief Event Emitter
@@ -11,27 +14,23 @@ import <entt/entt.hpp>;
 
 export namespace Hedron {
 
+#ifdef DISABLED_CODE_FOR_NOW
 ///
-/// @brief General purpose event emitter.
+/// @brief Event Emitter
+/// @warn To create an emitter type, derived classes must inherit from the base.
 /// 
-/// To create an emitter type, derived classes must inherit from the base as:
+/// @note Handlers for the different events are created internally on the fly. It's not required to specify
+/// in advance the full list of accepted events. Moreover, whenever an event is published, an emitter also
+/// passes a reference to itself to its listeners.
 /// 
-/// @code{.cpp}
-/// struct my_emitter: emitter<my_emitter> {
-///     // ...
+/// @example
+/// struct MyEmitter: Emitter<MyEmitter> {
+///     ...
 /// }
-/// @endcode
-/// 
-/// Handlers for the different events are created internally on the fly. It's not
-/// required to specify in advance the full list of accepted events.<br/>
-/// Moreover, whenever an event is published, an emitter also passes a reference
-/// to itself to its listeners.
-/// 
-/// @tparam Derived Emitter type.
-/// @tparam Allocator Type of allocator used to manage memory and elements.
 ///
 template<typename Derived, typename Allocator>
 class Emitter {
+    /// Types
     using key_type = entt::id_type;
     using mapped_type = std::function<void(void *)>;
 
@@ -40,50 +39,23 @@ class Emitter {
     using container_type = entt::dense_map<key_type, mapped_type, entt::identity, std::equal_to<key_type>, container_allocator>;
 
 public:
-    /*! @brief Allocator type. */
-    using allocator_type = Allocator;
-    /*! @brief Unsigned integer type. */
-    using size_type = std::size_t;
+    using allocator_type = Allocator;   // Allocator type. 
+    using size_type = std::size_t;      // Unsigned integer type. 
 
-    // Default Constructor and Destructor
-    Emitter():
-        Emitter { allocator_type{} } {
-    }
-
-    virtual ~Emitter() noexcept {
-        static_assert(std::is_base_of_v<Emitter<Derived, Allocator>, Derived>, "Invalid emitter type");
-    }
-
-    /**
-     * @brief Constructs an emitter with a given allocator.
-     * @param allocator The allocator to use.
-     */
+    /// Default
+    Emitter(): Emitter { allocator_type{} } {}
     explicit Emitter(const allocator_type &allocator):
         handlers { allocator, allocator } {
     }
-
-    /**
-     * @brief Move constructor.
-     * @param other The instance to move from.
-     */
-    Emitter(Emitter &&other) noexcept
-        : handlers { std::move(other.handlers) } {}
-
-    /**
-     * @brief Allocator-extended move constructor.
-     * @param other The instance to move from.
-     * @param allocator The allocator to use.
-     */
-    Emitter(Emitter &&other, const allocator_type &allocator) noexcept
-        : handlers { container_type{std::move(other.handlers.first()), allocator}, allocator } {
+    Emitter(Emitter &&other) noexcept: handlers { std::move(other.handlers) } {}
+    Emitter(Emitter &&other, const allocator_type &allocator) noexcept: handlers { container_type { std::move(other.handlers.first()), allocator }, allocator } {
         ENTT_ASSERT(alloc_traits::is_always_equal::value || handlers.second() == other.handlers.second(), "Copying an emitter is not allowed");
     }
+    virtual ~Emitter() noexcept {
+        static_assert(std::is_base_of_v<Emitter<Derived, Allocator>, Derived>, "Invalid emitter type!");
+    }
 
-    /**
-     * @brief Move assignment operator.
-     * @param other The instance to move from.
-     * @return This dispatcher.
-     */
+    /// Operators
     Emitter &operator=(Emitter &&other) noexcept {
         ENTT_ASSERT(alloc_traits::is_always_equal::value || handlers.second() == other.handlers.second(), "Copying an emitter is not allowed");
 
@@ -91,84 +63,89 @@ public:
         return *this;
     }
 
-    /**
-     * @brief Exchanges the contents with those of a given emitter.
-     * @param other Emitter to exchange the content with.
-     */
-    void swap(Emitter &other) {
-        using std::swap;
-        swap(handlers, other.handlers);
+    /// Methods
+    // Disconnects all the listeners.
+    void Clear() noexcept {
+        handlers.first().clear();
     }
 
-    /**
-     * @brief Returns the associated allocator.
-     * @return The associated allocator.
-     */
-    [[nodiscard]] constexpr allocator_type get_allocator() const noexcept {
-        return handlers.second();
-    }
-
-    /**
-     * @brief Publishes a given event.
-     * @tparam Type Type of event to trigger.
-     * @param value An instance of the given type of event.
-     */
+    // Checks if there are listeners registered for the specific event.
     template<typename Type>
-    void publish(Type &&value) {
-        if (const auto id = entt::type_id<Type>().hash(); handlers.first().contains(id)) {
+    [[nodiscard]] bool Contains() const {
+        return handlers.first().contains(entt::type_hash<std::remove_cv_t<std::remove_reference_t<Type>>>::value());
+    }
+
+    // Checks if there are listeners registered with the event emitter.
+    [[nodiscard]] bool Empty() const noexcept {
+        return handlers.first().empty();
+    }
+
+    // Disconnects the listener of specified event type from the event emitter.
+    template<typename T>
+    void Erase() {
+        handlers.first().erase(entt::type_hash<std::remove_cv_t<std::remove_reference_t<T>>>::value());
+    }
+
+    // Publishes a given event type instance with specified event type to trigger.
+    template<typename T>
+    void Publish(T &&value) {
+        if (const auto id = entt::type_id<T>().hash(); handlers.first().contains(id)) {
             handlers.first()[id](&value);
         }
     }
 
-    /**
-     * @brief Registers a listener with the event emitter.
-     * @tparam Type Type of event to which to connect the listener.
-     * @param func The listener to register.
-     */
-    template<typename Type>
-    void on(std::function<void(Type &, Derived &)> func) {
-        handlers.first().insert_or_assign(entt::type_id<Type>().hash(), [func = std::move(func), this](void *value) {
-            func(*static_cast<Type *>(value), static_cast<Derived &>(*this));
+    // Registers a listener with the event emitter with the specified event type to which to connect the listener.
+    template<typename T>
+    void Register(std::function<void(T &, Derived &)> func) {
+        handlers.first().insert_or_assign(entt::type_id<T>().hash(), [func = std::move(func), this](void *value) {
+            func(*static_cast<T *>(value), static_cast<Derived &>(*this));
         });
     }
 
-    /**
-     * @brief Disconnects a listener from the event emitter.
-     * @tparam Type Type of event of the listener.
-     */
-    template<typename Type>
-    void erase() {
-        handlers.first().erase(entt::type_hash<std::remove_cv_t<std::remove_reference_t<Type>>>::value());
+    // Exchanges the contents with those of a given emitter.
+    void Swap(Emitter &other) {
+        std::swap(handlers, other.handlers);
     }
 
-    /*! @brief Disconnects all the listeners. */
-    void clear() noexcept {
-        handlers.first().clear();
-    }
-
-    /**
-     * @brief Checks if there are listeners registered for the specific event.
-     * @tparam Type Type of event to test.
-     * @return True if there are no listeners registered, false otherwise.
-     */
-    template<typename Type>
-    [[nodiscard]] bool contains() const {
-        return handlers.first().contains(entt::type_hash<std::remove_cv_t<std::remove_reference_t<Type>>>::value());
-    }
-
-    /**
-     * @brief Checks if there are listeners registered with the event emitter.
-     * @return True if there are no listeners registered, false otherwise.
-     */
-    [[nodiscard]] bool empty() const noexcept {
-        return handlers.first().empty();
+    // Returns the associated allocator.
+    [[nodiscard]] constexpr allocator_type get_allocator() const noexcept {
+        return handlers.second();
     }
 
 private:
+    /// Properties
     entt::compressed_pair<container_type, allocator_type> handlers;
 };
+#endif
 
-template<typename, typename = std::allocator<void>>
-class Emitter;
+///
+/// @brief Simple Event Emitter
+/// @note There are a lot of bugs around C++20 modules in msvc so to keep it rolling we are using this for now.
+///
+class EventEmitter {
+public:
+    /// Methods
+    template<typename EventType>
+    void Register(std::function<void(const EventType &)> handler) {
+        auto &handlers = eventHandlers[typeid(EventType)];
+        handlers.push_back([handler = std::move(handler)](const void *event) {
+            handler(*static_cast<const EventType *>(event));
+        });
+    }
+
+    template<typename EventType>
+    void Publish(const EventType &event) {
+        auto it = eventHandlers.find(typeid(EventType));
+        if (it != eventHandlers.end()) {
+            for (auto &handler : it->second) {
+                handler(&event);
+            }
+        }
+    }
+
+private:
+    /// Properties
+    unordered_map<std::type_index, vector<function<void(const void *)>>> eventHandlers;
+};
 
 }

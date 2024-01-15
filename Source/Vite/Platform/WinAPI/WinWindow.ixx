@@ -15,7 +15,7 @@ public:
 
     /// Controls
     void FullScreen(bool fullScreen) override;
-    void Transparency(bool transparency) override;
+    void Transparent(bool transparent) override;
 
     /// Accessors
     Size2D ContentSize() const override;
@@ -42,7 +42,7 @@ private:
 
     /// Methods
     LRESULT Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-    //void *LoadIconFile(const string &icon);
+    //HICON LoadIconFile(const string &icon);
     //void *LoadIconResource(const uint32_t id);
 
 private:
