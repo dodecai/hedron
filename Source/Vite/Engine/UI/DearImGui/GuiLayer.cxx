@@ -315,5 +315,3 @@ namespace Hedron {
 //void GuiLayer::OnWindowEvent(WindowEventData &data, const EventListener::EventEmitter &emitter) {}
 
 }
-
-#pragma warning(pop)

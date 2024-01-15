@@ -5,6 +5,21 @@ import Vite.Type;
 export namespace Hedron {
 
 ///
+/// @brief Alignments for 2D objects
+///
+enum class Alignment2D {
+    TopLeft,
+    TopCenter,
+    TopRight,
+    CenterLeft,
+    Center,
+    CenterRight,
+    BottomLeft,
+    BottomCenter,
+    BottomRight
+};
+
+///
 /// @brief Position2D is a simple position 2D in space
 /// @tparam T  Any arithmetic type
 ///

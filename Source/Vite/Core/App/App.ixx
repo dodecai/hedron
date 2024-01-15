@@ -60,14 +60,17 @@ public:
 
         // Load and configure Systems
         LogInfo("Loading Systems");
-        //mListener = EventListener::Craate();
         mCoreWindow = Window::Create({ mSettings.Title /*, mSettings.Width, mSettings.Height*/ });
-        mCoreWindow->Transparency(true);
-        //mWindow->SetEventListener(mListener); || mWindow->mExternalInputEventListener = [&](auto value) -> bool { return mListener->Callback(value); };
-        //mListener->Emitter.on<KeyboardEventData>([&](auto &data, const auto &emitter) { OnKeyboardEvent(data, emitter); });
-        //mListener->Emitter.on<MouseEventData>([&](auto &data, const auto &emitter) { OnMouseEvent(data, emitter); });
-        //mListener->Emitter.on<WindowEventData>([&](auto &data, const auto &emitter) { OnWindowEvent(data, emitter); });
-        //LogDebug("Created window '{}' with size '{}x{}'.", mProperties.Title, mProperties.Width, mProperties.Height);
+        //mCoreWindow->FullScreen(true);
+        //mCoreWindow->Transparency(true);
+        mEventHandler = EventHandler::Create();
+        mCoreWindow->ExternalEventHandler([&](auto value) -> bool { return mEventHandler->Callback(value); });
+        //mEventHandler->Emitter.Register<AppEventData>([&](auto &data, const auto &emitter) { OnWindowEvent(data, emitter); });
+        //mEventHandler->Emitter.Register<KeyboardEventData>([&](auto &data, const auto &emitter) { OnKeyboardEvent(data, emitter); });
+        //mEventHandler->Emitter.Register<MouseEventData>([&](auto &data, const auto &emitter) { OnMouseEvent(data, emitter); });
+        mEventHandler->Emitter.Register<MouseEventData>([&](const auto &data) { OnMouseEvent(data); });
+        mEventHandler->Emitter.Register<KeyboardEventData>([&](const auto &data) { OnKeyboardEvent(data); });
+        LogDebug("Created window '{}' with size '{}'.", mSettings.Title, mSettings.Resolution);
 
         GFXContext::API = mSettings.GraphicsAPI;
         mGraphicsContext = GFXContext::Create(mCoreWindow->AsPlatformHandle());
@@ -116,56 +119,58 @@ public:
     // This method is triggered when a app event occurs.
     virtual void OnAppEvent() {
         for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnWindowEvent(data, emitter);
+            //if (data.Handled) break;
+            //layer->OnWindowEvent(data, emitter);
         }
 
         //switch (data.Action) {
-        //    case WindowAction::Destroy: {
-        //        Exit();
-        //        break;
-        //    }
+            //case WindowAction::Destroy: {
+            //    Exit();
+            //    break;
+            //}
 
-        //    case WindowAction::Resize: {
-        //        mContext->SetViewport(mWindow->GetContextSize().Width, mWindow->GetContextSize().Height);
-        //        break;
-        //    }
+            //case WindowAction::Resize: {
+            //    mContext->SetViewport(mWindow->GetContextSize().Width, mWindow->GetContextSize().Height);
+            //    break;
+            //}
 
-        //    default: {
-        //        break;
-        //    }
+            //default: {
+            //    break;
+            //}
         //}
     }
 
     // This method is triggered when a controller input event occurs.
     virtual void OnControllerEvent(ControllerEventData &data) {
         for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnControllerEvent(data, emitter);
+            //if (data.Handled) break;
+            //layer->OnControllerEvent(data, emitter);
         }
     }
     
     // This method is triggered when a keyboard input event occurs.
-    virtual void OnKeyboardEvent(KeyboardEventData &data) {
+    virtual void OnKeyboardEvent(const KeyboardEventData &data) {
+        Log("Keyboard Event: {}\n", (int)data.Key);
         for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnKeyboardEvent(data, emitter);
+            //if (data.Handled) break;
+            //layer->OnKeyboardEvent(data, emitter);
         }
     }
     
     // This method is triggered when a mouse input event occurs.
-    virtual void OnMouseEvent(MouseEventData &data) {
+    virtual void OnMouseEvent(const MouseEventData &data) {
+        Log("Mouse Event: {}:{}\n", (int)data.X, (int)data.Y);
         for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnMouseEvent(data, emitter);
+            //if (data.Handled) break;
+            //layer->OnMouseEvent(data, emitter);
         }
     }
     
     // This method is triggered when a touch input event occurs.
     virtual void OnTouchEvent(TouchEventData &data) {
         for (auto layer : mLayers) {
-        //    if (data.Handled) break;
-        //    layer->OnTouchEvent(data, emitter);
+            //if (data.Handled) break;
+            //layer->OnTouchEvent(data, emitter);
         }
     }
 
@@ -257,15 +262,15 @@ private:
                 mStatistics.msPF = deltaTime.GetSeconds();
 
                 title = mSettings.Title + std::format(" [fps: {:.0f} | msPF: {:.3f}", mStatistics.fps, mStatistics.msPF);
-                //mWindow->SetTitle(title);
+                mCoreWindow->Title(title);
 
                 delay = 0.0;
                 frames = 0.0;
+
             }
 
             // Update application
-            mCoreWindow->Update();
-            //mListener->Update();
+            mEventHandler->Update();
             mGraphicsContext->Attach();
             //mRenderer->RenderFrame();
             for (auto *layer : mLayers) layer->Update(deltaTime);
@@ -276,7 +281,6 @@ private:
                 //pCoreLayer->Finish();
             }
             mGraphicsContext->SwapBuffers();
-            mGraphicsContext->Detach();
         }
 
         // Termination
@@ -346,10 +350,10 @@ private:
     LayerStack mLayers;
     Scope<ThreadPool> mThreadPool;
     Scope<Window> mCoreWindow;
+    Scope<EventHandler> mEventHandler;
     Scope<GFXContext> mGraphicsContext;
     //Reference<Config> mConfig;
     //Reference<Dialog> mDialog;
-    //Scope<EventListener> mListener;
     //Scope<Renderer> mRenderer;
     
     //ImGuiLayer *pImGuiLayer;

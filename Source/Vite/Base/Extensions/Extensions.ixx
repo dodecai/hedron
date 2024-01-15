@@ -15,14 +15,16 @@ export namespace Hedron {
 ///
 /// @brief Converts enumeration value to BitMask value
 ///
-template<typename T, typename = typename std::enable_if_t<std::is_arithmetic_v<T>, T>>
-constexpr auto BitMask(T x) { return (1 << x); }
+template<typename T>
+consteval auto BitMask(T x) noexcept requires std::is_arithmetic_v<T> {
+    return (1 << x);
+}
 
 ///
 /// @brief Converts enumeration to base type
 ///
 template<typename E>
-constexpr auto GetEnumType(E e) noexcept {
+consteval auto GetEnumType(E e) noexcept {
     return static_cast<std::underlying_type_t<E>>(e);
 }
 
@@ -35,21 +37,78 @@ template <typename DerivedT, typename BaseT>
 class DeriveEnum {
 public:
     /// Default
-    DeriveEnum() {}
-    DeriveEnum(DerivedT e): Derived(e) {}
+    DeriveEnum() = default;
     DeriveEnum(BaseT e): Base(e) {}
+    DeriveEnum(DerivedT e): Derived(e) {}
     explicit DeriveEnum(int val): Derived(static_cast<DerivedT>(val)) {}
 
     /// Casts
     operator DerivedT() const { return Derived; }
 
 private:
-    // Properties
+    /// Properties
     union {
         DerivedT Derived;
         BaseT Base;
     };
 };
+
+///
+/// @brief Enable BitMask Operators
+///
+template<typename E>
+struct EnableBitMaskOperators {
+    static const bool enable = false;
+};
+
+// BitMask Operator AND
+template<typename E>
+inline auto operator&(E lhs, E rhs) noexcept requires EnableBitMaskOperators<E>::enable {
+    using underlying = typename std::underlying_type<E>::type;
+    return static_cast<E>(static_cast<underlying>(lhs) & static_cast<underlying>(rhs));
+}
+
+// BitMask Operator OR
+template<typename E>
+inline auto operator|(E lhs, E rhs) noexcept requires EnableBitMaskOperators<E>::enable {
+    using underlying = typename std::underlying_type<E>::type;
+    return static_cast<E>(static_cast<underlying>(lhs) | static_cast<underlying>(rhs));
+}
+
+// BitMask Operator XOR
+template<typename E>
+inline auto operator^(E lhs, E rhs) noexcept requires EnableBitMaskOperators<E>::enable {
+    using underlying = typename std::underlying_type<E>::type;
+    return static_cast<E>(static_cast<underlying>(lhs) ^ static_cast<underlying>(rhs));
+}
+
+// BitMask Operator NOT
+template<typename E>
+inline auto operator~(E rhs) noexcept requires EnableBitMaskOperators<E>::enable {
+    using underlying = typename std::underlying_type<E>::type;
+    return static_cast<E>(~static_cast<underlying>(rhs));
+}
+
+// BitMask Operator AND Assignment
+template<typename E>
+inline auto &operator&=(E &lhs, E rhs) noexcept requires EnableBitMaskOperators<E>::enable {
+    lhs = lhs & rhs;
+    return lhs;
+}
+
+// BitMask Operator OR Assignment
+template<typename E>
+inline auto &operator|=(E &lhs, E rhs) noexcept requires EnableBitMaskOperators<E>::enable {
+    lhs = lhs | rhs;
+    return lhs;
+}
+
+// BitMask Operator XOR Assignment
+template<typename E>
+inline auto &operator^=(E &lhs, E rhs) noexcept requires EnableBitMaskOperators<E>::enable {
+    lhs = lhs ^ rhs;
+    return lhs;
+}
 
 
 ///
@@ -59,7 +118,7 @@ private:
 ///
 /// @brief Compile-Time Variant of rfind in a string view
 ///
-consteval size_t constexpr_rfind(const std::string_view str, char ch, size_t pos = std::string_view::npos) {
+consteval auto constexpr_rfind(const std::string_view str, char ch, size_t pos = std::string_view::npos) noexcept {
     if (pos >= str.size()) { pos = str.size() - 1; }
 
     for (size_t i = pos; i != static_cast<size_t>(-1); --i) {
@@ -123,7 +182,7 @@ inline std::uint32_t DecodeUtf8(std::string_view::iterator &begin, std::string_v
 /// @brief Vector SizeOf
 ///
 template<typename T>
-size_t sizeof_vector(const typename std::vector<T> &vec) {
+size_t sizeof_vector(const typename std::vector<T> &vec) noexcept {
     return sizeof(T) * vec.size();
 }
 

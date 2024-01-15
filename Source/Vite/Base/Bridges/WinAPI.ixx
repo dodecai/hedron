@@ -25,6 +25,7 @@ using ::HICON;
 using ::HMODULE;
 using ::HWND;
 using ::LRESULT;
+using ::MSG;
 using ::UINT;
 using ::WPARAM;
 using ::LPARAM;

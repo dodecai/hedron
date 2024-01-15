@@ -4,7 +4,7 @@ export import Vite.Device.Input.Controller;
 export import Vite.Device.Input.Keyboard;
 export import Vite.Device.Input.Mouse;
 export import Vite.Device.Input.Touch;
-export import Vite.Event.Emitter;
+import Vite.Event.Emitter;
 
 import Vite.Base;
 
@@ -347,22 +347,24 @@ struct TouchEventData: public EventData {
     int32 Y = 0;
 };
 
+
 ///
-/// @brief Event Listener
+/// @brief Event Handler Interface
 ///
-class EventListener {
+class EventHandler {
 public:
     // Default
-    EventListener() = default;
-    virtual ~EventListener() = default;
-    static Scope<EventListener> Create();
+    EventHandler() = default;
+    virtual ~EventHandler() = default;
+    static Scope<EventHandler> Create();
 
     // Methods
     virtual bool Callback(void *event) = 0;
     virtual void Update() = 0;
 
     // Event Emitter
-    //struct EventEmitter: public Emitter<EventEmitter> {} Emitter;
+    EventEmitter Emitter;
+    //struct EventEmitter: public Emitter<EventEmitter, std::allocator<void>> {} Emitter;
 };
 
 }
