@@ -18,20 +18,21 @@ namespace Hedron {
 
 //// Properties
 //RAWINPUTDEVICE RawInputDevice[1];
-//
+
 //// Events
-//bool WinEventListener::Callback(void *event) {
-//	return Register(event) ? false : true;
-//}
-//
-//void WinEventListener::Update() {
+bool WinEventListener::Callback(void *event) {
+    return true;
+    //return Register(event) ? false : true;
+}
+
+void WinEventListener::Update() {
 //	MSG message = {};
 //	while (PeekMessage(&message, nullptr, 0, 0, PM_REMOVE)) {
 //		TranslateMessage(&message);
 //		DispatchMessage(&message);
 //	}
-//}
-//
+}
+
 //intptr_t WinEventListener::Register(void *event) {
 //	// Properties
 //	LRESULT result = 1;

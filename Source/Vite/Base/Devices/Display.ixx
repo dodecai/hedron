@@ -12,7 +12,7 @@ struct DisplayProperties {
     string ID;
     float AspectRatio;
     string Resolution;
-    Size2D<uint32> Size;
+    Size2DBase<uint32> Size;
 };
 
 ///

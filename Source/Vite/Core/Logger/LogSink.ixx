@@ -72,7 +72,7 @@ public:
                 break;
             }
             default: {
-                mStream << std::format("{}{}{}{}{}<{}> {}{}{}{}",
+                mStream << std::format("{}{}{}{}{}<{}> {}{}{}{}\n",
                     Cli::Color::Gray, record.Timestamp,
                     levelColor, record.Level,
                     Cli::Color::LightGray, record.Location.Class,
@@ -157,7 +157,7 @@ public:
                 break;
             }
             default: {
-                mStream << std::format("{}{}<{}> {}",
+                mStream << std::format("{}{}<{}> {}\n",
                     record.Timestamp,
                     record.Level,
                     record.Location.Class,

@@ -59,7 +59,7 @@
         "%{Library.ShaderC}",
 	    --"%{Library.Vulkan}",
 
-        "LibPHX",
+        --"LibPHX",
     }
 
     filter { "files: **.natvis "}

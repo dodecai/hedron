@@ -8,6 +8,7 @@ export import Vite.App.Statistics;
 
 import Vite.Base;
 import Vite.Config;
+import Vite.Device.GFXContext;
 import Vite.Event;
 import Vite.Logger;
 import Vite.System.Dialog;
@@ -60,20 +61,20 @@ public:
         // Load and configure Systems
         LogInfo("Loading Systems");
         //mListener = EventListener::Craate();
-        mCoreWindow = Window::Create({ /* mSettings.Title, mSettings.Width, mSettings.Height*/ });
+        mCoreWindow = Window::Create({ mSettings.Title /*, mSettings.Width, mSettings.Height*/ });
+        mCoreWindow->Transparency(true);
         //mWindow->SetEventListener(mListener); || mWindow->mExternalInputEventListener = [&](auto value) -> bool { return mListener->Callback(value); };
         //mListener->Emitter.on<KeyboardEventData>([&](auto &data, const auto &emitter) { OnKeyboardEvent(data, emitter); });
         //mListener->Emitter.on<MouseEventData>([&](auto &data, const auto &emitter) { OnMouseEvent(data, emitter); });
         //mListener->Emitter.on<WindowEventData>([&](auto &data, const auto &emitter) { OnWindowEvent(data, emitter); });
         //LogDebug("Created window '{}' with size '{}x{}'.", mProperties.Title, mProperties.Width, mProperties.Height);
 
-        //Context::API = mProperties.GfxApi;
-        //mContext = Context::Create(mWindow->GetNativeWindow());
-        //mContext->Attach();
-        //mContext->Load();
-        //mContext->SetViewport({ mWindow->GetContextSize() });
-        //mContext->SetVSync(mSettings.VSync);
-        //mContext->Clear();
+        GFXContext::API = mSettings.GraphicsAPI;
+        mGraphicsContext = GFXContext::Create(mCoreWindow->AsPlatformHandle());
+        mGraphicsContext->Attach();
+        mGraphicsContext->Viewport(mCoreWindow->ContentSize());
+        mGraphicsContext->VSync(mSettings.VSync);
+        mGraphicsContext->Clear();
 
         //mDialog = Dialog::Create();
 
@@ -231,6 +232,8 @@ private:
         double frames {};
         Timer timer {};
         string title(64, ' ');
+
+        auto title2 = mCoreWindow->Title();
         
         // Main-Loop
         LogCaption("Main-Loop");
@@ -261,18 +264,19 @@ private:
             }
 
             // Update application
-            //mContext->Attach();
+            mCoreWindow->Update();
+            //mListener->Update();
+            mGraphicsContext->Attach();
             //mRenderer->RenderFrame();
             for (auto *layer : mLayers) layer->Update(deltaTime);
             Update(deltaTime);
-            //if (mWindow->GetState(WindowState::Alive)) {
-            //    mListener->Update();
-            //    pCoreLayer->Prepare();
-            //    for (Layer *layer : mLayers) layer->GuiUpdate();
-            //    pCoreLayer->Finish();
-            //}
-            //mContext->SwapBuffers();
-            //mContext->Detach();
+            if (mCoreWindow->State(WindowState::Active)) {
+                //pCoreLayer->Prepare();
+                //for (Layer *layer : mLayers) layer->GuiUpdate();
+                //pCoreLayer->Finish();
+            }
+            mGraphicsContext->SwapBuffers();
+            mGraphicsContext->Detach();
         }
 
         // Termination
@@ -342,8 +346,8 @@ private:
     LayerStack mLayers;
     Scope<ThreadPool> mThreadPool;
     Scope<Window> mCoreWindow;
+    Scope<GFXContext> mGraphicsContext;
     //Reference<Config> mConfig;
-    //Reference<Context> mContext;
     //Reference<Dialog> mDialog;
     //Scope<EventListener> mListener;
     //Scope<Renderer> mRenderer;

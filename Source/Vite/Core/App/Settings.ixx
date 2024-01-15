@@ -1,6 +1,7 @@
 ﻿export module Vite.App.Settings;
 
 import Vite.Base;
+import Vite.Device.GFXContext;
 import Vite.Logger.LogLevel;
 
 export namespace Hedron {
@@ -21,7 +22,7 @@ struct Settings {
     /// Properties
     string Title = "Hedron";
     string Resolution = "1024x768";
-    //GraphicsAPI GraphicsAPI = GraphicsAPI::OpenGL;
+    GraphicsAPI GraphicsAPI = GraphicsAPI::OpenGL;
     LogLevel LogLevel = LogLevel::Trace;
 
     /// Logging

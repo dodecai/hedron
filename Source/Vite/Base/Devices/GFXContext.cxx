@@ -1,6 +1,6 @@
 ﻿module;
 
-//#include "Vite/Base/Platform/Detection.h"
+#include "Vite/Base/Platform/Detection.h"
 
 module Vite.Device.GFXContext;
 
@@ -14,23 +14,16 @@ import Vite.Logger;
 
 namespace Hedron {
 
-Reference<Context> Context::Create(void *window) {
+Scope<GFXContext> GFXContext::Create(void *window) {
 #ifdef APP_PLATFORM_WINDOWS
     switch (API) {
         case GraphicsAPI::OpenGL: {
             LogDebug("Created context for 'OpenGL'");
-            //return CreateReference<GLContext>(window);
-            return {};
-        }
-
-        case GraphicsAPI::Vulkan: {
-            LogDebug("Created context for 'Vulkan'");
-            //return CreateReference<VKContext>(window);
-            return {};
+            return CreateScope<GLContext>(window);
         }
 
         default: {
-            //AppAssert(false, "The selected graphics api isn't implemented!");
+            AppAssert(false, "The selected graphics api isn't implemented!");
             return nullptr;
         }
     }
@@ -39,7 +32,5 @@ Reference<Context> Context::Create(void *window) {
     return nullptr;
 #endif
 }
-
-void Context::Destroy() {}
 
 }
