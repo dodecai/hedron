@@ -10,10 +10,13 @@ export namespace Hedron {
 ///
 template<typename T = float>
     requires typename_arithmetic<T>
-struct Position2D {
+struct Position2DBase {
     T X {};
     T Y {};
 };
+
+/// Aliases
+using Position2D = Position2DBase<float>;
 
 ///
 /// @brief Size2D is a simple size in 2D space
@@ -21,9 +24,12 @@ struct Position2D {
 ///
 template<typename T = float>
     requires typename_arithmetic<T>
-struct Size2D {
+struct Size2DBase {
     T Width {};
     T Height {};
 };
+
+/// Aliases
+using Size2D = Size2DBase<float>;
 
 }

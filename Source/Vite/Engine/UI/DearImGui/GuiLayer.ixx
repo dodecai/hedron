@@ -1,18 +1,15 @@
 ﻿module;
 
-#pragma warning(push, 0)
-    //#include <imgui/imgui.h>
-    //#include <imgui/imgui_internal.h>
-#pragma warning(pop)
+//#pragma warning(push, 0)
+//    #include <imgui/imgui.h>
+//    #include <imgui/imgui_internal.h>
+//#pragma warning(pop)
 
 export module Vite.DearImGui.Layer;
 
-//#include <Ultra/UI/ImGui/Styles/Styles.h>
-
-//import <glad/gl.h>;
-
-import Vite.Core;
 import Vite.App.Layers;
+//import Vite.Bridge.DearImGui;
+import Vite.Core;
 
 export namespace Hedron {
 

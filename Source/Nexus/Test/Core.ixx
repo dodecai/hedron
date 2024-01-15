@@ -9,6 +9,8 @@ export namespace Hedron::Test {
 
 // Performance Test
 inline long long Fibonacci(int n) {
+    //if (n < 0) throw std::invalid_argument("n is negative");
+    //if (n >= 47) throw std::invalid_argument("n is too large");
     if (n <= 1) return n;
     return Fibonacci(n - 1) + Fibonacci(n - 2);
 }
@@ -26,10 +28,11 @@ public:
 
     /// Methods
     void Create() override {
-        mThreadPool = CreateScope<ThreadPool>();
+        mThreadPool = CreateScope<ThreadPool>(4);
     }
     void Destroy() override {}
     void Update(DeltaTime deltaTime) override {
+        //return; // OpenGL Context destroys stack
         ///
         /// ThreadPool
         ///
@@ -38,12 +41,12 @@ public:
 
         if (delay >= 0.2) {
             // Thread Pool Tasks
-            const int n = 2;
-            auto fibResultA = mThreadPool->Enqueue([&] {
+            const int n = 4;
+            auto fibResultA = mThreadPool->Enqueue([=] {
                 auto result = Fibonacci(n);
                 return result;
             });
-            auto fibResultB = mThreadPool->Enqueue([&] {
+            auto fibResultB = mThreadPool->Enqueue([=] {
                 auto result = Fibonacci(n);
                 return result;
             });

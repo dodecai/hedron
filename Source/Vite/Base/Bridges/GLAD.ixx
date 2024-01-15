@@ -1,13 +1,13 @@
 ﻿module;
 
+#include "Vite/Base/Platform/Support.h"
+
 #pragma warning(push, 0)
-
-namespace gl {
-
 #include <glad/gl.h>
-
-}
-
+#if defined(APP_PLATFORM_WINDOWS)
+    #pragma comment(lib, "opengl32.lib")
+    #include <GL/wglext.h>
+#endif
 #pragma warning(pop)
 
 export module Vite.Bridge.Glad;
@@ -19,10 +19,8 @@ export module Vite.Bridge.Glad;
 /// @todo Further research on how to reduce the export.
 ///
 
-#pragma warning(push, 0)
 export {
 
-using namespace ::gl;
+// ToDo: Finish CreateCppModule4ClassicHeader.ps1
 
 }
-#pragma warning(pop)
