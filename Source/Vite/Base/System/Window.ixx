@@ -13,11 +13,17 @@ export namespace Hedron {
 enum class WindowState {
     Active      = BitMask(0),
     Alive       = BitMask(1),
+    //Created   = BitMask(x),
+    //Destroy   = BitMask(x),
+    //DpiUpdate = BitMask(x),
+    //DragNDrop = BitMask(x),
     Focused     = BitMask(2),
     Drawing     = BitMask(3),
     FullScreen  = BitMask(4),
     Maximized   = BitMask(5),
     Minimized   = BitMask(6),
+    //Moving    = BitMask(x),
+    //Resizing  = BitMask(x),
     Visible     = BitMask(7),
 };
 

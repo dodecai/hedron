@@ -1,5 +1,6 @@
 ﻿export module Vite.Device.Input.Keyboard;
 
+import Vite.Extension;
 import Vite.Type.Standard;
 
 export namespace Hedron {
@@ -7,19 +8,17 @@ export namespace Hedron {
 ///
 /// @brief Keyboard Key Actions
 ///
-enum class KeyboardAction {
-    Null		= 0x00,
-	Raw			= 0x01,
-	Input		= 0x20,
-	Undefined   = 0xFF,
+enum class KeyAction {
+    Undefined,
+	Raw,
+	Input,
 };
 
-inline std::ostream &operator<<(std::ostream &stream, KeyboardAction action) {
+inline std::ostream &operator<<(std::ostream &stream, KeyAction action) {
 	switch (action) {
-        case KeyboardAction::Null:	    { stream << "Null";		break; }
-		case KeyboardAction::Raw:		{ stream << "Raw";			break; }
-		case KeyboardAction::Input:		{ stream << "Input";		break; }
-		case KeyboardAction::Undefined:	{ stream << "-";			break; }
+		case KeyAction::Raw:		{ stream << "Raw";		    break; }
+		case KeyAction::Input:		{ stream << "Input";	    break; }
+		default:	                { stream << "Undefined";	break; }
 	}
 	return stream;
 }
@@ -29,7 +28,7 @@ inline std::ostream &operator<<(std::ostream &stream, KeyboardAction action) {
 ///
 enum class KeyCode {
 	// Source:	https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
-    Null		= 0x00,
+    Undefined	= 0x00,
 
 	// Mouse:	  0x01-02
 	Cancel		= 0x03,
@@ -269,12 +268,12 @@ enum class KeyCode {
 	//LMenu		= LAlt,
 	//RMenu		= RAlt,
 
-	Undefined	= 0xFF,
+	Unknown 	= 0xFF,
 };
 
 inline std::ostream &operator<<(std::ostream &stream, KeyCode code) {
 	switch (code) {
-		case KeyCode::Null:				    { stream << "Null";				    break; }
+		case KeyCode::Undefined:			{ stream << "Undefined";			break; }
 		case KeyCode::Cancel:				{ stream << "Cancel";				break; }
 		case KeyCode::Back:					{ stream << "Back";					break; }
 		case KeyCode::Tab:					{ stream << "Tab";					break; }
@@ -459,29 +458,45 @@ inline std::ostream &operator<<(std::ostream &stream, KeyCode code) {
 		case KeyCode::Zoom:					{ stream << "Zoom";					break; }
 		case KeyCode::A1:					{ stream << "A1";					break; }
 		case KeyCode::OemClear:				{ stream << "OemClear";				break; }
-		case KeyCode::Undefined:			{ stream << "-";					break; }
+		default:			                { stream << "Unknown";  			break; }
 	}
 	return stream;
 }
+
+
+///
+///  @brief Keyboard Key Modifiers [Alt|Control|Shift|Super]
+///
+enum class KeyModifier {
+    None    = BitMask(0),
+    Alt     = BitMask(1),
+    Control = BitMask(2),
+    Shift   = BitMask(3),
+    Super   = BitMask(4),
+};
+
+// Enable BitMask Operators
+template<> struct EnableBitMaskOperators<KeyModifier> {
+    static const bool enable = true;
+};
+
 
 ///
 /// @brief Keyboard Key States
 ///
 enum class KeyState {
-	Null		= 0x00,
-	Press		= 0x01,
-	Hold		= 0x02,
-	Release		= 0x03,
-	Undefined   = 0xFF,
+    Undefined,
+    Press,
+	Hold,
+    Release,
 };
 
 inline std::ostream &operator<<(std::ostream &stream, KeyState state) {
 	switch (state) {
-		case KeyState::Null:		{ stream << "Null";			break; }
 		case KeyState::Press:		{ stream << "Press";		break; }
-		case KeyState::Hold:		{ stream << "Hold";			break; }
-		case KeyState::Release:		{ stream << "Release";		break; }
-		case KeyState::Undefined:	{ stream << "-";			break; }
+		case KeyState::Hold:        { stream << "Hold";			break; }
+		case KeyState::Release:	    { stream << "Release";		break; }
+		default:           	        { stream << "Undefined";	break; }
 	}
 	return stream;
 }

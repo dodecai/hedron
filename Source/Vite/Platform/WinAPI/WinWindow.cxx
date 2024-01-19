@@ -328,6 +328,22 @@ void WinWindow::FullScreen(bool fullScreen) {
         }
     }
 
+    //// Get the current window style
+    //LONG windowStyle = GetWindowLong(mWindowHandle, GWL_STYLE);
+
+    //if (fullScreen) {
+    //    // Set the window style to fullscreen
+    //    SetWindowLong(mWindowHandle, GWL_STYLE, windowStyle & ~WS_OVERLAPPEDWINDOW);
+
+    //    // Set the window position and size to cover the entire screen
+    //    SetWindowPos(mWindowHandle, HWND_TOP, 0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN), SWP_FRAMECHANGED);
+    //} else {
+    //    // Restore the window style to normal
+    //    SetWindowLong(mWindowHandle, GWL_STYLE, windowStyle | WS_OVERLAPPEDWINDOW);
+
+    //    // Set the window position and size based on the stored settings
+    //    SetWindowPos(mWindowHandle, HWND_TOP, mSettings.Position.X, mSettings.Position.Y, mSettings.Size.Width, mSettings.Size.Height, SWP_FRAMECHANGED);
+    //}
     // FullScreen more convenient?
     //mSettings.Style = WindowStyle::FullScreen;
     //HMONITOR hmon = MonitorFromWindow(WindowHandle, MONITOR_DEFAULTTONEAREST);
@@ -362,6 +378,7 @@ void WinWindow::Transparent(bool transparent) {
             SetWindowCompositionAttribute(mWindowHandle, &data);
             //BOOL value = TRUE;
             //DwmSetWindowAttribute(mWindowHandle, DWMWA_USE_HOSTBACKDROPBRUSH, reinterpret_cast<void *>(&value), sizeof(accent));
+            //SetLayeredWindowAttributes(mWindowHandle, 0, 128, LWA_ALPHA);
         }
     }
 
@@ -501,9 +518,6 @@ void *WinWindow::AsPlatformHandle() {
 
 /// Methods
 LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    // Properties
-    LRESULT result = 1;
-
     ///
     /// @brief	Window Messages
     /// @source:
@@ -595,7 +609,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                 LogError("Could not release handle to window.\n");
             }
 
-            result = 0;
+            return TRUE;
             break;
         }
         case WM_CREATE: {
@@ -606,7 +620,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             mState &= ~WindowState::Alive;
 
             PostQuitMessage(0);
-            result = 0;
+            return TRUE;
             break;
         }
 
@@ -633,7 +647,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                 bounds->ptMinTrackSize.y = minHeight;
             }
             
-            result = 0;
+            return TRUE;
             break;
         }
 
@@ -652,7 +666,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         }
         case WM_ERASEBKGND: {
             // Prevent system clearing the window.
-            result = 0;
+            return TRUE;
             break;
         }
         case WM_MOVE: {
@@ -737,13 +751,13 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         // System
         case WM_SYSCOMMAND: {
             // Disable the menu system commands (ALT, F10), so that they don't steal the focus
-            if (wParam == SC_KEYMENU) { result = 0; break; }
+            if (wParam == SC_KEYMENU) return TRUE;
             
             switch (wParam) {
                 // FulLScree-Mode: Prevent ScreenSaver or Monitor PowerSaver
                 case SC_SCREENSAVE: [[fallthrough]];
                 case SC_MONITORPOWER: {
-                    if (mSettings.Style == WindowStyle::FullScreen) { result = 0; break; }
+                    if (mSettings.Style == WindowStyle::FullScreen) { return TRUE; }
                     break;
                 }
             
@@ -764,10 +778,9 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (mExternalEventHandler) {
         MSG message = { hWnd, uMsg, wParam, lParam };
         auto externalResult = mExternalEventHandler(&message);
-        if (result && externalResult) result = 0;
+        if (externalResult) return TRUE;
     }
 
-    if (!result) return result;
     return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 

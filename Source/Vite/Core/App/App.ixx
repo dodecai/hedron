@@ -62,14 +62,12 @@ public:
         LogInfo("Loading Systems");
         mCoreWindow = Window::Create({ mSettings.Title /*, mSettings.Width, mSettings.Height*/ });
         //mCoreWindow->FullScreen(true);
-        //mCoreWindow->Transparency(true);
+        //mCoreWindow->Transparent(true);
         mEventHandler = EventHandler::Create();
         mCoreWindow->ExternalEventHandler([&](auto value) -> bool { return mEventHandler->Callback(value); });
-        //mEventHandler->Emitter.Register<AppEventData>([&](auto &data, const auto &emitter) { OnWindowEvent(data, emitter); });
-        //mEventHandler->Emitter.Register<KeyboardEventData>([&](auto &data, const auto &emitter) { OnKeyboardEvent(data, emitter); });
-        //mEventHandler->Emitter.Register<MouseEventData>([&](auto &data, const auto &emitter) { OnMouseEvent(data, emitter); });
-        mEventHandler->Emitter.Register<MouseEventData>([&](const auto &data) { OnMouseEvent(data); });
-        mEventHandler->Emitter.Register<KeyboardEventData>([&](const auto &data) { OnKeyboardEvent(data); });
+        mEventHandler->Register<MouseEvent>([&](const MouseEvent &event /*, const auto &emitter*/) { OnInputEvent(event); });
+        mEventHandler->Register<KeyboardEvent>([&](const KeyboardEvent &event /*, const auto &emitter*/) { OnInputEvent(event); });
+        mEventHandler->Register<WindowEvent>([&](const WindowEvent &event /*, const auto &emitter*/) { OnAppEvent(event); });
         LogDebug("Created window '{}' with size '{}'.", mSettings.Title, mSettings.Resolution);
 
         GFXContext::API = mSettings.GraphicsAPI;
@@ -116,61 +114,65 @@ public:
     /// Event Interface
     ///
 
-    // This method is triggered when a app event occurs.
-    virtual void OnAppEvent() {
+    // This method is triggered when a window event occurs.
+    virtual void OnAppEvent(const WindowEvent &event) {
         for (auto layer : mLayers) {
-            //if (data.Handled) break;
-            //layer->OnWindowEvent(data, emitter);
+            if (event.Handled) break;
+            layer->OnAppEvent(event);
         }
 
-        //switch (data.Action) {
-            //case WindowAction::Destroy: {
-            //    Exit();
-            //    break;
-            //}
+        Log("Window Event\n");
 
-            //case WindowAction::Resize: {
-            //    mContext->SetViewport(mWindow->GetContextSize().Width, mWindow->GetContextSize().Height);
-            //    break;
-            //}
+        //switch (event.Action) {
+        //    case WindowAction::Destroy: {
+        //        Exit();
+        //        break;
+        //    }
 
-            //default: {
-            //    break;
-            //}
+        //    case WindowAction::Resize: {
+        //        mContext->SetViewport(mWindow->GetContextSize().Width, mWindow->GetContextSize().Height);
+        //        break;
+        //    }
+
+        //    default: {
+        //        break;
+        //    }
         //}
     }
 
     // This method is triggered when a controller input event occurs.
-    virtual void OnControllerEvent(ControllerEventData &data) {
+    virtual void OnInputEvent(const ControllerEvent &event) {
         for (auto layer : mLayers) {
-            //if (data.Handled) break;
-            //layer->OnControllerEvent(data, emitter);
+            if (event.Handled) break;
+            layer->OnInputEvent(event);
         }
     }
     
     // This method is triggered when a keyboard input event occurs.
-    virtual void OnKeyboardEvent(const KeyboardEventData &data) {
-        Log("Keyboard Event: {}\n", (int)data.Key);
+    virtual void OnInputEvent(const KeyboardEvent &event) {
         for (auto layer : mLayers) {
-            //if (data.Handled) break;
-            //layer->OnKeyboardEvent(data, emitter);
+            if (event.Handled) break;
+            layer->OnInputEvent(event);
         }
+
+        Log("Keyboard Event: [Code: {}]\n", (int)event.Key);
     }
     
     // This method is triggered when a mouse input event occurs.
-    virtual void OnMouseEvent(const MouseEventData &data) {
-        Log("Mouse Event: {}:{}\n", (int)data.X, (int)data.Y);
+    virtual void OnInputEvent(const MouseEvent &event) {
         for (auto layer : mLayers) {
-            //if (data.Handled) break;
-            //layer->OnMouseEvent(data, emitter);
+            if (event.Handled) break;
+            layer->OnInputEvent(event);
         }
+
+        Log("Mouse Event\n");
     }
     
     // This method is triggered when a touch input event occurs.
-    virtual void OnTouchEvent(TouchEventData &data) {
+    virtual void OnInputEvent(const TouchEvent &event) {
         for (auto layer : mLayers) {
-            //if (data.Handled) break;
-            //layer->OnTouchEvent(data, emitter);
+            if (event.Handled) break;
+            layer->OnInputEvent(event);
         }
     }
 
