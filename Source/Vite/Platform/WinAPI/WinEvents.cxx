@@ -30,11 +30,6 @@ RAWINPUTDEVICE RawInputDevice[1];
 namespace Hedron {
 
 WinEventHandler::WinEventHandler() {
-    //RawInputDevice[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
-    //RawInputDevice[0].usUsage = HID_USAGE_GENERIC_MOUSE;
-    //RawInputDevice[0].dwFlags = RIDEV_INPUTSINK;
-    //RawInputDevice[0].hwndTarget = msg.hwnd;
-    //RegisterRawInputDevices(RawInputDevice, 1, sizeof(RawInputDevice[0]));
 }
 
 //// Events
@@ -59,12 +54,24 @@ bool WinEventHandler::Dispatch(MSG message) {
     LPARAM &lParam = message.lParam;
     bool result { false };
 
+    // ToDo: Move to Constructor
+    static auto once = true;
+    if (once) {
+        RawInputDevice[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
+        RawInputDevice[0].usUsage = HID_USAGE_GENERIC_MOUSE;
+        RawInputDevice[0].dwFlags = RIDEV_INPUTSINK;
+        RawInputDevice[0].hwndTarget = hWnd;
+        RegisterRawInputDevices(RawInputDevice, 1, sizeof(RawInputDevice[0]));
+        once = false;
+    }
+
     ///
 	/// Do the magic
 	/// Sources:
-	/// - Raw Input:			https://docs.microsoft.com/en-us/windows/win32/inputdev/raw-input-notifications
+	/// - Raw Input:        https://docs.microsoft.com/en-us/windows/win32/inputdev/raw-input-notifications
 	/// - Keyboard Input:	https://docs.microsoft.com/en-us/windows/win32/inputdev/keyboard-input-notifications
 	/// - Mouse Input:		https://docs.microsoft.com/en-us/windows/win32/inputdev/mouse-input-notifications
+    /// - Touch Input:		?
     ///
 	switch (uMsg) {
 		///
@@ -78,172 +85,173 @@ bool WinEventHandler::Dispatch(MSG message) {
             //static int32_t lastX = 0;
             //static int32_t lastY = 0;
 
-            //MouseEventData data;
-            //data.Action = MouseAction::Raw;
-            //data.LastX = lastX;
-            //data.LastY = lastY;
+            //MouseEventevent event;
+            //event.Action = MouseAction::Raw;
+            //event.LastX = lastX;
+            //event.LastY = lastY;
             //UINT dwSize = 40;
             //static BYTE lpb[40];
 
-            //// Get Data
-            //uint32_t lr = GetRawInputData((HRAWINPUT)msg.lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
-            //if (lr != dwSize) OutputDebugString(TEXT("GetRawInputData does not return correct size !\n"));
+            //// Get event
+            //uint32_t lr = GetRawInputevent((HRAWINPUT)msg.lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
+            //if (lr != dwSize) OutputDebugString(TEXT("GetRawInputevent does not return correct size !\n"));
             //RAWINPUT *raw = (RAWINPUT *)lpb;
 
-            //// Extract raw data
+            //// Extract raw event
             //switch (raw->header.dwType) {
             //	case RIM_TYPEKEYBOARD: {
             //		break;
             //	}
             //	case RIM_TYPEMOUSE: {
-            //		data.X = raw->data.mouse.lLastX;
-            //		data.Y = raw->data.mouse.lLastY;
+            //		event.X = raw->event.mouse.lLastX;
+            //		event.Y = raw->event.mouse.lLastY;
             //		break;
             //	}
             //}
-            //data.DeltaX = data.X - data.LastX;
-            //data.DeltaY = data.Y - data.LastY;
-            //lastX = data.X;
-            //lastY = data.Y;
+            //event.DeltaX = event.X - event.LastX;
+            //event.DeltaY = event.Y - event.LastY;
+            //lastX = event.X;
+            //lastY = event.Y;
 
             //// Finalization
-            //MouseEvent.Publish(data);
+            //MouseEvent.Publish(event);
             break;
         }
 		
 		// State
 		case WM_ACTIVATE: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Activate;
-            //
-            //data.Active = (bool)msg.wParam;;
-            //
-            //Emitter.publish(data);
+            WindowEvent event;
+            //event.Action = WindowAction::Activate;
+            //event.Active = (bool)msg.wParam;;
+            
+            Publish(event);
 			break;
 		}
 		case WM_KILLFOCUS: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Focus;
-            //
-            //data.Focus = false;
-            //
-            //Emitter.publish(data);
+            WindowEvent event;
+            //event.Action = WindowAction::Focus;
+            //event.Focus = false;
+            
+            Publish(event);
 			break;
 		}
 		case WM_SETFOCUS: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Focus;
-            //
-            //data.Focus = true;
-            //
-            //Emitter.publish(data);
+            WindowEvent event;
+            //event.Action = WindowAction::Focus;
+            //event.Focus = true;
+            
+            Publish(event);
 			break;
 		}
 
 		// System
 		case WM_DPICHANGED: {
-            //WindowEventData data;
-            //data.Action = WindowAction::DpiUpdate;
-            //// ToDo: Something like DPI data would be nice.
-            // Emitter.publish(data);
+            // ToDo: Something like DPI event would be nice.
+            WindowEvent event;
+            //event.Action = WindowAction::DpiUpdate;
+            
+            Publish(event);
 			break;
 		}
 		case WM_SYSCOMMAND: {
-            //switch (msg.wParam) {
-            //	// Devices
-            //	case SC_MONITORPOWER: {
-            //		DeviceEventData data;
-            //		data.Action = DeviceAction::Null;
-            //          Emitter.publish(data);
-            //		break;
-            //	}
-            //
-            //	// Power
-            //	case SC_SCREENSAVE: {
-            //		PowerEventData data;
-            //		data.Action = PowerAction::Null;
-            //          Emitter.publish(data);
-            //          break;
-            //	}
-            //	
-            //	// Default
-            //	default: {
-            //		break;
-            //	}
-            //}
+            switch (wParam) {
+            	// Devices
+            	case SC_MONITORPOWER: {
+                    //DeviceEventevent event;
+                    //event.Action = DeviceAction::Null;
+                    //Emitter.publish(event);
+            		break;
+            	}
+            
+            	// Power
+            	case SC_SCREENSAVE: {
+                    //PowerEventevent event;
+                    //event.Action = PowerAction::Null;
+                    //Emitter.publish(event);
+                    break;
+            	}
+            	
+            	// Default
+            	default: {
+            		break;
+            	}
+            }
 			break;
 		}
 
         // Window
         // @note: They serve only for notification purposes, the windows handle the events on their own.
         case WM_CREATE: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Create;
-            //Emitter.publish(data);
+            WindowEvent event;
+            //event.Action = WindowAction::Create;
+            
+            Publish(event);
             break;
         }
         case WM_DESTROY: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Destroy;
-            //Emitter.publish(data);
+            WindowEvent event;
+            //event.Action = WindowAction::Destroy;
+            
+            Publish(event);
             break;
         }
         case WM_PAINT: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Draw;
-            //Emitter.publish(data);
+            WindowEvent event;
+            //event.Action = WindowAction::Draw;
+             
+            Publish(event);
             break;
         }
         case WM_SHOWWINDOW: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Show;
-            //data.Visible = (bool)msg.wParam;
-            //Emitter.publish(data);
+            WindowEvent event;
+            //event.Action = WindowAction::Show;
+            //event.Visible = (bool)msg.wParam;
+
+            Publish(event);
             break;
         }
         case WM_SIZING: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Resize;
-            //
+            WindowEvent event;
+            //event.Action = WindowAction::Resize;
             //PRECT pWindowDimension = reinterpret_cast<PRECT>(msg.lParam);
-            //data.X = pWindowDimension->left;
-            //data.Y = pWindowDimension->top;
-            //data.Width = pWindowDimension->right - pWindowDimension->left;
-            //data.Height = pWindowDimension->bottom - pWindowDimension->top;
-            //
-            //Emitter.publish(data);
+            //event.X = pWindowDimension->left;
+            //event.Y = pWindowDimension->top;
+            //event.Width = pWindowDimension->right - pWindowDimension->left;
+            //event.Height = pWindowDimension->bottom - pWindowDimension->top;
+            
+            Publish(event);
             break;
         }
         case WM_MOVE: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Move;
-            //
-            //data.X = GET_X_LPARAM(msg.lParam);
-            //data.Y = GET_Y_LPARAM(msg.lParam);
-            //
-            //Emitter.publish(data);
+            WindowEvent event;
+            //event.Action = WindowAction::Move;
+            //event.X = GET_X_LPARAM(msg.lParam);
+            //event.Y = GET_Y_LPARAM(msg.lParam);
+            
+            Publish(event);
             break;
         }
         case WM_SIZE: {
-            //WindowEventData data;
-            //data.Action = WindowAction::Show;
+            WindowEvent event;
+            //event.Action = WindowAction::Show;
             //
             //switch (msg.wParam) {
             //	case SIZE_MAXIMIZED: {
-            //		data.Action = WindowAction::Maximize;
+            //		event.Action = WindowAction::Maximize;
             //		break;
             //	}
             //	case SIZE_MINIMIZED: {
-            //		data.Action = WindowAction::Minimize;
+            //		event.Action = WindowAction::Minimize;
             //		break;
             //	}
             //	case SIZE_RESTORED: {
-            //		data.Action = WindowAction::Restore;
+            //		event.Action = WindowAction::Restore;
             //	}
             //}
-            //data.Width = static_cast<uint32_t>((UINT64)msg.lParam & 0xFFFF);
-            //data.Height = static_cast<uint32_t>((UINT64)msg.lParam >> 16);
-            //Emitter.publish(data);
+            //event.Width = static_cast<uint32_t>((UINT64)msg.lParam & 0xFFFF);
+            //event.Height = static_cast<uint32_t>((UINT64)msg.lParam >> 16);
+
+            Publish(event);
             break;
         }
 
@@ -256,17 +264,14 @@ bool WinEventHandler::Dispatch(MSG message) {
         case WM_SYSCHAR:    [[fallthrough]];
         case WM_UNICHAR: {
             //// Preparation
-            //KeyboardEventData data;
-            //data.Action = KeyboardAction::Input;
-            //data.State = KeyState::Undefined;
-            //
-            //// Get Key Code
-            //data.Character = (char)msg.wParam;
-            //data.Key = KeyCode{ (KeyCode)msg.wParam };
-            //
-            //// Finalization
-            // Emitter.publish(data);
-            //result = 0;
+            KeyboardEvent event;
+            //event.Action = KeyboardAction::Input;
+            //event.State = KeyState::Undefined;
+            //event.Character = (char)msg.wParam;
+            //event.Key = KeyCode{ (KeyCode)msg.wParam };
+                        
+            Publish(event);
+            result = true;
 			break;
 		}
         
@@ -276,17 +281,16 @@ bool WinEventHandler::Dispatch(MSG message) {
         case WM_SYSKEYUP:   [[fallthrough]];
         case WM_SYSKEYDOWN: {
 			// Preparation
-			KeyboardEventData data;
-			data.Action = KeyboardAction::Null;
+			KeyboardEvent event;
 
 			// Get Key Code
-			data.Key = KeyCode{ (KeyCode)wParam };
+            event.Key = KeyCode{ static_cast<KeyCode>(wParam) };
 			if (HIWORD(lParam) & KF_EXTENDED) {
 				switch (wParam) {
-					case VK_CONTROL:	{ data.Key = KeyCode::RControl;	break; }
-					case VK_SHIFT:		{ data.Key = KeyCode::RShift;	break; }
-					case VK_MENU:		{ data.Key = KeyCode::RAlt;		break; }
-					case VK_RETURN:		{ data.Key = KeyCode::Return;	break; }
+					case VK_CONTROL:	{ event.Key = KeyCode::RControl;    break; }
+					case VK_SHIFT:		{ event.Key = KeyCode::RShift;	    break; }
+					case VK_MENU:		{ event.Key = KeyCode::RAlt;		break; }
+					case VK_RETURN:		{ event.Key = KeyCode::Return;	    break; }
 					default:			{ break; }
 				}
 			}
@@ -294,30 +298,31 @@ bool WinEventHandler::Dispatch(MSG message) {
 			// Get Key State
 			switch (uMsg) {
 				case WM_KEYDOWN:	case WM_SYSKEYDOWN: {
-					data.State = KeyState::Press;
+                    event.State = KeyState::Press;
 					break;
 				}
 				case WM_KEYUP:		case WM_SYSKEYUP: {
-					data.State = KeyState::Release;
+                    event.State = KeyState::Release;
 					break;
 				}
 				default: {
-					data.State = KeyState::Null;
+                    // ToDo: Add hold state
 					break;
 				}
 			}
 
 			// Get Modifiers
-			data.Modifier.Alt		= (bool)GetAsyncKeyState(VK_MENU);
-			data.Modifier.Control	= (bool)GetAsyncKeyState(VK_CONTROL);
-			data.Modifier.Shift		= (bool)GetAsyncKeyState(VK_SHIFT);
-			data.Modifier.Super		= (bool)(GetAsyncKeyState(VK_LWIN) | GetAsyncKeyState(VK_RWIN));
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_MENU) ? KeyModifier::Alt : KeyModifier::None;
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_CONTROL) ? KeyModifier::Control : KeyModifier::None;
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_SHIFT) ? KeyModifier::Shift : KeyModifier::None;
+            event.Modifiers |= (bool)(GetAsyncKeyState(VK_LWIN) | GetAsyncKeyState(VK_RWIN)) ? KeyModifier::Super : KeyModifier::None;
+
 			if (GetSystemMetrics(SM_SWAPBUTTON)) {
 				// Mouse Buttons as modifiers ... yes we can :)
 			}
 
 			// Finalization
-            Emitter.Publish(data);
+            Publish(event);
 			result = true;
 			break;
 		}
@@ -340,43 +345,43 @@ bool WinEventHandler::Dispatch(MSG message) {
         case WM_MBUTTONDBLCLK:  [[fallthrough]];
         case WM_RBUTTONDBLCLK:  [[fallthrough]];
         case WM_XBUTTONDBLCLK: {
-			MouseEventData data;
-			data.Action = MouseAction::DoubleClick;
+			MouseEvent event;
+			event.Action = MouseAction::DoubleClick;
 
 			// Get MouseButton
 			switch (uMsg) {
 				case WM_LBUTTONDBLCLK: {
-					data.Button = MouseButton::Left;
+					event.Button = MouseButton::Left;
 					break;
 				}
 				case WM_MBUTTONDBLCLK: {
-					data.Button = MouseButton::Middle;
+					event.Button = MouseButton::Middle;
 					break;
 				}
 				case WM_RBUTTONDBLCLK: {
-					data.Button = MouseButton::Right;
+					event.Button = MouseButton::Right;
 					break;
 				}
 				case WM_XBUTTONDBLCLK: {
 					short button = GET_XBUTTON_WPARAM(wParam);
-					data.Button = (button == XBUTTON1 ? MouseButton::X1 : MouseButton::X2);
+					event.Button = (button == XBUTTON1 ? MouseButton::X1 : MouseButton::X2);
 					break;
 				}
 				default: {
-					data.Button = MouseButton::Undefined;
+					event.Button = MouseButton::Undefined;
 					break;
 				}
 			}
 
-			// Get Modifiers
-			data.Modifier.Control	= GetKeyState(VK_CONTROL);
-			data.Modifier.Shift		= GetKeyState(VK_SHIFT);
-			data.Modifier.Alt		= GetKeyState(VK_MENU);
-			data.Modifier.Super		= (GetKeyState(VK_LWIN) | GetKeyState(VK_RWIN));
+            // Get Modifiers
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_MENU) ? KeyModifier::Alt : KeyModifier::None;
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_CONTROL) ? KeyModifier::Control : KeyModifier::None;
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_SHIFT) ? KeyModifier::Shift : KeyModifier::None;
+            event.Modifiers |= (bool)(GetAsyncKeyState(VK_LWIN) | GetAsyncKeyState(VK_RWIN)) ? KeyModifier::Super : KeyModifier::None;
 
-			data.State = MouseButtonState::Press;
+			event.State = MouseButtonState::Press;
 
-            Emitter.Publish(data);
+            Publish(event);
 			result = true;
 			break;
 		}
@@ -390,114 +395,101 @@ bool WinEventHandler::Dispatch(MSG message) {
         case WM_MBUTTONUP:  [[fallthrough]];
         case WM_RBUTTONUP:  [[fallthrough]];
         case WM_XBUTTONUP: {
-//			MouseEventData data;
-//			data.Action = MouseAction::Click;
-//
-//			// Get MouseButton
-//			switch (msg.message) {
-//				case WM_LBUTTONDOWN:	case WM_LBUTTONUP: {
-//					data.Button = MouseButton::Left;
-//					data.State = (msg.message == WM_LBUTTONDOWN ? ButtonState::Press : ButtonState::Release);
-//
-//					break;
-//				}
-//				case WM_MBUTTONDOWN:	case WM_MBUTTONUP: {
-//					data.Button = MouseButton::Middle;
-//					data.State = (msg.message == WM_MBUTTONDOWN ? ButtonState::Press : ButtonState::Release);
-//					break;
-//				}
-//				case WM_RBUTTONDOWN:	case WM_RBUTTONUP: {
-//					data.Button = MouseButton::Right;
-//					data.State = (msg.message == WM_RBUTTONDOWN ? ButtonState::Press : ButtonState::Release);
-//					break;
-//				}
-//				case WM_XBUTTONDOWN:	case WM_XBUTTONUP: {
-//					short button = GET_XBUTTON_WPARAM(msg.wParam);
-//					data.Button = (button & XBUTTON1 ? MouseButton::X1 : MouseButton::X2);
-//					data.State = (msg.message == WM_XBUTTONDOWN ? ButtonState::Press : ButtonState::Release);
-//                    break;
-//				}
-//				default: {
-//					data.Button = MouseButton::Undefined;
-//					data.State = ButtonState::Undefined;
-//					break;
-//				}
-//			}
-//
-//			// Get Modifiers
-//			data.Modifier.Control	= GetKeyState(VK_CONTROL);
-//			data.Modifier.Shift		= GetKeyState(VK_SHIFT);
-//			data.Modifier.Alt		= GetKeyState(VK_MENU);
-//			data.Modifier.Super		= (GetKeyState(VK_LWIN) | GetKeyState(VK_RWIN));
-//
-//            Emitter.publish(data);
-//			result = 0;
+			MouseEvent event;
+			event.Action = MouseAction::Click;
+
+			// Get MouseButton
+			switch (uMsg) {
+				case WM_LBUTTONDOWN:	case WM_LBUTTONUP: {
+					event.Button = MouseButton::Left;
+					event.State = (uMsg == WM_LBUTTONDOWN ? MouseButtonState::Press : MouseButtonState::Release);
+
+					break;
+				}
+				case WM_MBUTTONDOWN:	case WM_MBUTTONUP: {
+					event.Button = MouseButton::Middle;
+					event.State = (uMsg == WM_MBUTTONDOWN ? MouseButtonState::Press : MouseButtonState::Release);
+					break;
+				}
+				case WM_RBUTTONDOWN:	case WM_RBUTTONUP: {
+					event.Button = MouseButton::Right;
+					event.State = (uMsg == WM_RBUTTONDOWN ? MouseButtonState::Press : MouseButtonState::Release);
+					break;
+				}
+				case WM_XBUTTONDOWN:	case WM_XBUTTONUP: {
+					short button = GET_XBUTTON_WPARAM(wParam);
+					event.Button = (button & XBUTTON1 ? MouseButton::X1 : MouseButton::X2);
+					event.State = (uMsg == WM_XBUTTONDOWN ? MouseButtonState::Press : MouseButtonState::Release);
+                    break;
+				}
+				default: {
+					break;
+				}
+			}
+
+            // Get Modifiers
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_MENU) ? KeyModifier::Alt : KeyModifier::None;
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_CONTROL) ? KeyModifier::Control : KeyModifier::None;
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_SHIFT) ? KeyModifier::Shift : KeyModifier::None;
+            event.Modifiers |= (bool)(GetAsyncKeyState(VK_LWIN) | GetAsyncKeyState(VK_RWIN)) ? KeyModifier::Super : KeyModifier::None;
+
+            Publish(event);
+			result = true;
 			break;
 		}
 
         // Move
 		case WM_MOUSEMOVE: {
-			static int32 lastX = 0;
-			static int32 lastY = 0;
+            auto x = static_cast<float>(GET_X_LPARAM(lParam)); // static_cast<short>(LOWORD(lParam));
+            auto y = static_cast<float>(GET_Y_LPARAM(lParam)); // static_cast<short>(HIWORD(lParam));
+			static float lastX = 0.0f;
+			static float lastY = 0.0f;
 
-			MouseEventData data;
-			data.Action = MouseAction::Move;
+			MouseEvent event;
+			event.Action = MouseAction::Move;
 
-			data.LastX = lastX;
-			data.LastY = lastY;
+            event.DeltaPosition = { x - lastX, y - lastY };
+            event.LastPosition = { lastX, lastY };
+            event.Position = { x, y };
 
-			data.X = GET_X_LPARAM(lParam);	// static_cast<short>(LOWORD(msg.lParam));
-			data.Y = GET_Y_LPARAM(lParam);	// static_cast<short>(HIWORD(msg.lParam));
-			
-			data.DeltaX = data.X - data.LastX;
-			data.DeltaY = data.Y - data.LastY;
-
-			lastX = data.X;
-			lastY = data.Y;
+            lastX = x;
+			lastY = y;
 
 			// Get Modifiers
 			switch (wParam) {
-				case MK_CONTROL: {
-					data.Modifier.Control = true;
-                    break;
-				}
-				case MK_SHIFT: {
-					data.Modifier.Shift = true;
-                    break;
-				}
 				case MK_LBUTTON: {
-					data.Button = MouseButton::Left;
+					event.Button = MouseButton::Left;
                     break;
 				}
 				case MK_MBUTTON: {
-					data.Button = MouseButton::Middle;
+					event.Button = MouseButton::Middle;
                     break;
 				}
 				case MK_RBUTTON: {
-					data.Button = MouseButton::Right;
+					event.Button = MouseButton::Right;
                     break;
 				}
 				case MK_XBUTTON1: {
-					data.Button = MouseButton::X1;
+					event.Button = MouseButton::X1;
                     break;
 				}
 				case MK_XBUTTON2: {
-					data.Button = MouseButton::X2;
+					event.Button = MouseButton::X2;
                     break;
 				}
 				default: {
-					data.Button = MouseButton::Undefined;
+					event.Button = MouseButton::Undefined;
                     break;
 				}
 			}
 
-			// Get Modifiers
-			data.Modifier.Control	= GetKeyState(VK_CONTROL);
-			data.Modifier.Shift		= GetKeyState(VK_SHIFT);
-			data.Modifier.Alt		= GetKeyState(VK_MENU);
-			data.Modifier.Super		= (GetKeyState(VK_LWIN) | GetKeyState(VK_RWIN));
+            // Get Modifiers
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_MENU) ? KeyModifier::Alt : KeyModifier::None;
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_CONTROL) ? KeyModifier::Control : KeyModifier::None;
+            event.Modifiers |= (bool)GetAsyncKeyState(VK_SHIFT) ? KeyModifier::Shift : KeyModifier::None;
+            event.Modifiers |= (bool)(GetAsyncKeyState(VK_LWIN) | GetAsyncKeyState(VK_RWIN)) ? KeyModifier::Super : KeyModifier::None;
 
-            Emitter.Publish(data);
+            Publish(event);
 			result = true;
 			break;
 			// Capture the mouse in case the user wants to drag it outside
@@ -505,12 +497,12 @@ bool WinEventHandler::Dispatch(MSG message) {
 			//RECT area;
 			//GetClientRect(msg.hwnd, &area);
 
-			//data.X = static_cast<unsigned int>(area.left <= x && x <= area.right ? x - area.left : 0xFFFFFFFF);
-			//data.Y = static_cast<unsigned int>(area.top <= y && y <= area.bottom ? y - area.top : 0xFFFFFFFF);
-			//data.ScreenX = static_cast<unsigned int>(x);
-			//data.ScreenY = static_cast<unsigned int>(y);
-			//data.DeltaX = static_cast<int>(x - pWindow->prevMouseX);
-			//data.DeltaY = static_cast<int>(y - pWindow->prevMouseY);
+			//event.X = static_cast<unsigned int>(area.left <= x && x <= area.right ? x - area.left : 0xFFFFFFFF);
+			//event.Y = static_cast<unsigned int>(area.top <= y && y <= area.bottom ? y - area.top : 0xFFFFFFFF);
+			//event.ScreenX = static_cast<unsigned int>(x);
+			//event.ScreenY = static_cast<unsigned int>(y);
+			//event.DeltaX = static_cast<int>(x - pWindow->prevMouseX);
+			//event.DeltaY = static_cast<int>(y - pWindow->prevMouseY);
 			//pWindow->prevMouseX = static_cast<unsigned int>(x);
 			//pWindow->prevMouseY = static_cast<unsigned int>(y);
 
@@ -554,30 +546,30 @@ bool WinEventHandler::Dispatch(MSG message) {
 			event.type = Event::MouseEntered;
 			pushEvent(event);
 			}
-			}*/
             break;
+			}*/
 		}
 
         // Wheel
 		case WM_MOUSEWHEEL: {
-			MouseEventData data;
-			data.Action = MouseAction::Wheel;
+			MouseEvent event;
+			event.Action = MouseAction::Wheel;
 
-			data.DeltaWheelY = (float)GET_WHEEL_DELTA_WPARAM(wParam) / (float)WHEEL_DELTA;
-            
-            //Input::sMouseWheelDelta = data.DeltaWheelY;
+            auto deltaWheelY = static_cast<float>(GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA);
+            event.DeltaWheel = { 0.0f, deltaWheelY };
 
-            Emitter.Publish(data);
+            Publish(event);
 			result = true;
 			break;
 		}
 		case WM_MOUSEHWHEEL: {
-			MouseEventData data;
-			data.Action = MouseAction::Wheel;
+			MouseEvent event;
+			event.Action = MouseAction::Wheel;
 
-			data.DeltaWheelX = (float)GET_WHEEL_DELTA_WPARAM(wParam) / (float)WHEEL_DELTA;
+            auto deltaWheelX = static_cast<float>(GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA);
+            event.DeltaWheel = { deltaWheelX, 0.0f };
 
-            Emitter.Publish(data);
+            Publish(event);
 			result = true;
 			break;
 		}
@@ -586,9 +578,10 @@ bool WinEventHandler::Dispatch(MSG message) {
         /// Touch
         ///
 		case WM_TOUCH: {
-//			TouchEventData data;
-//
-//            Emitter.publish(data);
+            TouchEvent event;
+            
+            Publish(event);
+            //result = true;
 			break;
 		}
 

@@ -8,20 +8,18 @@ export namespace Hedron {
 /// @brief Controller Actions
 ///
 enum class ControllerAction {
-    Null		= 0x00,
-    Analog		= 0x10,
-    Digital		= 0x20,
-    Button		= 0x30,
-    Undefined   = 0xFF,
+    Undefined,
+    Analog,
+    Button,
+    Digital,
 };
 
 inline std::ostream &operator<<(std::ostream &stream, ControllerAction action) {
     switch (action) {
-        case ControllerAction::Null:	    { stream << "Null";	    break; }
-        case ControllerAction::Analog:		{ stream << "Analog";	break; }
-        case ControllerAction::Digital:		{ stream << "Digital";	break; }
-        case ControllerAction::Button:		{ stream << "Button";	break; }
-        case ControllerAction::Undefined:	{ stream << "-";		break; }
+        case ControllerAction::Analog:		{ stream << "Analog";	    break; }
+        case ControllerAction::Digital:		{ stream << "Digital";	    break; }
+        case ControllerAction::Button:		{ stream << "Button";	    break; }
+        default:                            { stream << "Undefined";	break; }
     }
     return stream;
 }
@@ -31,7 +29,7 @@ inline std::ostream &operator<<(std::ostream &stream, ControllerAction action) {
 ///
 enum class ControllerButton {
     // Null
-    Null				= 0x00,
+    Undefined			= 0x00,
 
     // Analog Sticks
     AStickLeftPress		= 0x10,
@@ -73,13 +71,13 @@ enum class ControllerButton {
     Start				= 0x50,
 
     // ~
-	Undefined			= 0xFF,
+	Unknown 			= 0xFF,
 };
 
 inline std::ostream &operator<<(std::ostream &stream, ControllerButton button) {
 	switch (button) {
         // Null
-		case ControllerButton::Null:				{ stream << "Null";		    	break; }
+		case ControllerButton::Undefined:			{ stream << "Undefined";        break; }
                                    
         // Analog Sticks
         case ControllerButton::AStickLeftPress:		{ stream << "AStickLeftPress";	break; }
@@ -121,7 +119,7 @@ inline std::ostream &operator<<(std::ostream &stream, ControllerButton button) {
         case ControllerButton::Start:				{ stream << "Start";			break; }
 
         // ~
-		case ControllerButton::Undefined:			{ stream << "-";				break; }
+		default:	                        		{ stream << "Unknown";			break; }
 	}
 	return stream;
 }
@@ -130,20 +128,18 @@ inline std::ostream &operator<<(std::ostream &stream, ControllerButton button) {
 /// @Button Controller States
 ///
 enum class ControllerButtonState {
-	Null		= 0x00,
-	Press		= 0x01,
-	Hold		= 0x02,
-	Release		= 0x03,
-	Undefined   = 0xFF,
+    Undefined,
+	Press,
+	Hold,
+	Release,
 };
 
 inline std::ostream &operator<<(std::ostream &stream, ControllerButtonState state) {
 	switch (state) {
-		case ControllerButtonState::Null:		{ stream << "Null";			break; }
 		case ControllerButtonState::Press:		{ stream << "Press";		break; }
 		case ControllerButtonState::Hold:		{ stream << "Hold";			break; }
 		case ControllerButtonState::Release:	{ stream << "Release";		break; }
-		case ControllerButtonState::Undefined:	{ stream << "-";			break; }
+		default:	                            { stream << "Undefined";	break; }
 	}
 	return stream;
 }

@@ -23,17 +23,17 @@ public:
     virtual void Attach() {}
     virtual void Detach() {}
     virtual void GuiUpdate() {}
-    virtual void Update([[maybe_unused]] DeltaTime deltaTime) {}
+    virtual void Update(DeltaTime deltaTime) {}
 
     ///
     /// Event Interface
     ///
-    
-    virtual void OnAppEvent([[maybe_unused]] WindowEventData &data /*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
-    virtual void OnControllerEvent([[maybe_unused]] ControllerEventData &data /*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
-    virtual void OnKeyboardEvent([[maybe_unused]] KeyboardEventData &data /*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
-    virtual void OnMouseEvent([[maybe_unused]] MouseEventData &data/*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
-    virtual void OnTouchEvent([[maybe_unused]] TouchEventData &data /*, [[maybe_unused]] const EventListener::EventEmitter &emitter */) {}
+
+    virtual void OnAppEvent(const WindowEvent &event /*, const EventListener::EventEmitter &emitter */) {}
+    virtual void OnInputEvent(const ControllerEvent &event /*, const EventListener::EventEmitter &emitter */) {}
+    virtual void OnInputEvent(const KeyboardEvent &event /*, const EventListener::EventEmitter &emitter */) {}
+    virtual void OnInputEvent(const MouseEvent &event/*, const EventListener::EventEmitter &emitter */) {}
+    virtual void OnInputEvent(const TouchEvent &event /*, const EventListener::EventEmitter &emitter */) {}
     
     /// Accessors
     const string &GetName() const { return mName; }
