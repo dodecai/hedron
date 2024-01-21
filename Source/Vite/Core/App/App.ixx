@@ -351,7 +351,7 @@ private:
             //mRenderer->RenderFrame();
             for (auto *layer : mLayers) layer->Update(deltaTime);
             Update(deltaTime);
-            if (mCoreWindow->State(WindowState::Active)) {
+            if (mCoreWindow->State(WindowState::Alive)) {
                 mDearImGuiLayer->Prepare();
                 for (auto *layer : mLayers) layer->UpdateUI();
                 mDearImGuiLayer->Render();
