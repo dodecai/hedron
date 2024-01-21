@@ -450,7 +450,7 @@ void WinWindow::Position(const Position2D &position) {
 void WinWindow::Progress(float progress) {
     static float max = 100.0f;
     float current = (float)(progress * max);
-    mTaskbarList->SetProgressValue(mWindowHandle, current, max);
+    mTaskbarList->SetProgressValue(mWindowHandle, static_cast<ULONGLONG>(current), static_cast<ULONGLONG>(max));
 }
 
 void WinWindow::Settings(const WindowSettings &settings) {

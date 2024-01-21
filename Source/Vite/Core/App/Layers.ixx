@@ -1,29 +1,29 @@
 ﻿export module Vite.App.Layers;
 
-import Vite.Base;
-import Vite.Event;
+export import Vite.Base;
+export import Vite.Event;
 
 export namespace Hedron {
 
 ///
 /// @brief Simple Application Layer Implementation
 ///
-class Layer {
+class Layer: public SteadyObject {
 public:
     /// Default
     Layer(const string &name = "Layer"): mName(name) {}
     virtual ~Layer() = default;
 
     ///
-    /// Interface
+    /// Control Interface
     ///
-    
+
     virtual void Create() {}
     virtual void Destroy() {}
     virtual void Attach() {}
     virtual void Detach() {}
-    virtual void GuiUpdate() {}
     virtual void Update(DeltaTime deltaTime) {}
+    virtual void UpdateUI() {}
 
     ///
     /// Event Interface
@@ -46,7 +46,7 @@ protected:
 ///
 /// @brief Container for the Application Layers
 ///
-class LayerStack {
+class LayerStack: public SteadyObject {
 public:
     /// Default
     LayerStack() = default;
