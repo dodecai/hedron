@@ -1,75 +1,106 @@
-﻿module Vite.Platform.WinDialog;
+﻿module;
 
-//import <Windows.h>;
-import Vite.App;
+#define NOMINMAX
+#define VC_EXTRALEAN
+
+#include <Windows.h>
+
+module Vite.Platform.WinDialog;
+
+///
+/// Helpers
+///
+namespace {
+
+#pragma warning(push)
+#pragma warning(disable: 4996)
+
+inline std::wstring ConvertChar2WChar(const std::string_view &source) {
+    wchar_t buffer[256] = {};
+    std::mbstowcs(buffer, source.data(), source.length());
+    std::wstring result = buffer;
+    return result;
+}
+
+inline std::string ConvertWChar2Char(const std::wstring_view &source) {
+    char buffer[256] = {};
+    std::wcstombs(buffer, source.data(), source.length());
+    std::string result = buffer;
+    return result;
+}
+
+#pragma warning(pop)
+
+}
 
 namespace Hedron {
 
-//// ToDo: Export these to String Utility
-//
-//#pragma warning(push)
-//#pragma warning(disable: 4996)
-//
-//inline wstring ConvertChar2WChar(const string &source) {
-//    wchar_t buffer[256] = {};
-//    std::mbstowcs(buffer, source.c_str(), source.length());
-//    wstring result = buffer;
-//    return result;
-//}
-//
-//inline string ConvertWChar2Char(const wstring &source) {
-//    char buffer[256] = {};
-//    std::wcstombs(buffer, source.c_str(), source.length());
-//    string result = buffer;
-//    return result;
-//}
-//
-//#pragma warning(pop)
-//
-//string WinDialog::OpenFile(const char *filter) const {
-//    OPENFILENAME dialog;       // common dialog box structure
-//    WCHAR szFile[260] = { 0 };   // if using TCHAR macros
-//
-//    // Initialize OPENFILENAME
-//    ZeroMemory(&dialog, sizeof(dialog));
-//    dialog.lStructSize = sizeof(dialog);
-//    dialog.hwndOwner = (HWND)Application::GetWindow().GetNativeWindow();
-//    dialog.lpstrFile = szFile;
-//    dialog.nMaxFile = sizeof(szFile);
-//    dialog.lpstrFilter = ConvertChar2WChar(filter).c_str();
-//    dialog.nFilterIndex = 1;
-//    dialog.lpstrFileTitle = NULL;
-//    dialog.nMaxFileTitle = 0;
-//    dialog.lpstrInitialDir = NULL;
-//    dialog.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-//
-//    if (GetOpenFileName(&dialog) == TRUE) {
-//        return ConvertWChar2Char(dialog.lpstrFile);
-//    }
-//    return std::string();
-//}
-//
-//string WinDialog::SaveFile(const char *filter) const {
-//    OPENFILENAME dialog;       // common dialog box structure
-//    WCHAR szFile[260] = { 0 };   // if using TCHAR macros
-//
-//     // Initialize OPENFILENAME
-//    ZeroMemory(&dialog, sizeof(dialog));
-//    dialog.lStructSize = sizeof(dialog);
-//    dialog.hwndOwner = (HWND)Application::GetWindow().GetNativeWindow();
-//    dialog.lpstrFile = szFile;
-//    dialog.nMaxFile = sizeof(szFile);
-//    dialog.lpstrFilter = ConvertChar2WChar(filter).c_str();
-//    dialog.nFilterIndex = 1;
-//    dialog.lpstrFileTitle = NULL;
-//    dialog.nMaxFileTitle = 0;
-//    dialog.lpstrInitialDir = NULL;
-//    dialog.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-//
-//    if (GetSaveFileName(&dialog) == TRUE) {
-//        return ConvertWChar2Char(dialog.lpstrFile);
-//    }
-//    return std::string();
-//}
+/// Default
+WinDialog::WinDialog(void *window) {
+    mWindowHandle = reinterpret_cast<HWND>(window);
+}
+
+WinDialog::~WinDialog() {
+    mWindowHandle = nullptr;
+}
+
+
+/// Methods
+string WinDialog::OpenFile(string_view title, const vector<string> &filter) const {
+    // Convert filter to platform specific format
+    wstring filters = {};
+    for (const auto &f : filter) {
+        filters += ConvertChar2WChar(f);
+        filters += L'\0';
+    }
+    wstring nativeTitle = ConvertChar2WChar(title);
+
+    WCHAR szFile[MAX_PATH] { 0 };
+    OPENFILENAME dialog = {
+        .lStructSize = sizeof(OPENFILENAME),
+        .hwndOwner = mWindowHandle,
+        .lpstrFilter = filters.c_str(),
+        .nFilterIndex = 1,
+        .lpstrFile = szFile,
+        .nMaxFile = sizeof(szFile),
+        .lpstrFileTitle = nativeTitle.data(),
+        .nMaxFileTitle = static_cast<DWORD>(nativeTitle.size()),
+        .lpstrInitialDir = nullptr,
+        .Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR,
+    };
+
+    if (GetOpenFileName(&dialog) == TRUE) {
+        return ConvertWChar2Char(dialog.lpstrFile);
+    }
+    return {};
+}
+
+string WinDialog::SaveFile(string_view title, const vector<string> &filter) const {
+    // Convert filter to platform specific format
+    wstring filters = {};
+    for (const auto &f : filter) {
+        filters += ConvertChar2WChar(f);
+        filters += L'\0';
+    }
+    wstring nativeTitle = ConvertChar2WChar(title);
+
+    WCHAR szFile[MAX_PATH] { 0 };
+    OPENFILENAME dialog = {
+        .lStructSize = sizeof(OPENFILENAME),
+        .hwndOwner = mWindowHandle,
+        .lpstrFilter = filters.c_str(),
+        .nFilterIndex = 1,
+        .lpstrFile = szFile,
+        .nMaxFile = sizeof(szFile),
+        .lpstrFileTitle = nativeTitle.data(),
+        .nMaxFileTitle = static_cast<DWORD>(nativeTitle.size()),
+        .lpstrInitialDir = nullptr,
+        .Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR,
+    };
+    if (GetSaveFileName(&dialog) == TRUE) {
+        return ConvertWChar2Char(dialog.lpstrFile);
+    }
+    return {};
+}
 
 }

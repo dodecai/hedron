@@ -72,10 +72,13 @@ public:
         mCoreWindow = Window::Create({ mSettings.Title /*, mSettings.Width, mSettings.Height*/ });
         //mCoreWindow->FullScreen(true);
         //mCoreWindow->Transparent(true);
-        mEventHandler = EventHandler::Create();
+        mDialog = Dialog::Create(mCoreWindow->AsPlatformHandle());
+        mEventHandler = EventHandler::Create(mCoreWindow->AsPlatformHandle());
         mCoreWindow->ExternalEventHandler([&](auto value) -> bool { return mEventHandler->Callback(value); });
+        mEventHandler->Register<ControllerEvent>([&](const ControllerEvent &event /*, const auto &emitter*/) { OnInputEvent(event); });
         mEventHandler->Register<MouseEvent>([&](const MouseEvent &event /*, const auto &emitter*/) { OnInputEvent(event); });
         mEventHandler->Register<KeyboardEvent>([&](const KeyboardEvent &event /*, const auto &emitter*/) { OnInputEvent(event); });
+        mEventHandler->Register<TouchEvent>([&](const TouchEvent &event /*, const auto &emitter*/) { OnInputEvent(event); });
         mEventHandler->Register<WindowEvent>([&](const WindowEvent &event /*, const auto &emitter*/) { OnAppEvent(event); });
         LogDebug("Created window '{}' with size '{}'.", mSettings.Title, mSettings.Resolution);
 
@@ -85,8 +88,6 @@ public:
         mGraphicsContext->Viewport(mCoreWindow->ContentSize());
         mGraphicsContext->VSync(mSettings.VSync);
         mGraphicsContext->Clear();
-
-        //mDialog = Dialog::Create();
 
         //mRenderer = Renderer::Create();
 
@@ -179,7 +180,6 @@ public:
             layer->OnInputEvent(event);
         }
         
-
     #ifdef APP_MODE_DEVELOP
         logger << "KeyboardEvent[";
         if (event.Action == KeyAction::Input) {
@@ -200,6 +200,15 @@ public:
             }
         }
         logger << "]" << std::endl;
+
+        if (event.State == KeyState::Release) {
+            if (event.Key == KeyCode::O) {
+                mDialog->OpenFile("Hedron Open", { "All Files (*.*)", "*.*", "C++ Module Interface", "*.ixx"});
+            }
+            if (event.Key == KeyCode::S) {
+                mDialog->SaveFile("Hedron Save As", { "All Files (*.*)", "*.*", "C++ Module Interface", "*.ixx" });
+            }
+        }
     #endif
     }
     
@@ -410,7 +419,7 @@ private:
     static inline Application *pAppInstance = nullptr;
     LayerStack mLayers;
     //Scope<Config> mConfig;
-    //Scope<Dialog> mDialog;
+    Scope<Dialog> mDialog;
     Scope<Window> mCoreWindow;
     Scope<EventHandler> mEventHandler;
     Scope<GFXContext> mGraphicsContext;

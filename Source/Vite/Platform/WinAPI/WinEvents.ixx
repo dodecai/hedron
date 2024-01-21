@@ -13,8 +13,8 @@ export namespace Hedron {
 class WinEventHandler: public EventHandler {
 public:
     /// Default
-    WinEventHandler();
-    virtual ~WinEventHandler() = default;
+    WinEventHandler(void *window);
+    virtual ~WinEventHandler();
 
     /// Events
     virtual bool Callback(void *event) override;
@@ -24,6 +24,10 @@ private:
     /// Methods
     bool Dispatch(MSG message);
     KeyModifier GetModifiers();
+
+    /// Handles
+    RAWINPUTDEVICE mRawInputDevice[1];
+    HWND mWindowHandle;
 };
 
 }

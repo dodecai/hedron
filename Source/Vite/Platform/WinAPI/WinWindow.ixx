@@ -47,7 +47,6 @@ private:
 
 private:
     /// Properties
-    //WindowData Data;
     WindowSettings mSettings {};
     wstring mWindowClass = L"Hedron::Window";
 

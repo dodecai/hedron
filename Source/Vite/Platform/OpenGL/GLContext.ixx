@@ -2,7 +2,6 @@
 
 import Vite.Core;
 import Vite.Device.GFXContext;
-import Vite.Platform.OpenGL;
 
 export namespace Hedron {
 

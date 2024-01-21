@@ -27,7 +27,7 @@ Scope<GFXContext> GFXContext::Create(void *window) {
         }
     }
 #else
-    AppAssert(false, "The selected platform is currently not supported!");
+    AppAssert(false, "The current platform isn't supported!");
     return nullptr;
 #endif
 }
