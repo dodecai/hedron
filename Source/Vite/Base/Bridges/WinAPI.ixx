@@ -26,6 +26,8 @@ using ::HMODULE;
 using ::HWND;
 using ::LRESULT;
 using ::MSG;
+using ::POINT;
+using ::RAWINPUTDEVICE;
 using ::UINT;
 using ::WPARAM;
 using ::LPARAM;

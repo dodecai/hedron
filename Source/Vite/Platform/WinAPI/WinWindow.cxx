@@ -18,10 +18,10 @@ module Vite.Platform.WinWindow;
 
 ///
 /// Helpers
-/// ToDo: Export these to Platform Helpers
 ///
 namespace {
 
+/// Platform Specific Properties
 struct PlatformWindowStyle {
     DWORD ClassStyle;
     DWORD WindowStyle;
@@ -51,6 +51,7 @@ enum class WinWindowStyleX: DWORD {
 };
 
 
+/// Platform Specific Functions
 inline std::wstring ConvertChar2WChar(const std::string &source) {
     int bufferSize = MultiByteToWideChar(CP_UTF8, 0, source.c_str(), -1, nullptr, 0);
     if (bufferSize == 0) return L"";
@@ -84,9 +85,8 @@ inline std::string GetLastErrorAsString() {
     return message;
 }
 
-///
-/// @brief Missing types for acrylic background
-///
+
+/// Missing types for acrylic background
 enum WINDOWCOMPOSITIONATTRIB {
     WCA_UNDEFINED                       = 0,
     WCA_NCRENDERING_ENABLED             = 1,
@@ -147,7 +147,7 @@ struct ACCENT_POLICY {
     DWORD AnimationId;
 };
 
-// Symbols
+/// Symbols
 typedef BOOL (WINAPI *AllowDarkModeForAppFunc)(BOOL);
 typedef BOOL (WINAPI *AllowDarkModeForWindowFunc)(HWND, BOOL);
 typedef BOOL (WINAPI *GetWindowCompositionAttributeFunction)(HWND, WINDOWCOMPOSITIONATTRIBDATA*);

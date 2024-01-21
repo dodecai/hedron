@@ -4,6 +4,7 @@ export import Vite.Device.Input.Controller;
 export import Vite.Device.Input.Keyboard;
 export import Vite.Device.Input.Mouse;
 export import Vite.Device.Input.Touch;
+import Vite.Math.Geometry;
 import Vite.Type;
 
 export namespace Hedron {
@@ -39,11 +40,11 @@ public:
     [[nodiscard]] static inline bool GetMouseButtonStateDelta(MouseButton button) {
         return mCaptureInput ? Instance->GetMouseButtonStateDeltaPlatform(button) : bool {};
     }
-    [[nodiscard]] static inline pair<float, float> GetMousePosition() {
-        return mCaptureInput ? Instance->GetMousePositionPlatform() : pair<float, float> {};
+    [[nodiscard]] static inline Position2D GetMousePosition() {
+        return mCaptureInput ? Instance->GetMousePositionPlatform() : Position2D {};
     }
-    [[nodiscard]] static inline pair<float, float> GetMousePositionDelta() {
-        return mCaptureInput ? Instance->GetMousePositionDeltaPlatform() : pair<float, float> {};
+    [[nodiscard]] static inline Position2D GetMousePositionDelta() {
+        return mCaptureInput ? Instance->GetMousePositionDeltaPlatform() : Position2D {};
     }
     [[nodiscard]] static inline float GetMouseWheelDelta() {
         return mCaptureInput ? Instance->GetMouseWheelDeltaPlatform() : float {};
@@ -54,8 +55,8 @@ protected:
     virtual bool GetKeyStatePlatform(KeyCode code) const = 0;
     virtual bool GetMouseButtonStatePlatform(MouseButton button) const = 0;
     virtual bool GetMouseButtonStateDeltaPlatform(MouseButton button) const = 0;
-    virtual pair<float, float> GetMousePositionPlatform() const = 0;
-    virtual pair<float, float> GetMousePositionDeltaPlatform() const = 0;
+    virtual Position2D GetMousePositionPlatform() const = 0;
+    virtual Position2D GetMousePositionDeltaPlatform() const = 0;
     virtual float GetMouseWheelDeltaPlatform() const = 0;
 
 protected:

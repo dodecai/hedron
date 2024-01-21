@@ -4,20 +4,7 @@
 #define VC_EXTRALEAN
 #define WIN32_LEAN_AND_MEAN
 
-#include <Windows.h>
-#include <WindowsX.h>
-
-module Vite.Platform.WinEvent;
-
-import Vite.Device.Input;
-import Vite.Event;
-import Vite.Platform.WinWindow;
-
-namespace {
-
-/// Properties
-RAWINPUTDEVICE RawInputDevice[1];
-
+/// Definitions
 #ifndef HID_USAGE_GENERIC_MOUSE
     #define HID_USAGE_GENERIC_MOUSE ((USHORT) 0x02)
 #endif
@@ -25,14 +12,34 @@ RAWINPUTDEVICE RawInputDevice[1];
     #define HID_USAGE_PAGE_GENERIC  ((USHORT) 0x01)
 #endif
 
-}
+#include <Windows.h>
+#include <WindowsX.h>
+
+module Vite.Platform.WinEvent;
+
+import Vite.Event;
+import Vite.Platform.WinWindow;
 
 namespace Hedron {
 
-WinEventHandler::WinEventHandler() {
+/// Default
+WinEventHandler::WinEventHandler(void *window) {
+    mWindowHandle = reinterpret_cast<HWND>(window);
+
+    mRawInputDevice[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
+    mRawInputDevice[0].usUsage = HID_USAGE_GENERIC_MOUSE;
+    mRawInputDevice[0].dwFlags = RIDEV_INPUTSINK;
+    mRawInputDevice[0].hwndTarget = mWindowHandle;
+    RegisterRawInputDevices(mRawInputDevice, 1, sizeof(mRawInputDevice[0]));
 }
 
-//// Events
+WinEventHandler::~WinEventHandler() {
+    RegisterRawInputDevices(mRawInputDevice, 1, sizeof(mRawInputDevice[0]));
+    mWindowHandle = nullptr;
+}
+
+
+/// Events
 bool WinEventHandler::Callback(void *event) {
     MSG &message = *reinterpret_cast<MSG *>(event);
     return Dispatch(message);
@@ -46,23 +53,14 @@ void WinEventHandler::Update() {
     }
 }
 
+
+/// Methods
 bool WinEventHandler::Dispatch(MSG message) {
 	// Properties
     HWND &hWnd = message.hwnd;
     UINT &uMsg = message.message;
     WPARAM &wParam = message.wParam;
     LPARAM &lParam = message.lParam;
-
-    // ToDo: Move to Constructor
-    static auto once = true;
-    if (once) {
-        RawInputDevice[0].usUsagePage = HID_USAGE_PAGE_GENERIC;
-        RawInputDevice[0].usUsage = HID_USAGE_GENERIC_MOUSE;
-        RawInputDevice[0].dwFlags = RIDEV_INPUTSINK;
-        RawInputDevice[0].hwndTarget = hWnd;
-        RegisterRawInputDevices(RawInputDevice, 1, sizeof(RawInputDevice[0]));
-        once = false;
-    }
 
     ///
 	/// Do the magic
@@ -79,40 +77,35 @@ bool WinEventHandler::Dispatch(MSG message) {
 
         /// Raw (must be requested by HighPrecision flag)
         case WM_INPUT: {
-            //if (MouseEvent.Empty()) break; // || KeyboardEvent.Empty()
-            //static int32_t lastX = 0;
-            //static int32_t lastY = 0;
+            if (mRawInputDevice[0].hwndTarget != hWnd) break;
 
-            //MouseEventevent event;
-            //event.Action = MouseAction::Raw;
-            //event.LastX = lastX;
-            //event.LastY = lastY;
-            //UINT dwSize = 40;
-            //static BYTE lpb[40];
+            UINT dwSize = 40;
+            static BYTE lpb[40];
+            auto rawInputData = GetRawInputData(reinterpret_cast<HRAWINPUT>(lParam), RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
+            auto *raw = reinterpret_cast<RAWINPUT *>(lpb);
 
-            //// Get event
-            //uint32_t lr = GetRawInputevent((HRAWINPUT)msg.lParam, RID_INPUT, lpb, &dwSize, sizeof(RAWINPUTHEADER));
-            //if (lr != dwSize) OutputDebugString(TEXT("GetRawInputevent does not return correct size !\n"));
-            //RAWINPUT *raw = (RAWINPUT *)lpb;
+            switch (raw->header.dwType) {
+                case RIM_TYPEMOUSE: {
+                    //MouseEvent event;
+                    //event.Action = MouseAction::Raw;
 
-            //// Extract raw event
-            //switch (raw->header.dwType) {
-            //	case RIM_TYPEKEYBOARD: {
-            //		break;
-            //	}
-            //	case RIM_TYPEMOUSE: {
-            //		event.X = raw->event.mouse.lLastX;
-            //		event.Y = raw->event.mouse.lLastY;
-            //		break;
-            //	}
-            //}
-            //event.DeltaX = event.X - event.LastX;
-            //event.DeltaY = event.Y - event.LastY;
-            //lastX = event.X;
-            //lastY = event.Y;
+                    //Publish(event);
+                    break;
+                }
 
-            //// Finalization
-            //MouseEvent.Publish(event);
+                case RIM_TYPEKEYBOARD: {
+                    //KeyboardEvent event;
+                    //event.Action = KeyAction::Raw;
+
+                    //Publish(event);
+                    break;
+                }
+                
+                default: {
+                    break;
+                }
+            }
+            
             break;
         }
 		

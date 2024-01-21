@@ -5,17 +5,17 @@
 module Vite.Event;
 
 import Vite.Logger;
-#ifdef APP_PLATFORM_WINDOWS
+#if defined APP_PLATFORM_WINDOWS
     import Vite.Platform.WinEvent;
 #endif
 
 namespace Hedron {
 
-Scope<EventHandler> EventHandler::Create() {
+Scope<EventHandler> EventHandler::Create(void *window) {
 #ifdef APP_PLATFORM_WINDOWS
-    return CreateScope<WinEventHandler>();
+    return CreateScope<WinEventHandler>(window);
 #else
-    AppAssert(nullptr, "The current platform isn't supported!");
+    AppAssert(false, "The current platform isn't supported!");
     return nullptr;
 #endif
 }
