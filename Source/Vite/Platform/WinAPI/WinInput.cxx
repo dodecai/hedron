@@ -16,8 +16,8 @@ bool WinInput::GetMouseButtonStatePlatform(MouseButton button) const {
         case MouseButton::Left:		return (bool)::GetAsyncKeyState((int)VK_LBUTTON);
         case MouseButton::Middle:	return (bool)::GetAsyncKeyState((int)VK_MBUTTON);
         case MouseButton::Right:	return (bool)::GetAsyncKeyState((int)VK_RBUTTON);
-        case MouseButton::X1:		return (bool)::GetAsyncKeyState((int)VK_XBUTTON1);
-        case MouseButton::X2:		return (bool)::GetAsyncKeyState((int)VK_XBUTTON2);
+        case MouseButton::Extra1:	return (bool)::GetAsyncKeyState((int)VK_XBUTTON1);
+        case MouseButton::Extra2:	return (bool)::GetAsyncKeyState((int)VK_XBUTTON2);
         default:					return false;
     }
 }
@@ -51,7 +51,7 @@ bool WinInput::GetMouseButtonStateDeltaPlatform(MouseButton button) const {
             }
             break;
         }
-        case MouseButton::X1: {
+        case MouseButton::Extra1: {
             static thread_local bool last {};
             auto current = (bool)::GetAsyncKeyState((int)VK_XBUTTON1);
             if (current != last) {
@@ -60,7 +60,7 @@ bool WinInput::GetMouseButtonStateDeltaPlatform(MouseButton button) const {
             }
             break;
         }
-        case MouseButton::X2: {
+        case MouseButton::Extra2: {
             static thread_local bool last {};
             auto current = (bool)::GetAsyncKeyState((int)VK_XBUTTON2);
             if (current != last) {

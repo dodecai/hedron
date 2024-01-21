@@ -112,6 +112,47 @@ inline auto &operator^=(E &lhs, E rhs) noexcept requires EnableBitMaskOperators<
 
 
 ///
+/// @brief Enable Named Enum Stream Operators
+///
+template<typename E>
+struct EnableNamedEnumStreamOperators {
+    static const bool Enable = false;
+};
+
+// Trait
+template<typename T>
+struct NamedEnumTraits;
+
+// Overload
+template<typename E>
+inline auto &operator<<(std::ostream &stream, const E &value) noexcept requires EnableNamedEnumStreamOperators<E>::Enable {
+    stream << NamedEnumTraits<E>::Names[static_cast<size_t>(value)];
+    return stream;
+}
+
+
+///
+/// @brief Enable Named Enum Formatter
+///
+template<typename E>
+struct EnableNamedEnumFormatter {
+    static const bool Enable = false;
+};
+
+template<typename E>
+struct std::formatter<E, std::enable_if_t<EnableNamedEnumFormatter<E>::Enable, char>> {
+    constexpr auto parse(std::format_parse_context &ctx) {
+        return ctx.begin();
+    }
+
+    template<typename FormatContext>
+    auto format(const E &e, FormatContext &ctx) {
+        return std::format_to(ctx.out(), "{}", Hedron::NamedEnumTraits<E>::Names[static_cast<size_t>(e)]);
+    }
+};
+
+
+///
 /// Category: string_view
 ///
 

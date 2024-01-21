@@ -545,6 +545,14 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         }
 
         // Custom Title Bar
+        case WM_MOUSEACTIVATE: {
+            //if (HIWORD(lParam) == WM_LBUTTONDBLCLK) {
+            //    if (LOWORD(lParam) == HTCLIENT) {
+            //        // Don't capture mouse on title click
+            //    }
+            //}
+            break;
+        }
         case WM_NCCALCSIZE: {
             if (mSettings.Style == WindowStyle::Borderless && lParam) {
                 const int borderX = GetSystemMetrics(SM_CXSIZEFRAME) / 2;
@@ -566,6 +574,8 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             auto hasThickFrame = GetWindowLongPtr(hWnd, GWL_STYLE) & WS_THICKFRAME;
             if (mSettings.Style != WindowStyle::Borderless || !hasThickFrame) break;
             break;
+
+            #ifdef LEGACY_CODE
 
             // Test for custom frames
             POINT cursorPosition = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
@@ -598,6 +608,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             if (testTitleBarHit) {
                 return HTCAPTION;
             };
+            #endif
         }
 
         // Creation and Destruction
