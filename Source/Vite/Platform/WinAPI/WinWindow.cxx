@@ -34,16 +34,20 @@ enum class ClassStyle: DWORD {
 };
 
 enum class WinWindowStyle: DWORD {
-    Default		= WS_OVERLAPPEDWINDOW, // Contains: WS_SYSMENU | WS_CAPTION | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_VISIBLE
-    Aero		= WS_POPUP | WS_THICKFRAME | WS_VISIBLE,
-    Borderless	= WS_POPUP | WS_THICKFRAME | WS_VISIBLE,
-    Full		= WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_VISIBLE,
+    CustomTitleBar	= WS_POPUP | WS_THICKFRAME | WS_VISIBLE,
+    FullScreen	    = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_VISIBLE,
+    TitleBar        = WS_OVERLAPPEDWINDOW, // Contains: WS_SYSMENU | WS_CAPTION | WS_MAXIMIZEBOX | WS_MINIMIZEBOX | WS_VISIBLE
+
+    Default         = TitleBar,
 };
 
 enum class WinWindowStyleX: DWORD {
-    DefaultX	= WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
-    FullX		= WS_EX_APPWINDOW,
-    Test		= WS_EX_APPWINDOW | WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE,
+    CustomTitleBarX = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
+    FullScreenX	    = WS_EX_APPWINDOW,
+    TitleBarX       = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE,
+    //Test          = WS_EX_APPWINDOW | WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE | WS_EX_STATICEDGE,
+
+    DefaultX    = TitleBarX,
 };
 
 
@@ -203,19 +207,24 @@ WinWindow::WinWindow(const WindowSettings &settings): mSettings { settings } {
     unsigned int screenHeight = GetSystemMetricsForDpi(SM_CYSCREEN, GetDpiForSystem());
     RECT dimension = {};
     switch (mSettings.Style) {
-        case WindowStyle::Default: {
-            windowStyle.WindowStyle = (DWORD)WinWindowStyle::Default;
-            windowStyle.WindowStyleEx = (DWORD)WinWindowStyleX::DefaultX;
-            break;
-        }
-        case WindowStyle::Borderless: {
-            windowStyle.WindowStyle = (DWORD)WinWindowStyle::Borderless;
-            windowStyle.WindowStyleEx = (DWORD)WinWindowStyleX::DefaultX;
+        case WindowStyle::CustomTitleBar: {
+            windowStyle.WindowStyle = (DWORD)WinWindowStyle::CustomTitleBar;
+            windowStyle.WindowStyleEx = (DWORD)WinWindowStyleX::CustomTitleBarX;
             break;
         }
         case WindowStyle::FullScreen: {
-            windowStyle.WindowStyle = (DWORD)WinWindowStyle::Full;
-            windowStyle.WindowStyleEx = (DWORD)WinWindowStyleX::FullX;
+            windowStyle.WindowStyle = (DWORD)WinWindowStyle::FullScreen;
+            windowStyle.WindowStyleEx = (DWORD)WinWindowStyleX::FullScreenX;
+            break;
+        }
+        case WindowStyle::TitleBar: {
+            windowStyle.WindowStyle = (DWORD)WinWindowStyle::TitleBar;
+            windowStyle.WindowStyleEx = (DWORD)WinWindowStyleX::TitleBarX;
+            break;
+        }
+        default: {
+            windowStyle.WindowStyle = (DWORD)WinWindowStyle::Default;
+            windowStyle.WindowStyleEx = (DWORD)WinWindowStyleX::DefaultX;
             break;
         }
     }
@@ -279,10 +288,10 @@ WinWindow::~WinWindow() {
     
     // Ensure that the Window Class gets released
     if (mApplicationHandle) {
-        //if (!UnregisterClass(ConvertChar2WChar(Properties.ID).c_str(), mApplicationHandle)) {
-        //    LogError("Could not unregister window class.");
-        //    Log("{}", GetLastErrorAsString());
-        //}
+        if (!UnregisterClass(mWindowClass.c_str(), mApplicationHandle)) {
+            LogError("Could not unregister window class.");
+            Log("{}", GetLastErrorAsString());
+        }
     }
 }
 
@@ -393,6 +402,7 @@ void WinWindow::Transparent(bool transparent) {
 Size2D WinWindow::ContentSize() const {
 	RECT dimension;
 	GetClientRect(mWindowHandle, &dimension);
+
     auto width = static_cast<float>(dimension.right - dimension.left);
     auto height = static_cast<float>(dimension.bottom - dimension.top);
 
@@ -400,10 +410,6 @@ Size2D WinWindow::ContentSize() const {
 }
 
 const Position2D &WinWindow::Position() const {
-	//WINDOWPLACEMENT position;
-	//GetWindowPlacement(mWindowHandle, &position);
-    //return { static_cast<float>(position.ptMinPosition.x), static_cast<float>(position.ptMinPosition.y) };
-
     return mSettings.Position;
 }
 
@@ -420,9 +426,6 @@ bool WinWindow::State(WindowState state) const {
 }
 
 const string &WinWindow::Title() const {
-    //vector<wchar_t> title(1024);
-	//GetWindowText(mWindowHandle, title.data(), sizeof_vector(title));
-
     return mSettings.Title;
 }
 
@@ -435,24 +438,28 @@ void Hedron::WinWindow::CursorPosition(const Position2D &position) {
 }
 
 void WinWindow::Position(const Position2D &position) {
-    if (!SetWindowPos(mWindowHandle, 0, static_cast<int>(position.X), static_cast<int>(position.Y), 0, 0, SWP_NOSIZE | SWP_NOZORDER)) {
+    auto x = static_cast<int>(position.X);
+    auto y = static_cast<int>(position.Y);
+
+    if (!SetWindowPos(mWindowHandle, 0, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER)) {
         LogError("Error occurred while setting display position!");
     }
     mSettings.Position = position;
 }
 
 void WinWindow::Progress(float progress) {
-    //static uint32_t max = 100;
-    //uint32_t current = (uint32_t)(progress * (float)max);
-    //TaskbarList->SetProgressValue(WindowHandle, current, max);
+    static float max = 100.0f;
+    float current = (float)(progress * max);
+    mTaskbarList->SetProgressValue(mWindowHandle, current, max);
 }
 
 void WinWindow::Settings(const WindowSettings &settings) {
-    //mSettings = settings;
-    
-    //SetDisplayPosition(properties.Position.X, properties.Position.Y);
-    //SetDisplaySize(properties.Size.Width, properties.Size.Height);
-    //SetTitle(properties.Title);
+    Position(settings.Position);
+    Size(settings.Size);
+    Title(settings.Title);
+    mSettings.MaxSize = settings.MaxSize;
+    mSettings.MinSize = settings.MinSize;
+    //mSettings.Style = settings.Style;
 }
 
 void WinWindow::Size(const Size2D &size) {
@@ -467,10 +474,9 @@ void WinWindow::Size(const Size2D &size) {
 
 void WinWindow::Title(string_view title) {
     mSettings.Title = title;
-    //if (!SetWindowText(WindowHandle, ConvertChar2WChar(title.data()).c_str())) {
-    //       LogError("Error occurred while setting title!");
-    //	return;
-    //}
+    if (!SetWindowText(mWindowHandle, ConvertChar2WChar(title.data()).c_str())) {
+        LogError("Error occurred while setting title!");
+    }
 }
 
 
@@ -534,120 +540,80 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     }
 
     // Process important window related events internally
+    // - Window Notifications: https://learn.microsoft.com/en-us/windows/win32/winmsg/window-notifications
     switch (uMsg) {
-        // Pre-Check: Does this message belong to the current window?
+        /// Pre-Check: Does this message belong to the current window?
         case WM_NULL: {
-            // Note: Could be useful in the future.
+            // Always ignore this message
             break;
         }
 
-        // Preparation
+        /// Preparation and Finalization
         case WM_NCCREATE: {
-            // Note: Could be useful in the future.
+            // Before the window is created
             break;
         }
-        case WM_NCDESTROY : {
-            // Note: Could be useful in the future.
+        case WM_NCDESTROY: {
+            // After the window has been destroyed
+            mWindowHandle = nullptr;
             break;
         }
-
-        // Custom Title Bar
-        case WM_MOUSEACTIVATE: {
-            //if (HIWORD(lParam) == WM_LBUTTONDBLCLK) {
-            //    if (LOWORD(lParam) == HTCLIENT) {
-            //        // Don't capture mouse on title click
-            //    }
-            //}
-            break;
-        }
-        case WM_NCCALCSIZE: {
-            if (mSettings.Style == WindowStyle::Borderless && lParam) {
-                const int borderX = GetSystemMetrics(SM_CXSIZEFRAME) / 2;
-                const int borderY = GetSystemMetrics(SM_CYSIZEFRAME) / 2;
-
-                auto hasThickFrame = GetWindowLongPtr(hWnd, GWL_STYLE) & WS_THICKFRAME;
-                if (!hasThickFrame) { break; }
-
-                auto *params = reinterpret_cast<NCCALCSIZE_PARAMS *>(lParam);
-                params->rgrc[0].left += borderX;
-                params->rgrc[0].top += borderY;
-                params->rgrc[0].right -= borderX;
-                params->rgrc[0].bottom -= borderY;
-
-                return WVR_ALIGNLEFT | WVR_ALIGNTOP | WVR_ALIGNBOTTOM | WVR_ALIGNRIGHT;
-            }
-           break;
-        }
-        case WM_NCHITTEST: {
-            auto hasThickFrame = GetWindowLongPtr(hWnd, GWL_STYLE) & WS_THICKFRAME;
-            if (mSettings.Style != WindowStyle::Borderless || !hasThickFrame) break;
-            break;
-
-            #ifdef LEGACY_CODE
-
-            // Test for custom frames
-            POINT cursorPosition = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
-            ScreenToClient(hWnd, &cursorPosition);
-            if (false /*!Data.Maximized*/) {
-                RECT clientRect {};
-                GetClientRect(hWnd, &clientRect);
-
-                const int borderSizeVertical = GetSystemMetrics(SM_CYFRAME);
-                int hit = 0;
-                enum { left = 1, top = 2, right = 4, bottom = 8 };
-                
-                static RECT borderThickness { 4, 4, 4, 4 };
-                if (cursorPosition.x <= borderThickness.left) hit |= left;
-                if (cursorPosition.x >= clientRect.right - borderThickness.right) hit |= right;
-                if (cursorPosition.y <= borderThickness.top || cursorPosition.y < borderSizeVertical) hit |= top;
-                if (cursorPosition.y >= clientRect.bottom - borderThickness.bottom) hit |= bottom;
-                
-                if (hit & top && hit & left)        return HTTOPLEFT;
-                if (hit & top && hit & right)       return HTTOPRIGHT;
-                if (hit & bottom && hit & left)     return HTBOTTOMLEFT;
-                if (hit & bottom && hit & right)    return HTBOTTOMRIGHT;
-                if (hit & left)                     return HTLEFT;
-                if (hit & top)                      return HTTOP;
-                if (hit & right)                    return HTRIGHT;
-                if (hit & bottom)                   return HTBOTTOM;
-            }
-
-            auto testTitleBarHit = 0;
-            if (testTitleBarHit) {
-                return HTCAPTION;
-            };
-            #endif
-        }
-
-        // Creation and Destruction
+        
+        /// Actions
         case WM_CLOSE: {
-            // Ensure that the Window gets destroyed and release the handle to it
-            if (DestroyWindow(mWindowHandle)) {
-                mWindowHandle = nullptr;
-            } else {
+            // Try to destroy the window, otherwise let the system handle it
+            if (!DestroyWindow(mWindowHandle)) {
                 LogError("Could not release handle to window.\n");
+                break;
             }
             return 0;
         }
         case WM_CREATE: {
             mState |= WindowState::Alive;
+
+            auto info = reinterpret_cast<CREATESTRUCT *>(lParam);
+            auto x = static_cast<float>(info->x);
+            auto y = static_cast<float>(info->y);
+            auto width = static_cast<float>(info->cx);
+            auto height = static_cast<float>(info->cy);
+
+            auto windowClass = info->lpszClass;
+            if (mWindowClass != windowClass) {
+                LogFatal("Detected window class mismatch!");
+            }
+            
+            mSettings.Position = { x, y };
+            mSettings.Size = { width, height };
+
             break;
         }
         case WM_DESTROY: {
             mState &= ~WindowState::Alive;
 
+            // Say goodbye
             PostQuitMessage(0);
             return 0;
         }
+        case WM_PAINT: {
+            mState |= WindowState::Drawing;
 
-        // Information
-        case WM_DPICHANGED: {
-            // Note: Could be useful in the future.
+            //PAINTSTRUCT ps {};
+            //HDC context = BeginPaint(hWnd, &ps);
+            // ToDo: Implement Software Rendering
+            //FillRect(context, &ps.rcPaint, ClearColor);
+            //EndPaint(hWnd, &ps);
+
+            mState &= ~WindowState::Drawing;
+            break;
+        }
+        case WM_ERASEBKGND: {
+            // Prevent system clearing the window (OpenGL/Vulkan will do that)
+            return 0;
             break;
         }
         case WM_GETMINMAXINFO: {
             if (mSettings.Style == WindowStyle::FullScreen) { break; }
-            
+
             MINMAXINFO *bounds = reinterpret_cast<MINMAXINFO *>(lParam);
             auto maxWidth = static_cast<LONG>(mSettings.MaxSize.Width);
             auto maxHeight = static_cast<LONG>(mSettings.MaxSize.Height);
@@ -662,71 +628,136 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                 bounds->ptMinTrackSize.x = minWidth;
                 bounds->ptMinTrackSize.y = minHeight;
             }
-            
-            break;
-        }
 
-        // Drawing
-        case WM_PAINT: {
-            mState |= WindowState::Drawing;
-
-            //PAINTSTRUCT ps {};
-            //HDC deviceContext = BeginPaint(hWnd, &ps);
-            // ToDo: Implement Software Rendering
-            //FillRect(deviceContext, &ps.rcPaint, ClearColor);
-            //EndPaint(hWnd, &ps);
-
-            mState &= ~WindowState::Drawing;
-            break;
-        }
-        case WM_ERASEBKGND: {
-            // Prevent system clearing the window.
             return 0;
-            break;
         }
         case WM_MOVE: {
-            // Note: Could be useful in the future.
-            break;
-        }
-        case WM_SHOWWINDOW: {
-            if (wParam == TRUE) {
-                mState |= WindowState::Visible;
-            } else {
-                mState &= ~WindowState::Visible;
-            }
+            auto x = static_cast<float>(GET_X_LPARAM(lParam));
+            auto y = static_cast<float>(GET_Y_LPARAM(lParam));
+
+            mLastPosition = mSettings.Position;
+            mSettings.Position = { x, y };
+            mDeltaPosition = { mSettings.Position.X - mLastPosition.X, mSettings.Position.Y - mLastPosition.Y };
             break;
         }
         case WM_SIZE: {
+            auto width = static_cast<float>(LOWORD(lParam));
+            auto height = static_cast<float>(HIWORD(lParam));
+
             switch (wParam) {
-                case SIZE_MAXIMIZED: {
-                    mState |= WindowState::Maximized;
-                    mState &= ~WindowState::Minimized;
-                    break;
-                }
-                case SIZE_MINIMIZED: {
-                    mState |= WindowState::Minimized;
-                    mState &= ~WindowState::Maximized;
-                    break;
-                }
                 case SIZE_RESTORED: {
+                    mState |= WindowState::Restored;
+                    mState |= WindowState::Visible;
+
                     mState &= ~WindowState::FullScreen;
                     mState &= ~WindowState::Maximized;
                     mState &= ~WindowState::Minimized;
                 }
+                case SIZE_MINIMIZED: {
+                    mState |= WindowState::Minimized;
+                    mState &= ~WindowState::Visible;
+
+                    mState &= ~WindowState::FullScreen;
+                    mState &= ~WindowState::Maximized;
+                    mState &= ~WindowState::Restored;
+                    break;
+                }
+                case SIZE_MAXIMIZED: {
+                    mState |= WindowState::Maximized;
+                    mState |= WindowState::Visible;
+
+                    mState &= ~WindowState::FullScreen;
+                    mState &= ~WindowState::Minimized;
+                    mState &= ~WindowState::Restored;
+                    break;
+                }
+                case SIZE_MAXSHOW: {
+                    mState |= WindowState::Visible;
+                    break;
+                }
+                case SIZE_MAXHIDE: {
+                    mState &= ~WindowState::Visible;
+                    break;
+                }
             }
 
-            auto width = static_cast<float>(LOWORD(lParam));
-            auto height = static_cast<float>(HIWORD(lParam));
+            mLastSize = mSettings.Size;
             mSettings.Size = { width, height };
-
+            mDeltaPosition = { mSettings.Size.Width - mLastSize.Width, mSettings.Size.Height - mLastSize.Height };
             break;
         }
         case WM_SIZING: {
-            //RedrawWindow(hWnd, nullptr, nullptr, RDW_UPDATENOW | RDW_NOERASE);
+            // Enable redraw while resizing
+            auto *rect = reinterpret_cast<RECT *>(lParam);
+            RedrawWindow(hWnd, rect, nullptr, RDW_UPDATENOW);
             break;
         }
 
-        // State
+        /// Custom Title Bar
+        case WM_MOUSEACTIVATE: {
+            // Don't capture mouse on title click
+            //if (HIWORD(lParam) == WM_LBUTTONDBLCLK) {
+            //    if (LOWORD(lParam) == HTCLIENT) {
+            //    }
+            //}
+            break;
+        }
+        case WM_NCCALCSIZE: {
+            if (mSettings.Style != WindowStyle::CustomTitleBar || !lParam) break;
+
+            auto hasThickFrame = GetWindowLongPtr(hWnd, GWL_STYLE) & WS_THICKFRAME;
+            if (!hasThickFrame) break;
+
+            const int borderX = GetSystemMetrics(SM_CXSIZEFRAME) / 2;
+            const int borderY = GetSystemMetrics(SM_CYSIZEFRAME) / 2;
+
+            auto *params = reinterpret_cast<NCCALCSIZE_PARAMS *>(lParam);
+            params->rgrc[0].left += borderX;
+            params->rgrc[0].top += borderY;
+            params->rgrc[0].right -= borderX;
+            params->rgrc[0].bottom -= borderY;
+
+            return WVR_ALIGNLEFT | WVR_ALIGNTOP | WVR_ALIGNBOTTOM | WVR_ALIGNRIGHT;
+        }
+        case WM_NCHITTEST: {
+            if (mSettings.Style != WindowStyle::CustomTitleBar || State(WindowState::FullScreen)) break;
+
+            auto hasThickFrame = GetWindowLongPtr(hWnd, GWL_STYLE) & WS_THICKFRAME;
+            if (!hasThickFrame) break;
+
+            POINT cursor = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
+
+            ScreenToClient(hWnd, &cursor);
+            RECT clientRect {};
+            GetClientRect(hWnd, &clientRect);
+
+            const int borderH = GetSystemMetrics(SM_CXFRAME);
+            const int borderV = GetSystemMetrics(SM_CYFRAME);
+            const int borderX = GetSystemMetrics(SM_CXSIZEFRAME) / 2;
+            const int borderY = GetSystemMetrics(SM_CYSIZEFRAME) / 2;
+            static RECT border { borderX, borderY, borderX, borderY };
+
+            enum { left = 1, top = 2, right = 4, bottom = 8 };
+            auto hit = 0;
+            if (cursor.x <= border.left) hit |= left;
+            if (cursor.x >= clientRect.right - border.right) hit |= right;
+            if (cursor.y <= border.top || cursor.y < borderV) hit |= top;
+            if (cursor.y >= clientRect.bottom - border.bottom) hit |= bottom;
+
+            switch (hit) {
+                case left:              return HTLEFT;
+                case top:               return HTTOP;
+                case right:             return HTRIGHT;
+                case bottom:            return HTBOTTOM;
+                case top | left:        return HTTOPLEFT;
+                case top | right:       return HTTOPRIGHT;
+                case bottom | left:     return HTBOTTOMLEFT;
+                case bottom | right:    return HTBOTTOMRIGHT;
+            }
+            return HTCAPTION;
+        }
+
+        /// State
         case WM_ACTIVATE: {
             if (wParam == WA_INACTIVE) {
                 mState &= ~WindowState::Active;
@@ -735,8 +766,21 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             }
             break;
         }
-        case WM_CAPTURECHANGED: {
-            break;
+        case WM_DPICHANGED: {
+            auto dpiX = static_cast<float>(LOWORD(wParam));
+            auto dpiY = static_cast<float>(HIWORD(wParam));
+
+            auto *rect = reinterpret_cast<RECT *>(lParam);
+
+            auto x = static_cast<float>(rect->left);
+            auto y = static_cast<float>(rect->top);
+            auto width = static_cast<float>(rect->right - rect->left);
+            auto height = static_cast<float>(rect->bottom - rect->top);
+
+            Position({ x, y });
+            Size({ width, height });
+
+            return 0;
         }
         case WM_KILLFOCUS: {
             mState &= ~WindowState::Focused;
@@ -762,8 +806,31 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             //SetCursorPos(position.x, position.y);
             break;
         }
-
-        // System
+        case WM_SHOWWINDOW: {
+            if (wParam == TRUE) {
+                mState |= WindowState::Visible;
+                switch (lParam) {
+                    case SW_PARENTCLOSING: {
+                        break;
+                    }
+                    case SW_OTHERZOOM: {
+                        break;
+                    }
+                    case SW_PARENTOPENING: {
+                        break;
+                    }
+                    case SW_OTHERUNZOOM: {
+                        break;
+                    }
+                    default: {
+                        break;
+                    }
+                }
+            } else {
+                mState &= ~WindowState::Visible;
+            }
+            break;
+        }
         case WM_SYSCOMMAND: {
             // Disable the menu system commands (ALT, F10), so that they don't steal the focus
             if (wParam == SC_KEYMENU) return 0;
@@ -783,7 +850,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             break;
         }
 
-        // Default: Currently nothing of interest
+        /// Default: Currently nothing of interest
         default: {
             break;
         }
@@ -795,7 +862,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 #ifdef LEGACY_CODE
 void *WinWindow::LoadIconFile(const string &icon) {
     return LoadImage(
-        NULL,				// Handle Instance must be NULL when loading from a files
+        nullptr,			// Handle Instance must be NULL when loading from a files
         ConvertChar2WChar(icon).c_str(),		// Icon File
         IMAGE_ICON,			// Specifies that the file is an icon
         0,					// Width of the image (we'll specify default later on)

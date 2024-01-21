@@ -23,6 +23,7 @@ public:
 private:
     /// Methods
     bool Dispatch(MSG message);
+    KeyModifier GetModifiers();
 };
 
 }

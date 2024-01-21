@@ -1,4 +1,13 @@
-﻿export module Vite.App;
+﻿module;
+
+///
+/// Switches
+///
+
+// This switch enables the development mode.
+#define APP_MODE_DEVELOP
+
+export module Vite.App;
 
 export import Vite.App.Arguments;
 export import Vite.App.Layers;
@@ -116,11 +125,6 @@ public:
 
     // This method is triggered when a window event occurs.
     virtual void OnAppEvent(const WindowEvent &event) {
-        for (auto layer : mLayers) {
-            if (event.Handled) break;
-            layer->OnAppEvent(event);
-        }
-
         switch (event.Action) {
             case WindowAction::Destroy: {
                 Exit();
@@ -137,47 +141,98 @@ public:
             }
         }
 
-        logger << event.Action << std::endl;
+        for (auto *layer : mLayers) {
+            if (event.Handled) break;
+            layer->OnAppEvent(event);
+        }
+
+    #ifdef APP_MODE_DEVELOP
+        logger << "WindowEvent[";
+        if (event.Action == WindowAction::Move) {
+            logger << "Action: '" << event.Action << "' | ";
+            logger << "Position: '" << event.Position.X << "|" << event.Position.Y << "'";
+        } else if (event.Action == WindowAction::Resize) {
+            logger << "Action: '" << event.Action << "' | ";
+            logger << "Size: '" << event.Size.Width << "x" << event.Size.Height << "'";
+        } else {
+            logger << "Action: '" << event.Action << "'";
+        }
+        logger << "]" << std::endl;
+    #endif
     }
 
     // This method is triggered when a controller input event occurs.
     virtual void OnInputEvent(const ControllerEvent &event) {
-        for (auto layer : mLayers) {
+        for (auto *layer : mLayers) {
             if (event.Handled) break;
             layer->OnInputEvent(event);
         }
+
+    #ifdef APP_MODE_DEVELOP
+    #endif
     }
     
     // This method is triggered when a keyboard input event occurs.
     virtual void OnInputEvent(const KeyboardEvent &event) {
-        for (auto layer : mLayers) {
+        for (auto *layer : mLayers) {
             if (event.Handled) break;
             layer->OnInputEvent(event);
         }
+        
 
-        if (event.State == KeyState::Press) {
-            logger << event.Key << std::endl;
+    #ifdef APP_MODE_DEVELOP
+        logger << "KeyboardEvent[";
+        if (event.Action == KeyAction::Input) {
+            logger << "Action: '" << event.Action << "' | ";
+            logger.Flush();
+            std::wcout << "Character: '" << event.Character << "'";
+        } else {
+            if (event.State == KeyState::Repeat) {
+                logger << "Action: '" << event.Action << "' | ";
+                logger << "Key: '" << event.Key << "' | ";
+                logger << "State: '" << event.State << "' | ";
+                logger << "Repeats: '" << event.Repeats << "'";
+            } else {
+                logger << "Action: '" << event.Action << "' | ";
+                logger << "Key: '" << event.Key << "' | ";
+                logger << "State: '" << event.State << "'";
+
+            }
         }
+        logger << "]" << std::endl;
+    #endif
     }
     
     // This method is triggered when a mouse input event occurs.
     virtual void OnInputEvent(const MouseEvent &event) {
-        for (auto layer : mLayers) {
+        for (auto *layer : mLayers) {
             if (event.Handled) break;
             layer->OnInputEvent(event);
         }
-
-        if (event.State == MouseButtonState::Press) {
-            logger << event.Button << std::endl;
+        
+    #ifdef APP_MODE_DEVELOP
+        logger << "MouseEvent[";
+        if (event.Action == MouseAction::Click || event.Action == MouseAction::DoubleClick || event.Action == MouseAction::Hold) {
+            logger << "Action: '" << event.Action << "' | ";
+            logger << "Button: '" << event.Button << "' | ";
+            logger << "State: '" << event.State << "'";
+        } else if (event.Action == MouseAction::Move) {
+            logger << "Action: '" << event.Action << "' | ";
+            logger << "Position: '" << event.Position.X << "|" << event.Position.Y << "'";
         }
+        logger << "]" << std::endl;
+    #endif
     }
     
     // This method is triggered when a touch input event occurs.
     virtual void OnInputEvent(const TouchEvent &event) {
-        for (auto layer : mLayers) {
+        for (auto *layer : mLayers) {
             if (event.Handled) break;
             layer->OnInputEvent(event);
         }
+
+    #ifdef APP_MODE_DEVELOP
+    #endif
     }
 
     ///
@@ -354,14 +409,13 @@ private:
     /// Systems
     static inline Application *pAppInstance = nullptr;
     LayerStack mLayers;
-    Scope<ThreadPool> mThreadPool;
+    //Scope<Config> mConfig;
+    //Scope<Dialog> mDialog;
     Scope<Window> mCoreWindow;
     Scope<EventHandler> mEventHandler;
     Scope<GFXContext> mGraphicsContext;
-    //Reference<Config> mConfig;
-    //Reference<Dialog> mDialog;
+    Scope<ThreadPool> mThreadPool;
     //Scope<Renderer> mRenderer;
-    
     //ImGuiLayer *pImGuiLayer;
 };
 

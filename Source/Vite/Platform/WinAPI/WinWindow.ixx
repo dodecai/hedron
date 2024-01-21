@@ -43,7 +43,7 @@ private:
     /// Methods
     LRESULT Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     //HICON LoadIconFile(const string &icon);
-    //void *LoadIconResource(const uint32_t id);
+    //HICON *LoadIconResource(const uint32 id);
 
 private:
     /// Properties

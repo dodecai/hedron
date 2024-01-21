@@ -12,8 +12,6 @@ enum class KeyAction {
     Undefined,
     Input,
 	Raw,
-    Repeat,
-    Count,
 };
 
 // Key Action Names
@@ -658,7 +656,7 @@ struct NamedEnumTraits<KeyModifier> {
 enum class KeyState {
     Undefined,
     Press,
-	Hold,
+	Repeat,
     Release,
 };
 

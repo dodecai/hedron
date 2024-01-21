@@ -67,7 +67,6 @@ struct NamedEnumTraits<MouseButton> {
 enum class MouseButtonState {
     Undefined,
 	Press,
-	Hold,
 	Release,
 };
 
@@ -77,7 +76,6 @@ struct NamedEnumTraits<MouseButtonState> {
     static constexpr string_view Names[] = {
         "Undefined",
         "Press",
-        "Hold",
         "Release",
     };
 };
