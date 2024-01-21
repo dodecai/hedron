@@ -526,6 +526,13 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     ///	 - https://docs.microsoft.com/en-us/windows/win32/inputdev/keyboard-input-notifications
     ///	 - https://docs.microsoft.com/en-us/windows/win32/gdi/painting-and-drawing-messages
     ///
+
+    // Publish events to an external event system
+    if (mExternalEventHandler) {
+        MSG message = { hWnd, uMsg, wParam, lParam };
+        if (mExternalEventHandler(&message)) return 0;
+    }
+
     // Process important window related events internally
     switch (uMsg) {
         // Pre-Check: Does this message belong to the current window?
@@ -569,6 +576,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
                 return WVR_ALIGNLEFT | WVR_ALIGNTOP | WVR_ALIGNBOTTOM | WVR_ALIGNRIGHT;
             }
+           break;
         }
         case WM_NCHITTEST: {
             auto hasThickFrame = GetWindowLongPtr(hWnd, GWL_STYLE) & WS_THICKFRAME;
@@ -619,9 +627,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             } else {
                 LogError("Could not release handle to window.\n");
             }
-
-            return TRUE;
-            break;
+            return 0;
         }
         case WM_CREATE: {
             mState |= WindowState::Alive;
@@ -631,8 +637,7 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             mState &= ~WindowState::Alive;
 
             PostQuitMessage(0);
-            return TRUE;
-            break;
+            return 0;
         }
 
         // Information
@@ -658,7 +663,6 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                 bounds->ptMinTrackSize.y = minHeight;
             }
             
-            return TRUE;
             break;
         }
 
@@ -666,18 +670,18 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         case WM_PAINT: {
             mState |= WindowState::Drawing;
 
-            PAINTSTRUCT ps {};
-            HDC deviceContext = BeginPaint(hWnd, &ps);
+            //PAINTSTRUCT ps {};
+            //HDC deviceContext = BeginPaint(hWnd, &ps);
             // ToDo: Implement Software Rendering
             //FillRect(deviceContext, &ps.rcPaint, ClearColor);
-            EndPaint(hWnd, &ps);
+            //EndPaint(hWnd, &ps);
 
             mState &= ~WindowState::Drawing;
             break;
         }
         case WM_ERASEBKGND: {
             // Prevent system clearing the window.
-            return TRUE;
+            return 0;
             break;
         }
         case WM_MOVE: {
@@ -762,13 +766,13 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         // System
         case WM_SYSCOMMAND: {
             // Disable the menu system commands (ALT, F10), so that they don't steal the focus
-            if (wParam == SC_KEYMENU) return TRUE;
+            if (wParam == SC_KEYMENU) return 0;
             
             switch (wParam) {
                 // FulLScree-Mode: Prevent ScreenSaver or Monitor PowerSaver
                 case SC_SCREENSAVE: [[fallthrough]];
                 case SC_MONITORPOWER: {
-                    if (mSettings.Style == WindowStyle::FullScreen) { return TRUE; }
+                    if (mSettings.Style == WindowStyle::FullScreen) { return 0; }
                     break;
                 }
             
@@ -783,13 +787,6 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         default: {
             break;
         }
-    }
-
-    // Publish events to an external event system
-    if (mExternalEventHandler) {
-        MSG message = { hWnd, uMsg, wParam, lParam };
-        auto externalResult = mExternalEventHandler(&message);
-        if (externalResult) return TRUE;
     }
 
     return DefWindowProc(hWnd, uMsg, wParam, lParam);

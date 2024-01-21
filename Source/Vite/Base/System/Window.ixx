@@ -24,6 +24,38 @@ enum class WindowAction {
     Update,
 };
 
+// Window Action Names
+template<>
+struct NamedEnumTraits<WindowAction> {
+    static constexpr string_view Names[] = {
+        "Undefined",
+        "Create",
+        "Destroy",
+        "DpiUpdate",
+        "DragNDrop",
+        "Hide",
+        "Maximize",
+        "Minimize",
+        "Move",
+        "Restore",
+        "Resize",
+        "Show",
+        "Update",
+    };
+};
+
+// Enable Formatter and Stream Operators
+template<>
+struct EnableNamedEnumFormatter<WindowAction> {
+    static const bool Enable = true;
+};
+
+template<>
+struct EnableNamedEnumStreamOperators<WindowAction> {
+    static const bool Enable = true;
+};
+
+
 ///
 /// @brief  Window States [Active|Alive|Focused|Drawing|FullScreen|Maximized|Minimized|Visible]
 ///

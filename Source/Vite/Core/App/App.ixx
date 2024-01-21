@@ -121,23 +121,23 @@ public:
             layer->OnAppEvent(event);
         }
 
-        logger << (int)event.Action << std::endl;
+        switch (event.Action) {
+            case WindowAction::Destroy: {
+                Exit();
+                break;
+            }
 
-        //switch (event.Action) {
-        //    case WindowAction::Destroy: {
-        //        Exit();
-        //        break;
-        //    }
+            case WindowAction::Resize: {
+                mGraphicsContext->Viewport(mCoreWindow->ContentSize());
+                break;
+            }
 
-        //    case WindowAction::Resize: {
-        //        mContext->SetViewport(mWindow->GetContextSize().Width, mWindow->GetContextSize().Height);
-        //        break;
-        //    }
+            default: {
+                break;
+            }
+        }
 
-        //    default: {
-        //        break;
-        //    }
-        //}
+        logger << event.Action << std::endl;
     }
 
     // This method is triggered when a controller input event occurs.

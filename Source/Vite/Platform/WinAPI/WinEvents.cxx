@@ -35,7 +35,7 @@ WinEventHandler::WinEventHandler() {
 //// Events
 bool WinEventHandler::Callback(void *event) {
     MSG &message = *reinterpret_cast<MSG *>(event);
-    return Dispatch(message) ? false : true;
+    return Dispatch(message);
 }
 
 void WinEventHandler::Update() {
@@ -52,7 +52,6 @@ bool WinEventHandler::Dispatch(MSG message) {
     UINT &uMsg = message.message;
     WPARAM &wParam = message.wParam;
     LPARAM &lParam = message.lParam;
-    bool result { false };
 
     // ToDo: Move to Constructor
     static auto once = true;
@@ -126,21 +125,21 @@ bool WinEventHandler::Dispatch(MSG message) {
             event.Action = WindowAction::Create;
             
             Publish(event);
-            break;
+            return false;
         }
         case WM_DESTROY: {
             WindowEvent event;
             event.Action = WindowAction::Destroy;
             
             Publish(event);
-            break;
+            return false;
         }
         case WM_DPICHANGED: {
             WindowEvent event;
             event.Action = WindowAction::DpiUpdate;
 
             Publish(event);
-            break;
+            return false;
         }
         case WM_SIZING: {
             WindowEvent event;
@@ -171,7 +170,7 @@ bool WinEventHandler::Dispatch(MSG message) {
             event.LastSize = { lastWidth, lastHeight };
             
             Publish(event);
-            break;
+            return false;
         }
         case WM_MOVE: {
             WindowEvent event;
@@ -181,14 +180,14 @@ bool WinEventHandler::Dispatch(MSG message) {
             event.Position = { x, y };
             
             Publish(event);
-            break;
+            return false;
         }
         case WM_SHOWWINDOW: {
             WindowEvent event;
             event.Action = wParam ? WindowAction::Show : WindowAction::Hide;
 
             Publish(event);
-            break;
+            return false;
         }
         case WM_SIZE: {
             WindowEvent event;
@@ -206,7 +205,7 @@ bool WinEventHandler::Dispatch(MSG message) {
             auto heightOld = static_cast<uint32>((UINT64)lParam >> 16);
 
             Publish(event);
-            break;
+            return false;
         }
 
         // States
@@ -215,27 +214,27 @@ bool WinEventHandler::Dispatch(MSG message) {
             if (wParam) { event.State |= WindowState::Active; }
 
             Publish(event);
-            break;
+            return false;
         }
         case WM_KILLFOCUS: {
             WindowEvent event;
 
             Publish(event);
-            break;
+            return false;
         }
         case WM_PAINT: {
             WindowEvent event;
             event.State |= WindowState::Drawing;
 
             Publish(event);
-            break;
+            return false;
         }
         case WM_SETFOCUS: {
             WindowEvent event;
             event.State = WindowState::Focused;
 
             Publish(event);
-            break;
+            return false;
         }
 
         /// System
@@ -262,7 +261,7 @@ bool WinEventHandler::Dispatch(MSG message) {
                     break;
                 }
             }
-            break;
+            return false;
         }
 
         ///
@@ -572,16 +571,16 @@ bool WinEventHandler::Dispatch(MSG message) {
             TouchEvent event;
             
             Publish(event);
-			break;
+            return false;
 		}
 
         /// Nothing of interest
 		default: {
-			break;
+            break;
 		}
 	}
 
-	return false;
+    return false;
 }
 
 }
