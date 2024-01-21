@@ -26,6 +26,7 @@ struct ContextData;
 class GFXContext {
     /// Friends
     friend class Application;
+    friend class DearImGuiLayer;
 
 public:
     /// Default

@@ -5,7 +5,7 @@
 ///
 
 // This switch enables the development mode.
-#define APP_MODE_DEVELOP
+//#define APP_MODE_DEVELOP
 
 export module Vite.App;
 
@@ -67,7 +67,7 @@ public:
         // Start Thread Pool
         mThreadPool = CreateScope<ThreadPool>();
 
-        // Load and configure Systems
+        // Load Window and Dialog
         LogInfo("Loading Systems");
         mCoreWindow = Window::Create({ mSettings.Title /*, mSettings.Width, mSettings.Height*/ });
         //mCoreWindow->FullScreen(true);
@@ -75,6 +75,8 @@ public:
         mDialog = Dialog::Create(mCoreWindow->AsPlatformHandle());
         mEventHandler = EventHandler::Create(mCoreWindow->AsPlatformHandle());
         mCoreWindow->ExternalEventHandler([&](auto value) -> bool { return mEventHandler->Callback(value); });
+        
+        // Load Event Handler
         mEventHandler->Register<ControllerEvent>([&](const ControllerEvent &event /*, const auto &emitter*/) { OnInputEvent(event); });
         mEventHandler->Register<MouseEvent>([&](const MouseEvent &event /*, const auto &emitter*/) { OnInputEvent(event); });
         mEventHandler->Register<KeyboardEvent>([&](const KeyboardEvent &event /*, const auto &emitter*/) { OnInputEvent(event); });
@@ -82,6 +84,7 @@ public:
         mEventHandler->Register<WindowEvent>([&](const WindowEvent &event /*, const auto &emitter*/) { OnAppEvent(event); });
         LogDebug("Created window '{}' with size '{}'.", mSettings.Title, mSettings.Resolution);
 
+        // Load Graphics Context
         GFXContext::API = mSettings.GraphicsAPI;
         mGraphicsContext = GFXContext::Create(mCoreWindow->AsPlatformHandle());
         mGraphicsContext->Attach();
@@ -89,6 +92,7 @@ public:
         mGraphicsContext->VSync(mSettings.VSync);
         mGraphicsContext->Clear();
 
+        // Load Renderer
         //mRenderer = Renderer::Create();
 
         // Load Aurora Layer
@@ -96,8 +100,8 @@ public:
         //PushOverlay(pAuroraLayer);
 
         // Load ImGui Layer
-        //pImGuiLayer = new ImGuiLayer();
-        //PushOverlay(pImGuiLayer);
+        mDearImGuiLayer = new DearImGuiLayer();
+        PushOverlay(mDearImGuiLayer);
 	}
     virtual ~Application() {
         // Destruction
@@ -202,10 +206,10 @@ public:
         logger << "]" << std::endl;
 
         if (event.State == KeyState::Release) {
-            if (event.Key == KeyCode::O) {
+            if (event.Key == KeyCode::O && (event.Modifiers & KeyModifier::Control) == KeyModifier::Control) {
                 mDialog->OpenFile("Hedron Open", { "All Files (*.*)", "*.*", "C++ Module Interface", "*.ixx"});
             }
-            if (event.Key == KeyCode::S) {
+            if (event.Key == KeyCode::S && (event.Modifiers & KeyModifier::Control) == KeyModifier::Control) {
                 mDialog->SaveFile("Hedron Save As", { "All Files (*.*)", "*.*", "C++ Module Interface", "*.ixx" });
             }
         }
@@ -252,6 +256,7 @@ public:
     const Settings &GetSettings() const { return mSettings; }
     const States &GetStates() const { return mStates; }
     const Statistics &GetStatistics() const { return mStatistics; }
+    const Scope<GFXContext> &GetGraphicsContext() { return mGraphicsContext; }
     const Scope<Window> &GetWindow() { return mCoreWindow; }
 
     ///
@@ -342,15 +347,17 @@ private:
             // Update application
             mEventHandler->Update();
             mGraphicsContext->Attach();
+            mGraphicsContext->Clear();
             //mRenderer->RenderFrame();
             for (auto *layer : mLayers) layer->Update(deltaTime);
             Update(deltaTime);
             if (mCoreWindow->State(WindowState::Active)) {
-                //pCoreLayer->Prepare();
-                //for (Layer *layer : mLayers) layer->GuiUpdate();
-                //pCoreLayer->Finish();
+                mDearImGuiLayer->Prepare();
+                for (auto *layer : mLayers) layer->UpdateUI();
+                mDearImGuiLayer->Render();
             }
             mGraphicsContext->SwapBuffers();
+            mGraphicsContext->Detach();
         }
 
         // Termination
@@ -425,7 +432,7 @@ private:
     Scope<GFXContext> mGraphicsContext;
     Scope<ThreadPool> mThreadPool;
     //Scope<Renderer> mRenderer;
-    //ImGuiLayer *pImGuiLayer;
+    DearImGuiLayer *mDearImGuiLayer;
 };
 
 // Symbol for Application Entry-Point

@@ -1,11 +1,4 @@
-﻿module;
-
-//#pragma warning(push, 0)
-//    #include <imgui/imgui.h>
-//    #include <imgui/imgui_internal.h>
-//#pragma warning(pop)
-
-export module Vite.DearImGui.Layer;
+﻿export module Vite.DearImGui.Layer;
 
 import Vite.App.Layers;
 //import Vite.Bridge.DearImGui;
@@ -13,31 +6,38 @@ import Vite.Core;
 
 export namespace Hedron {
 
-//class GuiLayer: public Layer {
-//public:
-//    GuiLayer();
-//    virtual ~GuiLayer();
-//
-//    virtual void Attach() override;
-//    virtual void Detach() override;
-//    virtual void GuiUpdate() override;
-//    virtual void Update(Timestamp deltaTime) override;
-//
-//    void Prepare();
-//    void Finish();
-//
-//    // EventListener
-//    virtual void OnControllerEvent(ControllerEventData &data, const EventListener::EventEmitter &emitter) override;
-//    virtual void OnKeyboardEvent(KeyboardEventData &data, const EventListener::EventEmitter &emitter) override;
-//    virtual void OnMouseEvent(MouseEventData &data, const EventListener::EventEmitter &emitter) override;
-//    virtual void OnTouchEvent(TouchEventData &data, const EventListener::EventEmitter &emitter) override;
-//    virtual void OnWindowEvent(WindowEventData &data, const EventListener::EventEmitter &emitter) override;
-//};
-//
-//// Helpers
-//namespace UI {
-//
-//
+class DearImGuiLayer: public Layer {
+public:
+    /// Default
+    DearImGuiLayer();
+    virtual ~DearImGuiLayer();
+
+    /// Controls
+    virtual void Attach() override;
+    virtual void Detach() override;
+    virtual void Update(DeltaTime deltaTime) override;
+    virtual void UpdateUI() override;
+    void Prepare();
+    void Render();
+
+    /// Events
+    virtual void OnAppEvent(const WindowEvent &event) override;
+    virtual void OnInputEvent(const ControllerEvent &event) override;
+    virtual void OnInputEvent(const KeyboardEvent &event) override;
+    virtual void OnInputEvent(const MouseEvent &event) override;
+    virtual void OnInputEvent(const TouchEvent &event) override;
+
+private:
+    /// Properties
+    const float mFontSize = 16.0f;
+    string mConfigFile = "./Data/DearImGui.ini";
+    string mLogFile = "./Log/DearImGui.log";
+    bool mShowDemoWindow = false;
+};
+
+/// Helpers
+namespace UI {
+
 //// Labels
 //template <typename ... Args>
 //auto Label(const string &format, const Args &...arguments) {
@@ -87,7 +87,7 @@ export namespace Hedron {
 //    //ImGui::PopStyleColor();
 //    ImGui::Columns(1);
 //}
-//
-//}
+
+}
 
 }

@@ -30,6 +30,7 @@ struct WindowSettings {
 class Window {
     /// Friends
     friend class Application;
+    friend class DearImGuiLayer;
 
 public:
     /// Default
