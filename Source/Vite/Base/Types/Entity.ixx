@@ -8,7 +8,7 @@ import Vite.Type.Standard;
 
 export namespace Hedron {
 
-using EntityID = size;
+using EntityID = size_t;
 
 ///
 /// @brief Entity: Base class for all entities.
