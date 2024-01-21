@@ -111,9 +111,11 @@ struct ControllerEvent: public BaseEvent {
 struct KeyboardEvent: public BaseEvent {
     // Data
     KeyAction Action {};
+    wchar_t Character {};
     DeltaTime DeltaTime {};
     KeyCode Key {};
     KeyModifier Modifiers;
+    uint16 Repeats {};
     KeyState State {};
 
     // Specification
@@ -175,6 +177,14 @@ public:
     /// Methods
     virtual bool Callback(void *event) = 0;
     virtual void Update() = 0;
+
+protected:
+    /// Properties
+    Position2D mMouseDeltaPosition {};
+    Position2D mMouseLastPosition {};
+    Position2D mMousePosition {};
+    Position2D mMouseDeltaWheel {};
+    Position2D mMouseLastDeltaWheel {};
 };
 
 }

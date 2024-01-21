@@ -129,7 +129,6 @@ struct NamedEnumTraits<ControllerButton> {
 enum class ControllerButtonState {
     Undefined,
 	Press,
-	Hold,
 	Release,
 };
 
@@ -139,7 +138,6 @@ struct NamedEnumTraits<ControllerButtonState> {
     static constexpr string_view Names[] = {
         "Undefined",
         "Press",
-        "Hold",
         "Release",
     };
 };
