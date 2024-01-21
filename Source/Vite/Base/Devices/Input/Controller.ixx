@@ -1,5 +1,6 @@
 ﻿export module Vite.Device.Input.Controller;
 
+import Vite.Extension;
 import Vite.Type.Standard;
 
 export namespace Hedron {
@@ -14,21 +15,21 @@ enum class ControllerAction {
     Digital,
 };
 
-inline std::ostream &operator<<(std::ostream &stream, ControllerAction action) {
-    switch (action) {
-        case ControllerAction::Analog:		{ stream << "Analog";	    break; }
-        case ControllerAction::Digital:		{ stream << "Digital";	    break; }
-        case ControllerAction::Button:		{ stream << "Button";	    break; }
-        default:                            { stream << "Undefined";	break; }
-    }
-    return stream;
-}
+// Controller Action Names
+template<>
+struct NamedEnumTraits<ControllerAction> {
+    static constexpr string_view Names[] = {
+        "Undefined",
+        "Analog",
+        "Button",
+        "Digital",
+    };
+};
 
 ///
 /// @brief Controller Buttons
 ///
 enum class ControllerButton {
-    // Null
     Undefined			= 0x00,
 
     // Analog Sticks
@@ -70,59 +71,57 @@ enum class ControllerButton {
     // Named Buttons
     Start				= 0x50,
 
-    // ~
 	Unknown 			= 0xFF,
 };
 
-inline std::ostream &operator<<(std::ostream &stream, ControllerButton button) {
-	switch (button) {
-        // Null
-		case ControllerButton::Undefined:			{ stream << "Undefined";        break; }
-                                   
+// Controller Button Names
+template<>
+struct NamedEnumTraits<ControllerButton> {
+    static constexpr string_view Names[] = {
+        "Undefined",
+
         // Analog Sticks
-        case ControllerButton::AStickLeftPress:		{ stream << "AStickLeftPress";	break; }
-        case ControllerButton::AStickLeftX:			{ stream << "AStickLeftX";		break; }
-        case ControllerButton::AStickLeftY:			{ stream << "AStickLeftY";		break; }
-        case ControllerButton::AStickRightPress:	{ stream << "AStickLeftPress";	break; }
-        case ControllerButton::AStickRightX:		{ stream << "AStickRightX";		break; }
-        case ControllerButton::AStickRightY:		{ stream << "AStickRightY";		break; }
+        "AStickLeftPress",
+        "AStickLeftX",
+        "AStickLeftY",
+        "AStickRightPress",
+        "AStickRightX",
+        "AStickRightY",
 
         // Digital Pad
-		case ControllerButton::DPadLeft:			{ stream << "DPadLeft";			break; }
-		case ControllerButton::DPadUp:				{ stream << "DPadUp";			break; }
-		case ControllerButton::DPadRight:			{ stream << "DPadRight";		break; }
-		case ControllerButton::DPadDown:			{ stream << "DPadDown";			break; }
+        "DPadLeft",
+        "DPadUp",
+        "DPadRight",
+        "DPadDown",
 
         // Buttons
-		case ControllerButton::Button0:				{ stream << "Button0";			break; }
-		case ControllerButton::Button1:				{ stream << "Button1";			break; }
-		case ControllerButton::Button2:				{ stream << "Button2";			break; }
-		case ControllerButton::Button3:				{ stream << "Button3";			break; }
-		case ControllerButton::Button4:				{ stream << "Button4";			break; }
-		case ControllerButton::Button5:				{ stream << "Button5";			break; }
-		case ControllerButton::Button6:				{ stream << "Button6";			break; }
-		case ControllerButton::Button7:				{ stream << "Button7";			break; }
-		case ControllerButton::Button8:				{ stream << "Button8";			break; }
-		case ControllerButton::Button9:				{ stream << "Button9";			break; }
-		case ControllerButton::Button10:			{ stream << "Button10";			break; }
-		case ControllerButton::Button11:			{ stream << "Button11";			break; }
-		case ControllerButton::Button12:			{ stream << "Button12";			break; }
-		case ControllerButton::Button13:			{ stream << "Button13";			break; }
-		case ControllerButton::Button14:			{ stream << "Button14";			break; }
-		case ControllerButton::Button15:			{ stream << "Button15";			break; }
-		case ControllerButton::ShoulderLeft1:		{ stream << "ShoulderLeft1";	break; }
-		case ControllerButton::ShoulderLeft2:		{ stream << "ShoulderLeft2";	break; }
-		case ControllerButton::ShoulderRight1:		{ stream << "ShoulderRight1";	break; }
-		case ControllerButton::ShoulderRight2:		{ stream << "ShoulderRight2";	break; }
-                                             
-        // Named Buttons
-        case ControllerButton::Start:				{ stream << "Start";			break; }
+        "Button0",
+        "Button1",
+        "Button2",
+        "Button3",
+        "Button4",
+        "Button5",
+        "Button6",
+        "Button7",
+        "Button8",
+        "Button9",
+        "Button10",
+        "Button11",
+        "Button12",
+        "Button13",
+        "Button14",
+        "Button15",
+        "ShoulderLeft1",
+        "ShoulderLeft2",
+        "ShoulderRight1",
+        "ShoulderRight2",
 
-        // ~
-		default:	                        		{ stream << "Unknown";			break; }
-	}
-	return stream;
-}
+        // Named Buttons
+        "Start",
+
+        "Unknown",
+    };
+};
 
 ///
 /// @Button Controller States
@@ -134,14 +133,52 @@ enum class ControllerButtonState {
 	Release,
 };
 
-inline std::ostream &operator<<(std::ostream &stream, ControllerButtonState state) {
-	switch (state) {
-		case ControllerButtonState::Press:		{ stream << "Press";		break; }
-		case ControllerButtonState::Hold:		{ stream << "Hold";			break; }
-		case ControllerButtonState::Release:	{ stream << "Release";		break; }
-		default:	                            { stream << "Undefined";	break; }
-	}
-	return stream;
-}
+// Controller Button State Names
+template<>
+struct NamedEnumTraits<ControllerButtonState> {
+    static constexpr string_view Names[] = {
+        "Undefined",
+        "Press",
+        "Hold",
+        "Release",
+    };
+};
+
+
+///
+/// Overloads
+///
+
+/// Formatter
+template<>
+struct EnableNamedEnumFormatter<ControllerAction> {
+    static const bool Enable = true;
+};
+
+template<>
+struct EnableNamedEnumFormatter<ControllerButton> {
+    static const bool Enable = true;
+};
+
+template<>
+struct EnableNamedEnumFormatter<ControllerButtonState> {
+    static const bool Enable = true;
+};
+
+/// Stream
+template<>
+struct EnableNamedEnumStreamOperators<ControllerAction> {
+    static const bool Enable = true;
+};
+
+template<>
+struct EnableNamedEnumStreamOperators<ControllerButton> {
+    static const bool Enable = true;
+};
+
+template<>
+struct EnableNamedEnumStreamOperators<ControllerButtonState> {
+    static const bool Enable = true;
+};
 
 }

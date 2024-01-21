@@ -17,6 +17,15 @@ export namespace Hedron {
 ///
 
 ///
+/// @brief Event Category [App|Input]
+///
+enum class EventCategory {
+    Undefined,
+    App,
+    Input
+};
+
+///
 /// @brief Event Priority [Low|Normal|High|Realtime]
 ///
 enum class EventPriority {
@@ -55,6 +64,7 @@ enum class EventSource {
 ///
 struct BaseEvent {
     mutable bool Handled = false;
+    mutable EventCategory Category {};
     mutable EventPriority Priority {};
 };
 
@@ -63,6 +73,7 @@ struct BaseEvent {
 ///
 struct WindowEvent: public BaseEvent {
     // Data
+    WindowAction Action {};
     WindowState State {};
 
     float DpiValue {};
@@ -135,7 +146,7 @@ struct MouseEvent: public BaseEvent {
 struct TouchEvent: public BaseEvent {
     // Data
     TouchAction Action {};
-    TouchStyle Style {};
+    TouchState State {};
 
     DeltaTime DeltaTime {};
     Position2D DeltaPosition {};

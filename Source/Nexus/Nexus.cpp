@@ -33,6 +33,7 @@ public:
     void Create() override {
         Debug::DisplayCompileInformation();
 
+
         auto nothing = true;
         #ifdef BASE_TESTS
             PushLayer(new Test::Base());

@@ -121,7 +121,7 @@ public:
             layer->OnAppEvent(event);
         }
 
-        Log("Window Event\n");
+        logger << (int)event.Action << std::endl;
 
         //switch (event.Action) {
         //    case WindowAction::Destroy: {
@@ -155,7 +155,9 @@ public:
             layer->OnInputEvent(event);
         }
 
-        Log("Keyboard Event: [Code: {}]\n", (int)event.Key);
+        if (event.State == KeyState::Press) {
+            logger << event.Key << std::endl;
+        }
     }
     
     // This method is triggered when a mouse input event occurs.
@@ -165,7 +167,9 @@ public:
             layer->OnInputEvent(event);
         }
 
-        Log("Mouse Event\n");
+        if (event.State == MouseButtonState::Press) {
+            logger << event.Button << std::endl;
+        }
     }
     
     // This method is triggered when a touch input event occurs.

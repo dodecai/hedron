@@ -7,23 +7,34 @@ import Vite.Type.Standard;
 
 export namespace Hedron {
 
+/// @brief Window Actions [Create|Destroy|DpiUpdate|DragNDrop|Hide|Maximize|Minimize|Move|Restore|Resize]
+enum class WindowAction {
+    Undefined,
+    Create,
+    Destroy,
+    DpiUpdate,
+    DragNDrop,
+    Hide,
+    Maximize,
+    Minimize,
+    Move,
+    Restore,
+    Resize,
+    Show,
+    Update,
+};
+
 ///
 /// @brief  Window States [Active|Alive|Focused|Drawing|FullScreen|Maximized|Minimized|Visible]
 ///
 enum class WindowState {
     Active      = BitMask(0),
     Alive       = BitMask(1),
-    //Created   = BitMask(x),
-    //Destroy   = BitMask(x),
-    //DpiUpdate = BitMask(x),
-    //DragNDrop = BitMask(x),
     Focused     = BitMask(2),
     Drawing     = BitMask(3),
     FullScreen  = BitMask(4),
     Maximized   = BitMask(5),
     Minimized   = BitMask(6),
-    //Moving    = BitMask(x),
-    //Resizing  = BitMask(x),
     Visible     = BitMask(7),
 };
 
