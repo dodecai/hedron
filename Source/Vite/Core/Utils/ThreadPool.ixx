@@ -29,8 +29,8 @@ export namespace Hedron {
 class ThreadPool {
 public:
     /// Default
-    ThreadPool(size threads = thread::hardware_concurrency()): mStop(false) {
-        for (size i = 0; i < threads; i++) {
+    ThreadPool(size_t threads = thread::hardware_concurrency()): mStop(false) {
+        for (size_t i = 0; i < threads; i++) {
             mWorkers.emplace_back([this] {
                 while (true) {
                     function<void()> task;
@@ -105,8 +105,8 @@ private:
     vector<thread> mWorkers;
 
     /// Limits
-    static constexpr size mMaxTasks = 2048; // ToDo: Find the optimal value
-    static constexpr size mMaxTimeout = 4;  // ToDo: Find the optimal value (4 ms = 240 fps)
+    static constexpr size_t mMaxTasks = 2048; // ToDo: Find the optimal value
+    static constexpr size_t mMaxTimeout = 4;  // ToDo: Find the optimal value (4 ms = 240 fps)
 
     /// Properties
     condition_variable mCondition;
