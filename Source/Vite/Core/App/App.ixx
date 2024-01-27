@@ -20,6 +20,7 @@ import Vite.Config;
 import Vite.Device.GFXContext;
 import Vite.Event;
 import Vite.Logger;
+import Vite.Renderer;
 import Vite.System.Dialog;
 import Vite.System.Window;
 import Vite.Util.Chrono;
@@ -93,7 +94,7 @@ public:
         mGraphicsContext->Clear();
 
         // Load Renderer
-        //mRenderer = Renderer::Create();
+        mRenderer = Renderer::Create();
 
         // Load Aurora Layer
         //pAuroraLayer = new AuroraLayer();
@@ -347,8 +348,8 @@ private:
             // Update application
             mEventHandler->Update();
             mGraphicsContext->Attach();
-            mGraphicsContext->Clear();
-            //mRenderer->RenderFrame();
+            //mGraphicsContext->Clear();
+            mRenderer->BeginScene();
             for (auto *layer : mLayers) layer->Update(deltaTime);
             Update(deltaTime);
             if (mCoreWindow->State(WindowState::Alive)) {
@@ -356,6 +357,8 @@ private:
                 for (auto *layer : mLayers) layer->UpdateUI();
                 mDearImGuiLayer->Render();
             }
+            mRenderer->EndScene();
+            mRenderer->RenderScene();
             mGraphicsContext->SwapBuffers();
             mGraphicsContext->Detach();
         }
@@ -426,12 +429,12 @@ private:
     static inline Application *pAppInstance = nullptr;
     LayerStack mLayers;
     //Scope<Config> mConfig;
-    Scope<Dialog> mDialog;
     Scope<Window> mCoreWindow;
+    Scope<Dialog> mDialog;
     Scope<EventHandler> mEventHandler;
     Scope<GFXContext> mGraphicsContext;
+    Scope<Renderer> mRenderer;
     Scope<ThreadPool> mThreadPool;
-    //Scope<Renderer> mRenderer;
     DearImGuiLayer *mDearImGuiLayer;
 };
 

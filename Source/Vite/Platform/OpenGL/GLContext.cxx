@@ -72,7 +72,9 @@ struct ContextData {
 #endif
 };
 
+///
 /// Default
+///
 GLContext::GLContext(void *window) {
 	// Prepare
 	mData = CreateScope<ContextData>();
@@ -232,7 +234,10 @@ GLContext::~GLContext() {
 #endif
 }
 
+
+///
 /// Controls
+///
 void GLContext::Attach() {
     if (!CurrentContext()) {
     #if defined APP_PLATFORM_WINDOWS
@@ -276,7 +281,9 @@ void GLContext::VSync(bool activate) {
 }
 
 
+///
 /// States
+///
 bool const GLContext::CurrentContext() {
 #if defined APP_PLATFORM_WINDOWS
     return (wglGetCurrentContext() == mData->RenderingContextHandle);
@@ -286,7 +293,9 @@ bool const GLContext::CurrentContext() {
 }
 
 
+///
 /// Casts
+///
 void *GLContext::AsPlatformHandle() {
 #if defined APP_PLATFORM_WINDOWS
     return reinterpret_cast<void *>(mData->RenderingContextHandle);
@@ -296,7 +305,9 @@ void *GLContext::AsPlatformHandle() {
 }
 
 
+///
 /// Methods
+///
 bool GLContext::LoadExtensions() {
 	bool result = true;
 #if defined(APP_PLATFORM_WINDOWS)

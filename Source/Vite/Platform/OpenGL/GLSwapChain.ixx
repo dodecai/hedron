@@ -1,18 +1,22 @@
 ﻿export module Vite.Platform.GLSwapchain;
 
-//import Vite.Renderer.Swapchain;
+import Vite.Renderer.Swapchain;
 
 export namespace Hedron {
 
-//class GLSwapchain: public Swapchain {
-//public:
-//    GLSwapchain(void *windowHandle, uint32_t width, uint32_t height);
-//    virtual ~GLSwapchain();
-//
-//    virtual void Present() override;
-//    virtual void Resize(uint32_t width, uint32_t height) override;
-//    virtual Reference<Texture> GetCurrentTexture() override;
-//    virtual uint32_t GetCurrentImageIndex() override;
-//};
+class GLSwapchain: public Swapchain {
+public:
+    /// Default
+    GLSwapchain(const Size2D &size);
+    virtual ~GLSwapchain();
+
+    /// Accessors
+    virtual Reference<Texture> CurrentImage() override;
+    virtual RendererID CurrentImageIndex() override;
+
+    /// Methods
+    virtual void Present() override;
+    virtual void Resize(float width, float height) override;
+};
 
 }

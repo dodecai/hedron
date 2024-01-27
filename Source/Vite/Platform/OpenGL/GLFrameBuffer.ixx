@@ -1,21 +1,22 @@
 ﻿export module Vite.Platform.GLFramebuffer;
 
-//import Vite.Renderer.Framebuffer;
+import Vite.Renderer.Framebuffer;
 
 export namespace Hedron {
 
-//class GLFramebuffer: public Framebuffer {
-//public:
-//    GLFramebuffer(uint32_t width, uint32_t height, TextureFormat format);
-//    virtual ~GLFramebuffer();
-//
-//    virtual void Bind() const override;
-//    virtual void Unbind() const override;
-//
-//    virtual Reference<Texture> GetColorAttachment() const override;
-//    virtual Reference<Texture> GetDepthAttachment() const override;
-//
-//private:
-//};
+class GLFramebuffer: public Framebuffer {
+public:
+    /// Default
+    GLFramebuffer(const FramebufferProperties &properties);
+    virtual ~GLFramebuffer();
+
+    /// Accessors
+    Reference<Texture> ColorAttachment() const override;
+    Reference<Texture> DepthAttachment() const override;
+
+    /// Methods
+    void Bind() const override;
+    void Unbind() const override;
+};
 
 }

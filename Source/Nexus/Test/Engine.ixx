@@ -1,30 +1,4 @@
-﻿export module Test.Engine;
-
-import Vite.Core;
-import Vite.Engine;
-import Vite.App.Layers;
-
-export namespace Hedron::Test {
-
-///
-/// @brief Engine | Serves all engine tests for the Hedron Engine.
-///
-class Engine: public Layer {
-public:
-    /// Default
-    Engine() = default;
-    ~Engine() = default;
-
-    /// Methods
-    void Create() override {}
-    void Destroy() override {}
-    void Update(DeltaTime deltaTime) override {}
-
-private:
-    /// Properties
-};
-
-}
+﻿module;
 
 //#define TEST_MESH_RENDERER 1
 //#define TEST_SPRITE_RENDERER 0
@@ -38,19 +12,28 @@ private:
 //#include <stb/stb_image.h>
 ////#define STB_IMAGE_WRITE_IMPLEMENTATION
 //#pragma warning(pop)
-//import Ultra;
-//import Ultra.Asset;
-//import Ultra.Asset.Model;
-//import Ultra.Math;
-//import Ultra.Renderer.Buffer;
-//import Ultra.Renderer.DesignerCamera;
-//import Ultra.Renderer.PipelineState;
-//import Ultra.Renderer.Texture;
-//import Ultra.UI.GUIBuilder;
-//import Ultra.UI.GUILayer;
-//import Ultra.System.Input;
+
+export module Test.Engine;
+
+import Vite.Core;
+import Vite.Engine;
+import Vite.App.Layers;
+
+//import Vite;
+//import Vite.Asset;
+//import Vite.Asset.Model;
+//import Vite.Math;
+//import Vite.Renderer.Buffer;
+//import Vite.Renderer.DesignerCamera;
+//import Vite.Renderer.PipelineState;
+//import Vite.Renderer.Texture;
+//import Vite.UI.GUIBuilder;
+//import Vite.UI.GUILayer;
 //
-//namespace Hedron::NewAndTasty {
+export namespace Hedron::Test {
+
+// ToDo
+namespace Hedron::NewAndTasty {
 //
 //template <typename T, size_t N>
 //struct PositionBase {
@@ -246,106 +229,110 @@ private:
 //    };
 //};
 //
-//}
-//
-//class Engine: public Ultra::Layer {
-//public:
-//    Engine() {
-//        // Prepare
-//        AssetManager::Instance().Load();
-//        mRenderer = Renderer::Create();
-//        auto swapchain = Swapchain::Create(nullptr, 1280, 1024);
-//        auto commandBuffer = CommandBuffer::Create();
-//        mCommandBuffer = mRenderer->GetCommandBuffer();
-//
-//        // Setup Camera
-//        auto aspectRatio = 1280.0f / 1024.0f;
-//        mDesignerCamera = DesignerCamera(45.0f, aspectRatio, 0.1f, 10000.0f);
-//        mDesignerCamera.SetViewportSize(1280.0f, 1024.0f);
-//        mDesignerCamera.SetPosition({ 0.0f, 4.0f, -24.0f });
-//
-//        // Load Shaders
-//        mDebugDepthShader = Shader::Create("Assets/Shaders/Debug/DepthVisualizer.glsl");
-//        mGridShader = Shader::Create("Assets/Shaders/Grid.glsl");
-//        mLightShader = Shader::Create("Assets/Shaders/Light.glsl");
-//        mModelShader = Shader::Create("Assets/Shaders/Materials/Material.Blinn-Phong.glsl");
-//        mNormalsShader = Shader::Create("Assets/Shaders/Debug/NormalsVisualizer.glsl");
-//        mSkyBoxShader = Shader::Create("Assets/Shaders/SkyBox.glsl");
-//        mStencilOutlineShader = Shader::Create("Assets/Shaders/Stencil.Outline.glsl");
-//
-//        // Load Buffers
-//        mCameraUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Camera));
-//        mEntityUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::EntityData));
-//        mLightBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Lights));
-//        mMaterialBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Material));
-//
-//        // Load Textures
-//        mCheckerBoard = Texture::Create({}, "./Assets/Textures/CheckerBoard.png");
-//        mConcreteTexture = Texture::Create({ .SamplerWrap = TextureWrap::Repeat }, "./Assets/Textures/Concrete.png");
-//        mGrassTexture = Texture::Create({ .SamplerWrap = TextureWrap::MirrorClamp }, "./Assets/Textures/Grass.png");
-//        mMarbleTexture = Texture::Create({ .SamplerWrap = TextureWrap::Clamp, .GenerateMips = true, }, "./Assets/Textures/Marble.jpg");
-//        mMatrixTexture = Texture::Create({}, "./Assets/Textures/Matrix.jpg");
-//        mMetalTexture = Texture::Create({}, "./Assets/Textures/Metal.png");
-//        mSmileyTexture = Texture::Create({ .SamplerWrap = TextureWrap::Clamp }, "./Assets/Textures/Smiley.png");
-//        mWindowTexture = Texture::Create({ .SamplerWrap = TextureWrap::Clamp }, "./Assets/Textures/Window.png");
-//        mWoodTexture = Texture::Create({}, "./Assets/Textures/Wood.png");
-//    }
-//    ~Engine() = default;
-//
-//    void Test(Timestamp deltaTime) {
-//        mRenderer->RenderFrame();
-//
-//        // Update Camera
-//        if (!mUIActive) mDesignerCamera.Update(deltaTime);
-//
-//        mCamera.ViewProjection = mDesignerCamera.GetViewProjection();
-//        mCamera.Projection = mDesignerCamera.GetProjectionMatrix();
-//        mCamera.View = mDesignerCamera.GetViewMatrix();
-//        mCamera.InverseViewProjection = mDesignerCamera.GetInverseViewProjection();
-//        mCamera.InverseProjection = mDesignerCamera.GetInverseProjection();
-//        mCamera.InverseView = mDesignerCamera.GetInverseView();
-//        mCamera.Position = mDesignerCamera.GetPosition();
-//        mCamera.Near = mDesignerCamera.GetNearPoint();
-//        mCamera.Far = mDesignerCamera.GetFarPoint();
-//        mCameraUniformBuffer->UpdateData(&mCamera, sizeof(Components::Camera));
-//        mCameraUniformBuffer->Bind(0);
-//        mCameraUniformBuffer->Bind((uint32_t)UniformPosition::CameraData);
-//
-//        // Mesh Renderer (3D)
-//        #if TEST_MESH_RENDERER == 1
-//            TestMeshRenderer(deltaTime);
-//        #endif
-//    
-//        // Sprite Renderer (2D)
-//        #if TEST_SPRITE_RENDERER == 1
-//            TestSpriteRenderer(deltaTime);
-//        #endif
-//    
-//        // UI Renderer (2D)
-//        #if TEST_UI_RENDERER == 1
-//            TestUIRenderer(deltaTime);
-//        #endif
-//    }
-//
-//    void GuiUpdate() override {
-//        static bool active = true;
-//        static float value = 1.0f;
-//        static auto color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-//
-//        ImGui::Begin("Renderer");
-//
-//        mUIActive = ImGui::IsWindowFocused();
-//        UI::Property("Color", glm::value_ptr(color));
-//        UI::Property("Distance", value);
-//        UI::Property("Lights", active);
-//        UI::Label("Lights Count: %d", 3);
-//        UI::LabelX("Lights CountX: %d", 3);
-//        UI::Property("State", "Count: % d", 3);
-//        ImGui::End();
-//    }
-//
-//    #pragma region Mesh Renderer
-//
+}
+
+
+///
+/// @brief Engine | Serves all engine tests for the Hedron Engine.
+///
+class Engine: public Layer {
+public:
+    /// Default
+    Engine() {
+        //// Prepare
+        //AssetManager::Instance().Load();
+        //mRenderer = Renderer::Create();
+        //auto swapchain = Swapchain::Create(nullptr, 1280, 1024);
+        //auto commandBuffer = CommandBuffer::Create();
+        //mCommandBuffer = mRenderer->GetCommandBuffer();
+
+        //// Setup Camera
+        //auto aspectRatio = 1280.0f / 1024.0f;
+        //mDesignerCamera = DesignerCamera(45.0f, aspectRatio, 0.1f, 10000.0f);
+        //mDesignerCamera.SetViewportSize(1280.0f, 1024.0f);
+        //mDesignerCamera.SetPosition({ 0.0f, 4.0f, -24.0f });
+
+        //// Load Shaders
+        //mDebugDepthShader = Shader::Create("Assets/Shaders/Debug/DepthVisualizer.glsl");
+        //mGridShader = Shader::Create("Assets/Shaders/Grid.glsl");
+        //mLightShader = Shader::Create("Assets/Shaders/Light.glsl");
+        //mModelShader = Shader::Create("Assets/Shaders/Materials/Material.Blinn-Phong.glsl");
+        //mNormalsShader = Shader::Create("Assets/Shaders/Debug/NormalsVisualizer.glsl");
+        //mSkyBoxShader = Shader::Create("Assets/Shaders/SkyBox.glsl");
+        //mStencilOutlineShader = Shader::Create("Assets/Shaders/Stencil.Outline.glsl");
+
+        //// Load Buffers
+        //mCameraUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Camera));
+        //mEntityUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::EntityData));
+        //mLightBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Lights));
+        //mMaterialBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Material));
+
+        //// Load Textures
+        //mCheckerBoard = Texture::Create({}, "./Assets/Textures/CheckerBoard.png");
+        //mConcreteTexture = Texture::Create({ .SamplerWrap = TextureWrap::Repeat }, "./Assets/Textures/Concrete.png");
+        //mGrassTexture = Texture::Create({ .SamplerWrap = TextureWrap::MirrorClamp }, "./Assets/Textures/Grass.png");
+        //mMarbleTexture = Texture::Create({ .SamplerWrap = TextureWrap::Clamp, .GenerateMips = true, }, "./Assets/Textures/Marble.jpg");
+        //mMatrixTexture = Texture::Create({}, "./Assets/Textures/Matrix.jpg");
+        //mMetalTexture = Texture::Create({}, "./Assets/Textures/Metal.png");
+        //mSmileyTexture = Texture::Create({ .SamplerWrap = TextureWrap::Clamp }, "./Assets/Textures/Smiley.png");
+        //mWindowTexture = Texture::Create({ .SamplerWrap = TextureWrap::Clamp }, "./Assets/Textures/Window.png");
+        //mWoodTexture = Texture::Create({}, "./Assets/Textures/Wood.png");
+    }
+    ~Engine() = default;
+
+    /// Methods
+    void Create() override {}
+    void Destroy() override {}
+    void Update(DeltaTime deltaTime) override {
+        //// Update Camera
+        //if (!mUIActive) mDesignerCamera.Update(deltaTime);
+
+        //mCamera.ViewProjection = mDesignerCamera.GetViewProjection();
+        //mCamera.Projection = mDesignerCamera.GetProjectionMatrix();
+        //mCamera.View = mDesignerCamera.GetViewMatrix();
+        //mCamera.InverseViewProjection = mDesignerCamera.GetInverseViewProjection();
+        //mCamera.InverseProjection = mDesignerCamera.GetInverseProjection();
+        //mCamera.InverseView = mDesignerCamera.GetInverseView();
+        //mCamera.Position = mDesignerCamera.GetPosition();
+        //mCamera.Near = mDesignerCamera.GetNearPoint();
+        //mCamera.Far = mDesignerCamera.GetFarPoint();
+        //mCameraUniformBuffer->UpdateData(&mCamera, sizeof(Components::Camera));
+        //mCameraUniformBuffer->Bind(0);
+        //mCameraUniformBuffer->Bind((uint32_t)UniformPosition::CameraData);
+
+        //// Mesh Renderer (3D)
+        //#if TEST_MESH_RENDERER == 1
+        //    TestMeshRenderer(deltaTime);
+        //#endif
+    
+        //// Sprite Renderer (2D)
+        //#if TEST_SPRITE_RENDERER == 1
+        //    TestSpriteRenderer(deltaTime);
+        //#endif
+    
+        //// UI Renderer (2D)
+        //#if TEST_UI_RENDERER == 1
+        //    TestUIRenderer(deltaTime);
+        //#endif
+    }
+
+    //void GuiUpdate() override {
+    //    static bool active = true;
+    //    static float value = 1.0f;
+    //    static auto color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    //    ImGui::Begin("Renderer");
+    //    mUIActive = ImGui::IsWindowFocused();
+    //    UI::Property("Color", glm::value_ptr(color));
+    //    UI::Property("Distance", value);
+    //    UI::Property("Lights", active);
+    //    UI::Label("Lights Count: %d", 3);
+    //    UI::LabelX("Lights CountX: %d", 3);
+    //    UI::Property("State", "Count: % d", 3);
+    //    ImGui::End();
+    //}
+
+    #pragma region Mesh Renderer
+
 //    void TestMeshRenderer(Timestamp deltaTime) {
 //        // Draw Scene
 //        //DrawGrid();
@@ -607,9 +594,9 @@ private:
 //        mCommandBuffer->DrawIndexed(skybox.Components, PrimitiveType::Triangle, false);
 //    }
 //
-//    #pragma endregion
-//
-//    #pragma region Sprite Renderer
+    #pragma endregion
+
+    #pragma region Sprite Renderer
 //    void TestSpriteRenderer(Timestamp deltaTime) {
 //        // Prepare
 //        Renderer2D::StartScene(mDesignerCamera);
@@ -633,18 +620,18 @@ private:
 //        // Finish
 //        Renderer2D::FinishScene();
 //    }
-//
-//    #pragma endregion
-//
-//    #pragma region UI Renderer
+
+    #pragma endregion
+
+    #pragma region UI Renderer
 //
 //    void TestUIRenderer(Timestamp deltaTime) {
 //    }
 //
-//    #pragma endregion
-//
-//    #pragma region Miscellanous
-//
+    #pragma endregion
+
+    #pragma region Miscellanous
+
 //    void ToDo() {
 //        //// Model, View, Projection
 //        ////auto orthographic = glm::ortho(0.0f, 1280.0f, 0.0f, 1024.0f, 0.1f, 100.0f);
@@ -666,51 +653,50 @@ private:
 //        ////view = glm::scale(model, glm::vec3(1.0f, 1.0f, -1.0f)); // Flip Z-Axis (OpenGL is a right-handed system)
 //    }
 //
-//    #pragma endregion
-//
-//private:
-//    // Properties
-//    bool mUIActive = false;
-//
-//    // Objects
-//    Scope<Renderer> mRenderer;
-//    CommandBuffer *mCommandBuffer;
-//    DesignerCamera mDesignerCamera;
-//
-//    // Point Light Position
-//    glm::vec3 mLightPosition {};
-//
-//    // Buffers
-//    Reference<Buffer> mCameraUniformBuffer;
-//    Reference<Buffer> mEntityUniformBuffer;
-//    Reference<Buffer> mLightBuffer;
-//    Reference<Buffer> mMaterialBuffer;
-//
-//    // Components
-//    Components::Camera mCamera;
-//    Components::EntityData mLightData;
-//    Components::Lights mLights;
-//    Components::Transform mTransform;
-//
-//    // Shaders
-//    Reference<Shader> mDebugDepthShader;
-//    Reference<Shader> mGridShader;
-//    Reference<Shader> mLightShader;
-//    Reference<Shader> mModelShader;
-//    Reference<Shader> mNormalsShader;
-//    Reference<Shader> mSkyBoxShader;
-//    Reference<Shader> mStencilOutlineShader;
-//    
-//    // Textures
-//    Reference<Texture> mCheckerBoard;
-//    Reference<Texture> mConcreteTexture;
-//    Reference<Texture> mGrassTexture;
-//    Reference<Texture> mMarbleTexture;
-//    Reference<Texture> mMatrixTexture;
-//    Reference<Texture> mMetalTexture;
-//    Reference<Texture> mSmileyTexture;
-//    Reference<Texture> mWindowTexture;
-//    Reference<Texture> mWoodTexture;
-//};
-//
-//}
+    #pragma endregion
+
+private:
+    /// Properties
+    //bool mUIActive = false;
+
+    //// Objects
+    //CommandBuffer *mCommandBuffer;
+    //DesignerCamera mDesignerCamera;
+
+    //// Point Light Position
+    //glm::vec3 mLightPosition {};
+
+    //// Buffers
+    //Reference<Buffer> mCameraUniformBuffer;
+    //Reference<Buffer> mEntityUniformBuffer;
+    //Reference<Buffer> mLightBuffer;
+    //Reference<Buffer> mMaterialBuffer;
+
+    //// Components
+    //Components::Camera mCamera;
+    //Components::EntityData mLightData;
+    //Components::Lights mLights;
+    //Components::Transform mTransform;
+
+    //// Shaders
+    //Reference<Shader> mDebugDepthShader;
+    //Reference<Shader> mGridShader;
+    //Reference<Shader> mLightShader;
+    //Reference<Shader> mModelShader;
+    //Reference<Shader> mNormalsShader;
+    //Reference<Shader> mSkyBoxShader;
+    //Reference<Shader> mStencilOutlineShader;
+    //
+    //// Textures
+    //Reference<Texture> mCheckerBoard;
+    //Reference<Texture> mConcreteTexture;
+    //Reference<Texture> mGrassTexture;
+    //Reference<Texture> mMarbleTexture;
+    //Reference<Texture> mMatrixTexture;
+    //Reference<Texture> mMetalTexture;
+    //Reference<Texture> mSmileyTexture;
+    //Reference<Texture> mWindowTexture;
+    //Reference<Texture> mWoodTexture;
+};
+
+}

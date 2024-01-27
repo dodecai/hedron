@@ -48,7 +48,7 @@ private:
     /// Methods
     bool LoadExtensions();
 
-    // Properties
+    /// Properties
     Scope<ContextData> mData;
     bool mLoaded;
 };

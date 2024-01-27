@@ -1,35 +1,38 @@
-﻿module Vite.Platform.GLSwapchain;
+﻿module;
 
-//import <glad/gl.h>;
+#include <glad/gl.h>
 
-#pragma warning(push)
-#pragma warning(disable: 4100)
+module Vite.Platform.GLSwapchain;
 
 namespace Hedron {
 
-//GLSwapchain::GLSwapchain(void *windowHandle, uint32_t width, uint32_t height): Swapchain(windowHandle, width, height) {}
-//
-//GLSwapchain::~GLSwapchain() {
-//}
-//
-//
-//void GLSwapchain::Present() {
-//    //Context::SwapBuffers(mWindowHandle);
-//}
-//
-//void GLSwapchain::Resize(uint32_t width, uint32_t height) {}
-//
-//
-//Reference<Texture> GLSwapchain::GetCurrentTexture() {
-//    // OpenGL does not have a swapchain texture concept like Vulkan/DirectX
-//    return nullptr;
-//}
-//
-//uint32_t GLSwapchain::GetCurrentImageIndex() {
-//    // OpenGL does not have a swapchain image index concept like Vulkan/DirectX
-//    return 0;
-//}
+///
+/// Default
+///
+GLSwapchain::GLSwapchain(const Size2D &size) {}
 
+GLSwapchain::~GLSwapchain() {}
+
+
+///
+/// Accessors
+///
+Reference<Texture> GLSwapchain::CurrentImage() {
+    return nullptr;
 }
 
-#pragma warning(pop)
+RendererID GLSwapchain::CurrentImageIndex() {
+    return 0;
+}
+
+
+///
+/// Methods
+///
+void GLSwapchain::Present() {
+    //Context::SwapBuffers(mWindowHandle);
+}
+
+void GLSwapchain::Resize(float width, float height) {}
+
+}

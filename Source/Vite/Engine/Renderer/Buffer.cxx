@@ -1,30 +1,30 @@
 ﻿module Vite.Renderer.Buffer;
 
-//import Vite.Device.GFXContext;
+import Vite.Device.GFXContext;
 //import Vite.Platform.DXBuffer;
-//import Vite.Platform.GLBuffer;
+import Vite.Platform.GLBuffer;
 //import Vite.Platform.VKBuffer;
 
 namespace Hedron {
 
-//Scope<Buffer> Buffer::Create(BufferType type, const void *data, size_t size, BufferUsage usage) {
-//    switch (Context::API) {
-//        case GraphicsAPI::DirectX:  { return CreateScope<DXBuffer>(type, data, size, usage); }
-//        case GraphicsAPI::OpenGL:   { return CreateScope<GLBuffer>(type, data, size, usage); }
-//        case GraphicsAPI::Vulkan:   { return CreateScope<VKBuffer>(type, data, size, usage); }
-//
-//        default: {
-//        #if APP_MODE_DEBUG
-//            throw std::runtime_error("Renderer::Buffer: RenderAPI not supported!");
-//        #else
-//            LogFatal("RenderAPI not supported!");
-//            return nullptr;
-//        #endif
-//        }
-//    }
-//}
+///
+/// Default
+///
+Scope<Buffer> Buffer::Create(BufferType type, const void *data, size_t size, BufferUsage usage) {
+    switch (GFXContext::API) {
+        //case GraphicsAPI::DirectX:  { return CreateScope<DXBuffer>(type, data, size, usage); }
+        case GraphicsAPI::OpenGL:   { return CreateScope<GLBuffer>(type, data, size, usage); }
+        //case GraphicsAPI::Vulkan:   { return CreateScope<VKBuffer>(type, data, size, usage); }
 
-#if UNDEFINED
+        default: {
+            LogFatal("Selected API isn't supported!");
+            return nullptr;
+        }
+    }
+}
+
+
+#if LEGACY_CODE
 
 template <index_t T>
 T *IndexBuffer::CompressIndices(const uint32_t *data, size_t &size) {
