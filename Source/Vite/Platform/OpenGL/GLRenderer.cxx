@@ -2,8 +2,11 @@
 
 namespace Hedron {
 
-//GLRenderer::GLRenderer() {}
+///
+/// Default
+///
+GLRenderer::GLRenderer() {}
 
-//GLRenderer::~GLRenderer() {}
+GLRenderer::~GLRenderer() {}
 
 }
