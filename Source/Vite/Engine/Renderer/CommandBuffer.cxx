@@ -17,7 +17,7 @@ Scope<CommandBuffer> CommandBuffer::Create() {
         //case GraphicsAPI::Vulkan:   { return CreateScope<VKCommandBuffer>(); }
 
         default: {
-            LogFatal("Selected API isn't supported!");
+            AppAssert(nullptr, "The selected graphics API isn't implemented!");
             return nullptr;
         }
     }

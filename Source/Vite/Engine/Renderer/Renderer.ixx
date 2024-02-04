@@ -24,21 +24,23 @@ public:
     virtual ~Renderer() = default;
     static Scope<Renderer> Create();
 
-    /// Methods
-    void BeginScene();
-    void EndScene();
-    void RenderScene();
-
-protected:
     /// Accessors
-    // Retrieve the command buffer (only for debugging purposes)
-    const CommandBuffer *GetCommandBuffer() const { return mCommandBuffer.get(); }
+    bool Capturing() const { return mCapturing; }
+    bool Presenting() const { return mPresenting; }
 
-protected:
+    /// Commands
+    void Capture();
+    void Present();
+
+private:
     /// Properties
     Scope<RenderDevice> mRenderDevice;
     Scope<CommandBuffer> mCommandBuffer;
     Scope<Swapchain> mSwapchain;
+
+    /// States
+    atomic<bool> mCapturing = false;
+    atomic<bool> mPresenting = false;
 };
 
 }

@@ -10,22 +10,19 @@ public:
     GLCommandBuffer();
     virtual ~GLCommandBuffer();
 
-    /// Mutators
-    void Clear(float r, float g, float b, float a) override;
-    void Viewport(float x, float y, float width, float height) override;
-
-    /// Methods
-    void Begin() override;
-    void End() override;
+    /// Commands
+    void Capture() override;
+    void Clear(const Color &color) override;
+    void Draw(uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance) override;
+    void DrawIndexed(size_t count, PrimitiveType type, bool depthTest = true) override;
+    void DrawIndexed(uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32 vertexOffset, uint32 firstInstance) override;
+    void UpdateStencilBuffer() override;
     void Execute() override;
     void Record(const function<void()> &callback) override;
+    void Viewport(const Position2D &position, const Size2D &size) override;
 
 private:
     /// Test
-    void Draw(uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance) override;
-    void DrawIndexed(uint32 indexCount, uint32 instanceCount, uint32 firstIndex, int32 vertexOffset, uint32 firstInstance) override;
-    void DrawIndexed(size_t count, PrimitiveType type, bool depthTest = true) override;
-    void UpdateStencilBuffer() override;
     void EnableStencilTest() override;
     void ResetStencilTest() override;
 };

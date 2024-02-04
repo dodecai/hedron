@@ -15,46 +15,24 @@ GLCommandBuffer::~GLCommandBuffer() {}
 
 
 ///
-/// Mutators
+/// Commands
 ///
-void GLCommandBuffer::Clear(float r, float g, float b, float a) {
-    glClearColor(r, g, b, a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+void GLCommandBuffer::Capture() {
+    mCommands.clear();
+    mCommands.reserve(1024);
 }
 
-void GLCommandBuffer::Viewport(float x, float y, float width, float height) {
-    // ToDo: Prevent sizes above imagination
-    if (!(width == 0) || !(height == 0)) return;
-    glViewport(static_cast<GLint>(x), static_cast<GLint>(y), static_cast<GLsizei>(width), static_cast<GLsizei>(height));
+void GLCommandBuffer::Clear(const Color &color) {
+    mCommands.push_back([color]() {
+        glClearColor(color.Red, color.Green, color.Blue, color.Alpha);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    });
 }
 
-
-///
-/// Methods
-///
-void GLCommandBuffer::Begin() {
-    // ToDo: Not needed, but it can be done with lambdas
+void GLCommandBuffer::Draw(uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance) {
 }
-
-void GLCommandBuffer::End() {
-    // ToDo: Not needed, but it can be done with lambdas
-}
-
-void GLCommandBuffer::Execute() {}
-
-void GLCommandBuffer::Record(const function<void()> &callback) {
-    mCommands.push_back(std::move(callback));
-}
-
-
-///
-/// Test
-///
-void GLCommandBuffer::Draw(uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance) {}
 
 void GLCommandBuffer::DrawIndexed(uint32_t indexCount, uint32_t instanceCount, uint32_t firstIndex, int32_t vertexOffset, uint32_t firstInstance) {
-    //if (!depthTest) glDisable(GL_DEPTH_TEST);
-
     GLenum mode = GL_TRIANGLES;
     GLenum type = GL_UNSIGNED_INT;
     //switch (properties.Type) {
@@ -68,14 +46,14 @@ void GLCommandBuffer::DrawIndexed(uint32_t indexCount, uint32_t instanceCount, u
     //    case PrimitiveType::Triangle: { mode = GL_TRIANGLES; break; }
     //}
 
-    glDrawElements(mode, indexCount, type, nullptr);
-
-    //if (!depthTest) glEnable(GL_DEPTH_TEST);
+    mCommands.push_back([indexCount, mode, type]() {
+        //if (!depthTest) glDisable(GL_DEPTH_TEST);
+        glDrawElements(mode, indexCount, type, nullptr);
+        //if (!depthTest) glEnable(GL_DEPTH_TEST);
+    });
 }
 
 void GLCommandBuffer::DrawIndexed(size_t count, PrimitiveType primitive, bool depthTest) {
-    if (!depthTest) { glDepthMask(GL_FALSE); } else { glDepthMask(GL_TRUE); };
-
     GLenum type = GL_UNSIGNED_INT;
     //switch (properties.Type) {
     //    case IndexType::UINT8:  { type = GL_UNSIGNED_BYTE; break; }
@@ -89,30 +67,65 @@ void GLCommandBuffer::DrawIndexed(size_t count, PrimitiveType primitive, bool de
         case PrimitiveType::Triangle: { mode = GL_TRIANGLES; break; }
     }
 
-    // ToDo: C4267 possible loss of data
-    glDrawElements(mode, static_cast<GLsizei>(count), type, nullptr);
-
-    if (!depthTest) { glDepthMask(GL_TRUE); } else { glDepthMask(GL_FALSE); };
+    mCommands.push_back([depthTest, count, mode, type]() {
+        if (!depthTest) { glDepthMask(GL_FALSE); } else { glDepthMask(GL_TRUE); };
+         // ToDo: C4267 possible loss of data
+        glDrawElements(mode, static_cast<GLsizei>(count), type, nullptr);
+        if (!depthTest) { glDepthMask(GL_TRUE); } else { glDepthMask(GL_FALSE); };
+    });
 }
 
+void GLCommandBuffer::Execute() {
+    for (auto &command : mCommands) {
+        command();
+    }
+}
+
+void GLCommandBuffer::Record(const function<void()> &callback) {
+    mCommands.push_back(std::move(callback));
+}
+
+void GLCommandBuffer::Viewport(const Position2D &position, const Size2D &size) {
+    // ToDo: Prevent sizes above imagination
+    if (!(size.Width == 0) || !(size.Height == 0)) return;
+
+    mCommands.push_back([position, size]() {
+        glViewport(
+            static_cast<GLint>(position.X),
+            static_cast<GLint>(position.Y),
+            static_cast<GLsizei>(size.Width),
+            static_cast<GLsizei>(size.Height)
+        );
+    });
+}
+
+
+///
+/// Test
+///
 void GLCommandBuffer::UpdateStencilBuffer() {
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glStencilMask(0xFF);
+    mCommands.push_back([]() {
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        glStencilMask(0xFF);
+    });
 }
 
 void GLCommandBuffer::EnableStencilTest() {
-    glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
-    glStencilMask(0x00);
-    glDisable(GL_DEPTH_TEST);
+    mCommands.push_back([]() {
+        glStencilFunc(GL_NOTEQUAL, 1, 0xFF);
+        glStencilMask(0x00);
+        glDisable(GL_DEPTH_TEST);
+    });
 }
 
 void GLCommandBuffer::ResetStencilTest() {
-    glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-    glStencilFunc(GL_ALWAYS, 1, 0xFF);
-    glStencilMask(0xFF);
-    glEnable(GL_DEPTH_TEST);
+    mCommands.push_back([]() {
+        glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+        glStencilFunc(GL_ALWAYS, 1, 0xFF);
+        glStencilMask(0xFF);
+        glEnable(GL_DEPTH_TEST);
+    });
 }
-
 
 }

@@ -22,12 +22,12 @@ Scope<GFXContext> GFXContext::Create(void *window) {
         }
 
         default: {
-            AppAssert(false, "The selected graphics api isn't implemented!");
+            AppAssert(nullptr, "The selected graphics API isn't implemented!");
             return nullptr;
         }
     }
 #else
-    AppAssert(false, "The current platform isn't supported!");
+    AppAssert(nullptr, "The current platform isn't supported!");
     return nullptr;
 #endif
 }

@@ -1,7 +1,8 @@
 ﻿export module Vite.DearImGui.Layer;
 
+export import <imgui/imgui.h>;
+//export import Vite.Bridge.DearImGui;
 import Vite.App.Layers;
-//import Vite.Bridge.DearImGui;
 import Vite.Core;
 
 export namespace Hedron {

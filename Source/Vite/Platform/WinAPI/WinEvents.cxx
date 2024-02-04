@@ -495,6 +495,13 @@ bool WinEventHandler::Dispatch(MSG message) {
             break;
 			}*/
 		}
+        case WM_MOUSELEAVE: {
+            MouseEvent event;
+            //event.Action = MouseAction::Leave;
+
+            Publish(event);
+            return true;
+        }
 
         /// Wheel
 		case WM_MOUSEWHEEL: {
