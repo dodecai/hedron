@@ -3,11 +3,11 @@
 #include "Vite/Base/Platform/Detection.h"
 
 #pragma comment(lib, "dwmapi.lib")
+#pragma comment(lib, "user32.lib")
 //#pragma comment(lib, "uxtheme.lib")
 
 #define NOMINMAX
 #define VC_EXTRALEAN
-#define WIN32_LEAN_AND_MEAN
 
 #include <DwmApi.h>
 #include <ShObjIdl.h>
@@ -175,25 +175,25 @@ WinWindow::WinWindow(const WindowSettings &settings): mSettings { settings } {
     //SetThreadExecutionState(ES_DISPLAY_REQUIRED && ES_SYSTEM_REQUIRED);
 
     // Load Resources
-    //mWindowIcon = LoadIcon(NULL, IDI_APPLICATION);
-    //mWindowIcon = (HICON)LoadImage(NULL, L"icon.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
-    //mWindowIcon = (HICON)LoadIconFile(Properties.Icon);
+    mApplicationIcon = LoadIcon(nullptr, IDI_APPLICATION);
+    //mApplicationIcon = LoadIconFile(Properties.Icon);
+    //mApplicationIcon = LoadImage(NULL, L"icon.ico", IMAGE_ICON, 0, 0, LR_LOADFROMFILE);
 
     // Register Window Class
-    static HBRUSH ClearColor = (HBRUSH)GetStockObject(NULL_BRUSH);
+    static auto clearColor = static_cast<HBRUSH>(GetStockObject(NULL_BRUSH));
     WNDCLASSEX classProperties = {
-        .cbSize	= sizeof(WNDCLASSEX),			// Structure Size (in bytes)
-        .style = windowStyle.ClassStyle,		// Separate device context for window and redraw on move
-        .lpfnWndProc = MessageCallback,			// Message Callback (WndProc)
-        .cbClsExtra = 0,						// Extra class data
-        .cbWndExtra = WS_EX_TOPMOST,			// Extra window data
-        .hInstance = mApplicationHandle,		// Application Intance
-        .hIcon = mApplicationIcon,  			// Load Icon (Default: LoadIcon(NULL, IDI_APPLICATION);)
-        .hCursor = LoadCursor(NULL, IDC_ARROW),	// Load Cursor (Default: IDC_ARROW)
-        .hbrBackground = ClearColor,			// Background (Not required for GL -> NULL)
-        .lpszMenuName = NULL,					// We Don't Want A Menu
-        .lpszClassName = mWindowClass.c_str(),   // Class Name should be unique per window
-        .hIconSm = mApplicationIcon,			// Load Icon Symbol (Default: LoadIcon(NULL, IDI_WINLOGO);)
+        .cbSize	= sizeof(WNDCLASSEX),			    // Structure Size (in bytes)
+        .style = windowStyle.ClassStyle,		    // Separate device context for window and redraw on move
+        .lpfnWndProc = MessageCallback,			    // Message Callback (WndProc)
+        .cbClsExtra = 0,						    // Extra class data
+        .cbWndExtra = WS_EX_TOPMOST,			    // Extra window data
+        .hInstance = mApplicationHandle,		    // Application Intance
+        .hIcon = mApplicationIcon,  			    // Load Icon (Default: LoadIcon(NULL, IDI_APPLICATION);)
+        .hCursor = LoadCursor(nullptr, IDC_ARROW),	// Load Cursor (Default: IDC_ARROW)
+        .hbrBackground = clearColor,			    // Background (Not required for GL -> NULL)
+        .lpszMenuName = nullptr,					// We Don't Want A Menu
+        .lpszClassName = mWindowClass.c_str(),      // Class Name should be unique per window
+        .hIconSm = mApplicationIcon,			    // Load Icon Symbol (Default: LoadIcon(NULL, IDI_WINLOGO);)
     };
     if (!RegisterClassEx(&classProperties)) {
         LogFatal("Failed to register the window class!");
@@ -257,6 +257,9 @@ WinWindow::WinWindow(const WindowSettings &settings): mSettings { settings } {
     }
     if (!mParentWindowHandle) { mParentWindowHandle = mWindowHandle; }
 
+    // Enable Drag and Drop
+    DragAcceptFiles(mWindowHandle, true);
+
     // Center Window
     if (!(mSettings.Style == WindowStyle::FullScreen)/* && Properties.Position.Centered*/) {
         unsigned int x = (GetSystemMetrics(SM_CXSCREEN) - dimension.right) / 2;
@@ -306,6 +309,21 @@ void WinWindow::Update() {
 
 /// Controls
 void WinWindow::FullScreen(bool fullScreen) {
+    // FullScreen more convenient?
+    //mSettings.Style = WindowStyle::FullScreen;
+    //HMONITOR hmon = MonitorFromWindow(WindowHandle, MONITOR_DEFAULTTONEAREST);
+    //MONITORINFO mi = { sizeof(mi) };
+    //GetMonitorInfo(hmon, &mi);
+    //dimension.left = mi.rcMonitor.left;
+    //dimension.top = mi.rcMonitor.top;
+    //dimension.right = mi.rcMonitor.right;
+    //dimension.bottom = mi.rcMonitor.bottom;
+    //// Configure Window
+    //ShowCursor(!);
+    auto hMonitor = MonitorFromWindow(mWindowHandle, MONITOR_DEFAULTTONEAREST);
+    auto monitorInfo = MONITORINFO { sizeof(MONITORINFO) };
+    GetMonitorInfo(hMonitor, &monitorInfo);
+
     // Switch to FullScreen Mode if requested
     unsigned int screenWidth = GetSystemMetricsForDpi(SM_CXSCREEN, GetDpiForSystem());
     unsigned int screenHeight = GetSystemMetricsForDpi(SM_CYSCREEN, GetDpiForSystem());
@@ -353,17 +371,6 @@ void WinWindow::FullScreen(bool fullScreen) {
     //    // Set the window position and size based on the stored settings
     //    SetWindowPos(mWindowHandle, HWND_TOP, mSettings.Position.X, mSettings.Position.Y, mSettings.Size.Width, mSettings.Size.Height, SWP_FRAMECHANGED);
     //}
-    // FullScreen more convenient?
-    //mSettings.Style = WindowStyle::FullScreen;
-    //HMONITOR hmon = MonitorFromWindow(WindowHandle, MONITOR_DEFAULTTONEAREST);
-    //MONITORINFO mi = { sizeof(mi) };
-    //GetMonitorInfo(hmon, &mi);
-    //dimension.left = mi.rcMonitor.left;
-    //dimension.top = mi.rcMonitor.top;
-    //dimension.right = mi.rcMonitor.right;
-    //dimension.bottom = mi.rcMonitor.bottom;
-    //// Configure Window
-    //ShowCursor(!);
 }
 
 void WinWindow::Transparent(bool transparent) {
@@ -592,6 +599,24 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
             // Say goodbye
             PostQuitMessage(0);
+            return 0;
+        }
+        case WM_DROPFILES: {
+            auto hDrop = reinterpret_cast<HDROP>(wParam);
+
+            uint32 count = DragQueryFile(hDrop, 0xFFFFFFFF, nullptr, 0);
+            vector<wstring> files;
+            for (auto i = 0u; i < count; i++) {
+                uint32 size = DragQueryFile(hDrop, i, nullptr, 0);
+                wstring file(size, '\0');
+                DragQueryFile(hDrop, i, file.data(), size + 1);
+                files.push_back(file);
+            }
+
+            auto position = POINT {};
+            DragQueryPoint(hDrop, &position);
+            DragFinish(hDrop);
+
             return 0;
         }
         case WM_PAINT: {

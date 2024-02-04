@@ -153,4 +153,15 @@ void GLRenderDevice::DrawingMode(PolygonMode mode) {
     }
 }
 
+
+///
+/// Commands
+///
+void GLRenderDevice::Capture() {
+}
+
+void GLRenderDevice::Present() {
+    
+}
+
 }

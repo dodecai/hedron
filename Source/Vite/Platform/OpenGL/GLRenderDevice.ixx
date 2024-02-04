@@ -11,7 +11,11 @@ public:
     virtual ~GLRenderDevice();
 
     /// Mutators
-    virtual void DrawingMode(PolygonMode mode) override;
+    void DrawingMode(PolygonMode mode) override;
+
+    /// Commands
+    void Capture() override;
+    void Present() override;
 };
 
 }

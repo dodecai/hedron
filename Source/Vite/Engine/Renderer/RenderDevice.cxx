@@ -17,7 +17,7 @@ Scope<RenderDevice> RenderDevice::Create() {
         //case GraphicsAPI::Vulkan:   { return CreateScope<VKRenderDevice>(); }
 
         default: {
-            LogFatal("Selected API isn't supported!");
+            AppAssert(nullptr, "The selected graphics API isn't implemented!");
             return nullptr;
         }
     }

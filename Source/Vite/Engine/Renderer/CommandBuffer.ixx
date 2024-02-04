@@ -30,26 +30,21 @@ public:
     virtual ~CommandBuffer() = default;
     static Scope<CommandBuffer> Create();
 
-    /// Mutators
-    virtual void Clear(float r, float g, float b, float a) = 0;
-    virtual void Viewport(float x, float y, float width, float height) = 0;
-
-    /// Methods
-    virtual void Begin() = 0;
-    virtual void End() = 0;
+    /// Commands
+    virtual void Capture() = 0;
+    virtual void Clear(const Color &color) = 0;
+    virtual void Draw(uint32 vertexCount, uint32 instanceCount = 0, uint32 firstVertex = 0, uint32 firstInstance = 0) = 0;
+    virtual void DrawIndexed(size_t count, PrimitiveType type, bool depthTest = true) = 0;
+    virtual void DrawIndexed(uint32 indexCount, uint32 instanceCount = 0, uint32 firstIndex = 0, int32 vertexOffset = 0, uint32 firstInstance = 0) = 0;
     virtual void Execute() = 0;
     virtual void Record(const function<void()> &callback) = 0;
+    virtual void Viewport(const Position2D &position, const Size2D &size) = 0;
 
 protected:
     /// Test
-    virtual void Draw(uint32 vertexCount, uint32 instanceCount = 0, uint32 firstVertex = 0, uint32 firstInstance = 0) = 0;
-    virtual void DrawIndexed(uint32 indexCount, uint32 instanceCount = 0, uint32 firstIndex = 0, int32 vertexOffset = 0, uint32 firstInstance = 0) = 0;
-    virtual void DrawIndexed(size_t count, PrimitiveType type, bool depthTest = true) = 0;
-    virtual void EnableStencilTest() {}
-    virtual void UpdateStencilBuffer() {}
-    virtual void ResetStencilTest() {}
-
-    /// ToDo
+    virtual void EnableStencilTest() = 0;
+    virtual void UpdateStencilBuffer() = 0;
+    virtual void ResetStencilTest() = 0;
     //virtual void BindRenderState(const Scope<RenderState> &renderState) = 0;
     //virtual void BindShader(const Scope<Shader> &shader) = 0;
     //virtual void BindVertexBuffer(const Scope<Buffer> &vertexBuffer) = 0;

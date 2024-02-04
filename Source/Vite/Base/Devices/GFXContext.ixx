@@ -1,19 +1,11 @@
 ﻿export module Vite.Device.GFXContext;
 
+export import Vite.Device.GFXData;
 import Vite.Math;
 import Vite.Type.SmartPointer;
 import Vite.Type.Standard;
 
 export namespace Hedron {
-
-///
-/// @brief Graphics API's [DirectX|OpenGL|Vulkan]
-///
-enum class GraphicsAPI {
-    DirectX,
-    OpenGL,
-    Vulkan,
-};
 
 ///
 /// @brief ContextData: This type is platform specific, look at the implementation for more details.

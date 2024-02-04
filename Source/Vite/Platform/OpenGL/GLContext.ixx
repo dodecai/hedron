@@ -30,19 +30,19 @@ public:
     virtual ~GLContext();
 
     /// Controls
-    virtual void Attach() override;
-    virtual void Detach() override;
-    virtual void Clear() override;
-    virtual void SwapBuffers() override;
-    virtual void Viewport(const Size2D &size, const Position2D &position) override;
-    virtual void VSync(bool activate) override;
+    void Attach() override;
+    void Detach() override;
+    void Clear() override;
+    void SwapBuffers() override;
+    void Viewport(const Size2D &size, const Position2D &position) override;
+    void VSync(bool activate) override;
 
     /// States
-    virtual bool const CurrentContext() override;
+    bool const CurrentContext() override;
 
 private:
     /// Casts
-    virtual void *AsPlatformHandle() override;
+    void *AsPlatformHandle() override;
 
 private:
     /// Methods

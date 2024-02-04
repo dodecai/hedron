@@ -349,16 +349,15 @@ private:
             mEventHandler->Update();
             mGraphicsContext->Attach();
             //mGraphicsContext->Clear();
-            mRenderer->BeginScene();
+            mRenderer->Capture();
             for (auto *layer : mLayers) layer->Update(deltaTime);
             Update(deltaTime);
+            mRenderer->Present();
             if (mCoreWindow->State(WindowState::Alive)) {
                 mDearImGuiLayer->Prepare();
                 for (auto *layer : mLayers) layer->UpdateUI();
                 mDearImGuiLayer->Render();
             }
-            mRenderer->EndScene();
-            mRenderer->RenderScene();
             mGraphicsContext->SwapBuffers();
             mGraphicsContext->Detach();
         }

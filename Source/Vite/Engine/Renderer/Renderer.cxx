@@ -30,44 +30,45 @@ Scope<Renderer> Renderer::Create() {
         //case GraphicsAPI::DirectX:  { renderer = CreateScope<DXRenderer>(); break; }
         case GraphicsAPI::OpenGL:   { renderer = CreateScope<GLRenderer>(); break; }
         //case GraphicsAPI::Vulkan:   { renderer = CreateScope<VKRenderer>(); break; }
+
         default: {
-            LogFatal("Selected API isn't supported!");
+            AppAssert(nullptr, "The selected graphics API isn't implemented!");
             return nullptr;
         }
     }
 
     renderer->mRenderDevice = RenderDevice::Create();
     renderer->mCommandBuffer = CommandBuffer::Create();
+    //auto swapchain = Swapchain::Create(nullptr, 1280, 1024);
     return renderer;
 }
 
 
 ///
-/// Methods
+/// Commands
 ///
-void Renderer::BeginScene() {
-    // Create render states
-    //auto renderState = RenderState::Create();
-    
-    // Begin recording commands and clear the screen
-    mCommandBuffer->Begin();
-    mCommandBuffer->Clear(0.1f, 0.1f, 0.1f, 1.0f);
+void Renderer::Capture() {
+    // Preparation
+    mCapturing = true;
+    mPresenting = false;
+
+    // Setup the render device and begin recording commands
+    mRenderDevice->Capture();
+    mCommandBuffer->Capture();
+    mCommandBuffer->Clear({ 0.1f, 0.1f, 0.1f, 1.0f });
 }
 
-void Renderer::EndScene() {
-    // End recording commands
-    mCommandBuffer->End();
-}
+void Renderer::Present() {
+    // Preparation
+    mCapturing = false;
+    mPresenting = true;
 
-void Renderer::RenderScene() {
-    // Set up the render state
-    //commandBuffer->BindRenderState(renderState);
-
-    // Execute the command buffer
+    // End recording commands and execute the command buffer
     mCommandBuffer->Execute();
 
     // Present the rendered image to the screen
-    //swapchain->Present();
+    mRenderDevice->Present();
+    //mSwapchain->Present();
 }
 
 }
