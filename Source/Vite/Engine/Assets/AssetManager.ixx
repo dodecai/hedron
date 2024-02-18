@@ -1,4 +1,4 @@
-﻿export module Vite.AssetManager;
+﻿export module Vite.Asset.Manager;
 
 import Vite.Core;
 import Vite.Asset;
@@ -7,6 +7,7 @@ import Vite.Util.String;
 export namespace Hedron {
 
 class AssetManager {
+    // Types
     using AssetFiles = unordered_map<AssetType, vector<string>>;
     using AssetMappings = unordered_map<AssetType, vector<string>>;
 
@@ -76,4 +77,5 @@ private:
     AssetFiles mAssets;
     AssetMappings mAssetMappings;
 };
+
 }

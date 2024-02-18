@@ -46,6 +46,7 @@ using glm::radians;
 using glm::scale;
 using glm::toMat4;
 using glm::translate;
+using glm::value_ptr;
 
 
 ///
@@ -72,11 +73,11 @@ glm::mat4 Orthographic(float left, float right, float bottom, float top, float n
     return glm::orthoLH_ZO(left, right, bottom, top, near, far);
 }
 
-glm::mat4 Transform(const glm::vec3 &position, const glm::quat &rotation, const glm::vec3 &scale) {
+glm::mat4 Transform(const glm::vec3 &position, const glm::vec3 &size, const glm::quat &rotation) {
     return
         glm::translate(glm::mat4(1.0f), position) *
         glm::toMat4(glm::quat(rotation)) *
-        glm::scale(glm::mat4(1.0f), scale);
+        glm::scale(glm::mat4(1.0f), size);
 }
 
 }

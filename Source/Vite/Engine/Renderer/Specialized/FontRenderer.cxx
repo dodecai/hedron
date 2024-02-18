@@ -13,7 +13,7 @@
 
 module Vite.FontRenderer;
 
-import Vite.AssetManager;
+import Vite.Asset.Manager;
 import Vite.UIRenderer;
 
 // ToDo: Use Atlas instead of individual textures

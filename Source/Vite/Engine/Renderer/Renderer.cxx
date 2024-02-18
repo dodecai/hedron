@@ -58,6 +58,9 @@ void Renderer::Capture() {
     mCommandBuffer->Clear({ 0.1f, 0.1f, 0.1f, 1.0f });
 }
 
+void Renderer::DrawIndexed() {
+}
+
 void Renderer::Present() {
     // Preparation
     mCapturing = false;

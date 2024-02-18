@@ -2,6 +2,7 @@
 
 import Vite.Bridge.GLM;
 import Vite.Core;
+import Vite.Asset;
 import Vite.Asset.Material;
 import Vite.Renderer.Buffer;
 import Vite.Renderer.CommandBuffer;
@@ -19,37 +20,86 @@ struct Vertex {
     glm::vec2 TexCoords {};
     glm::vec3 Tangent {};
     glm::vec3 Bitangent {};
-    //int BoneIDs[MaxBoneInfluences] = { 0, 0, 0, 0 };
-    //float Weights[MaxBoneInfluences] = { 0.0f, 0.0f, 0.0f, 0.0f };
 };
 
-struct TextureData {
+struct TextureAsset {
     uint32 ID;
     string Path;
     string Type;
+    Reference<Texture> Texture;
 };
 
 using Vertices = vector<Vertex>;
 using Indices = vector<uint32>;
-using Textures = vector<Reference<Texture>>;
-using TextureInfo = vector<TextureData>;
+using Textures = vector<TextureAsset>;
 
 class Mesh {
 public:
-    Mesh(Vertices vertices, Indices indices, Textures textures, TextureInfo info, MaterialData material = {}):
+    Mesh(const Vertices &vertices, const Indices &indices, const Textures &textures, const Components::Material &material = {}, Reference<Texture> dontKnowWhyButIfRemovedTexturesDontLoadCorrectly = {}):
         mVertices(vertices),
         mIndices(indices),
         mTextures(textures),
-        mTextureData(info),
-        mMaterialData(material) {
+        mMaterial(material) {
         SetupMesh();
     }
     ~Mesh() = default;
 
-    void Draw(CommandBuffer *commandBuffer);
-    uint32 GetIndices() const { return static_cast<uint32>(mIndices.size()); }
+    void Bind() {
+        mVertexBuffer->Bind();
+        mPipeline->Bind();
+        mIndexBuffer->Bind();
 
-    MaterialData GetMaterial() const { return mMaterialData; }
+        for (size_t i = 0; i < mTextures.size(); i++) {
+            if (i >= 3) break;
+            if (mTextures[i].Type == "Simple") {
+                mTextures[i].Texture->Bind(0);
+                mTextures[i].Texture->Bind(1);
+                mTextures[i].Texture->Bind(2);
+            } else if (mTextures[i].Type == "Diffuse") {
+                mTextures[i].Texture->Bind(0);
+                mTextures[i].Texture->Bind(2);
+            //} else if(mTextures[i].Type == "Normal") {
+            //    mTextures[i].Texture->Bind(0);
+            //    mTextures[i].Texture->Bind(2);
+            } else if (mTextures[i].Type == "Specular") {
+                mTextures[i].Texture->Bind(0);
+                mTextures[i].Texture->Bind(2);
+            //} else if(mTextures[i].Type == "Height") {
+            //    mTextures[i].Texture->Bind(1);
+            //} else if(mTextures[i].Type == "Ambient") {
+            //    mTextures[i].Texture->Bind(2);
+            //} else if(mTextures[i].Type == "Metallic") {
+            //    mTextures[i].Texture->Bind(5);
+            //} else if(mTextures[i].Type == "Roughness") {
+            //    mTextures[i].Texture->Bind(6);
+            //} else if(mTextures[i].Type == "AO") {
+            //    mTextures[i].Texture->Bind(7);
+            } else {
+                mMaterialBuffer->Bind(9);
+                mMaterialBuffer->UpdateData(&mMaterial, sizeof(Components::Material));
+            }
+        }
+        if (!mTextures.size()) {
+            mMaterialBuffer->Bind(9);
+            mMaterialBuffer->UpdateData(&mMaterial, sizeof(Components::Material));
+        }
+    }
+    void Unbind() {
+        mPipeline->Unbind();
+
+        for (size_t i = 0; i < mTextures.size(); i++) {
+            if (i >= 3) break;
+            mTextures[i].Texture->Unbind(static_cast<uint32_t>(i));
+        }
+        mMaterialBuffer->Unbind();
+    }
+
+    uint32 GetIndicesCount() const { return static_cast<uint32>(mIndices.size()); }
+    Components::Material GetMaterial() const { return mMaterial; }
+
+    void SetDefaultTexture(const Textures &textures) {
+        mTextures = textures;
+    }
 
 private:
     void SetupMesh() {
@@ -64,56 +114,26 @@ private:
             { ShaderDataType::Float2, "aTexCoords" },
             { ShaderDataType::Float3, "aTangent"   },
             { ShaderDataType::Float3, "aBitangent" },
-            //{ ShaderDataType::Int4,   "aBoneIDs"   },
-            //{ ShaderDataType::Float4, "aWeights"   },
         };
         mPipeline = PipelineState::Create(properties);
 
         mVertexBuffer = Buffer::Create(BufferType::Vertex, mVertices.data(), sizeof_vector(mVertices));
         mIndexBuffer = Buffer::Create(BufferType::Index, mIndices.data(), sizeof_vector(mIndices));
-        mMaterialBuffer = Buffer::Create(BufferType::Uniform, &mMaterialData, sizeof(MaterialData));
+        mMaterialBuffer = Buffer::Create(BufferType::Uniform, &mMaterial, sizeof(Components::Material));
     }
 
 private:
-    Reference<PipelineState> mPipeline;
+    /// Data
     Vertices mVertices;
     Indices mIndices;
     Textures mTextures;
+    Components::Material mMaterial;
 
-    TextureInfo mTextureData;
-    MaterialData mMaterialData;
-
+    /// Instances
+    Reference<PipelineState> mPipeline;
     Reference<Buffer> mVertexBuffer;
     Reference<Buffer> mIndexBuffer;
     Reference<Buffer> mMaterialBuffer;
 };
-
-}
-
-module: private;
-
-namespace Hedron {
-
-void Mesh::Draw(CommandBuffer *commandBuffer) {
-    mVertexBuffer->Bind();
-    mPipeline->Bind();
-    mIndexBuffer->Bind();
-
-    for (size_t i = 0; i < mTextures.size(); i++) {
-        if (i >= 3) break;
-        mTextures[i]->Bind(static_cast<uint32_t>(i));
-    }
-    if (!mTextures.size()) {
-        mMaterialBuffer->Bind(9);
-        mMaterialBuffer->UpdateData(&mMaterialData, sizeof(MaterialData));
-    }
-    commandBuffer->DrawIndexed(mIndices.size(), PrimitiveType::Triangle, true);
-    mPipeline->Unbind();
-
-    for (size_t i = 0; i < mTextures.size(); i++) {
-        if (i >= 3) break;
-        mTextures[i]->Unbind(static_cast<uint32_t>(i));
-    }
-}
 
 }

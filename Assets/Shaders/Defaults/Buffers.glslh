@@ -2,7 +2,7 @@
 //#pragma once
 
 ///
-/// @brief Camera\Renderer\Scene\Screen Data
+/// Camera\Renderer\Scene\Screen Data
 ///
 
 layout(std140, binding = 0) uniform RendererData {
@@ -32,7 +32,7 @@ layout(std140, binding = 3) uniform ScreenData {
 } uScreen;
 
 ///
-/// @brief Animation and Object Data
+/// Animation and Object Data
 ///
 
 layout(std140, binding = 4) uniform EntityData {
@@ -46,7 +46,7 @@ layout(std140, binding = 5) uniform AnimationData {
 } uAnimation;
 
 ///
-/// @brief Light and Shadow Data
+/// Light and Shadow Data
 ///
 
 #define MAX_LIGHTS 5

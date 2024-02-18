@@ -5,51 +5,60 @@ export import Vite.Math.Matrix;
 export import Vite.Math.Quaternion;
 export import Vite.Math.Vector;
 
+import Vite.Type.Concepts;
+import Vite.Type.Standard;
+
 export namespace Hedron {
 
 namespace Math {
 
+///
+/// Aliases
+///
+// Scalar Types
+using Bool = bool;
+using Double = double;
+using Float = float;
+using Int = int32;
+using UInt = uint32;
+
+// Vector Types
+using Bool2 = VectorBase<bool, 2, VectorAliases::None>;
+using Bool3 = VectorBase<bool, 3, VectorAliases::None>;
+using Bool4 = VectorBase<bool, 4, VectorAliases::None>;
+
+using Double2 = VectorBase<double, 2>;
+using Double3 = VectorBase<double, 3>;
+using Double4 = VectorBase<double, 4>;
+
+using Float2 = VectorBase<float, 2>;
+using Float3 = VectorBase<float, 3>;
+using Float4 = VectorBase<float, 4>;
+
+using Int2 = VectorBase<int32_t, 2>;
+using Int3 = VectorBase<int32_t, 3>;
+using Int4 = VectorBase<int32_t, 4>;
+
+using UInt2 = VectorBase<uint32_t, 2>;
+using UInt3 = VectorBase<uint32_t, 3>;
+using UInt4 = VectorBase<uint32_t, 4>;
+
+
+///
+/// Functions
+///
+template <typename_floating_point T>
+constexpr inline T DegreesToRadians(T degrees) {
+    return degrees * static_cast<T>(std::numbers::pi) / 180.0f;
+}
+
+template <typename_floating_point T>
+constexpr inline T RadiansToDegrees(T radians) {
+    return radians * 180.0f / static_cast<T>(std::numbers::pi);
+}
+
+
 #ifdef LEGACY_CODE
-
-//#pragma warning(push)
-//#pragma warning(disable: 4201)
-//
-//#pragma warning(pop)
-
-///
-/// @brief Migration Section, until everything is implemented, we use the glm Mappings
-///
-
-//// Scalar Types
-//using Bool = bool;
-//using Double = double;
-//using Float = float;
-//using Int = int32_t;
-//using UInt = uint32_t;
-//
-//// Vector Types
-//using Bool2 = VectorBase<bool, 2, VectorAliases::None>;
-//using Bool3 = VectorBase<bool, 3, VectorAliases::None>;
-//using Bool4 = VectorBase<bool, 4, VectorAliases::None>;
-//
-//using Double2 = VectorBase<double, 2>;
-//using Double3 = VectorBase<double, 3>;
-//using Double4 = VectorBase<double, 4>;
-//
-//using Float2 = VectorBase<float, 2>;
-//using Float3 = VectorBase<float, 3>;
-//using Float4 = VectorBase<float, 4>;
-//
-//using Int2 = VectorBase<int32_t, 2>;
-//using Int3 = VectorBase<int32_t, 3>;
-//using Int4 = VectorBase<int32_t, 4>;
-//
-//using UInt2 = VectorBase<uint32_t, 2>;
-//using UInt3 = VectorBase<uint32_t, 3>;
-//using UInt4 = VectorBase<uint32_t, 4>;
-
-namespace Math {
-
 
 bool DecomposeTransform([[maybe_unused]] const glm::mat4 &transform, [[maybe_unused]] glm::vec3 &position, [[maybe_unused]] glm::vec3 &orientation, [[maybe_unused]] glm::vec3 &scale) {
     // from glm::decompose in matrix_decompose.inl
@@ -153,72 +162,6 @@ glm::mat4 calculate_lookAt_matrix(glm::vec3 position, glm::vec3 target, glm::vec
 // view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 view = calculate_lookAt_matrix(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 #endif
-
-}
-
-// Extensions
-
-namespace std {
-
-template<>
-struct std::formatter<glm::vec3> {
-    constexpr auto parse(format_parse_context &ctx) {
-        const auto it = ctx.begin();
-        if (it != ctx.end() && *it != '}')
-            throw format_error("Invalid format for glm::vec4!");
-        return it;
-    }
-
-    template<typename FormatContext>
-    auto format(const glm::vec4 &vec, FormatContext &ctx) {
-        return format_to(ctx.out(), "[{}, {}, {}]", vec.x, vec.y, vec.z);
-    }
-};
-
-
-template<>
-struct std::formatter<glm::vec4> {
-    constexpr auto parse(format_parse_context &ctx) {
-        const auto it = ctx.begin();
-        if (it != ctx.end() && *it != '}') throw format_error("Invalid format for glm::vec4!");
-        return it;
-    }
-
-    template<typename FormatContext>
-    auto format(const glm::vec4 &vec, FormatContext &ctx) {
-        return format_to(ctx.out(), "[{}, {}, {}, {}]", vec.x, vec.y, vec.z, vec.w);
-    }
-};
-
-template<>
-struct std::formatter<glm::mat4> {
-    constexpr auto parse(format_parse_context &ctx) {
-        const auto it = ctx.begin();
-        if (it != ctx.end() && *it != '}') throw format_error("Invalid format for für glm::mat4!");
-        return it;
-    }
-
-    template<typename FormatContext>
-    auto format(const glm::mat4 &mat, FormatContext &ctx) {
-        std::ostringstream os;
-        os << "[";
-        for (int i = 0; i < 4; ++i) {
-            os << "[";
-            for (int j = 0; j < 4; ++j) {
-                os << mat[i][j];
-                if (j < 3)
-                    os << ", ";
-            }
-            os << "]";
-            if (i < 3)
-                os << ", ";
-        }
-        os << "]";
-        return format_to(ctx.out(), "{}", os.str());
-    }
-};
-
-}
 
 #endif
 
