@@ -27,7 +27,8 @@ public:
 private:
     /// Methods
     static inline string Ticks (const string_view &format = "{:%Y-%m-%dT%H:%M:%S}") {
-        auto args = std::make_format_args(Clock::now());
+        auto elapsed = Clock::now();
+        auto args = std::make_format_args(elapsed);
         try {
             return std::vformat(format, args);
         } catch (const std::exception &ex) {
@@ -62,9 +63,9 @@ private:
         elapsed -= second;
         auto millisecond = duration_cast<microseconds>(elapsed);
 
-        auto args = std::make_format_args(day.count(), hour.count(), minute.count(), second.count(), millisecond.count());
+        //auto args = std::make_format_args(day.count(), hour.count(), minute.count(), second.count(), millisecond.count());
         try {
-            return std::vformat(format, args);
+            //return std::vformat(format, args);
         } catch (const std::exception &ex) {
             return ex.what();
         }

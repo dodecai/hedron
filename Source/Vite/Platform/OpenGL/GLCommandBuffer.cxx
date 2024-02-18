@@ -23,10 +23,12 @@ void GLCommandBuffer::Capture() {
 }
 
 void GLCommandBuffer::Clear(const Color &color) {
-    mCommands.push_back([color]() {
-        glClearColor(color.Red, color.Green, color.Blue, color.Alpha);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    });
+    //mCommands.push_back([color]() {
+    //    glClearColor(color.Red, color.Green, color.Blue, color.Alpha);
+    //    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    //});
+    glClearColor(color.Red, color.Green, color.Blue, color.Alpha);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 void GLCommandBuffer::Draw(uint32 vertexCount, uint32 instanceCount, uint32 firstVertex, uint32 firstInstance) {
@@ -46,11 +48,12 @@ void GLCommandBuffer::DrawIndexed(uint32_t indexCount, uint32_t instanceCount, u
     //    case PrimitiveType::Triangle: { mode = GL_TRIANGLES; break; }
     //}
 
-    mCommands.push_back([indexCount, mode, type]() {
-        //if (!depthTest) glDisable(GL_DEPTH_TEST);
-        glDrawElements(mode, indexCount, type, nullptr);
-        //if (!depthTest) glEnable(GL_DEPTH_TEST);
-    });
+    //mCommands.push_back([indexCount, mode, type]() {
+    //    //if (!depthTest) glDisable(GL_DEPTH_TEST);
+    //    glDrawElements(mode, indexCount, type, nullptr);
+    //    //if (!depthTest) glEnable(GL_DEPTH_TEST);
+    //});
+    glDrawElements(mode, indexCount, type, nullptr);
 }
 
 void GLCommandBuffer::DrawIndexed(size_t count, PrimitiveType primitive, bool depthTest) {
@@ -67,18 +70,22 @@ void GLCommandBuffer::DrawIndexed(size_t count, PrimitiveType primitive, bool de
         case PrimitiveType::Triangle: { mode = GL_TRIANGLES; break; }
     }
 
-    mCommands.push_back([depthTest, count, mode, type]() {
-        if (!depthTest) { glDepthMask(GL_FALSE); } else { glDepthMask(GL_TRUE); };
-         // ToDo: C4267 possible loss of data
-        glDrawElements(mode, static_cast<GLsizei>(count), type, nullptr);
-        if (!depthTest) { glDepthMask(GL_TRUE); } else { glDepthMask(GL_FALSE); };
-    });
+    //mCommands.push_back([depthTest, count, mode, type]() {
+    //    if (!depthTest) { glDepthMask(GL_FALSE); } else { glDepthMask(GL_TRUE); };
+    //     // ToDo: C4267 possible loss of data
+    //    glDrawElements(mode, static_cast<GLsizei>(count), type, nullptr);
+    //    if (!depthTest) { glDepthMask(GL_TRUE); } else { glDepthMask(GL_FALSE); };
+    //});
+    if (!depthTest) { glDepthMask(GL_FALSE); } else { glDepthMask(GL_TRUE); };
+     // ToDo: C4267 possible loss of data
+    glDrawElements(mode, static_cast<GLsizei>(count), type, nullptr);
+    if (!depthTest) { glDepthMask(GL_TRUE); } else { glDepthMask(GL_FALSE); };
 }
 
 void GLCommandBuffer::Execute() {
-    for (auto &command : mCommands) {
-        command();
-    }
+    //for (auto &command : mCommands) {
+    //    command();
+    //}
 }
 
 void GLCommandBuffer::Record(const function<void()> &callback) {
@@ -89,14 +96,20 @@ void GLCommandBuffer::Viewport(const Position2D &position, const Size2D &size) {
     // ToDo: Prevent sizes above imagination
     if (!(size.Width == 0) || !(size.Height == 0)) return;
 
-    mCommands.push_back([position, size]() {
-        glViewport(
-            static_cast<GLint>(position.X),
-            static_cast<GLint>(position.Y),
-            static_cast<GLsizei>(size.Width),
-            static_cast<GLsizei>(size.Height)
-        );
-    });
+    //mCommands.push_back([position, size]() {
+    //    glViewport(
+    //        static_cast<GLint>(position.X),
+    //        static_cast<GLint>(position.Y),
+    //        static_cast<GLsizei>(size.Width),
+    //        static_cast<GLsizei>(size.Height)
+    //    );
+    //});
+    glViewport(
+        static_cast<GLint>(position.X),
+        static_cast<GLint>(position.Y),
+        static_cast<GLsizei>(size.Width),
+        static_cast<GLsizei>(size.Height)
+    );
 }
 
 
