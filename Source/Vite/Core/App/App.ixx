@@ -355,9 +355,9 @@ private:
             Update(deltaTime);
             mRenderer->Present();
             if (mCoreWindow->State(WindowState::Alive)) {
-                //mDearImGuiLayer->Prepare();
-                //for (auto *layer : mLayers) layer->UpdateUI();
-                //mDearImGuiLayer->Render();
+                mDearImGuiLayer->Prepare();
+                for (auto *layer : mLayers) layer->UpdateUI();
+                mDearImGuiLayer->Render();
             }
             mGraphicsContext->SwapBuffers();
             mGraphicsContext->Detach();

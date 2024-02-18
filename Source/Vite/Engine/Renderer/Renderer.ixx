@@ -25,13 +25,16 @@ public:
     static Scope<Renderer> Create();
 
     /// Accessors
-    Scope<CommandBuffer> &GetCommandBuffer() { return mCommandBuffer; }
     bool Capturing() const { return mCapturing; }
     bool Presenting() const { return mPresenting; }
 
     /// Commands
     void Capture();
+    void DrawIndexed();
     void Present();
+
+    /// Debug
+    Scope<CommandBuffer> &GetCommandBuffer() { return mCommandBuffer; }
 
 private:
     /// Properties

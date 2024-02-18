@@ -37,6 +37,20 @@ namespace Hedron {
 
 export namespace Hedron {
 
+class SpriteRenderer {
+public:
+    /// Default
+    SpriteRenderer() = default;
+    ~SpriteRenderer() = default;
+
+    /// Commands
+    void Start() {}
+    void Finish() {}
+
+private:
+    void Flush() {}
+};
+
 //class Renderer2D {
 //public:
 //    Renderer2D() = default;

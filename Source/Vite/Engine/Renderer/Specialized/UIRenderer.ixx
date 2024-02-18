@@ -24,6 +24,21 @@ import Vite.Renderer.Viewport;
 ///
 export namespace Hedron {
 
+class UIRenderer {
+public:
+    /// Default
+    UIRenderer() = default;
+    ~UIRenderer() = default;
+
+    /// Commands
+    void Start() {}
+    void Finish() {}
+
+private:
+    void Flush() {}
+};
+
+
 /////
 ///// @brief Renderer
 /////

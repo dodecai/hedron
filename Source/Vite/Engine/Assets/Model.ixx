@@ -9,6 +9,7 @@ export module Vite.Asset.Model;
 
 import Vite.Bridge.GLM;
 import Vite.Core;
+import Vite.Asset;
 import Vite.Asset.Material;
 import Vite.Asset.Mesh;
 import Vite.Renderer.CommandBuffer;
@@ -23,11 +24,39 @@ public:
     Model(const string &path, bool gamma = false): mGammaCorrection(gamma) {
         Load(path);
     }
+
+    Model(Vertices vertices, Indices indices, const string &texturePath, const TextureProperties &properties = {}, const Components::Material &material = {}) {
+        TextureAsset data = {};
+        data.Texture = Texture::Create(properties, texturePath);
+        data.ID = data.Texture->GetRendererID();
+        data.Type = "Simple";
+        data.Path = texturePath;
+
+        Mesh mesh(vertices, indices, { data }, material);
+        mMeshes.push_back(mesh);
+    }
+
     ~Model() = default;
 
     void Draw(CommandBuffer *commandBuffer) {
         for (auto &mesh : mMeshes) {
-            mesh.Draw(commandBuffer);
+            mesh.Bind();
+            commandBuffer->DrawIndexed(mesh.GetIndicesCount(), PrimitiveType::Triangle, true);
+            mesh.Unbind();
+        }
+    }
+
+    const Meshes &GetMeshes() const { return mMeshes; }
+
+    void SetDefaultTexture(const string &path, const TextureProperties &properties = {}) {
+        TextureAsset data = {};
+        data.Texture = Texture::Create(properties, path);
+        data.ID = data.Texture->GetRendererID();
+        data.Type = "Simple";
+        data.Path = path;
+
+        for (auto &mesh : mMeshes) {
+            mesh.SetDefaultTexture({ data });
         }
     }
 
@@ -46,7 +75,6 @@ private:
         mDirectory = File::GetPath(path);
         ProcessNode(scene->mRootNode, scene);
 
-
         //Assimp::DefaultLogger::kill();
     }
 
@@ -64,8 +92,7 @@ private:
         Vertices vertices {};
         Indices indices {};
         Textures textures {};
-        vector<TextureData> info {};
-        MaterialData material {};
+        Components::Material material {};
 
         // Vertices
         for (size_t i = 0; i < mesh->mNumVertices; i++) {
@@ -118,35 +145,30 @@ private:
         if (mesh->mMaterialIndex >= 0) {
             auto *current = scene->mMaterials[mesh->mMaterialIndex];
 
-            auto [diffuseMaps, diffuseInfo] = LoadMaterialTextures(current, aiTextureType_DIFFUSE, "Diffuse");
-            textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-            info.insert(info.end(), diffuseInfo.begin(), diffuseInfo.end());
+            auto diffuse = LoadMaterialTextures(current, aiTextureType_DIFFUSE, "Diffuse");
+            textures.insert(textures.end(), diffuse.begin(), diffuse.end());
 
-            auto [normalMaps, normalInfo] = LoadMaterialTextures(current, aiTextureType_HEIGHT, "Normal");
-            textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-            info.insert(info.end(), normalInfo.begin(), normalInfo.end());
+            auto normal = LoadMaterialTextures(current, aiTextureType_NORMALS, "Normal");
+            textures.insert(textures.end(), normal.begin(), normal.end());
 
-            auto [specularMaps, specularInfo] = LoadMaterialTextures(current, aiTextureType_SPECULAR, "Specular");
-            textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-            info.insert(info.end(), specularInfo.begin(), specularInfo.end());
+            auto specular = LoadMaterialTextures(current, aiTextureType_SPECULAR, "Specular");
+            textures.insert(textures.end(), specular.begin(), specular.end());
 
-            auto [heightMaps, heightInfo] = LoadMaterialTextures(current, aiTextureType_HEIGHT, "Height");
-            textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-            info.insert(info.end(), heightInfo.begin(), heightInfo.end());
+            auto height = LoadMaterialTextures(current, aiTextureType_HEIGHT, "Height");
+            textures.insert(textures.end(), height.begin(), height.end());
 
-            auto [ambientMaps, ambientInfo] = LoadMaterialTextures(current, aiTextureType_AMBIENT, "Ambient");
-            textures.insert(textures.end(), ambientMaps.begin(), ambientMaps.end());
-            info.insert(info.end(), ambientInfo.begin(), ambientInfo.end());
+            auto ambient = LoadMaterialTextures(current, aiTextureType_AMBIENT, "Ambient");
+            textures.insert(textures.end(), ambient.begin(), ambient.end());
         }
-        if (textures.empty() && mesh->mMaterialIndex >= 0) {
+        if (mesh->mMaterialIndex >= 0) {
             material = LoadMaterial(scene->mMaterials[mesh->mMaterialIndex]);
         }
 
-        return Mesh(vertices, indices, textures, info, material);
+        return Mesh(vertices, indices, textures, material);
     }
 
-    MaterialData LoadMaterial(aiMaterial *material) {
-        MaterialData result;
+    Components::Material LoadMaterial(aiMaterial *material) {
+        Components::Material result;
         aiColor3D color(0.0f, 0.0f, 0.0f);
         float shininess;
 
@@ -168,9 +190,8 @@ private:
         return result;
     }
 
-    std::tuple<Textures, TextureInfo> LoadMaterialTextures(aiMaterial *material, aiTextureType type, string typeName) {
-        vector<Reference<Texture>> textures {};
-        TextureInfo info {};
+    Textures LoadMaterialTextures(aiMaterial *material, aiTextureType type, string typeName) {
+        Textures textures {};
 
         for (size_t i = 0; i < material->GetTextureCount(type); i++) {
             aiString str;
@@ -178,35 +199,35 @@ private:
             bool skip = false;
             for (size_t j = 0; j < mTexturesLoaded.size(); j++) {
                 if (strcmp(mTexturesLoaded[j].Path.data(), str.C_Str()) == 0) {
-                    info.push_back(mTexturesLoaded[j]);
-                    textures.push_back(mTextures[j]);
+                    textures.push_back(mTexturesLoaded[j]);
                     skip = true;
                     break;
                 }
             }
             if (!skip) {
                 string path = mDirectory + '/' + str.C_Str();
-                TextureData data;
+                TextureAsset data;
                 auto texture = Texture::Create({}, path);
                 data.ID = texture->GetRendererID();
                 data.Type = typeName;
                 data.Path = str.C_Str();
+                data.Texture = texture;
 
-                mTextures.push_back(texture);
-                info.push_back(data);
+                textures.push_back(data);
                 mTexturesLoaded.push_back(data);
             }
         }
-        return { textures, info };
+        return { textures };
     }
 
 private:
-    string mDirectory;
-    Meshes mMeshes;
+    /// Properties
     bool mGammaCorrection;
 
-    TextureInfo mTexturesLoaded {};
-    Textures mTextures {};
+    /// Data
+    string mDirectory;
+    Meshes mMeshes;
+    Textures mTexturesLoaded {};
 };
 
 }
