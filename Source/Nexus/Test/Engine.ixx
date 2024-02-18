@@ -324,7 +324,7 @@ public:
 
     void TestMeshRenderer(DeltaTime deltaTime) {
         // Draw Scene
-        DrawGrid();
+        //DrawGrid();
         DrawLevel(deltaTime);
         DrawSkybox(deltaTime);
     }
@@ -355,9 +355,10 @@ public:
     void DrawLevel(DeltaTime deltaTime) {
         // Load Model
         static Model level("Assets/Models/Test/Test.obj");
+        static Model cube("Assets/Models/Cube/Cube.obj");
         static Model sphere("Assets/Models/Sphere/SphereUV.obj");
         //static Model backpack("Assets/Models/Backpack/Backpack.obj");
-        //static Model nanosuit("Assets/Models/Nanosuit/Nanosuit.obj");
+        static Model nanosuit("Assets/Models/Nanosuit/Nanosuit.obj");
         //static Model sponza("Assets/Models/Sponza/Sponza.obj");
         
         // Draw Lights
@@ -369,9 +370,10 @@ public:
         DrawModel(level, { 0.0f, 0.0f, 0.0f });
         mConcreteTexture->Bind(0);
         mConcreteTexture->Bind(2);
+        DrawModel(cube, { 12.0f, 12.0f, 0.0f });
         DrawModel(sphere, { 10.0f, 10.0f, 0.0f });
         //DrawModel(backpack, { 7.0f, 2.0f, 9.0f }, { 0.2f, 0.2f, 0.2f });
-        //DrawModel(nanosuit, { 7.0f, 0.0f, -8.0f }, { 0.2f, 0.2f, 0.2f });
+        DrawModel(nanosuit, { 7.0f, 0.0f, -8.0f }, { 0.2f, 0.2f, 0.2f });
         //DrawModel(sponza, { 0.0f, 0.0f, 0.0f }, { 0.1f, 0.1f ,0.1f });
         
         // Draw Objects
@@ -426,16 +428,6 @@ public:
         // Bind Shader
         if (stencil) { mStencilOutlineShader->Bind(); } else { mModelShader->Bind(); }
         
-        // Material Tests
-        MaterialData materialData {
-            .Ambient { 0.1f, 0.1f, 0.1f },
-            .Diffuse { 0.5f, 0.5f, 0.5f },
-            .Specular { 1.0f, 1.0f, 1.0f },
-            .Shininess { 32.0f }
-        };
-        mMaterialBuffer->UpdateData(&materialData, sizeof(Components::Material));
-        mMaterialBuffer->Bind(9);
-        
         // Update Entity Data
         Components::EntityData entityData;
         entityData.Transform = transform;
@@ -476,8 +468,8 @@ public:
         
         float value = (sin(timeValue) / 2.0f) + 0.5f;
         mLightData.Color = glm::vec4(1.0f, 1.0f - value, value, 1.0f);
-        auto model = glm::Translate(glm::mat4(1.0f), mLightPosition) *
-            glm::Scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+        auto model = glm::translate(glm::mat4(1.0f), mLightPosition) *
+            glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
         mLightData.Transform = model;
         
         // Lighs
@@ -517,7 +509,7 @@ public:
             .Linear = 0.14f,
             .Quadratic = 0.07f,
         
-            //.CutOffAngle = std::cos(glm::radians(12.5f)),
+            .CutOffAngle = std::cos(glm::radians(12.5f)),
         };
         // - Finish Light
         mLights.Count = 4;
@@ -544,7 +536,7 @@ public:
 
         // Update Entity Data
         Components::EntityData entityData;
-        entityData.Transform = glm::Translate(glm::mat4(1.0f), position) * glm::Scale(glm::mat4(1.0f), size);
+        entityData.Transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
         mEntityUniformBuffer->UpdateData(&entityData, sizeof(Components::EntityData));
         mEntityUniformBuffer->Bind((size_t)UniformPosition::EntityData);
 

@@ -1,16 +1,4 @@
-﻿module;
-
-#define GLM_ENABLE_EXPERIMENTAL
-#define GLM_FORCE_LEFT_HANDED
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#define GLM_FORCE_XYZW_ONLY
-
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/quaternion.hpp>
-#include <glm/gtx/transform.hpp>
-
-export module Vite.Renderer.DesignerCamera;
+﻿export module Vite.Renderer.DesignerCamera;
 
 import Vite.Bridge.GLM;
 import Vite.Core;

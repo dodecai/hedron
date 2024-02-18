@@ -3,7 +3,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #define GLM_FORCE_LEFT_HANDED
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#define GLM_FORCE_XYZW_ONLY
+#define GLM_FORCE_XYZW_ONLY             // Disables SIMD intrinsics for now, GLM_FORCE_PURE is buggy (we disable it due to msvc bug)
 
 #pragma warning(push, 0)
 
@@ -37,6 +37,18 @@ using glm::vec4;
 
 
 ///
+/// Functions
+///
+using glm::inverse;
+using glm::radians;
+using glm::rotate;
+using glm::radians;
+using glm::scale;
+using glm::toMat4;
+using glm::translate;
+
+
+///
 /// Operators
 ///
 using glm::operator+;
@@ -65,14 +77,6 @@ glm::mat4 Transform(const glm::vec3 &position, const glm::quat &rotation, const 
         glm::translate(glm::mat4(1.0f), position) *
         glm::toMat4(glm::quat(rotation)) *
         glm::scale(glm::mat4(1.0f), scale);
-}
-
-glm::mat4 Scale(const glm::mat4 &matrix, const glm::vec3 &scale) {
-    return glm::scale(matrix, scale);
-}
-
-glm::mat4 Translate(const glm::mat4 &matrix, const glm::vec3 &position) {
-    return glm::translate(matrix, position);
 }
 
 }
