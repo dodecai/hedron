@@ -2,8 +2,8 @@
 
 export import Vite.Core;
 export import Vite.Renderer.Data;
-//export import Vite.Renderer.Buffer;
-//export import Vite.Renderer.Shader;
+export import Vite.Renderer.Buffer;
+export import Vite.Renderer.Shader;
 
 export namespace Hedron {
 
@@ -17,8 +17,8 @@ struct PipelineProperties {
     bool DepthWritable = true;
     bool Wireframe = false;
 
-    //VertexBufferLayout Layout;
-    //Reference<Shader> Shader;
+    VertexBufferLayout Layout;
+    Reference<Shader> Shader;
 };
 
 /// 

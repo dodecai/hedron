@@ -258,6 +258,7 @@ public:
     const States &GetStates() const { return mStates; }
     const Statistics &GetStatistics() const { return mStatistics; }
     const Scope<GFXContext> &GetGraphicsContext() { return mGraphicsContext; }
+    const Scope<Renderer> &GetRenderer() { return mRenderer; }
     const Scope<Window> &GetWindow() { return mCoreWindow; }
 
     ///
@@ -354,9 +355,9 @@ private:
             Update(deltaTime);
             mRenderer->Present();
             if (mCoreWindow->State(WindowState::Alive)) {
-                mDearImGuiLayer->Prepare();
-                for (auto *layer : mLayers) layer->UpdateUI();
-                mDearImGuiLayer->Render();
+                //mDearImGuiLayer->Prepare();
+                //for (auto *layer : mLayers) layer->UpdateUI();
+                //mDearImGuiLayer->Render();
             }
             mGraphicsContext->SwapBuffers();
             mGraphicsContext->Detach();

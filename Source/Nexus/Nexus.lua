@@ -26,13 +26,14 @@
     }
     
     externalincludedirs {
-	    "%{Headers.ThirdParty}"
+	    "%{Headers.ThirdParty}",
+	    "%{Headers.glm}",
     }
     includedirs {
-        "%{Headers.Library}"
+        "%{Headers.Library}",
     }
     links {
-        "Vite"
+        "Vite",
     }
 
     filter { "configurations:Debug" }

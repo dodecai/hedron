@@ -158,8 +158,8 @@ struct MatrixBase {
     /// Methods
     ///
     
-    // Computes the determinant of the matrix (supports 2x2 and 3x3 matrices).
-    T Determinant() const requires (N >= 2 && N <= 3) {
+    // Computes the determinant of the matrix (supports 2x2, 3x3 and 4x4 matrices).
+    T Determinant() const requires (N >= 2 && N <= 4) {
         if constexpr (N == 2) {
             return Data[0][0] * Data[1][1] - Data[0][1] * Data[1][0];
         } else if constexpr (N == 3) {
@@ -167,6 +167,22 @@ struct MatrixBase {
                 Data[0][0] * (Data[1][1] * Data[2][2] - Data[1][2] * Data[2][1]) -
                 Data[0][1] * (Data[1][0] * Data[2][2] - Data[1][2] * Data[2][0]) +
                 Data[0][2] * (Data[1][0] * Data[2][1] - Data[1][1] * Data[2][0]);
+        } else if constexpr (N == 3) {
+            T det = 0;
+            for (size_t j = 0; j < 4; ++j) {
+                MatrixBase<T, 3> subMatrix;
+                for (size_t subi = 0, origi = 1; origi < 4; ++origi) {
+                    for (size_t subj = 0, origj = 0; origj < 4; ++origj) {
+                        if (origj == j) continue;
+                        subMatrix.Data[subi][subj] = Data[origi][origj];
+                        ++subj;
+                    }
+                    ++subi;
+                }
+                T subDet = subMatrix.Determinant();
+                det += (j % 2 == 0 ? 1 : -1) * Data[0][j] * subDet;
+            }
+            return det;
         }
     }
 
@@ -179,16 +195,55 @@ struct MatrixBase {
         return m;
     }
 
-    // Computes the inverse of the matrix (supports only 2x2 matrices).
-    MatrixBase Inverse() const requires (N == 2) {
+    // Computes the inverse of the matrix (supports 2x2, 3x3 and 4x4 matrices).
+    MatrixBase Inverse() const requires (N == 2 && N <= 4) {
         T determinant = Determinant();
         //ValidateScalar(determinant);
-        MatrixBase result;
-        result.Data[0][0] = Data[1][1] / determinant;
-        result.Data[0][1] = -Data[0][1] / determinant;
-        result.Data[1][0] = -Data[1][0] / determinant;
-        result.Data[1][1] = Data[0][0] / determinant;
-        return result;
+
+        if constexpr (N == 2) {
+            MatrixBase result;
+            result.Data[0][0] = Data[1][1] / determinant;
+            result.Data[0][1] = -Data[0][1] / determinant;
+            result.Data[1][0] = -Data[1][0] / determinant;
+            result.Data[1][1] = Data[0][0] / determinant;
+            return result;
+        } else if constexpr (N == 3) {
+            MatrixBase result;
+            result.Data[0][0] = (Data[1][1] * Data[2][2] - Data[2][1] * Data[1][2]) / determinant;
+            result.Data[0][1] = -(Data[0][1] * Data[2][2] - Data[0][2] * Data[2][1]) / determinant;
+            result.Data[0][2] = (Data[0][1] * Data[1][2] - Data[0][2] * Data[1][1]) / determinant;
+            result.Data[1][0] = -(Data[1][0] * Data[2][2] - Data[1][2] * Data[2][0]) / determinant;
+            result.Data[1][1] = (Data[0][0] * Data[2][2] - Data[0][2] * Data[2][0]) / determinant;
+            result.Data[1][2] = -(Data[0][0] * Data[1][2] - Data[1][0] * Data[0][2]) / determinant;
+            result.Data[2][0] = (Data[1][0] * Data[2][1] - Data[2][0] * Data[1][1]) / determinant;
+            result.Data[2][1] = -(Data[0][0] * Data[2][1] - Data[2][0] * Data[0][1]) / determinant;
+            result.Data[2][2] = (Data[0][0] * Data[1][1] - Data[1][0] * Data[0][1]) / determinant;
+
+            return result;
+        } else if constexpr (N == 4) {
+            MatrixBase adj;
+
+            for (size_t i = 0; i < 4; ++i) {
+                for (size_t j = 0; j < 4; ++j) {
+                    MatrixBase<T, 3> subMatrix;
+                    for (size_t subi = 0, origi = 0; origi < 4; ++origi) {
+                        if (origi == i) continue;
+                        for (size_t subj = 0, origj = 0; origj < 4; ++origj) {
+                            if (origj == j) continue;
+                            subMatrix.Data[subi][subj] = Data[origi][origj];
+                            ++subj;
+                        }
+                        ++subi;
+                    }
+                    T subDet = subMatrix.Determinant();
+                    T cofactor = ((i + j) % 2 == 0 ? 1 : -1) * subDet;
+                    adj.Data[j][i] = cofactor;
+                }
+            }
+
+            MatrixBase result = adj / determinant;
+            return result;
+        }
     }
 
     // Constructs a look-at matrix for 3D transformations (supports only 4x4 matrices).

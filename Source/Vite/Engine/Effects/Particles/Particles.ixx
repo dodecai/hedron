@@ -1,8 +1,4 @@
-﻿module;
-
-#define GLM_ENABLE_EXPERIMENTAL
-
-export module Vite.Effect.Particles;
+﻿export module Vite.Effect.Particles;
 
 import Vite.Core;
 import Vite.Util.Random;

@@ -92,9 +92,9 @@ public:
         std::lock_guard<mutex> lock(mMutex);
         mCounter++;
         try {
-            auto formattedArgs = std::make_format_args(std::forward<Args>(args)...);
+            auto formattedArgs = std::make_format_args(args...);
             for (const auto &sink : mSinks) {
-                if (sink->GetType() == type) sink->operator()(record, formattedArgs);
+               if (sink->GetType() == type) sink->operator()(record, formattedArgs);
             }
         } catch (std::exception ex) {
             //this->operator()("Hedron::Logger: {}", ex.what());
@@ -107,9 +107,9 @@ public:
         std::lock_guard<mutex> lock(mMutex);
         mCounter++;
         try {
-            auto formattedArgs = std::make_format_args(std::forward<Args>(args)...);
+            auto formattedArgs = std::make_format_args(args...);
             for (const auto &sink : mSinks) {
-                sink->operator()(record, formattedArgs);
+               sink->operator()(record, formattedArgs);
             }
         } catch (std::exception ex) {
             //this->operator()("Hedron::Logger: {}", ex.what());

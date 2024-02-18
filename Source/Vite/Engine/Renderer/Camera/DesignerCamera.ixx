@@ -1,159 +1,171 @@
-﻿export module Vite.Renderer.DesignerCamera;
+﻿module;
 
+#define GLM_ENABLE_EXPERIMENTAL
+#define GLM_FORCE_LEFT_HANDED
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#define GLM_FORCE_XYZW_ONLY
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/transform.hpp>
+
+export module Vite.Renderer.DesignerCamera;
+
+import Vite.Bridge.GLM;
 import Vite.Core;
-//import Vite.Device.Input;
-//import Vite.Renderer.Camera;
-//import Vite.Util.Timer;
+import Vite.Device.Input;
+import Vite.Renderer.Camera;
 
 #pragma warning(push)
 #pragma warning(disable: 4201)
 
 export namespace Hedron {
 
-//class DesignerCamera: public Camera {
-//public:
-//    DesignerCamera() = default;
-//    DesignerCamera(float fov, float aspectRatio, float nearClip, float farClip):
-//        mFOV(fov),
-//        mAspectRatio(aspectRatio),
-//        mNearClip(nearClip),
-//        mFarClip(farClip),
-//        Camera(Math::Perspective(glm::radians(fov), aspectRatio, nearClip, farClip)) {
-//        UpdateView();
-//    }
-//    ~DesignerCamera() = default;
-//
-//    void Update([[maybe_unused]] Timestamp delta) {
-//        // ToDo: Works everywhere, but eats the performance...
-//        const float cameraSpeed = 0.003f;
-//        auto wheel = Input::GetMouseWheelDelta();
-//        auto [x, y] = Input::GetMousePositionDelta();
-//        const glm::vec2 &mouse { x, y };
-//        glm::vec2 mouseDelta = (mouse - mInitialMousePosition) * cameraSpeed;
-//        mInitialMousePosition = mouse;
-//
-//        if (Input::GetMouseButtonState(MouseButton::Left)) Rotate(mouseDelta);
-//        if (Input::GetMouseButtonState(MouseButton::Middle)) Pan(mouseDelta);
-//        if (Input::GetMouseButtonState(MouseButton::Right)) Zoom(mouseDelta.y);
-//
-//        if (Input::GetKeyState(KeyCode::KeyA)) { Pan(glm::vec2(2.0, 0.0f) * cameraSpeed); }
-//        if (Input::GetKeyState(KeyCode::KeyW)) { Pan(glm::vec2(0.0, 2.0f) * cameraSpeed); }
-//        if (Input::GetKeyState(KeyCode::KeyD)) { Pan(glm::vec2(-2.0, 0.0f) * cameraSpeed); }
-//        if (Input::GetKeyState(KeyCode::KeyS)) { Pan(glm::vec2(0.0, -2.0f) * cameraSpeed); }
-//
-//        UpdateView();
-//    }
-//
-//    inline float GetDistance() const { return mDistance; }
-//    inline void SetDistance(float distance) { mDistance = distance; }
-//
-//    inline void SetPosition(const glm::vec3 &position) {
-//        mPosition = position;
-//        mFocalPoint = mPosition + GetForwardDirection() * mDistance;
-//        UpdateProjection();
-//        UpdateView();
-//    }
-//    inline void SetViewportSize(float width, float height) {
-//        mAspectRatio = width / height;
-//        mViewportWidth = width;
-//        mViewportHeight = height;
-//        UpdateProjection();
-//    }
-//    const glm::mat4 &GetViewMatrix() const { return mViewMatrix; }
-//    const glm::mat4 &GetProjectionMatrix() const { return mProjection; }
-//    glm::mat4 GetViewProjection() const { return mProjection * mViewMatrix; }
-//    glm::mat4 GetInverseViewProjection() const { return glm::inverse(GetViewProjection()); }
-//    glm::mat4 GetInverseView() const { return glm::inverse(mViewMatrix); }
-//    glm::mat4 GetInverseProjection() const { return glm::inverse(mProjection); }
-//
-//    glm::vec3 GetUpDirection() const {
-//        return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
-//    }
-//    glm::vec3 GetRightDirection() const {
-//        return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
-//    }
-//    glm::vec3 GetForwardDirection() const {
-//        return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, 1.0f));
-//    }
-//    glm::vec3 GetPosition() const { return mPosition; }
-//    glm::quat GetOrientation() const {
-//        return glm::quat(glm::vec3(mPitch, mYaw, 0.0f));
-//    }
-//    float GetNearPoint() const { return mNearClip; }
-//    float GetFarPoint() const { return mFarClip; }
-//
-//    float GetPitch() const { return mPitch; }
-//    float GetYaw() const { return mYaw; }
-//
-//private:
-//    void UpdateProjection() {
-//        mAspectRatio = mViewportWidth / mViewportHeight;
-//        mProjection = Math::Perspective(glm::radians(mFOV), mAspectRatio, mNearClip, mFarClip);
-//    }
-//    void UpdateView() {
-//        // Lock the camera's rotation
-//        // mYaw = mPitch = 0.0f;
-//        mPosition = CalculatePosition();
-//        //mViewMatrix = Math::LookAt(mPosition, mFocalPoint, glm::vec3(0.0f, 1.0f, 0.0f));
-//        glm::quat orientation = GetOrientation();
-//        mViewMatrix = glm::translate(glm::mat4(1.0f), mPosition) * glm::toMat4(orientation);
-//        mViewMatrix = glm::inverse(mViewMatrix);
-//    }
-//
-//    void Pan(const glm::vec2 &delta) {
-//        auto [xSpeed, ySpeed] = PanSpeed();
-//        mFocalPoint += -GetRightDirection() * delta.x * xSpeed * mDistance;
-//        mFocalPoint += GetUpDirection() * delta.y * ySpeed * mDistance;
-//    }
-//    void Rotate(const glm::vec2 &delta) {
-//        float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
-//        mYaw += yawSign * delta.x * RotationSpeed();
-//        mPitch += delta.y * RotationSpeed();
-//    }
-//    void Zoom(float delta) {
-//        mDistance -= delta * ZoomSpeed();
-//
-//        if (mDistance < 1.0f) {
-//            mFocalPoint += GetForwardDirection();
-//            mDistance = 1.0f;
-//        }
-//    }
-//
-//    glm::vec3 CalculatePosition() const {
-//        return mFocalPoint - GetForwardDirection() * mDistance;
-//    }
-//
-//    std::pair<float, float> PanSpeed() const {
-//        float xFactor = std::min(mViewportWidth / 1000.0f, 0.64f);
-//        float yFactor = std::min(mViewportHeight / 1000.0f, 0.64f);
-//        return { xFactor, yFactor };
-//    }
-//    float RotationSpeed() const {
-//        return 0.92f;
-//    }
-//    float ZoomSpeed() const {
-//        float speed = std::clamp(0.64f * mDistance, 2.0f, 100.0f);
-//        return speed;
-//    }
-//
-//private:
-//    float mAspectRatio = 1.334f;
-//    float mViewportWidth = 800;
-//    float mViewportHeight = 600;
-//
-//    float mFOV = 45.0f;
-//    float mNearClip = 0.1f;
-//    float mFarClip = 1000.0f;
-//
-//    glm::mat4 mViewMatrix = {};
-//    glm::vec3 mPosition = { 0.0f, 0.0f, 0.0f };
-//    glm::vec3 mFocalPoint = { 0.0f, 0.0f, 0.0f };
-//    glm::vec2 mInitialMousePosition = { 0.0f, 0.0f };
-//
-//    float mDistance = 5.0f;
-//    float mPitch = 0.0f;
-//    float mYaw = 0.0f;
-//};
+class DesignerCamera: public Camera {
+public:
+    DesignerCamera() = default;
+    DesignerCamera(float fov, float aspectRatio, float nearClip, float farClip):
+        mFOV(fov),
+        mAspectRatio(aspectRatio),
+        mNearClip(nearClip),
+        mFarClip(farClip),
+        Camera(glm::Perspective(glm::radians(fov), aspectRatio, nearClip, farClip)) {
+        UpdateView();
+    }
+    ~DesignerCamera() = default;
+    
+    void Update(DeltaTime delta) {
+        // ToDo: Works everywhere, but eats the performance...
+        const float cameraSpeed = 0.003f;
+        auto wheel = Input::GetMouseWheelDelta();
+        auto [x, y] = Input::GetMousePositionDelta();
+        const glm::vec2 &mouse { x, y };
+        glm::vec2 mouseDelta = (mouse - mInitialMousePosition) * cameraSpeed;
+        mInitialMousePosition = mouse;
+        
+        if (Input::GetMouseButtonState(MouseButton::Left)) Rotate(mouseDelta);
+        if (Input::GetMouseButtonState(MouseButton::Middle)) Pan(mouseDelta);
+        if (Input::GetMouseButtonState(MouseButton::Right)) Zoom(mouseDelta.y);
+        
+        if (Input::GetKeyState(KeyCode::A)) { Pan(glm::vec2(2.0, 0.0f) * cameraSpeed); }
+        if (Input::GetKeyState(KeyCode::W)) { Pan(glm::vec2(0.0, 2.0f) * cameraSpeed); }
+        if (Input::GetKeyState(KeyCode::D)) { Pan(glm::vec2(-2.0, 0.0f) * cameraSpeed); }
+        if (Input::GetKeyState(KeyCode::S)) { Pan(glm::vec2(0.0, -2.0f) * cameraSpeed); }
+        
+        UpdateView();
+    }
+    
+    inline float GetDistance() const { return mDistance; }
+    inline void SetDistance(float distance) { mDistance = distance; }
+    
+    inline void SetPosition(const glm::vec3 &position) {
+        mPosition = position;
+        mFocalPoint = mPosition + GetForwardDirection() * mDistance;
+        UpdateProjection();
+        UpdateView();
+    }
+    inline void SetViewportSize(float width, float height) {
+        mAspectRatio = width / height;
+        mViewportWidth = width;
+        mViewportHeight = height;
+        UpdateProjection();
+    }
+    const glm::mat4 &GetViewMatrix() const { return mViewMatrix; }
+    const glm::mat4 &GetProjectionMatrix() const { return mProjection; }
+    glm::mat4 GetViewProjection() const { return mProjection * mViewMatrix; }
+    glm::mat4 GetInverseViewProjection() const { return glm::inverse(GetViewProjection()); }
+    glm::mat4 GetInverseView() const { return glm::inverse(mViewMatrix); }
+    glm::mat4 GetInverseProjection() const { return glm::inverse(mProjection); }
+    
+    glm::vec3 GetUpDirection() const {
+        return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
+    }
+    glm::vec3 GetRightDirection() const {
+        return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
+    }
+    glm::vec3 GetForwardDirection() const {
+        return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, 1.0f));
+    }
+    glm::vec3 GetPosition() const { return mPosition; }
+    glm::quat GetOrientation() const {
+        return glm::quat(glm::vec3(mPitch, mYaw, 0.0f));
+    }
+    float GetNearPoint() const { return mNearClip; }
+    float GetFarPoint() const { return mFarClip; }
+
+    float GetPitch() const { return mPitch; }
+    float GetYaw() const { return mYaw; }
+
+private:
+    void UpdateProjection() {
+        mAspectRatio = mViewportWidth / mViewportHeight;
+        mProjection = glm::Perspective(glm::radians(mFOV), mAspectRatio, mNearClip, mFarClip);
+    }
+    void UpdateView() {
+        // Lock the camera's rotation
+        //// mYaw = mPitch = 0.0f;
+        mPosition = CalculatePosition();
+        ////mViewMatrix = Math::LookAt(mPosition, mFocalPoint, glm::vec3(0.0f, 1.0f, 0.0f));
+        glm::quat orientation = GetOrientation();
+        mViewMatrix = glm::translate(glm::mat4(1.0f), mPosition) * glm::toMat4(orientation);
+        mViewMatrix = glm::inverse(mViewMatrix);
+    }
+
+    void Pan(const glm::vec2 &delta) {
+        auto [xSpeed, ySpeed] = PanSpeed();
+        mFocalPoint += -GetRightDirection() * delta.x * xSpeed * mDistance;
+        mFocalPoint += GetUpDirection() * delta.y * ySpeed * mDistance;
+    }
+    void Rotate(const glm::vec2 &delta) {
+        float yawSign = GetUpDirection().y < 0 ? -1.0f : 1.0f;
+        mYaw += yawSign * delta.x * RotationSpeed();
+        mPitch += delta.y * RotationSpeed();
+    }
+    void Zoom(float delta) {
+        mDistance -= delta * ZoomSpeed();
+    
+        if (mDistance < 1.0f) {
+            mFocalPoint += GetForwardDirection();
+            mDistance = 1.0f;
+        }
+    }
+
+    glm::vec3 CalculatePosition() const {
+        return mFocalPoint - GetForwardDirection() * mDistance;
+    }
+
+    std::pair<float, float> PanSpeed() const {
+        float xFactor = std::min(mViewportWidth / 1000.0f, 0.64f);
+        float yFactor = std::min(mViewportHeight / 1000.0f, 0.64f);
+        return { xFactor, yFactor };
+    }
+    float RotationSpeed() const {
+        return 0.92f;
+    }
+    float ZoomSpeed() const {
+        float speed = std::clamp(0.64f * mDistance, 2.0f, 100.0f);
+        return speed;
+    }
+
+private:
+    float mAspectRatio = 1.334f;
+    float mViewportWidth = 800;
+    float mViewportHeight = 600;
+
+    float mFOV = 45.0f;
+    float mNearClip = 0.1f;
+    float mFarClip = 1000.0f;
+
+    glm::mat4 mViewMatrix = {};
+    glm::vec3 mPosition = { 0.0f, 0.0f, 0.0f };
+    glm::vec3 mFocalPoint = { 0.0f, 0.0f, 0.0f };
+    glm::vec2 mInitialMousePosition = { 0.0f, 0.0f };
+
+    float mDistance = 5.0f;
+    float mPitch = 0.0f;
+    float mYaw = 0.0f;
+};
 
 #define EXAMPLES1
 #ifdef EXAMPLES

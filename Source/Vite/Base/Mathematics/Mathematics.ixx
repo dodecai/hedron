@@ -7,6 +7,8 @@ export import Vite.Math.Vector;
 
 export namespace Hedron {
 
+namespace Math {
+
 #ifdef LEGACY_CODE
 
 //#pragma warning(push)
@@ -46,49 +48,7 @@ export namespace Hedron {
 //using UInt3 = VectorBase<uint32_t, 3>;
 //using UInt4 = VectorBase<uint32_t, 4>;
 
-//// Matrix Types
-//using glm::mat2;
-//using glm::mat3;
-//using glm::mat4;
-//using Matrix2x2 = glm::mat2x2;
-//using Matrix2x3 = glm::mat2x3;
-//using Matrix2x4 = glm::mat2x4;
-//using Matrix3x2 = glm::mat3x2;
-//using Matrix3x3 = glm::mat3x3;
-//using Matrix3x4 = glm::mat3x4;
-//using Matrix4x2 = glm::mat4x2;
-//using Matrix4x3 = glm::mat4x3;
-//using Matrix4x4 = glm::mat4x4;
-//
-//using DoubleMatrix2 = glm::dmat2;
-//using DoubleMatrix3 = glm::dmat3;
-//using DoubleMatrix4 = glm::dmat4;
-//using DoubleMatrix2x2 = glm::dmat2x2;
-//using DoubleMatrix2x3 = glm::dmat2x3;
-//using DoubleMatrix2x4 = glm::dmat2x4;
-//using DoubleMatrix3x2 = glm::dmat3x2;
-//using DoubleMatrix3x3 = glm::dmat3x3;
-//using DoubleMatrix3x4 = glm::dmat3x4;
-//using DoubleMatrix4x2 = glm::dmat4x2;
-//using DoubleMatrix4x3 = glm::dmat4x3;
-//using DoubleMatrix4x4 = glm::dmat4x4;
-
-// Other
-//using Quaternion = glm::quat;
-
 namespace Math {
-
-glm::mat4 LookAt(const glm::vec3 &position, const glm::vec3 &target, const glm::vec3 &up) {
-    return glm::lookAtLH(position, target, up);
-}
-
-glm::mat4 Perspective(float fov, float aspect, float near, float far) {
-    return glm::perspectiveLH_ZO(fov, aspect, near, far);
-}
-
-glm::mat4 Orthographic(float left, float right, float bottom, float top, float near, float far) {
-    return glm::orthoLH_ZO(left, right, bottom, top, near, far);
-}
 
 
 bool DecomposeTransform([[maybe_unused]] const glm::mat4 &transform, [[maybe_unused]] glm::vec3 &position, [[maybe_unused]] glm::vec3 &orientation, [[maybe_unused]] glm::vec3 &scale) {
@@ -261,5 +221,7 @@ struct std::formatter<glm::mat4> {
 }
 
 #endif
+
+}
 
 }

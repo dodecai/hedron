@@ -40,11 +40,11 @@ public:
     virtual void Record(const function<void()> &callback) = 0;
     virtual void Viewport(const Position2D &position, const Size2D &size) = 0;
 
-protected:
     /// Test
     virtual void EnableStencilTest() = 0;
     virtual void UpdateStencilBuffer() = 0;
     virtual void ResetStencilTest() = 0;
+protected:
     //virtual void BindRenderState(const Scope<RenderState> &renderState) = 0;
     //virtual void BindShader(const Scope<Shader> &shader) = 0;
     //virtual void BindVertexBuffer(const Scope<Buffer> &vertexBuffer) = 0;

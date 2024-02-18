@@ -12,6 +12,16 @@
 #include <stb/stb_image.h>
 #pragma warning(pop)
 
+//#pragma warning(push, 0)
+////https://github.com/nothings/stb/issues/334
+//#ifndef STB_IMAGE_IMPLEMENTATION
+//    #define STB_IMAGE_IMPLEMENTATION
+//#endif
+//#define STB_IMAGE_STATIC
+//#include <stb/stb_image.h>
+////#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#pragma warning(pop)
+
 module Vite.Platform.GLTexture;
 
 import Vite.System.FileSystem;
