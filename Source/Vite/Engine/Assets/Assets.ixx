@@ -32,13 +32,13 @@ string to_string(const AssetType &type) {
 }
 
 struct Asset {
-    AssetType Type { AssetType::Unknown };
-    string Path {};
     string ID {};
+    string Path {};
 };
 
-// ToDo
 
+
+// ToDo
 enum class UniformPosition {
     RendererData    = 0,
     CameraData      = 1,
@@ -50,7 +50,6 @@ enum class UniformPosition {
     ShadowData      = 7,
     MaterialData    = 9,
 };
-
 
 namespace Components {
 

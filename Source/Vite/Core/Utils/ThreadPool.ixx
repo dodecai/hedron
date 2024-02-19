@@ -5,6 +5,13 @@ import Vite.Logger;
 
 export namespace Hedron {
 
+/// 
+/// Thread Result: A helper type to get the result of a thread.
+///
+template<typename F, typename ...Args>
+using ThreadResult = future<typename std::invoke_result<F, Args...>::type>;
+
+
 ///
 /// @brief Thread Pool
 /// @note  This is a very simple implementation of a thread pool, but enough for us.
