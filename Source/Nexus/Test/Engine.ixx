@@ -248,11 +248,10 @@ public:
             .Linear = 0.14f,
             .Quadratic = 0.07f,
         };
-        // - Point Light 2
         mLights.Light[2] = {
             .Type = Components::LightType::Point,
             .LightColor = mLightData.Color,
-            .LightPosition = { 0.0f, 5.0f, 0.0f },
+            .LightPosition = { 0.0f, 7.0f, 0.0f },
 
             .Constant = 1.0f,
             .Linear = 0.14f,

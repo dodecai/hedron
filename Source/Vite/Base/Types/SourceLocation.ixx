@@ -8,8 +8,8 @@ namespace Hedron {
 
 // Extracts the pretty class name from a function signature
 consteval std::string_view ExtractClassFromSignature(const std::string_view signature) {
-    const size_t classEnd = constexpr_rfind(signature, ':') - 1;
-    if (classEnd == std::string_view::npos) { return ""; }
+    const size_t classEnd = constexpr_rfind(signature, '(');
+    if (classEnd == std::string_view::npos || classEnd <= 0) { return ""; }
 
     const size_t namespaceStart = constexpr_rfind(signature, ' ', classEnd) + 1;
     if (namespaceStart == std::string_view::npos) { return ""; }
