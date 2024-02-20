@@ -114,18 +114,6 @@ public:
     };
     ~Material() = default;
 
-    /// Accessors/Mutators
-    auto &Data() {
-        if constexpr (T == MaterialType::Traditional) {
-            return *reinterpret_cast<TraditonalMaterialData *>(mData.get());
-        } else if constexpr (T == MaterialType::PBR) {
-            return *reinterpret_cast<PBRMaterialData *>(mData.get());
-        } else {
-            static_assert("The specified material type isn't implemented!");
-        }
-    }
-    auto &Textures() { return mTextures; }
-
     /// Commands
     void Bind() const {
         mMaterialBuffer->Bind(9);
@@ -149,7 +137,21 @@ public:
         }
     }
 
+protected:
+    /// Accessors/Mutators
+    auto &Data() {
+        if constexpr (T == MaterialType::Traditional) {
+            return *reinterpret_cast<TraditonalMaterialData *>(mData.get());
+        } else if constexpr (T == MaterialType::PBR) {
+            return *reinterpret_cast<PBRMaterialData *>(mData.get());
+        } else {
+            static_assert("The specified material type isn't implemented!");
+        }
+    }
+    auto &Textures() { return mTextures; }
+
 private:
+    /// Factory
     static Scope<MaterialData> Create(MaterialType type) {
         switch (type) {
             case MaterialType::Traditional: return CreateScope<TraditonalMaterialData>();
