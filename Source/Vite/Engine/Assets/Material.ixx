@@ -137,7 +137,6 @@ public:
         }
     }
 
-protected:
     /// Accessors/Mutators
     auto &Data() {
         if constexpr (T == MaterialType::Traditional) {
