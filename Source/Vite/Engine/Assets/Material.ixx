@@ -2,6 +2,7 @@
 
 import Vite.Bridge.GLM;
 import Vite.Core;
+import Vite.Renderer.Buffer;
 import Vite.Renderer.Texture;
 
 export namespace Hedron {
@@ -15,11 +16,27 @@ enum class MaterialType {
     PBR
 };
 
+// MaterialTexturesUniformPosition: An enum that represents the position of a texture in a material
+enum class MaterialTextureType {
+    // Traditional
+    Ambient         = 0,
+    Diffuse         = 1,
+    Specular        = 2,
+    Emissive        = 3,
+
+    // PBR
+    Metalness       = 0,
+    Roughness       = 1,
+    AO              = 2,
+    RefractionIndex = 3,
+    Translucency    = 4
+};
+
 // MaterialTexture: A struct that holds the data for a texture in a material
 struct MaterialTexture {
     string ID;
     string Path;
-    string Type;
+    MaterialTextureType Type;
     Reference<Texture> Instance;
 };
 
@@ -78,7 +95,6 @@ struct PBRMaterialData: public MaterialData {
 #pragma endregion
 ///
 
-
 ///
 /// @brief Material: A class that represents a material, either traditional or PBR
 ///
@@ -86,21 +102,50 @@ template <MaterialType T>
 class Material {
 public:
     /// Default
-    Material(): mData(Create(T)) {};
+    Material(): mData(Create(T)) {
+        mData->Type = T;
+        if constexpr (T == MaterialType::Traditional) {
+            mMaterialBuffer = Buffer::Create(BufferType::Uniform, mData.get(), sizeof(TraditonalMaterialData));
+        } else if constexpr (T == MaterialType::PBR) {
+            mMaterialBuffer = Buffer::Create(BufferType::Uniform, mData.get(), sizeof(PBRMaterialData));
+        } else {
+            static_assert("The specified material type isn't implemented!");
+        }
+    };
     ~Material() = default;
 
     /// Accessors/Mutators
-    template<typename R> requires std::is_base_of_v<MaterialData, R>
-    R &Data() {
-        if constexpr (T = MaterialType::Traditional) {
-            static_assert(std::is_same_v<R, TraditonalMaterialData>, "<Material> Something got very wrong..., this should never happen!");
-            return *reinterpret_cast<R *>(mData.get());
+    auto &Data() {
+        if constexpr (T == MaterialType::Traditional) {
+            return *reinterpret_cast<TraditonalMaterialData *>(mData.get());
         } else if constexpr (T == MaterialType::PBR) {
-            static_assert(std::is_same_v<R, PBRMaterialData>, "<Material> Something got very wrong..., this should never happen!");
-            return *reinterpret_cast<R *>(mData.get());
+            return *reinterpret_cast<PBRMaterialData *>(mData.get());
         } else {
-            static_assert(false, "<Material> The specified material type isn't implemented yet!");
-            //throw std::invalid_argument("The specified material type isn't implemented yet!");
+            static_assert("The specified material type isn't implemented!");
+        }
+    }
+    auto &Textures() { return mTextures; }
+
+    /// Commands
+    void Bind() const {
+        mMaterialBuffer->Bind(9);
+        if constexpr (T == MaterialType::Traditional) {
+            mMaterialBuffer->UpdateData(mData.get(), sizeof(TraditonalMaterialData));
+        } else if constexpr (T == MaterialType::PBR) {
+            mMaterialBuffer->UpdateData(mData.get(), sizeof(PBRMaterialData));
+        } else {
+            static_assert("The specified material type isn't implemented!");
+        }
+
+        for (const auto &texture : mTextures) {
+            texture.Instance->Bind(texture.Type);
+        }
+    }
+    void Unbind() const {
+        mMaterialBuffer->Unbind();
+
+        for (const auto &texture : mTextures) {
+            texture.Instance->Unbind();
         }
     }
 
@@ -116,7 +161,10 @@ private:
 private:
     /// Data
     Scope<MaterialData> mData;
-    MaterialTextures Textures;
+    MaterialTextures mTextures;
+
+    /// Buffers
+    Reference<Buffer> mMaterialBuffer;
 };
 
 }
