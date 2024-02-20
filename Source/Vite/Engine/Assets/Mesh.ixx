@@ -12,14 +12,20 @@ import Vite.Renderer.Texture;
 
 export namespace Hedron {
 
-constexpr int MaxBoneInfluences = 4;
-
-struct Vertex {
+struct MeshVertexLayout {
     glm::vec3 Position {};
     glm::vec3 Normal {};
     glm::vec2 TexCoords {};
     glm::vec3 Tangent {};
     glm::vec3 Bitangent {};
+};
+
+using MeshVertices = vector<MeshVertexLayout>;
+using MeshIndices = vector<uint32>;
+
+struct MeshData {
+    MeshVertices Vertices {};
+    MeshIndices Indices {};
 };
 
 struct TextureAsset {
@@ -29,13 +35,11 @@ struct TextureAsset {
     Reference<Texture> Texture;
 };
 
-using Vertices = vector<Vertex>;
-using Indices = vector<uint32>;
 using Textures = vector<TextureAsset>;
 
 class Mesh {
 public:
-    Mesh(const Vertices &vertices, const Indices &indices, const Textures &textures, const Components::Material &material = {}, Reference<Texture> dontKnowWhyButIfRemovedTexturesDontLoadCorrectly = {}):
+    Mesh(const MeshVertices &vertices, const MeshIndices &indices, const Textures &textures, const Components::Material &material = {}, Reference<Texture> dontKnowWhyButIfRemovedTexturesDontLoadCorrectly = {}):
         mVertices(vertices),
         mIndices(indices),
         mTextures(textures),
@@ -124,8 +128,8 @@ private:
 
 private:
     /// Data
-    Vertices mVertices;
-    Indices mIndices;
+    MeshVertices mVertices;
+    MeshIndices mIndices;
     Textures mTextures;
     Components::Material mMaterial;
 
@@ -134,6 +138,18 @@ private:
     Reference<Buffer> mVertexBuffer;
     Reference<Buffer> mIndexBuffer;
     Reference<Buffer> mMaterialBuffer;
+};
+
+
+class MeshFactory {
+protected:
+    MeshFactory() = default;
+    ~MeshFactory() = default;
+
+public:
+    static void CreateCube() {}
+    static void CreateSphere() {}
+    static void CreatePlane() {}
 };
 
 }

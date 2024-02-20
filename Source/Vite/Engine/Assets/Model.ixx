@@ -25,7 +25,7 @@ public:
         Load(path);
     }
 
-    Model(Vertices vertices, Indices indices, const string &texturePath, const TextureProperties &properties = {}, const Components::Material &material = {}) {
+    Model(MeshVertices vertices, MeshIndices indices, const string &texturePath, const TextureProperties &properties = {}, const Components::Material &material = {}) {
         TextureAsset data = {};
         data.Texture = Texture::Create(properties, texturePath);
         data.ID = data.Texture->GetRendererID();
@@ -89,14 +89,14 @@ private:
     }
 
     Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene) {
-        Vertices vertices {};
-        Indices indices {};
+        MeshVertices vertices {};
+        MeshIndices indices {};
         Textures textures {};
         Components::Material material {};
 
         // Vertices
         for (size_t i = 0; i < mesh->mNumVertices; i++) {
-            Vertex vertex;
+            MeshVertexLayout vertex;
             glm::vec3 vector;
 
             vector.x = static_cast<float>(mesh->mVertices[i].x);
