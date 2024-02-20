@@ -17,6 +17,7 @@ import Vite.SpriteRenderer;
 import Vite.UIRenderer;
 
 import Vite.Asset;
+import Vite.Asset.Material;
 import Vite.Asset.Manager;
 import Vite.Asset.Model;
 import Vite.Renderer.Buffer;
