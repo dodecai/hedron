@@ -19,8 +19,8 @@ enum class MaterialType {
 // MaterialTexturesUniformPosition: An enum that represents the position of a texture in a material
 enum class MaterialTextureType {
     // Traditional
-    Ambient         = 0,
-    Diffuse         = 1,
+    Ambient         = 40,
+    Diffuse         = 0,
     Specular        = 2,
     Emissive        = 3,
 
@@ -29,15 +29,38 @@ enum class MaterialTextureType {
     Roughness       = 1,
     AO              = 2,
     RefractionIndex = 3,
-    Translucency    = 4
+    Translucency    = 4,
+
+    // ToDo
+    Height          = 20,
+    Simple          = 30,
+    Normal
 };
+
+string to_string(MaterialTextureType type) {
+    switch (type) {
+        case MaterialTextureType::Ambient: return "Ambient";
+        case MaterialTextureType::Diffuse: return "Diffuse";
+        case MaterialTextureType::Specular: return "Specular";
+        case MaterialTextureType::Emissive: return "Emissive";
+        //case MaterialTextureType::Metalness: return "Metalness";
+        //case MaterialTextureType::Roughness: return "Roughness";
+        //case MaterialTextureType::AO: return "AO";
+        //case MaterialTextureType::RefractionIndex: return "RefractionIndex";
+        //case MaterialTextureType::Translucency: return "Translucency";
+        //case MaterialTextureType::Height: return "Height";
+        //case MaterialTextureType::Simple: return "Simple";
+        //case MaterialTextureType::Normal: return "Normal";
+        default: return "Unknown";
+    }
+}
 
 // MaterialTexture: A struct that holds the data for a texture in a material
 struct MaterialTexture {
-    string ID;
+    uint32 ID;
     string Path;
     MaterialTextureType Type;
-    Reference<Texture> Instance;
+    Reference<Texture> Texture;
 };
 
 // MaterialTextures: A vector of MaterialTexture
@@ -55,13 +78,16 @@ struct MaterialData {
 
 // Traditional Material Data (special layout for all graphics APIs)
 struct TraditonalMaterialData: public MaterialData {
-    glm::vec3 Ambient {};   float AmbientWeight {};
-    glm::vec3 Diffuse {};   float DiffuseWeight {};
-    glm::vec3 Specular {};  float SpecularWeight {};
-    glm::vec3 Emissive {};  float EmissiveWeight {};
+    glm::vec3 Ambient {};   float AmbientWeight { 0.75f };
+    glm::vec3 Diffuse {};   float DiffuseWeight { 0.75f };
+    glm::vec3 Specular {};  float SpecularWeight { 0.75f };
+    ////////////////////////////////////////////////////////////////
+    alignas(16) float Shininess = 32.0f; // ToDo: Remove this hack after updating the shaders
+    ////////////////////////////////////////////////////////////////
+    glm::vec3 Emissive {};  float EmissiveWeight { 0.75f };
 
-    float Shininess {};
-    float Opacity;
+    //float Shininess { 0.32f };
+    float Opacity {};
 
     uint32 AmbientEnabled: 2;
     uint32 AmbientTextureEnabled: 2;
@@ -99,7 +125,7 @@ struct PBRMaterialData: public MaterialData {
 /// @brief Material: A class that represents a material, either traditional or PBR
 ///
 template <MaterialType T>
-class Material {
+class Material: public MoveableObject {
 public:
     /// Default
     Material(): mData(Create(T)) {
@@ -112,30 +138,11 @@ public:
             static_assert("The specified material type isn't implemented!");
         }
     };
+    Material(Material &&other) {
+        mData = std::move(other.mData);
+        mTextures = std::move(other.mTextures);
+    }
     ~Material() = default;
-
-    /// Commands
-    void Bind() const {
-        mMaterialBuffer->Bind(9);
-        if constexpr (T == MaterialType::Traditional) {
-            mMaterialBuffer->UpdateData(mData.get(), sizeof(TraditonalMaterialData));
-        } else if constexpr (T == MaterialType::PBR) {
-            mMaterialBuffer->UpdateData(mData.get(), sizeof(PBRMaterialData));
-        } else {
-            static_assert("The specified material type isn't implemented!");
-        }
-
-        for (const auto &texture : mTextures) {
-            texture.Instance->Bind(texture.Type);
-        }
-    }
-    void Unbind() const {
-        mMaterialBuffer->Unbind();
-
-        for (const auto &texture : mTextures) {
-            texture.Instance->Unbind();
-        }
-    }
 
     /// Accessors/Mutators
     auto &Data() {
@@ -149,12 +156,61 @@ public:
     }
     auto &Textures() { return mTextures; }
 
+    /// Commands
+    void Bind() const {
+        // ToDo: Rework this with shaders
+        for (const auto &texture : mTextures) {
+            if (texture.Type == MaterialTextureType::Simple) {
+                texture.Texture->Bind(0);
+                texture.Texture->Bind(1);
+                texture.Texture->Bind(2);
+            } else if (texture.Type == MaterialTextureType::Diffuse) {
+                texture.Texture->Bind(0);
+                texture.Texture->Bind(2);
+            } else if (texture.Type == MaterialTextureType::Specular) {
+                texture.Texture->Bind(0);
+                texture.Texture->Bind(2);
+            } else {
+                mMaterialBuffer->Bind(9);
+                //texture.Texture->Bind(static_cast<uint32>(texture.Type));
+            }
+        }
+
+        //mMaterialBuffer->Bind(9);
+        if constexpr (T == MaterialType::Traditional) {
+            mMaterialBuffer->UpdateData(mData.get(), sizeof(TraditonalMaterialData));
+        } else if constexpr (T == MaterialType::PBR) {
+            mMaterialBuffer->UpdateData(mData.get(), sizeof(PBRMaterialData));
+        } else {
+            static_assert("The specified material type isn't implemented!");
+        }
+    }
+    void Unbind() const {
+        mMaterialBuffer->Unbind();
+
+        for (const auto &texture : mTextures) {
+            if (texture.Type == MaterialTextureType::Simple) {
+                texture.Texture->Unbind(0);
+                texture.Texture->Unbind(1);
+                texture.Texture->Unbind(2);
+            } else if (texture.Type == MaterialTextureType::Diffuse) {
+                texture.Texture->Unbind(0);
+                texture.Texture->Unbind(2);
+            } else if (texture.Type == MaterialTextureType::Specular) {
+                texture.Texture->Unbind(0);
+                texture.Texture->Unbind(2);
+            } else {
+                //texture.Texture->Unbind(static_cast<uint32>(texture.Type));
+            }
+        }
+    }
+
 private:
     /// Factory
     static Scope<MaterialData> Create(MaterialType type) {
         switch (type) {
-            case MaterialType::Traditional: return CreateScope<TraditonalMaterialData>();
-            case MaterialType::PBR: return CreateScope<PBRMaterialData>();
+            case MaterialType::Traditional: { return CreateScope<TraditonalMaterialData>();; }
+            case MaterialType::PBR:         { return  CreateScope<PBRMaterialData>(); }
             default: throw std::invalid_argument("The specified material type isn't implemented!");
         }
     }

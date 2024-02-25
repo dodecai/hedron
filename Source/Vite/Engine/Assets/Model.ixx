@@ -13,50 +13,49 @@ import Vite.Asset;
 import Vite.Asset.Material;
 import Vite.Asset.Mesh;
 import Vite.Renderer.CommandBuffer;
+import Vite.Renderer.PipelineState;
 import Vite.Renderer.Texture;
 
 export namespace Hedron {
 
-using Meshes = vector<Mesh>;
+using MaterialID = size_t;
+using Meshes = vector<Reference<Mesh>>;
+
+struct ModelData {
+    Reference<Material<MaterialType::Traditional>> Material;
+    Meshes Meshes;
+};
+
+using ModelTable = unordered_map<MaterialID, ModelData>;
 
 class Model {
 public:
-    Model(const string &path, bool gamma = false): mGammaCorrection(gamma) {
+    /// Default
+    Model(const string &path) {
         Load(path);
     }
-
-    Model(MeshVertices vertices, MeshIndices indices, const string &texturePath, const TextureProperties &properties = {}, const Components::Material &material = {}) {
-        TextureAsset data = {};
-        data.Texture = Texture::Create(properties, texturePath);
-        data.ID = data.Texture->GetRendererID();
-        data.Type = "Simple";
-        data.Path = texturePath;
-
-        Mesh mesh(vertices, indices, { data }, material);
-        mMeshes.push_back(mesh);
-    }
-
     ~Model() = default;
 
-    void Draw(CommandBuffer *commandBuffer) {
-        for (auto &mesh : mMeshes) {
-            mesh.Bind();
-            commandBuffer->DrawIndexed(mesh.GetIndicesCount(), PrimitiveType::Triangle, true);
-            mesh.Unbind();
+    void Draw(CommandBuffer *buffer) {
+        for (auto &[id, object] : mModelTable) {
+            object.Material->Bind();
+            for (auto &&mesh : object.Meshes) {
+                mesh->Bind();
+                buffer->DrawIndexed(mesh->GetIndicesCount(), PrimitiveType::Triangle, true);
+                mesh->Unbind();
+            }
+            object.Material->Unbind();
         }
     }
-
-    const Meshes &GetMeshes() const { return mMeshes; }
-
     void SetDefaultTexture(const string &path, const TextureProperties &properties = {}) {
-        TextureAsset data = {};
+        MaterialTexture data = {};
         data.Texture = Texture::Create(properties, path);
         data.ID = data.Texture->GetRendererID();
-        data.Type = "Simple";
+        data.Type = MaterialTextureType::Simple;
         data.Path = path;
 
-        for (auto &mesh : mMeshes) {
-            mesh.SetDefaultTexture({ data });
+        for (auto &[id, object] : mModelTable) {
+            object.Material->Textures().push_back(data);
         }
     }
 
@@ -73,28 +72,36 @@ private:
             return;
         }
         mDirectory = File::GetPath(path);
-        ProcessNode(scene->mRootNode, scene);
+        ProcessScene(scene);
 
         //Assimp::DefaultLogger::kill();
     }
 
-    void ProcessNode(aiNode *node, const aiScene *scene) {
-        for (size_t i = 0; i < node->mNumMeshes; i++) {
-            auto *mesh = scene->mMeshes[node->mMeshes[i]];
-            mMeshes.push_back(ProcessMesh(mesh, scene));
-        }
-        for (size_t i = 0; i < node->mNumChildren; i++) {
-            ProcessNode(node->mChildren[i], scene);
-        }
+    void ProcessScene(const aiScene *scene) {
+        mModelTable.reserve(scene->mNumMaterials);
+
+        function<void(const aiScene *, aiNode *)> processNode;
+        processNode = [&](const aiScene *scene, aiNode *node) {
+            for (size_t i = 0; i < node->mNumMeshes; i++) {
+                auto *mesh = scene->mMeshes[node->mMeshes[i]];
+                if (mModelTable.find(mesh->mMaterialIndex) == mModelTable.end()) {
+                    mModelTable[mesh->mMaterialIndex].Material = ProcessMaterialData(scene, mesh);
+                    auto data = mModelTable[mesh->mMaterialIndex].Material->Data();
+                }
+                mModelTable[mesh->mMaterialIndex].Meshes.push_back(ProcessMeshData(scene, mesh));
+            }
+            for (size_t i = 0; i < node->mNumChildren; i++) {
+                processNode(scene, node->mChildren[i]);
+            }
+        };
+
+        processNode(scene, scene->mRootNode);
     }
 
-    Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene) {
-        MeshVertices vertices {};
-        MeshIndices indices {};
-        Textures textures {};
-        Components::Material material {};
+    Reference<Mesh> ProcessMeshData(const aiScene *scene, aiMesh *mesh) {
+        MeshData data {};
 
-        // Vertices
+        // Mesh
         for (size_t i = 0; i < mesh->mNumVertices; i++) {
             MeshVertexLayout vertex;
             glm::vec3 vector;
@@ -126,76 +133,91 @@ private:
                 vector.y = static_cast<float>(mesh->mBitangents[i].y);
                 vector.z = static_cast<float>(mesh->mBitangents[i].z);
                 vertex.Bitangent = vector;
-            } else {
-                vertex.TexCoords = { 0.0f, 0.0f };
             }
 
-            vertices.push_back(vertex);
+            data.Vertices.push_back(vertex);
         }
-
-        // Indices
         for (size_t i = 0; i < mesh->mNumFaces; i++) {
             auto &face = mesh->mFaces[i];
             for (size_t j = 0; j < face.mNumIndices; j++) {
-                indices.push_back(face.mIndices[j]);
+                data.Indices.push_back(face.mIndices[j]);
             }
         }
+
+        return CreateReference<Mesh>(data);
+    }
+
+    Reference<Material<MaterialType::Traditional>> ProcessMaterialData(const aiScene *scene, aiMesh *mesh) {
+        auto materialRef = CreateReference<Material<MaterialType::Traditional>>();
 
         // Materials
         if (mesh->mMaterialIndex >= 0) {
             auto *current = scene->mMaterials[mesh->mMaterialIndex];
 
-            auto diffuse = LoadMaterialTextures(current, aiTextureType_DIFFUSE, "Diffuse");
-            textures.insert(textures.end(), diffuse.begin(), diffuse.end());
+            auto ambient = LoadMaterialTextures(current, aiTextureType_AMBIENT, MaterialTextureType::Ambient);
+            materialRef->Textures().insert(materialRef->Textures().end(), ambient.begin(), ambient.end());
+            materialRef->Data().AmbientTextureEnabled = ambient.size() > 0 ? true : false;
 
-            auto normal = LoadMaterialTextures(current, aiTextureType_NORMALS, "Normal");
-            textures.insert(textures.end(), normal.begin(), normal.end());
+            auto diffuse = LoadMaterialTextures(current, aiTextureType_DIFFUSE, MaterialTextureType::Diffuse);
+            materialRef->Textures().insert(materialRef->Textures().end(), diffuse.begin(), diffuse.end());
+            materialRef->Data().DiffuseTextureEnabled = diffuse.size() > 0 ? true : false;
 
-            auto specular = LoadMaterialTextures(current, aiTextureType_SPECULAR, "Specular");
-            textures.insert(textures.end(), specular.begin(), specular.end());
+            auto specular = LoadMaterialTextures(current, aiTextureType_SPECULAR, MaterialTextureType::Specular);
+            materialRef->Textures().insert(materialRef->Textures().end(), specular.begin(), specular.end());
+            materialRef->Data().SpecularTextureEnabled = specular.size() > 0 ? true : false;
 
-            auto height = LoadMaterialTextures(current, aiTextureType_HEIGHT, "Height");
-            textures.insert(textures.end(), height.begin(), height.end());
 
-            auto ambient = LoadMaterialTextures(current, aiTextureType_AMBIENT, "Ambient");
-            textures.insert(textures.end(), ambient.begin(), ambient.end());
+
+            auto height = LoadMaterialTextures(current, aiTextureType_HEIGHT, MaterialTextureType::Height);
+            materialRef->Textures().insert(materialRef->Textures().end(), height.begin(), height.end());
+            //materialRef->Data().HeightTextureEnabled = true;
+
+            auto normal = LoadMaterialTextures(current, aiTextureType_NORMALS, MaterialTextureType::Normal);
+            materialRef->Textures().insert(materialRef->Textures().end(), normal.begin(), normal.end());
+            //materialRef->Data().NormalTextureEnabled = true;
         }
         if (mesh->mMaterialIndex >= 0) {
-            material = LoadMaterial(scene->mMaterials[mesh->mMaterialIndex]);
+            materialRef->Data() = LoadMaterialData(scene->mMaterials[mesh->mMaterialIndex]).Data();
+            auto data = materialRef->Data();
         }
 
-        return Mesh(vertices, indices, textures, material);
+        return materialRef;
     }
 
-    Components::Material LoadMaterial(aiMaterial *material) {
-        Components::Material result;
-        aiColor3D color(0.0f, 0.0f, 0.0f);
-        float shininess;
+    Material<MaterialType::Traditional> LoadMaterialData(aiMaterial *material) {
+        Material<MaterialType::Traditional> result;
+        auto &&data = result.Data();
+        aiColor3D color {};
+        float shininess {};
 
         material->Get(AI_MATKEY_COLOR_AMBIENT, color);
-        result.Ambient = glm::vec3(color.r, color.g, color.b);
+        data.Ambient = glm::vec3(color.r, color.g, color.b);
+        data.AmbientEnabled = color.IsBlack() ? false : true;
 
         material->Get(AI_MATKEY_COLOR_DIFFUSE, color);
-        result.Diffuse = glm::vec3(color.r, color.g, color.b);
+        data.Diffuse = glm::vec3(color.r, color.g, color.b);
+        data.DiffuseEnabled = color.IsBlack() ? false : true;
 
         material->Get(AI_MATKEY_COLOR_SPECULAR, color);
-        result.Specular = glm::vec3(color.r, color.g, color.b);
+        data.Specular = glm::vec3(color.r, color.g, color.b);
+        data.SpecularEnabled = color.IsBlack() ? false : true;
+
+        material->Get(AI_MATKEY_COLOR_EMISSIVE, color);
+        data.Emissive = glm::vec3(color.r, color.g, color.b);
+        data.EmissiveEnabled = color.IsBlack() ? false : true;
 
         material->Get(AI_MATKEY_SHININESS, shininess);
-        if (shininess < 0.0f) {
-            shininess = 32.0f;
-        }
-        result.Shininess = shininess;
+        data.Shininess = shininess;
 
         return result;
     }
 
-    Textures LoadMaterialTextures(aiMaterial *material, aiTextureType type, string typeName) {
-        Textures textures {};
+    MaterialTextures LoadMaterialTextures(aiMaterial *material, aiTextureType aiType, MaterialTextureType type) {
+        MaterialTextures textures {};
 
-        for (size_t i = 0; i < material->GetTextureCount(type); i++) {
+        for (size_t i = 0; i < material->GetTextureCount(aiType); i++) {
             aiString str;
-            material->GetTexture(type, static_cast<unsigned int>(i), &str);
+            material->GetTexture(aiType, static_cast<unsigned int>(i), &str);
             bool skip = false;
             for (size_t j = 0; j < mTexturesLoaded.size(); j++) {
                 if (strcmp(mTexturesLoaded[j].Path.data(), str.C_Str()) == 0) {
@@ -206,10 +228,10 @@ private:
             }
             if (!skip) {
                 string path = mDirectory + '/' + str.C_Str();
-                TextureAsset data;
+                MaterialTexture data;
                 auto texture = Texture::Create({}, path);
                 data.ID = texture->GetRendererID();
-                data.Type = typeName;
+                data.Type = type;
                 data.Path = str.C_Str();
                 data.Texture = texture;
 
@@ -221,13 +243,10 @@ private:
     }
 
 private:
-    /// Properties
-    bool mGammaCorrection;
-
     /// Data
     string mDirectory;
-    Meshes mMeshes;
-    Textures mTexturesLoaded {};
+    ModelTable mModelTable;
+    MaterialTextures mTexturesLoaded {};
 };
 
 }

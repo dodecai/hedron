@@ -28,23 +28,23 @@ struct MeshData {
     MeshIndices Indices {};
 };
 
-struct TextureAsset {
-    uint32 ID;
-    string Path;
-    string Type;
-    Reference<Texture> Texture;
-};
-
-using Textures = vector<TextureAsset>;
-
 class Mesh {
 public:
-    Mesh(const MeshVertices &vertices, const MeshIndices &indices, const Textures &textures, const Components::Material &material = {}, Reference<Texture> dontKnowWhyButIfRemovedTexturesDontLoadCorrectly = {}):
-        mVertices(vertices),
-        mIndices(indices),
-        mTextures(textures),
-        mMaterial(material) {
+    Mesh(const MeshData &data):
+        mData(data) {
         SetupMesh();
+    }
+    Mesh(const Mesh &other) {
+        mData = other.mData;
+        mPipeline = other.mPipeline;
+        mVertexBuffer = other.mVertexBuffer;
+        mIndexBuffer = other.mIndexBuffer;
+    }
+    Mesh(Mesh &&other) {
+        mData = std::move(other.mData);
+        mPipeline = std::move(other.mPipeline);
+        mVertexBuffer = std::move(other.mVertexBuffer);
+        mIndexBuffer = std::move(other.mIndexBuffer);
     }
     ~Mesh() = default;
 
@@ -52,58 +52,14 @@ public:
         mVertexBuffer->Bind();
         mPipeline->Bind();
         mIndexBuffer->Bind();
-
-        for (size_t i = 0; i < mTextures.size(); i++) {
-            if (i >= 3) break;
-            if (mTextures[i].Type == "Simple") {
-                mTextures[i].Texture->Bind(0);
-                mTextures[i].Texture->Bind(1);
-                mTextures[i].Texture->Bind(2);
-            } else if (mTextures[i].Type == "Diffuse") {
-                mTextures[i].Texture->Bind(0);
-                mTextures[i].Texture->Bind(2);
-            //} else if(mTextures[i].Type == "Normal") {
-            //    mTextures[i].Texture->Bind(0);
-            //    mTextures[i].Texture->Bind(2);
-            } else if (mTextures[i].Type == "Specular") {
-                mTextures[i].Texture->Bind(0);
-                mTextures[i].Texture->Bind(2);
-            //} else if(mTextures[i].Type == "Height") {
-            //    mTextures[i].Texture->Bind(1);
-            //} else if(mTextures[i].Type == "Ambient") {
-            //    mTextures[i].Texture->Bind(2);
-            //} else if(mTextures[i].Type == "Metallic") {
-            //    mTextures[i].Texture->Bind(5);
-            //} else if(mTextures[i].Type == "Roughness") {
-            //    mTextures[i].Texture->Bind(6);
-            //} else if(mTextures[i].Type == "AO") {
-            //    mTextures[i].Texture->Bind(7);
-            } else {
-                mMaterialBuffer->Bind(9);
-                mMaterialBuffer->UpdateData(&mMaterial, sizeof(Components::Material));
-            }
-        }
-        if (!mTextures.size()) {
-            mMaterialBuffer->Bind(9);
-            mMaterialBuffer->UpdateData(&mMaterial, sizeof(Components::Material));
-        }
     }
     void Unbind() {
+        mIndexBuffer->Unbind();
         mPipeline->Unbind();
-
-        for (size_t i = 0; i < mTextures.size(); i++) {
-            if (i >= 3) break;
-            mTextures[i].Texture->Unbind(static_cast<uint32_t>(i));
-        }
-        mMaterialBuffer->Unbind();
+        mVertexBuffer->Unbind();
     }
 
-    uint32 GetIndicesCount() const { return static_cast<uint32>(mIndices.size()); }
-    Components::Material GetMaterial() const { return mMaterial; }
-
-    void SetDefaultTexture(const Textures &textures) {
-        mTextures = textures;
-    }
+    uint32 GetIndicesCount() const { return static_cast<uint32>(mData.Indices.size()); }
 
 private:
     void SetupMesh() {
@@ -121,23 +77,18 @@ private:
         };
         mPipeline = PipelineState::Create(properties);
 
-        mVertexBuffer = Buffer::Create(BufferType::Vertex, mVertices.data(), sizeof_vector(mVertices));
-        mIndexBuffer = Buffer::Create(BufferType::Index, mIndices.data(), sizeof_vector(mIndices));
-        mMaterialBuffer = Buffer::Create(BufferType::Uniform, &mMaterial, sizeof(Components::Material));
+        mVertexBuffer = Buffer::Create(BufferType::Vertex, mData.Vertices.data(), sizeof_vector(mData.Vertices));
+        mIndexBuffer = Buffer::Create(BufferType::Index, mData.Indices.data(), sizeof_vector(mData.Indices));
     }
 
 private:
     /// Data
-    MeshVertices mVertices;
-    MeshIndices mIndices;
-    Textures mTextures;
-    Components::Material mMaterial;
+    MeshData mData;
 
     /// Instances
     Reference<PipelineState> mPipeline;
     Reference<Buffer> mVertexBuffer;
     Reference<Buffer> mIndexBuffer;
-    Reference<Buffer> mMaterialBuffer;
 };
 
 

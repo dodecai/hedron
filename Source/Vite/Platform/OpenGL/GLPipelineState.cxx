@@ -59,13 +59,16 @@ void GLPipelineState::Bind() {
     UpdateProperties();
 
     glBindVertexArray(mPipelineID);
+    //uint32 bindingIndex = 0;
+    //glVertexArrayVertexBuffer(mPipelineID, bindingIndex, VBO, first offset, whole stride);
 
     auto attributeIndex = 0;
     const auto &layout = mProperties.Layout;
     for (const auto &attribute : layout) {
         auto baseType = ShaderDataTypeToGLBaseType(attribute.Type);
-        glEnableVertexAttribArray(attributeIndex);
+        glEnableVertexArrayAttrib(mPipelineID, attributeIndex);
         if (baseType == GL_INT) {
+            //glVertexAttribIFormat();
             glVertexAttribIPointer(
                 attributeIndex,
                 attribute.GetComponentCount(),
@@ -74,6 +77,7 @@ void GLPipelineState::Bind() {
                 (const void *)(intptr)attribute.Offset
             );
         } else {
+            //glVertexArrayAttribFormat();
             glVertexAttribPointer(
                 attributeIndex,
                 attribute.GetComponentCount(),

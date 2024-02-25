@@ -77,13 +77,18 @@ public:
         mEntityUniformBuffer->Bind((size_t)UniformPosition::EntityData);
 
         model.Draw(mCommandBuffer.get());
+        //for (auto &mesh : model.GetMeshes()) {
+        //    mesh->Bind();
+        //    mCommandBuffer->DrawIndexed(mesh->GetIndicesCount(), PrimitiveType::Triangle, true);
+        //    mesh->Unbind();
+        //}
 
         // Visualize Normals
         //mNormalsShader->Bind();
-        //model.Draw(mCommandBuffer);
-
         //for (auto &mesh : model.GetMeshes()) {
-        //    
+        //    mesh.Bind();
+        //    mCommandBuffer->DrawIndexed(mesh.GetIndicesCount(), PrimitiveType::Triangle, true);
+        //    mesh.Unbind();
         //}
     }
     void DrawSkybox() {

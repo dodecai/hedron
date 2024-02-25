@@ -30,6 +30,11 @@ private:
     }
 
 public:
+    /// Commands
+    static inline void Disable() { mCaptureInput = false; }
+    static inline void Enable() { mCaptureInput = true; }
+
+
     /// Methods
     [[nodiscard]] static inline bool GetKeyState(KeyCode code) {
         return mCaptureInput ? Instance->GetKeyStatePlatform(code) : bool {};
@@ -61,7 +66,7 @@ protected:
 
 protected:
     /// Properties
-    inline static float sMouseWheelDelta {};
+    static inline float sMouseWheelDelta {};
 
 private:
     static inline bool mCaptureInput { true };
