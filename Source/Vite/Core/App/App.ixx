@@ -17,6 +17,7 @@ export import Vite.App.Statistics;
 
 import Vite.Base;
 import Vite.Config;
+import Vite.Device.Input;
 import Vite.Device.GFXContext;
 import Vite.Event;
 import Vite.Logger;
@@ -91,6 +92,7 @@ public:
         mGraphicsContext->Attach();
         mGraphicsContext->Viewport(mCoreWindow->ContentSize());
         mGraphicsContext->VSync(mSettings.VSync);
+        //mGraphicsContext->VSync(false);
         mGraphicsContext->Clear();
 
         // Load Renderer
@@ -134,6 +136,16 @@ public:
         switch (event.Action) {
             case WindowAction::Destroy: {
                 Exit();
+                break;
+            }
+
+            case WindowAction::Focus: {
+                //Input::Enable();
+                break;
+            }
+
+            case WindowAction::Defocus: {
+                //Input::Disable();
                 break;
             }
 
@@ -354,11 +366,11 @@ private:
             for (auto *layer : mLayers) layer->Update(deltaTime);
             Update(deltaTime);
             mRenderer->Present();
-            if (mCoreWindow->State(WindowState::Alive)) {
-                mDearImGuiLayer->Prepare();
-                for (auto *layer : mLayers) layer->UpdateUI();
-                mDearImGuiLayer->Render();
-            }
+            //if (mCoreWindow->State(WindowState::Alive)) {
+            //    mDearImGuiLayer->Prepare();
+            //    for (auto *layer : mLayers) layer->UpdateUI();
+            //    mDearImGuiLayer->Render();
+            //}
             mGraphicsContext->SwapBuffers();
             mGraphicsContext->Detach();
         }

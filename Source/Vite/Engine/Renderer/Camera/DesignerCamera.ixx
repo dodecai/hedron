@@ -29,6 +29,9 @@ public:
         auto wheel = Input::GetMouseWheelDelta();
         auto [x, y] = Input::GetMousePositionDelta();
         const glm::vec2 &mouse { x, y };
+        if (mInitialMousePosition.x == 0.0f && mInitialMousePosition.y == 0.0f) {
+            mInitialMousePosition = mouse;
+        }
         glm::vec2 mouseDelta = (mouse - mInitialMousePosition) * cameraSpeed;
         mInitialMousePosition = mouse;
         

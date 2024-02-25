@@ -72,22 +72,22 @@ bool WinInput::GetMouseButtonStateDeltaPlatform(MouseButton button) const {
 }
 
 Position2D WinInput::GetMousePositionPlatform() const {
-    static thread_local POINT delta {};
+    auto active = GetActiveWindow();
 
     POINT current {};
     GetCursorPos(&current);
-    ScreenToClient(GetActiveWindow(), &current);
+    ScreenToClient(active, &current);
 
     mLastMousePosition = current;
     return { static_cast<float>(current.x), static_cast<float>(current.y) };
 }
 
 Position2D WinInput::GetMousePositionDeltaPlatform() const {
-    static thread_local POINT delta {};
+    auto active = GetActiveWindow();
 
     POINT current {};
     GetCursorPos(&current);
-    ScreenToClient(GetActiveWindow(), &current);
+    ScreenToClient(active, &current);
 
     current.x -= mLastMousePosition.x;
     current.y -= mLastMousePosition.y;

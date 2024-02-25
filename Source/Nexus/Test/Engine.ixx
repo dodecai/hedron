@@ -75,11 +75,6 @@ public:
         // Load Buffers
         mEntityUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::EntityData));
         mLightBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Lights));
-
-        // Load Textures
-        mCheckerBoard = Texture::Create({}, "./Assets/Textures/CheckerBoard.png");
-        mGrassTexture = Texture::Create({ .SamplerWrap = TextureWrap::MirrorClamp }, "./Assets/Textures/Grass.png");
-        mMatrixTexture = Texture::Create({}, "./Assets/Textures/Matrix.jpg");
     }
     ~Engine() = default;
 
@@ -139,6 +134,10 @@ public:
         static Model window("Assets/Models/Cube/Cube.obj");
         static bool once = true;
         if (once) {
+            // "./Assets/Textures/CheckerBoard.png"
+            // "./Assets/Textures/Grass.png", { .SamplerWrap = TextureWrap::MirrorClamp }
+            // "./Assets/Textures/Matrix.jpg"
+
             level.SetDefaultTexture("Assets/Textures/Metal.png");
             cube.SetDefaultTexture("Assets/Textures/Concrete.png", { .SamplerWrap = TextureWrap::Repeat });
             cube2.SetDefaultTexture("Assets/Textures/Wood.png", { .SamplerWrap = TextureWrap::Repeat, .GenerateMips = true, });
@@ -384,11 +383,6 @@ private:
 
     /// Shaders
     Reference<Shader> mLightShader;
-    
-    /// Textures
-    Reference<Texture> mCheckerBoard;
-    Reference<Texture> mGrassTexture;
-    Reference<Texture> mMatrixTexture;
 };
 
 }
