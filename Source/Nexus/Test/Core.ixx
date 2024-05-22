@@ -9,7 +9,6 @@ export namespace Hedron::Test {
 
 // Performance Test
 inline long long Fibonacci(int n) {
-    //if (n < 0) throw std::invalid_argument("n is negative");
     //if (n >= 47) throw std::invalid_argument("n is too large");
     if (n <= 1) return n;
     return Fibonacci(n - 1) + Fibonacci(n - 2);
@@ -17,140 +16,92 @@ inline long long Fibonacci(int n) {
 
 #pragma endregion
 
-///
-/// @brief Core | Serves all core tests for the Hedron Engine.
-///
-class Core: public Layer {
-public:
-    /// Default
-    Core() = default;
-    ~Core() = default;
+#pragma region /// Events
 
-    /// Methods
-    void Create() override {
-        mThreadPool = CreateScope<ThreadPool>(4);
-    }
-    void Destroy() override {}
-    void Update(DeltaTime deltaTime) override {
-        //return; // OpenGL Context destroys stack
-        ///
-        /// ThreadPool
-        ///
-        static double delay = 0.0;
-        delay += deltaTime.GetMilliseconds();
-
-        if (delay >= 0.2) {
-            // Thread Pool Tasks
-            const int n = 4;
-            auto fibResultA = mThreadPool->Enqueue([=] {
-                auto result = Fibonacci(n);
-                return result;
-            });
-            auto fibResultB = mThreadPool->Enqueue([=] {
-                auto result = Fibonacci(n);
-                return result;
-            });
-
-            delay = 0.0;
-        }
-    }
-
-private:
-    /// Properties
-    Scope<ThreadPool> mThreadPool;
+struct KeyboardEvent {
+    int KeyCode = 0;
 };
 
-}
+struct MouseEvent {
+    int X = 0;
+    int Y = 0;
+};
 
-//import Ultra;
-//import Ultra.Core.ThreadPool;
-//
-//export namespace Hedron::Test {
-//
-//#pragma region Events
-//
-//struct KeyboardEvent {
-//    int KeyCode = 0;
-//};
-//
-//struct MouseEvent {
-//    int X = 0;
-//    int Y = 0;
-//};
-//
-//struct EventListenerTest {
-//    void OnKeyboardEvent(const KeyboardEvent &data) {
-//        logger << __FUNCTION__ << ":" << data.KeyCode << "\n";
-//    }
-//    void OnMouseEvent(const MouseEvent &data) {
-//        logger << __FUNCTION__ << ":" << data.X << "\n";
-//    }
-//};
-//
-//struct Tester {
-//    int Value = 5;
-//
-//    //void BasicEvent(string test) {
-//    //    logger << __FUNCTION__ << ":" << test << "\n";
-//    //}
-//
-//    //void BasicEventInt(int test) {
-//    //    logger << __FUNCTION__ << ":" << test << "\n";
-//    //}
-//
-//    bool Event(string test) {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return false;
-//    }
-//
-//    const bool ConstEvent(string test) {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return false;
-//    }
-//
-//    static bool StaticEvent(string test) {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return true;
-//    }
-//
-//    bool NoExceptEvent(string test) noexcept {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return false;
-//    }
-//
-//    const bool NoExceptConstEvent(string test) noexcept {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return false;
-//    }
-//
-//    static bool NoExceptStaticEvent(string test) noexcept {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return false;
-//    }
-//
-//    volatile bool VolatileEvent(string test) {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return false;
-//    }
-//
-//    const volatile bool VolatileConstEvent(string test) {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return false;
-//    }
-//
-//    static volatile bool VolatileStaticEvent(string test) {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return false;
-//    }
-//
-//    static const volatile bool VolatileStaticConstEvent(string test) {
-//        //logger << __FUNCTION__ << ":" << test << "\n";
-//        return false;
-//    }
-//};
-//
-//#pragma endregion
-//
+struct EventListenerTest {
+    void OnKeyboardEvent(const KeyboardEvent &data) {
+        logger << __FUNCTION__ << ":" << data.KeyCode << "\n";
+    }
+    void OnMouseEvent(const MouseEvent &data) {
+        logger << __FUNCTION__ << ":" << data.X << "\n";
+    }
+};
+
+struct Tester {
+    int Value = 5;
+
+    //void BasicEvent(string test) {
+    //    logger << __FUNCTION__ << ":" << test << "\n";
+    //}
+
+    //void BasicEventInt(int test) {
+    //    logger << __FUNCTION__ << ":" << test << "\n";
+    //}
+
+    bool Event(string test) {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return false;
+    }
+
+    const bool ConstEvent(string test) {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return false;
+    }
+
+    static bool StaticEvent(string test) {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return true;
+    }
+
+    bool NoExceptEvent(string test) noexcept {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return false;
+    }
+
+    const bool NoExceptConstEvent(string test) noexcept {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return false;
+    }
+
+    static bool NoExceptStaticEvent(string test) noexcept {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return false;
+    }
+
+    volatile bool VolatileEvent(string test) {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return false;
+    }
+
+    const volatile bool VolatileConstEvent(string test) {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return false;
+    }
+
+    static volatile bool VolatileStaticEvent(string test) {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return false;
+    }
+
+    static const volatile bool VolatileStaticConstEvent(string test) {
+        //logger << __FUNCTION__ << ":" << test << "\n";
+        return false;
+    }
+};
+
+#pragma endregion
+
+#pragma region /// Future
+
 //#ifdef FUTURE_TEST
 //
 //static std::future<void> Future;
@@ -173,86 +124,66 @@ private:
 //    applog << "3: " << MainThread3.get_id() << std::endl;
 //}
 //#endif
-//
-//class Core {
-//    struct EventEmitter: Emitter<EventEmitter> {};
-//
-//public:
-//    Core() {
-//        Test();
-//    }
-//    ~Core() = default;
-//
-//    void Test() {
-//        return;
-//        auto shaders = Directory::GetFiles("Assets/Shaders", ".glsl");
-//        auto bin = File::LoadAsBinary("Assets/Shaders/Test.glsl");
-//        auto txt = File::LoadAsText("Assets/Shaders/Test.glsl");
-//        return; // Heap Corruption
-//
-//
-//        ///
-//        /// Core
-//        ///
-//        LogCaption("Core");
-//        // Property
-//        Log("Property");
-//        LogDelimiter("");
-//        LogTrace("PropertySize before: {}", static_cast<size_t>(PropertySize));
-//        PropertySize = 1001;
-//        LogTrace("PropertySize after setting: {}", static_cast<size_t>(PropertySize));
-//        LogDelimiter("");
-//        // UUID
-//        Log("UUID");
-//        LogDelimiter("");
-//        LogInfo("UUID [uint16]: {}", static_cast<uint16_t>(UUID<uint16_t>()));
-//        LogInfo("UUID [uint32]: {}", static_cast<uint32_t>(UUID<uint32_t>()));
-//        LogInfo("UUID [uint64]: {}", static_cast<uint64_t>(UUID<uint64_t>()));
-//        LogInfo("UUID [string]: {}", static_cast<string>(UUID()));
-//        LogDelimiter("");
-//        // Logger
-//        Log("Logger");
-//        LogDelimiter("");
-//        logger << LogLevel::Trace << "Hello World! 🦄" << "\n";
-//        LogTrace("{}: {} {:.2}", "Hello", "World! 🦄", 1.234567f);
-//        Logger::Test();
-//        LogDelimiter("");
-//
-//        ///
-//        /// Math
-//        ///
-//        LogCaption("Math");
-//        // Matrix
-//        // Quaternion
-//        // Vector
-//        Log("Vector");
-//        LogDelimiter("");
-//        Test::VectorTests();
-//        LogDelimiter("");
-//
-//        ///
-//        /// System
-//        ///
-//        LogCaption("System");
-//        // CLI
-//        Log("CLI");
-//        LogDelimiter("");
-//        Cli::Test();
-//        LogDelimiter("");
-//
-//        ///
-//        /// Utilities
-//        ///
-//        LogCaption("Utilities");
-//        // DateTime
-//        Log("DateTime");
-//        LogDelimiter("");
-//        logger(" - CurrentDate:      {}\n", apptime.GetDate());
-//        logger(" - CurrentTime:      {}\n", apptime.GetTime());
-//        logger(" - CurrentTimestamp: {}\n", apptime.GetTimeStamp());
-//        logger(" - CurrentRuntime:   {}\n", apptime.GetRuntime());
-//        LogDelimiter("");
-//
+
+#pragma endregion
+
+///
+/// @brief Core | Serves all core tests for the Hedron Engine.
+///
+class Core: public Layer {
+public:
+    /// Default
+    Core() = default;
+    ~Core() = default;
+
+    /// Methods
+    void Create() override {
+        LogCaption("Core Tests");
+        mThreadPool = CreateScope<ThreadPool>(4);
+        Test();
+    }
+    void Destroy() override {}
+    void Update(DeltaTime deltaTime) override {
+        //return; // OpenGL Context destroys stack
+        ///
+        /// ThreadPool
+        ///
+        static double delay = 0.0;
+        delay += deltaTime.GetMilliseconds();
+
+        if (delay >= 0.2) {
+            // Thread Pool Tasks
+            const int n = 512;
+            auto fibResultA = mThreadPool->Enqueue([=] {
+                auto result = Fibonacci(n);
+                return result;
+            });
+            auto fibResultB = mThreadPool->Enqueue([=] {
+                auto result = Fibonacci(n);
+                return result;
+            });
+
+            delay = 0.0;
+        }
+    }
+
+    /// Tests
+    void Test() {
+        AppTest();
+        ConfigTest();
+        EventTest();
+        LoggerTest();
+        NetworkTest();
+        SerializerTest();
+        UtilsTest();
+    }
+    void AppTest() {}
+    void ConfigTest() {}
+    void EventTest() {
+        LogDelimiter("");
+        Log("Events\n");
+        LogDelimiter("");
+
 //        // Delegate, Dispatcher, Emitter and Signal
 //        Log("Delegate, Dispatcher, Emitter and Signal");
 //        LogDelimiter("");
@@ -357,9 +288,36 @@ private:
 //        LogDelimiter("");
 //        //String::Test();
 //        LogDelimiter("");
-//        // ThreadPool
-//        Log("ThreadPool");
-//        LogDelimiter("");
+    }
+    void LoggerTest() {
+        LogDelimiter("");
+        Log("Logger\n");
+        LogDelimiter("");
+
+        logger << LogLevel::Trace << "Hello World! 🦄" << "\n";
+        LogTrace("{}: {} {:.2}", "Hello", "World! 🦄", 1.234567f);
+        Test::TestLogger();
+
+    }
+    void NetworkTest() {}
+    void SerializerTest() {}
+    void UtilsTest() {
+        // Utils
+        LogDelimiter("");
+        Log("Utils\n");
+        LogDelimiter("");
+
+        // Chrono
+        logger(" - CurrentDate:      {}\n", Chrono::Date());
+        logger(" - CurrentTime:      {}\n", Chrono::Time());
+        logger(" - CurrentTimestamp: {}\n", Chrono::Timestamp());
+        //logger(" - CurrentRuntime:   {}\n", Chrono::Runtime());
+        
+        // Random
+        
+        // String
+        
+        // ThreadPool
 //        ThreadPool pool;
 //        for (int i = 0; i < 8; ++i) {
 //            // Create eight tasks in the queue
@@ -374,7 +332,8 @@ private:
 //            });
 //        }
 //        std::this_thread::sleep_for(std::chrono::milliseconds(32));
-//        LogDelimiter("");
+        
+        // Timer
 //         // Timer
 //        {
 //            Log("Timer");
@@ -388,26 +347,17 @@ private:
 //            Log("Duration(s):  {}", timer.GetDeltaTimeAs(TimerUnit::Seconds));
 //            LogDelimiter("");
 //        }
-//    }
-//
-//    //virtual void OnKeyboardEvent(KeyboardEventData &data, const EventListener::EventEmitter &emitter) override {
-//    //    return;
-//    //    if (data.State == KeyState::Release) {
-//    //        if (data.Key == KeyCode::F9) {
-//    //            mRenderer->Dispose();
-//    //            auto api = Context::GetAPI() == GraphicsAPI::OpenGL ? GraphicsAPI::Vulkan : GraphicsAPI::OpenGL;
-//    //            Context::SetAPI(api);
-//    //            Reload();
-//    //            mRenderer = Renderer::Create();
-//    //        }
-//    //    }
-//    //}
-//
-//private:
-//    Ultra::Property<size_t> PropertySize { 50, [this](const size_t &value) {
-//        return value > 1000 ? 1000 : 0;
-//    } };
-//
-//};
-//
-//}
+    }
+
+    /// Events
+    //void OnInputEvent(const KeyboardEvent &event) override {
+    //}
+
+private:
+    /// Instances
+    Scope<ThreadPool> mThreadPool;
+    //struct EventEmitter: Emitter<EventEmitter> {};
+
+};
+
+}

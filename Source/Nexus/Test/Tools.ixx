@@ -16,9 +16,15 @@ public:
     ~Tool() = default;
 
     /// Methods
-    void Create() override {}
+    void Create() override {
+        LogCaption("Tool Tests");
+        Test();
+    }
     void Destroy() override {}
     void Update(DeltaTime deltaTime) override {}
+
+    /// Tests
+    void Test() {}
 
 private:
     /// Properties
