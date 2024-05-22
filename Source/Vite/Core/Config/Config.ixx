@@ -29,26 +29,26 @@ public:
     void Load(const string &file) {
         mConfigFile = file;
         try {
-            //mConfigData = YAML::LoadFile(mConfigFile);
+            mConfigData = YAML::LoadFile(mConfigFile);
         } catch (std::exception ex) {
             LogError("Something went wrong while loading Config!");
         }
 
         try {
-            //if (mConfigData["App"]) {
-            //    AppCaption = mConfigData["App"]["Caption"].as<std::string>();
-            //    AppDescription = mConfigData["App"]["Description"].as<std::string>();
-            //    AppVersion = mConfigData["App"]["Version"].as<std::string>();
-            //}
+            if (mConfigData["App"]) {
+                //AppCaption = mConfigData["App"]["Caption"].as<std::string>();
+                //AppDescription = mConfigData["App"]["Description"].as<std::string>();
+                //AppVersion = mConfigData["App"]["Version"].as<std::string>();
+            }
 
-            //if (mConfigData["Settings"]["Engine"]) {
-            //    string delimiter = "x";
-            //    string resolution = mConfigData["Settings"]["Engine"]["Resolution"].as<std::string>();
-            //    string tokenW = resolution.substr(0, resolution.find(delimiter));
-            //    string tokenH = resolution.substr(resolution.find(delimiter) + 1);
-            //    std::istringstream(tokenH) >> WindowHeight;
-            //    std::istringstream(tokenW) >> WindowWidth;
-            //}
+            if (mConfigData["Settings"]["Engine"]) {
+                //string delimiter = "x";
+                //string resolution = mConfigData["Settings"]["Engine"]["Resolution"].as<std::string>();
+                //string tokenW = resolution.substr(0, resolution.find(delimiter));
+                //string tokenH = resolution.substr(resolution.find(delimiter) + 1);
+                //std::istringstream(tokenH) >> WindowHeight;
+                //std::istringstream(tokenW) >> WindowWidth;
+            }
         } catch (std::exception ex) {
             std::cout << "Something went wrong!" << "\n";
         }
@@ -58,23 +58,25 @@ public:
     // @return The setting value or default value if not found
     template <typename T = string>
     T GetSetting(const string &key, const string &value) const {
-        //if (mConfigData["Settings"][key][value].IsDefined()) {
+        if (mConfigData["Settings"][key][value].IsDefined()) {
             try {
-                //return mConfigData["Settings"][key][value].as<T>();
-            } catch (std::exception ex) {
+                return mConfigData["Settings"][key][value].as<T>();
+            } catch (const YAML::Exception &ex) {
+                return T {};
+            } catch (...) {
                 LogError("Could not deduce the type of '{}:{}'!", key, value);
                 return T {};
             }
-        //} else {
-        //    LogWarning("The requested setting '{}:{}' doesn't exist!", key, value);
-        //}
+        } else {
+            LogWarning("The requested setting '{}:{}' doesn't exist!", key, value);
+        }
         return T {};
     }
 
 private:
     /// Properties
     string mConfigFile {};
-    //YAML::Node mConfigData;
+    YAML::Node mConfigData;
 };
 
 }

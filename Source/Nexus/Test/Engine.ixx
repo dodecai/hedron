@@ -79,7 +79,9 @@ public:
     ~Engine() = default;
 
     /// Methods
-    void Create() override {}
+    void Create() override {
+        LogCaption("Engine Tests");
+    }
     void Destroy() override {}
     void Update(DeltaTime deltaTime) override {
         // Update Camera
@@ -162,22 +164,22 @@ public:
         //mMeshRenderer.DrawModel(sponza, { { 0.0f, 0.0f, 0.0f }, { 0.1f, 0.1f ,0.1f } });
         
         // Update Objects
-        static float CubeAX = -4.0f;
-        static float CubeBX = 0.0f;
-        static float CubeCX = 4.0f;
-        static bool left = true;
-        float direction = 1.0f;
-        if (CubeAX > -8.0f && left) {
+        static auto CubeAX = -4.0;
+        static auto CubeBX = 0.0;
+        static auto CubeCX = 4.0;
+        static auto left = true;
+        auto direction = 1.0;
+        if (CubeAX > -8.0 && left) {
             CubeAX -= direction * deltaTime;
             CubeBX -= direction * deltaTime;
             CubeCX -= direction * deltaTime;
-        } else if (CubeAX < -8.0f && left) {
+        } else if (CubeAX < -8.0 && left) {
             left = false;
-        } else if (CubeCX < 8.0f && !left) {
+        } else if (CubeCX < 8.0 && !left) {
             CubeAX += direction * deltaTime;
             CubeBX += direction * deltaTime;
             CubeCX += direction * deltaTime;
-        } else if (CubeCX > 8.0f && !left) {
+        } else if (CubeCX > 8.0 && !left) {
             left = true;
         }
 

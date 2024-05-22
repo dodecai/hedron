@@ -51,8 +51,8 @@ public:
         mStates = { .Active = true, .Running = true };
 
         // Load Configuration
-        //mConfig = Config::Create();
-        //mConfig->Load("Data/Config.yml");
+        mConfig = CreateScope<Config>();
+        mConfig->Load("Data/Config.yml");
 
         // Configure Logger
         logger.SetLevel(mSettings.LogLevel);
@@ -366,11 +366,11 @@ private:
             for (auto *layer : mLayers) layer->Update(deltaTime);
             Update(deltaTime);
             mRenderer->Present();
-            //if (mCoreWindow->State(WindowState::Alive)) {
-            //    mDearImGuiLayer->Prepare();
-            //    for (auto *layer : mLayers) layer->UpdateUI();
-            //    mDearImGuiLayer->Render();
-            //}
+            if (mCoreWindow->State(WindowState::Alive)) {
+                mDearImGuiLayer->Prepare();
+                for (auto *layer : mLayers) layer->UpdateUI();
+                mDearImGuiLayer->Render();
+            }
             mGraphicsContext->SwapBuffers();
             mGraphicsContext->Detach();
         }
@@ -440,7 +440,7 @@ private:
     /// Systems
     static inline Application *pAppInstance = nullptr;
     LayerStack mLayers;
-    //Scope<Config> mConfig;
+    Scope<Config> mConfig;
     Scope<Window> mCoreWindow;
     Scope<Dialog> mDialog;
     Scope<EventHandler> mEventHandler;
