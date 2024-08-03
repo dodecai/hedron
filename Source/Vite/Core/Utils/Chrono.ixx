@@ -35,37 +35,53 @@ private:
             return ex.what();
         }
     }
-    static inline string RuntimeTicks (const string_view &format = "P{0:02d}DT{1:02d}:{2:02d}:{3:02d}") {
-        /// Option A: "P{:%H:%M:%S}" (lacks support for years, months and days)
-        //auto elapsed = Clock::now() - mStartTime;
+    static inline string RuntimeTicks (const string_view &format = "P{0}DT{1:02}:{2:02}:{3:02}.{4:03}") {
+        // "P{0}Y{1}M{2}DT{3:02}:{4:02}:{5:02}.{6:03}"
+        /// Option A: "P{:%H:%M:%S}" (lacks support for days)
+        //auto elapsed = Clock::now() - sStartTime;
         //auto args = std::make_format_args(elapsed);
         //try {
-        //    return std::vformat(format, args);
+        //    return std::vformat("P{:%H:%M:%S}", args);
         //} catch (const std::exception &ex) {
         //    return ex.what();
         //}
 
         /// Option B: "P{0:02d}DT{1:02d}:{2:02d}:{3:02d}"
-        using namespace std::chrono;
-        auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - sStartTime);
+        auto elapsed = Clock::now() - sStartTime;
 
-        auto year = duration_cast<years>(elapsed);
-        elapsed -= year;
-        auto month = duration_cast<months>(elapsed);
-        elapsed -= month;
-        auto day = duration_cast<days>(elapsed);
-        elapsed -= day;
-        auto hour = duration_cast<hours>(elapsed);
-        elapsed -= hour;
-        auto minute = duration_cast<minutes>(elapsed);
-        elapsed -= minute;
-        auto second = duration_cast<seconds>(elapsed);
-        elapsed -= second;
-        auto millisecond = duration_cast<microseconds>(elapsed);
+        //auto years = std::chrono::duration_cast<std::chrono::years>(elapsed);
+        //elapsed -= years;
+        //auto months = std::chrono::duration_cast<std::chrono::months>(elapsed);
+        //elapsed -= months;
+        auto days = std::chrono::duration_cast<std::chrono::days>(elapsed);
+        elapsed -= days;
+        auto hours = std::chrono::duration_cast<std::chrono::hours>(elapsed);
+        elapsed -= hours;
+        auto minutes = std::chrono::duration_cast<std::chrono::minutes>(elapsed);
+        elapsed -= minutes;
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(elapsed);
+        elapsed -= seconds;
+        auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed);
 
-        //auto args = std::make_format_args(day.count(), hour.count(), minute.count(), second.count(), millisecond.count());
+        //auto Y = years.count();
+        //auto M = months.count();
+        auto D = days.count();
+        auto h = hours.count();
+        auto m = minutes.count();
+        auto s = seconds.count();
+        auto ms = milliseconds.count();
+
+        auto args = std::make_format_args(
+            //Y,
+            //M,
+            D,
+            h,
+            m,
+            s,
+            ms
+        );
         try {
-            //return std::vformat(format, args);
+            return std::vformat(format, args);
         } catch (const std::exception &ex) {
             return ex.what();
         }
