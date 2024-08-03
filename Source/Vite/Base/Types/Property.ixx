@@ -9,12 +9,13 @@ export namespace Hedron {
 /// @brief Property: Built-In Getter and Setter for <any> type
 /// 
 /// @example
-/// Property<size_t> Size { 0, [this](const size_t &value) {
-///    return value > 1000 ? 0 : value;
+/// Property<size_t> Size { 50, [](const auto &value) {
+///    return value > 1000 ? 1000 : value;
 /// }};
 ///
 template <typename T>
 class Property {
+public:
     /// Types
     using Setter = std::function<T(const T &)>;
 
