@@ -189,6 +189,7 @@ void TestString() {
     std::wstring wstring21 = L"Ein paar Zeichen zum testen #+äü+ö€";
 
     // Perform simple tests
+    //static_assert(!String::StartsWith("First Second and SeConD Third", "fiRst", true), "Starts With not working!");
     //AppAssert(!String::StartsWith(string00, string01, true), "[Application::Utility::String]: '{}' starts with '{}' filed!", string00, string01);
     //AppAssert(String::StartsWith(string00, string01), "[Application::Utility::String]: '", string00, "' starts with '", string01, "' failed!");
     //AppAssert(!String::StartsWith(string00, string03), "[Application::Utility::String]: '", string00, "' starts with '", string03, "' failed!");

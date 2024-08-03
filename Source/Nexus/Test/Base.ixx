@@ -75,22 +75,31 @@ public:
         LogDelimiter("");
 
         // Property
-        LogTrace("PropertySize before: {}", static_cast<size_t>(PropertySize));
-        PropertySize = 1001;
-        LogTrace("PropertySize after setting: {}", static_cast<size_t>(PropertySize));
+        Log("Property\n");
+        Log(" - Size before: {}\n", static_cast<size_t>(PropertySize));
+        PropertySize = 2000;
+        Log(" - Size after setting it to 2000: {}\n", static_cast<size_t>(PropertySize));
+
+        // Timestamp
+        Log("Timestamp\n");
+        auto delta = DeltaTime(1000);
+        Log(" - seconds:     {}\n", delta.GetSeconds());
+        Log(" - miliseconds: {}\n", delta.GetMilliseconds());
 
         // UUID
-        LogInfo("UUID [uint16]: {}", static_cast<uint16>(UUID<uint16>()));
-        LogInfo("UUID [uint32]: {}", static_cast<uint32>(UUID<uint32>()));
-        LogInfo("UUID [uint64]: {}", static_cast<uint64>(UUID<uint64>()));
-        LogInfo("UUID [string]: {}", static_cast<string>(UUID()));
+        Log("UUID\n");
+        Log(" - uint16: {}\n", static_cast<uint16>(UUID<uint16>()));
+        Log(" - uint32: {}\n", static_cast<uint32>(UUID<uint32>()));
+        Log(" - uint64: {}\n", static_cast<uint64>(UUID<uint64>()));
+        Log(" - string: {}\n", static_cast<string>(UUID()));
     }
 
 private:
     /// Properties
-    Property<size_t> PropertySize { 50/*, [this](const size_t &value) {
-        return value > 1000 ? 1000 : 0;
-    } */ };
+    Property<size_t> PropertySize { 50, [](const auto &value) {
+            return value > 1000 ? 1000 : value;
+        }
+    };
 };
 
 }

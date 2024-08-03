@@ -69,15 +69,6 @@ public:
         //Ultra::Test::VectorTests();
         //Ultra::Test::MatrixTests();
         //Ultra::Test::QuaternionTests();
-        //
-        ////logger.Test();
-        ////Log("Default 水 öäü");
-        ////LogFatal("Fatal");
-        ////LogError("Error");
-        ////LogWarning("Warn");
-        ////LogInfo("Info");
-        ////LogDebug("Debug");
-        ////LogTrace("Trace");
     }
 
 private:
