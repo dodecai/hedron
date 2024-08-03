@@ -242,23 +242,22 @@ void TestLogger() {
     // LogLevels
     logger(LogLevel::Caption, "Caption");
     logger(LogLevel::Default, "Default\n");
-    logger(LogLevel::Fatal, "Fatal\n");
-    logger(LogLevel::Error, "Error\n");
-    logger(LogLevel::Warn, "Warn\n");
-    logger(LogLevel::Info, "Info\n");
-    logger(LogLevel::Debug, "Debug\n");
-    logger(LogLevel::Trace, "Trace\n");
+    logger(LogLevel::Fatal, "Fatal");
+    logger(LogLevel::Error, "Error");
+    logger(LogLevel::Warn, "Warn");
+    logger(LogLevel::Info, "Info");
+    logger(LogLevel::Debug, "Debug");
+    logger(LogLevel::Trace, "Trace");
     logger(LogLevel::Delimiter, "");
 
     // Formatting
     logger("Test {}, if you can {}!\n", "me", 1);
-    logger(LogLevel::Warn, "Test {}, if you can {}!\n", "me", 2);
-    logger(LogLevel::Error, "Test {}, if you can {}!\n", "me", 3);
-
+    logger(LogLevel::Info, "Test {}, if you can {}!", "me", 2);
+    logger(LogLevel::Warn, "Test {}, if you can {}!", "me", 3);
     logger << "Test " << "me" << ", if you can " << 4 << "!" << std::endl;
-    logger << LogLevel::Warn << "Test " << "me" << ", if you can " << 5 << "!" << "\n";
+    logger << LogLevel::Debug << "Test " << "me" << ", if you can " << 5 << "!\n";
     logger << LogLevel::Error << "Test " << "me" << ", if you can " << 6 << "!\n";
-    logger << LogLevel::Error << "Test " << "me" << ", if you can " << 7 << "!";
+    logger << LogLevel::Fatal << "Test " << "me" << ", if you can " << 7 << "!\n";
     logger.Flush();
     logger << "\n";
     logger(LogLevel::Delimiter, "");

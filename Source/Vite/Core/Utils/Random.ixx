@@ -18,22 +18,25 @@ public:
 
     /// Methods
     static double Double() {
-        return static_cast<double>(sRandomsDistribution(sRandomEngine)) / static_cast<double>(std::numeric_limits<uint32>::max());
+        return sDoubleDistribution(sRandomEngine);
     }
     static float Float() {
-        return static_cast<float>(sRandomsDistribution(sRandomEngine)) / static_cast<float>(std::numeric_limits<uint32>::max());
+        return sFloatDistribution(sRandomEngine);
     }
     static int Integer() {
-        return static_cast<int>(sRandomsDistribution(sRandomEngine)) / static_cast<int>(std::numeric_limits<uint32>::max());
+        return sIntDistribution(sRandomEngine);
     }
     static unsigned int UnsignedInteger() {
-        return static_cast<unsigned int>(sRandomsDistribution(sRandomEngine)) / static_cast<unsigned int>(std::numeric_limits<uint32>::max());
+        return sUIntDistribution(sRandomEngine);
     }
 
 private:
     /// Properties
     static inline std::mt19937 sRandomEngine;
-    static inline std::uniform_int_distribution<std::mt19937::result_type> sRandomsDistribution;
+    static inline std::uniform_real_distribution<double> sDoubleDistribution { std::numeric_limits<double>::min(), std::numeric_limits<double>::max() };
+    static inline std::uniform_real_distribution<float> sFloatDistribution { std::numeric_limits<float>::min(), std::numeric_limits<float>::max() };
+    static inline std::uniform_int_distribution<int> sIntDistribution { std::numeric_limits<int>::min(), std::numeric_limits<int>::max() };
+    static inline std::uniform_int_distribution<unsigned int> sUIntDistribution { std::numeric_limits<unsigned int>::min(), std::numeric_limits<unsigned int>::max() };
 };
 
 }

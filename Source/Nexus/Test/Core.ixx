@@ -139,7 +139,7 @@ public:
     /// Methods
     void Create() override {
         LogCaption("Core Tests");
-        mThreadPool = CreateScope<ThreadPool>(4);
+        mThreadPool = CreateScope<ThreadPool>(12);
         Test();
     }
     void Destroy() override {}
@@ -153,7 +153,7 @@ public:
 
         if (delay >= 0.2) {
             // Thread Pool Tasks
-            const int n = 512;
+            const int n = 32;
             auto fibResultA = mThreadPool->Enqueue([=] {
                 auto result = Fibonacci(n);
                 return result;
@@ -294,10 +294,9 @@ public:
         Log("Logger\n");
         LogDelimiter("");
 
-        logger << LogLevel::Trace << "Hello World! 🦄" << "\n";
         LogTrace("{}: {} {:.2}", "Hello", "World! 🦄", 1.234567f);
+        logger << LogLevel::Trace << "Hello World! 🦄" << "\n";
         Test::TestLogger();
-
     }
     void NetworkTest() {}
     void SerializerTest() {}
@@ -308,45 +307,63 @@ public:
         LogDelimiter("");
 
         // Chrono
-        logger(" - CurrentDate:      {}\n", Chrono::Date());
-        logger(" - CurrentTime:      {}\n", Chrono::Time());
-        logger(" - CurrentTimestamp: {}\n", Chrono::Timestamp());
-        //logger(" - CurrentRuntime:   {}\n", Chrono::Runtime());
+        Log("Chrono\n");
+        Log(" - CurrentDate:      {}\n", Chrono::Date());
+        Log(" - CurrentTime:      {}\n", Chrono::Time());
+        Log(" - CurrentTimestamp: {}\n", Chrono::Timestamp());
+        Log(" - CurrentRuntime:   {}\n", Chrono::Runtime());
         
         // Random
+        Log("Random\n");
+        Random::Seed();
+        Log(" - Double:          {}\n", Random::Double());
+        Log(" - Float:           {}\n", Random::Float());
+        Log(" - Integer:         {}\n", Random::Integer());
+        Log(" - UnsignedInteger: {}\n", Random::UnsignedInteger());
         
         // String
+        Log("String\n");
+        Log(" - Contains [Hello World! <= World]?: {}\n", String::Contains("Hello World!", "world", false));
+        Log(" - Contains [Hello World! <= world]?: {}\n", String::Contains("Hello World!", "world", true));
+        Log(" - Decimal [0123456789]?:             {}\n", String::IsDecimal("0123456789"));
+        Log(" - Decimal [0123456789A]?:            {}\n", String::IsDecimal("0123456789A"));
+        Log(" - Hexadecimal [0x123456789ABCDEF]?:  {}\n", String::IsHexadecimal("0x123456789ABCDEF"));
+        Log(" - Hexadecimal [0x123456789ABCDEFG]?: {}\n", String::IsHexadecimal("0x123456789ABCDEFG"));
+        Log(" - Octal [01234567]?:                 {}\n", String::IsOctal("01234567"));
+        Log(" - Octal [012345678]?:                {}\n", String::IsOctal("012345678"));
+        Log(" - Numeric [123]?:                    {}\n", String::IsNumeric("123"));
+        Log(" - Numeric [123 0x1]?:                {}\n", String::IsNumeric("123"));
+        Test::TestString();
         
         // ThreadPool
-//        ThreadPool pool;
-//        for (int i = 0; i < 8; ++i) {
-//            // Create eight tasks in the queue
-//            pool.Enqueue([i] {
-//                auto timer = Timer();
-//                {
-//                    Log("TaskStart {}\n", i);
-//                    std::this_thread::sleep_for(std::chrono::milliseconds(2));
-//                    Log("TaskEnd {}\n", i);
-//                }
-//                Log("TaskDuration {}\n", timer.GetDeltaTime());
-//            });
-//        }
-//        std::this_thread::sleep_for(std::chrono::milliseconds(32));
+        Log("ThreadPool\n");
+        ThreadPool pool;
+        for (int i = 0; i < 3; ++i) {
+            // Create eight tasks in the queue
+            pool.Enqueue([i] {
+                auto timer = Timer();
+                {
+                    Log(" - TaskStart {}\n", i);
+                    std::this_thread::sleep_for(std::chrono::milliseconds(2));
+                    Log(" - TaskEnd {}\n", i);
+                }
+                Log(" - TaskDuration {}: {}\n", i, timer.DeltaTime());
+            });
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(32));
         
         // Timer
-//         // Timer
-//        {
-//            Log("Timer");
-//            LogDelimiter("");
-//            Timer timer {};
-//            Log("Now:          {}", timer.Now());
-//            Log("Duration:     {}", timer.GetDeltaTime());
-//            Log("Duration(ns): {}", timer.GetDeltaTimeAs(TimerUnit::Nanoseconds));
-//            Log("Duration(µs): {}", timer.GetDeltaTimeAs(TimerUnit::Microseconds));
-//            Log("Duration(ms): {}", timer.GetDeltaTimeAs(TimerUnit::Milliseconds));
-//            Log("Duration(s):  {}", timer.GetDeltaTimeAs(TimerUnit::Seconds));
-//            LogDelimiter("");
-//        }
+        Log("Timer\n");
+        {
+            auto timer = Timer();
+            std::this_thread::sleep_for(std::chrono::milliseconds(2));
+            Log(" - Now:          {}\n", timer.Now());
+            Log(" - Duration:     {}\n", timer.DeltaTime());
+            Log(" - Duration(ns): {}\n", timer.DeltaTimeAs(TimerUnit::Nanoseconds));
+            Log(" - Duration(µs): {}\n", timer.DeltaTimeAs(TimerUnit::Microseconds));
+            Log(" - Duration(ms): {}\n", timer.DeltaTimeAs(TimerUnit::Milliseconds));
+            Log(" - Duration(s):  {}\n", timer.DeltaTimeAs(TimerUnit::Seconds));
+        }
     }
 
     /// Events

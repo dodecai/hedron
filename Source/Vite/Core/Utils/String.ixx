@@ -231,8 +231,8 @@ void TestString() {
     //String::ToLower(wstring21);
     //String::ToUpper(wstring21);
 
-    //const auto stringA0 = "a"_hash;
-    //const auto stringA1 = "a"_hash;
+    const auto stringA0 = "a"_hash;
+    const auto stringA1 = "a"_hash;
     //if (stringA0 != stringA1) {}
 }
 

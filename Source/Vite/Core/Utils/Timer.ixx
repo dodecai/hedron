@@ -39,11 +39,12 @@ public:
     // Retrieve delta time in specified unit (s = default, ms, µs, ns)
     inline const double DeltaTimeAs(TimerUnit unit = TimerUnit::Seconds) {
         double duration {};
+        auto elapsed = CalculateDuration();
         switch (unit) {
-            case TimerUnit::Seconds:		{ duration = std::chrono::duration<double>(CalculateDuration()).count();             break; }
-            case TimerUnit::Milliseconds:	{ duration = std::chrono::duration<double, std::milli>(CalculateDuration()).count(); break; }
-            case TimerUnit::Microseconds:	{ duration = std::chrono::duration<double, std::micro>(CalculateDuration()).count(); break; }
-            case TimerUnit::Nanoseconds:	{ duration = std::chrono::duration<double, std::nano>(CalculateDuration()).count();  break; }
+            case TimerUnit::Seconds:		{ duration = std::chrono::duration<double>(elapsed).count();             break; }
+            case TimerUnit::Milliseconds:	{ duration = std::chrono::duration<double, std::milli>(elapsed).count(); break; }
+            case TimerUnit::Microseconds:	{ duration = std::chrono::duration<double, std::micro>(elapsed).count(); break; }
+            case TimerUnit::Nanoseconds:	{ duration = std::chrono::duration<double, std::nano>(elapsed).count();  break; }
             default: { break; }
         }
         Reset();
