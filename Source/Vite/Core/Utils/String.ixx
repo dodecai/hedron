@@ -13,7 +13,7 @@ class String: public StaticObject {
 public:
     /// Methods
     // Checks if the given string contains the given token
-    static bool Contains(const string_view &value, const string_view &token, bool caseSensitive = false) noexcept {
+    static constexpr bool Contains(const string_view &value, const string_view &token, bool caseSensitive = false) noexcept {
         if (value.length() < token.length()) return false;
         if (caseSensitive) {
             return value.find(token) != string::npos;
@@ -27,12 +27,12 @@ public:
 
     // Checks if the given string contains the given token
     template <typename CharT, typename Traits, typename Allocator>
-    static bool ContainsW(const std::basic_string<CharT, Traits, Allocator> &value, const std::basic_string<CharT, Traits, Allocator> &token) {
+    static constexpr bool ContainsW(const std::basic_string<CharT, Traits, Allocator> &value, const std::basic_string<CharT, Traits, Allocator> &token) {
         return std::ranges::search(string, token) != value.end();
     }
 
     // Checks if the given string ends with the given token
-    static bool EndsWith(string_view value, string_view token, bool caseSensitive = false) noexcept {
+    static constexpr bool EndsWith(string_view value, string_view token, bool caseSensitive = false) noexcept {
         if (value.length() < token.length()) return false;
         if (caseSensitive) {
             return value.compare(value.length() - token.length(), token.length(), token) == 0;
@@ -45,7 +45,7 @@ public:
     }
 
     // Checks if the given string starts with the given token
-    static bool StartsWith(string_view value, string_view token, bool caseSensitive = false) noexcept {
+    static constexpr bool StartsWith(string_view value, string_view token, bool caseSensitive = false) noexcept {
         if (value.length() < token.length()) return false;
         if (caseSensitive) {
             return value.compare(0, token.length(), token) == 0;
@@ -58,28 +58,28 @@ public:
     }
 
     // Checks if the given string is a number
-    static bool IsNumeric(string_view value) noexcept {
+    static constexpr bool IsNumeric(string_view value) noexcept {
         return std::all_of(value.cbegin(), value.cend(), [](auto c) {
             return (c >= '0' && c <= '9') || c == '-' || c == ',' || c == '.';
         });
     }
 
     // Checks if the given string is a decimal number
-    static bool IsDecimal(string_view value) noexcept {
+    static constexpr bool IsDecimal(string_view value) noexcept {
         return std::all_of(value.cbegin(), value.cend(), [](auto c) {
             return (c >= '0' && c <= '9');
         });
     }
 
     // Checks if the given string is a hexadecimal number
-    static bool IsHexadecimal(string_view value) noexcept {
+    static constexpr bool IsHexadecimal(string_view value) noexcept {
         return std::all_of(value.cbegin(), value.cend(), [](auto c) {
             return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F') || (c == 'x' || c == 'X');
         });
     }
 
     // Checks if the given string is a octal number
-    static bool IsOctal(string_view value) noexcept {
+    static constexpr bool IsOctal(string_view value) noexcept {
         return std::all_of(value.cbegin(), value.cend(), [](auto c) {
             return (c >= '0' && c <= '7');
         });
@@ -136,15 +136,15 @@ public:
 
     // Converts the given string to lower case
     template<typename T> // ToDo: Concept doesn't work as expected after 16.10 Preview 2
-    static T &ToLower(T &value) noexcept {
-        std::transform(value.begin(), value.end(), value.begin(), ::tolower);
+    static constexpr T &ToLower(T &value) noexcept {
+        std::ranges::transform(value, value.begin(), [](unsigned char c) { return std::tolower(c); });
         return value;
     }
 
     // Converts the given string to upper case
     template<typename T> // ToDo: Concept doesn't work as expected after 16.10 Preview 2
-    static T &ToUpper(T &value) noexcept {
-        std::transform(value.begin(), value.end(), value.begin(), ::toupper);
+    static constexpr T &ToUpper(T &value) noexcept {
+        std::ranges::transform(value, value.begin(), [](unsigned char c) { return std::toupper(c); });
         return value;
     }
 };
@@ -154,7 +154,7 @@ public:
 ///
 namespace Test {
 
-void TestString();
+void String();
 
 }
 
@@ -167,7 +167,46 @@ module: private;
 
 namespace Hedron::Test {
 
-void TestString() {
+constexpr void Compiler() {
+    // Contains
+    static_assert(String::Contains("First Second and SeConD Third", "Second", true), "String::Contains failed!");
+    static_assert(!String::Contains("First Second and SeConD Third", "Fourth", true), "String::Contains failed!");
+
+    // EndsWith
+    static_assert(String::EndsWith("First Second and SeConD Third", "Third", true), "String::EndsWith failed!");
+    static_assert(!String::EndsWith("First Second and SeConD Third", "Second", true), "String::EndsWith failed!");
+
+    // StartsWith
+    static_assert(String::StartsWith("First Second and SeConD Third", "First", true), "String::StartsWith failed!");
+    static_assert(!String::StartsWith("First Second and SeConD Third", "Second", true), "String::StartsWith failed!");
+
+    // IsNumeric
+    static_assert(String::IsNumeric("0123456789"), "String::IsNumeric failed!");
+    static_assert(!String::IsNumeric("123a4566789"), "String::IsNumeric failed!");
+
+    // IsDecimal
+    static_assert(String::IsDecimal("0123456789"), "String::IsDecimal failed!");
+    static_assert(!String::IsDecimal("123a4566789"), "String::IsDecimal failed!");
+
+    // IsHexadecimal
+    static_assert(String::IsHexadecimal("0x123456789ABCDEF"), "String::IsHexadecimal failed!");
+    static_assert(!String::IsHexadecimal("0x123456789ABCDEFG"), "String::IsHexadecimal failed!");
+
+    // IsOctal
+    static_assert(String::IsOctal("01234567"), "String::IsOctal failed!");
+    static_assert(!String::IsOctal("0123456789"), "String::IsOctal failed!");
+
+    // Replace
+    // Note: This can only be testet at runtime
+
+    // Test für ToLower
+    // Note: This can only be testet at runtime
+
+    // Test für ToUpper
+    // Note: This can only be testet at runtime
+}
+
+void String() {
     string string00 = "First Second and SeConD Third";
     string string01 = "fiRst";
     string string02 = "second";

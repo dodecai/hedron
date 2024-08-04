@@ -15,6 +15,9 @@
 	#define APP_COMPILER "MSVC"
 	#define APP_COMPILER_MSVC
 
+    inline constexpr auto AppCompilerVersionMajor = _MSC_VER;
+    inline constexpr auto AppCompilerVersionMinor = 0;
+    inline constexpr auto AppCompilerVersionPatch = 0;
 	#define APP_COMPILER_VERSION_MAJOR _MSC_VER // / 100
 	#define APP_COMPILER_VERSION_MINOR 0        // % 100
 	#define APP_COMPILER_VERSION_PATCH 0
@@ -23,6 +26,9 @@
     #define APP_COMPILER "Clang"
     #define APP_COMPILER_CLANG
 
+    inline constexpr auto AppCompilerVersionMajor = __clang_major__;
+    inline constexpr auto AppCompilerVersionMinor = __clang_minor__;
+    inline constexpr auto AppCompilerVersionPatch = __clang_patchlevel__;
     #define APP_COMPILER_VERSION_MAJOR __clang_major__
     #define APP_COMPILER_VERSION_MINOR __clang_minor__
     #define APP_COMPILER_VERSION_PATCH __clang_patchlevel__
@@ -31,6 +37,9 @@
     #define APP_COMPILER "emscripten"
 	#define APP_COMPILER_EMSCRIPTEN
 
+    inline constexpr auto AppCompilerVersionMajor = 0;
+    inline constexpr auto AppCompilerVersionMinor = 0;
+    inline constexpr auto AppCompilerVersionPatch = 0;
 	#define APP_COMPILER_MAJOR		0
 	#define APP_COMPILER_MINOR		0
 	#define APP_COMPILER_PATCH		0
@@ -39,6 +48,9 @@
     #define APP_COMPILER "GCC"
     #define APP_COMPILER_GNU
 
+    inline constexpr auto AppCompilerVersionMajor = __GNUC__;
+    inline constexpr auto AppCompilerVersionMinor = __GNUC_MINOR__;
+    inline constexpr auto AppCompilerVersionPatch = 0;
     #define APP_COMPILER_VERSION_MAJOR __GNUC__
     #define APP_COMPILER_VERSION_MINOR __GNUC_MINOR__
     #define APP_COMPILER_VERSION_PATCH 0
@@ -48,24 +60,33 @@
     #define APP_COMPILER_MINGW
     
 	#if defined(__MINGW32__)
+        inline constexpr auto AppCompilerVersionMajor = __MINGW32_MAJOR_VERSION;
+        inline constexpr auto AppCompilerVersionMinor = __MINGW32_MINOR_VERSION;
 		#define APP_COMPILER_MAJOR	__MINGW32_MAJOR_VERSION
 		#define APP_COMPILER_MINOR	__MINGW32_MINOR_VERSION
 	#else
+        inline constexpr auto AppCompilerVersionMajor = __MINGW64_VERSION_MAJOR;
+        inline constexpr auto AppCompilerVersionMinor = __MINGW64_VERSION_MINOR;
 		#define APP_COMPILER_MAJOR	__MINGW64_VERSION_MAJOR
 		#define APP_COMPILER_MINOR	__MINGW64_VERSION_MINOR
 	#endif
+    inline constexpr auto AppCompilerVersionPatch = 0;
     #define APP_COMPILER_VERSION_PATCH 0
 #else
     inline constexpr auto AppCompiler = "Unknown";
-    #define APP_COMPILER			"Unknown"
+    #define APP_COMPILER "Unknown"
 	#define APP_COMPILER_UNKNOWN
 
+    inline constexpr auto AppCompilerVersionMajor = 0;
+    inline constexpr auto AppCompilerVersionMinor = 0;
+    inline constexpr auto AppCompilerVersionPatch = 0;
 	#define APP_COMPILER_MAJOR		0
 	#define APP_COMPILER_MINOR		0
 	#define APP_COMPILER_PATCH		0
 
 	static_assert(false, "Compiler detection failed!");
 #endif
+inline constexpr auto AppCompilerVersion = "v" TOSTRING(APP_COMPILER_VERSION_MAJOR) "." TOSTRING(APP_COMPILER_VERSION_MINOR) "." TOSTRING(APP_COMPILER_VERSION_PATCH);
 #define APP_COMPILER_VERSION "v" TOSTRING(APP_COMPILER_VERSION_MAJOR) "." TOSTRING(APP_COMPILER_VERSION_MINOR) "." TOSTRING(APP_COMPILER_VERSION_PATCH)
 
 // Platform Detection
