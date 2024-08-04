@@ -333,7 +333,7 @@ public:
         Log(" - Octal [012345678]?:                {}\n", String::IsOctal("012345678"));
         Log(" - Numeric [123]?:                    {}\n", String::IsNumeric("123"));
         Log(" - Numeric [123 0x1]?:                {}\n", String::IsNumeric("123"));
-        Test::TestString();
+        Test::String();
         
         // ThreadPool
         Log("ThreadPool\n");
