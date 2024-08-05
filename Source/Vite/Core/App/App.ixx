@@ -168,10 +168,14 @@ public:
         logger << "WindowEvent[";
         if (event.Action == WindowAction::Move) {
             logger << "Action: '" << event.Action << "' | ";
-            logger << "Position: '" << event.Position.X << "|" << event.Position.Y << "'";
+            logger << "Delta: '" << event.DeltaPosition.X << "|" << event.DeltaPosition.Y << "' | ";
+            logger << "Position: '" << event.Position.X << "|" << event.Position.Y << "' | ";
+            logger << "Previous: '" << event.LastPosition.X << "|" << event.LastPosition.Y << "'";
         } else if (event.Action == WindowAction::Resize) {
             logger << "Action: '" << event.Action << "' | ";
-            logger << "Size: '" << event.Size.Width << "x" << event.Size.Height << "'";
+            logger << "Delta: '" << event.DeltaSize.Width << "x" << event.DeltaSize.Height << "' | ";
+            logger << "Size: '" << event.Size.Width << "x" << event.Size.Height << "' | ";
+            logger << "Previous: '" << event.LastSize.Width << "x" << event.LastSize.Height << "'";
         } else {
             logger << "Action: '" << event.Action << "'";
         }
@@ -213,7 +217,6 @@ public:
                 logger << "Action: '" << event.Action << "' | ";
                 logger << "Key: '" << event.Key << "' | ";
                 logger << "State: '" << event.State << "'";
-
             }
         }
         logger << "]" << std::endl;
@@ -244,7 +247,15 @@ public:
             logger << "State: '" << event.State << "'";
         } else if (event.Action == MouseAction::Move) {
             logger << "Action: '" << event.Action << "' | ";
-            logger << "Position: '" << event.Position.X << "|" << event.Position.Y << "'";
+            logger << "Delta: '" << event.DeltaPosition.X << "|" << event.DeltaPosition.Y << "' | ";
+            logger << "Position: '" << event.Position.X << "|" << event.Position.Y << "' | ";
+            logger << "Previous: '" << event.LastPosition.X << "|" << event.LastPosition.Y << "'";
+        } else if (event.Action == MouseAction::Wheel) {
+            logger << "Action: '" << event.Action << "' | ";
+            logger << "WheelX: '" << event.DeltaWheel.X << "'";
+            logger << "WheelY: '" << event.DeltaWheel.Y << "'";
+        } else {
+            logger << "Action: '" << event.Action << "'";
         }
         logger << "]" << std::endl;
     #endif

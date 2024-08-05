@@ -18,21 +18,12 @@ inline long long Fibonacci(int n) {
 
 #pragma region /// Events
 
-struct KeyboardEvent {
-    int KeyCode = 0;
-};
-
-struct MouseEvent {
-    int X = 0;
-    int Y = 0;
-};
-
 struct EventListenerTest {
     void OnKeyboardEvent(const KeyboardEvent &data) {
-        logger << __FUNCTION__ << ":" << data.KeyCode << "\n";
+        logger << __FUNCTION__ << ":" << data.Key << "\n";
     }
     void OnMouseEvent(const MouseEvent &data) {
-        logger << __FUNCTION__ << ":" << data.X << "\n";
+        logger << __FUNCTION__ << ":" << data.Position.X << "\n";
     }
 };
 
@@ -367,14 +358,20 @@ public:
     }
 
     /// Events
-    //void OnInputEvent(const KeyboardEvent &event) override {
-    //}
+    void OnAppEvent(const WindowEvent &event) override {}
+    void OnInputEvent(const ControllerEvent &event) override {}
+    void OnInputEvent(const KeyboardEvent &event) override {
+        if (event.Action == KeyAction::Input) {
+            Log("{}", event.Utf8Character);
+        }
+    }
+    void OnInputEvent(const MouseEvent &event) override {}
+    void OnInputEvent(const TouchEvent &event) override {}
 
 private:
     /// Instances
     Scope<ThreadPool> mThreadPool;
     //struct EventEmitter: Emitter<EventEmitter> {};
-
 };
 
 }
