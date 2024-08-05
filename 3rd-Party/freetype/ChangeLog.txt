@@ -16,6 +16,8 @@ git rm -f "Makefile"
 git rm -f "meson.build"
 git rm -f "meson_options.txt"
 git rm -f "modules.cfg"
+git rm -f "MSBuild.rsp"
+git rm -f "MSBuild.sln"
 git rm -f "README.git"
 git rm -f "vms_make.com"
 
