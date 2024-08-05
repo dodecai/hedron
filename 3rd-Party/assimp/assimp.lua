@@ -68,6 +68,7 @@
       "ASSIMP_BUILD_NO_SMD_IMPORTER",
       "ASSIMP_BUILD_NO_STL_IMPORTER",
       "ASSIMP_BUILD_NO_TERRAGEN_IMPORTER",
+      "ASSIMP_BUILD_NO_USD_IMPORTER",
       "ASSIMP_BUILD_NO_X_IMPORTER",
       "ASSIMP_BUILD_NO_X3D_IMPORTER",
       "ASSIMP_BUILD_NO_XGL_IMPORTER",
@@ -106,7 +107,6 @@
   files {
       "assimp.lua",
       "include/**",
-      "revision.h",
       "code/AssetLib/Collada/ColladaLoader.cpp",
       "code/AssetLib/Collada/ColladaParser.cpp",
       "code/AssetLib/Ply/PlyParser.cpp",
@@ -162,9 +162,12 @@
 	  -- "contrib/rabidjson/**.h",
 	  -- "contrib/pugixml/**.c",
 	  -- "contrib/pugixml/**.h",
+      "contrib/irrXML/*",
+      "contrib/utf8cpp/*",
+	  -- "contrib/zip/src/*.c",
+	  -- "contrib/zip/src/*.h",
 	  -- "contrib/zlib/*.c",
 	  -- "contrib/zlib/*.h",
-      "contrib/irrXML/*",
   }
 
   includedirs {
@@ -175,7 +178,8 @@
       -- "contrib/rapidjson/include",
       -- "contrib/pugixml/src",
       -- "contrib/unzip",
-      -- "contrib/utf8cpp",
+      -- "contrib/tinyusdz",
+      "contrib/utf8cpp/source",
       "contrib/irrXML",
       "contrib/zlib",
   }
