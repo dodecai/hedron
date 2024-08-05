@@ -5,7 +5,7 @@ This is a utility for generating compact font atlases using [MSDFgen](https://gi
 
 The atlas generator loads a subset of glyphs from a TTF or OTF font file, generates a distance field for each of them, and tightly packs them into an atlas bitmap (example below). The finished atlas and/or its layout metadata can be exported as an [Artery Font](https://github.com/Chlumsky/artery-font-format) file, a plain image file, a CSV sheet or a structured JSON file.
 
-![Atlas example](https://user-images.githubusercontent.com/18639794/76163889-811f2e80-614a-11ea-9b28-1eed54dbb899.png)
+![Atlas example](https://github.com/Chlumsky/msdf-atlas-gen/assets/18639794/ee8bfc77-7d36-4cbb-82df-aa8a02424b4a)
 
 A font atlas is typically stored in texture memory and used to draw text in real-time rendering contexts such as video games.
 
@@ -27,8 +27,8 @@ The atlas generator can generate the following six types of atlases.
 
 Notes:
 - *Sharp corners* refers to preservation of corner sharpness when upscaled.
-- *Soft effects* refers to the support of effects that use true distance, such as glows, rounded borders, or simplified shadows.
-- *Hard effects* refers to the support of effects that use pseudo-distance, such as mitered borders or thickness adjustment.
+- *Soft effects* refers to the support of effects that use true distance, such as glows, rounded outlines, or simplified shadows.
+- *Hard effects* refers to the support of effects that use perpendicular distance, such as mitered outlines or thickness adjustment.
 
 ## Getting started
 
@@ -47,11 +47,15 @@ Use the following command line arguments for the standalone version of the atlas
 
 - `-font <fontfile.ttf/otf>` (required) &ndash; sets the input font file.
   - Alternatively, use `-varfont <fontfile.ttf/otf?var0=value0&var1=value1>` to configure a variable font.
-- `-charset <charset.txt>` &ndash; sets the character set. The ASCII charset will be used if not specified. See [the syntax specification](#character-set-specification-syntax) of `charset.txt`.
+- `-charset <charset.txt>` &ndash; sets the character set. See [the syntax specification](#character-set-specification-syntax) of `charset.txt`.
 - `-glyphset <glyphset.txt>` &ndash; sets the set of input glyphs using their indices within the font file. See [the syntax specification](#glyph-set-specification).
+- `-chars` / `-glyphs <set string>` sets the above character / glyph set in-line. See [the syntax specification](#character-set-specification-syntax).
+- `-allglyphs` &ndash; sets the set of input glyphs to all glyphs present within the font file.
 - `-fontscale <scale>` &ndash; applies a scaling transformation to the font's glyphs. Mainly to be used to generate multiple sizes in a single atlas, otherwise use [`-size`](#glyph-configuration).
 - `-fontname <name>` &ndash; sets a name for the font that will be stored in certain output files as metadata.
 - `-and` &ndash; separates multiple inputs to be combined into a single atlas.
+
+If no character set or glyph set is provided, and `-allglyphs` is not used, the ASCII charset will be used.
 
 ### Bitmap atlas type
 
@@ -62,7 +66,7 @@ Use the following command line arguments for the standalone version of the atlas
 - `hardmask` &ndash; a non-anti-aliased binary image
 - `softmask` &ndash; an anti-aliased image
 - `sdf` &ndash; a true signed distance field (SDF)
-- `psdf` &ndash; a pseudo-distance field
+- `psdf` &ndash; a signed perpendicular distance field (PSDF)
 - `msdf` (default) &ndash; a multi-channel signed distance field (MSDF)
 - `mtsdf` &ndash; a combination of MSDF and true SDF in the alpha channel
 
@@ -87,10 +91,21 @@ Use the following command line arguments for the standalone version of the atlas
 Alternativelly, the minimum possible dimensions may be selected automatically if a dimensions constraint is set instead:
 
 - `-pots` &ndash; a power-of-two square
-- `-potr` &ndash; a power-of-two square or rectangle (2:1)
+- `-potr` &ndash; a power-of-two square or rectangle (typically 2:1 aspect ratio)
 - `-square` &ndash; any square dimensions
 - `-square2` &ndash; square with even side length
 - `-square4` (default) &ndash; square with side length divisible by four
+
+### Uniform grid atlas
+
+By default, glyphs in the atlas have different dimensions and are bin-packed in an irregular fashion to maximize use of space.
+With the `-uniformgrid` switch, you can instead force all glyphs to have identical dimensions and be laid out in a grid.
+In that case, these additional options are available to customize the layout:
+
+- `-uniformcols <N>` &ndash; sets the number of columns
+- `-uniformcell <width> <height>` &ndash; sets the dimensions of the grid's cells
+- `-uniformcellconstraint <none / pots / potr / square / square2 / square4>` &ndash; sets constraint for cell dimensions (see explanation of options above)
+- `-uniformorigin <off / on / horizontal / vertical>` &ndash; sets whether the glyph's origin point should be fixed at the same position in each cell
 
 ### Outputs
 
@@ -104,10 +119,15 @@ Any non-empty subset of the following may be specified:
 
 ### Glyph configuration
 
-- `-size <EM size>` &ndash; sets the size of the glyphs in the atlas in pixels per EM
-- `-minsize <EM size>` &ndash; sets the minimum size. The largest possible size that fits the same atlas dimensions will be used
-- `-emrange <EM range>` &ndash; sets the distance field range in EM's
+- `-size <em size>` &ndash; sets the size of the glyphs in the atlas in pixels per em
+- `-minsize <em size>` &ndash; sets the minimum size. The largest possible size that fits the same atlas dimensions will be used
+- `-emrange <em range>` &ndash; sets the distance field range in em's
 - `-pxrange <pixel range>` (default = 2) &ndash; sets the distance field range in output pixels
+- `-aemrange` / `-apxrange <outermost distance> <innermost distance>` &ndash; sets the distance field range asymmetrically by specifying the minimum and maximum representable signed distances (outside distances are negative!)
+- `-pxalign <off / on / horizontal / vertical>` (default = vertical) &ndash; enables or disables alignment of glyph's origin point with the pixel grid
+- `-empadding` / `-pxpadding <width>` &ndash; sets additional padding within each glyph's box (in em's / pixels)
+- `-outerempadding` / `-outerpxpadding <width>` &ndash; sets additional padding around each glyph's box
+- `-aempadding` / `-apxpadding` / `-aouterempadding` / `-aouterpxpadding <left> <bottom> <right> <top>` &ndash; sets additional padding (see above) asymmetrically with a separate width value for each side
 
 ### Distance field generator settings
 

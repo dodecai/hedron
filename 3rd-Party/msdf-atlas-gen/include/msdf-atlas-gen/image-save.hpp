@@ -21,11 +21,17 @@ bool saveImageText(const msdfgen::BitmapConstRef<float, N> &bitmap, const char *
 template <int N>
 bool saveImage(const msdfgen::BitmapConstRef<byte, N> &bitmap, ImageFormat format, const char *filename, YDirection outputYDirection) {
     switch (format) {
+    #ifndef MSDFGEN_DISABLE_PNG
         case ImageFormat::PNG:
             return msdfgen::savePng(bitmap, filename);
+    #endif
         case ImageFormat::BMP:
             return msdfgen::saveBmp(bitmap, filename);
         case ImageFormat::TIFF:
+            return false;
+        case ImageFormat::RGBA:
+            return msdfgen::saveRgba(bitmap, filename);
+        case ImageFormat::FL32:
             return false;
         case ImageFormat::TEXT:
             return saveImageText(bitmap, filename, outputYDirection);
@@ -44,12 +50,18 @@ bool saveImage(const msdfgen::BitmapConstRef<byte, N> &bitmap, ImageFormat forma
 template <int N>
 bool saveImage(const msdfgen::BitmapConstRef<float, N> &bitmap, ImageFormat format, const char *filename, YDirection outputYDirection) {
     switch (format) {
+    #ifndef MSDFGEN_DISABLE_PNG
         case ImageFormat::PNG:
             return msdfgen::savePng(bitmap, filename);
+    #endif
         case ImageFormat::BMP:
             return msdfgen::saveBmp(bitmap, filename);
         case ImageFormat::TIFF:
             return msdfgen::saveTiff(bitmap, filename);
+        case ImageFormat::RGBA:
+            return msdfgen::saveRgba(bitmap, filename);
+        case ImageFormat::FL32:
+            return msdfgen::saveFl32(bitmap, filename);
         case ImageFormat::TEXT:
             return false;
         case ImageFormat::TEXT_FLOAT:
