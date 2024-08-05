@@ -4,7 +4,7 @@
 /*
  * MULTI-CHANNEL SIGNED DISTANCE FIELD ATLAS GENERATOR
  * ---------------------------------------------------
- * A utility by Viktor Chlumsky, (c) 2020 - 2023
+ * A utility by Viktor Chlumsky, (c) 2020 - 2024
  * Generates compact bitmap font atlases using MSDFgen
  */
 
@@ -14,6 +14,7 @@
 #include "types.h"
 #include "utf8.h"
 #include "Rectangle.h"
+#include "Padding.h"
 #include "Charset.h"
 #include "GlyphBox.h"
 #include "GlyphGeometry.h"
@@ -26,6 +27,7 @@
 #include "AtlasStorage.h"
 #include "BitmapAtlasStorage.h"
 #include "TightAtlasPacker.h"
+#include "GridAtlasPacker.h"
 #include "AtlasGenerator.h"
 #include "ImmediateAtlasGenerator.h"
 #include "DynamicAtlas.h"

@@ -69,8 +69,10 @@ bool exportArteryFont(const FontGeometry *fonts, int fontCount, const msdfgen::B
         fontVariant.codepointType = convertCodepointType(identifierType);
         fontVariant.imageType = convertImageType(properties.imageType);
         fontVariant.metrics.fontSize = REAL(properties.fontSize*fontMetrics.emSize);
-        if (properties.imageType != ImageType::HARD_MASK)
-            fontVariant.metrics.distanceRange = REAL(properties.pxRange);
+        if (properties.imageType != ImageType::HARD_MASK) {
+            fontVariant.metrics.distanceRange = REAL(properties.pxRange.upper-properties.pxRange.lower);
+            fontVariant.metrics.distanceRangeMiddle = REAL(.5*(properties.pxRange.lower+properties.pxRange.upper));
+        }
         fontVariant.metrics.emSize = REAL(fontMetrics.emSize);
         fontVariant.metrics.ascender = REAL(fontMetrics.ascenderY);
         fontVariant.metrics.descender = REAL(fontMetrics.descenderY);
@@ -134,12 +136,14 @@ bool exportArteryFont(const FontGeometry *fonts, int fontCount, const msdfgen::B
         image.channels = N;
         image.imageType = convertImageType(properties.imageType);
         switch (properties.imageFormat) {
+        #ifndef MSDFGEN_DISABLE_PNG
             case ImageFormat::PNG:
                 image.encoding = artery_font::IMAGE_PNG;
                 image.pixelFormat = artery_font::PIXEL_UNSIGNED8;
                 if (!encodePng((std::vector<byte> &) image.data, atlas))
                     return false;
                 break;
+        #endif
             case ImageFormat::TIFF:
                 image.encoding = artery_font::IMAGE_TIFF;
                 image.pixelFormat = artery_font::PIXEL_FLOAT32;
