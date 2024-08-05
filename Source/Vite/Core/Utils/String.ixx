@@ -196,14 +196,8 @@ constexpr void Compiler() {
     static_assert(String::IsOctal("01234567"), "String::IsOctal failed!");
     static_assert(!String::IsOctal("0123456789"), "String::IsOctal failed!");
 
-    // Replace
-    // Note: This can only be testet at runtime
-
-    // Test für ToLower
-    // Note: This can only be testet at runtime
-
-    // Test für ToUpper
-    // Note: This can only be testet at runtime
+    // Replace, Split, Join, ToLower, ToUpper
+    // Note: This can only be tested at runtime
 }
 
 void String() {

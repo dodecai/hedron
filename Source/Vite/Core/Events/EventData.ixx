@@ -120,6 +120,7 @@ struct KeyboardEvent: public BaseEvent {
     KeyModifier Modifiers;
     uint16 Repeats {};
     KeyState State {};
+    string Utf8Character {}; // UTF-8 Character (1-4 bytes)
 
     // Specification
     const EventSource Source = EventSource::Keyboard;

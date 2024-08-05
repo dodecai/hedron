@@ -255,8 +255,14 @@ bool WinEventHandler::Dispatch(MSG message) {
             KeyboardEvent event;
             event.Action = KeyAction::Input;
 
-            auto character = static_cast<wchar_t>(wParam);
-            event.Character = character;
+            event.Character = static_cast<wchar_t>(wParam);
+
+            char utf8Character[5] = { 0 };
+            int length = WideCharToMultiByte(CP_UTF8, 0, reinterpret_cast<LPCWCH>(&wParam), 1, utf8Character, sizeof(utf8Character), nullptr, nullptr);
+
+            if (length > 0) {
+                event.Utf8Character = std::string(utf8Character, length);
+            }
         
             Publish(event);
             return true;
