@@ -32,12 +32,12 @@ public:
     /// Adds a batch of glyphs. Adding more than one glyph at a time may improve packing efficiency
     ChangeFlags add(GlyphGeometry *glyphs, int count, bool allowRearrange = false);
     /// Allows access to generator. Do not add glyphs to the generator directly!
-    AtlasGenerator & atlasGenerator();
-    const AtlasGenerator & atlasGenerator() const;
+    AtlasGenerator &atlasGenerator();
+    const AtlasGenerator &atlasGenerator() const;
 
 private:
     int side;
-    int padding;
+    int spacing;
     int glyphCount;
     int totalArea;
     RectanglePacker packer;
