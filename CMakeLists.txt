@@ -25,7 +25,7 @@ endif()
 
 message(VERBOSE "*")
 message(VERBOSE "* ${PROJECT_NAME} v${PROJECT_VERSION} (${CMAKE_BUILD_TYPE})")
-message(VERBOSE "* Copyright (c) 2017-2023 Michele Caini <michele.caini@gmail.com>")
+message(VERBOSE "* Copyright (c) 2017-2024 Michele Caini <michele.caini@gmail.com>")
 message(VERBOSE "*")
 
 # CMake stuff
@@ -36,6 +36,7 @@ list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 option(ENTT_USE_LIBCPP "Use libc++ by adding -stdlib=libc++ flag if available." OFF)
 option(ENTT_USE_SANITIZER "Enable sanitizers by adding -fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined flags if available." OFF)
+option(ENTT_USE_CLANG_TIDY "Enable static analysis with clang-tidy" OFF)
 
 if(ENTT_USE_LIBCPP)
     if(NOT WIN32)
@@ -55,7 +56,7 @@ if(ENTT_USE_LIBCPP)
     endif()
 
     if(NOT ENTT_HAS_LIBCPP)
-        message(VERBOSE "The option ENTT_USE_LIBCPP is set but libc++ is not available. The flag will not be added to the target.")
+        message(VERBOSE "The option ENTT_USE_LIBCPP is set but libc++ is not available.")
     endif()
 endif()
 
@@ -66,7 +67,15 @@ if(ENTT_USE_SANITIZER)
     endif()
 
     if(NOT ENTT_HAS_SANITIZER)
-        message(VERBOSE "The option ENTT_USE_SANITIZER is set but sanitizer support is not available. The flags will not be added to the target.")
+        message(VERBOSE "The option ENTT_USE_SANITIZER is set but sanitizer support is not available.")
+    endif()
+endif()
+
+if(ENTT_USE_CLANG_TIDY)
+    find_program(ENTT_CLANG_TIDY_EXECUTABLE "clang-tidy")
+
+    if(NOT ENTT_CLANG_TIDY_EXECUTABLE)
+        message(VERBOSE "The option ENTT_USE_CLANG_TIDY is set but clang-tidy executable is not available.")
     endif()
 endif()
 
@@ -109,10 +118,12 @@ if(ENTT_INCLUDE_HEADERS)
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/config/version.h>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/container/dense_map.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/container/dense_set.hpp>
+            $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/container/table.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/container/fwd.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/algorithm.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/any.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/attribute.h>
+            $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/bit.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/compressed_pair.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/enum.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/family.hpp>
@@ -122,6 +133,7 @@ if(ENTT_INCLUDE_HEADERS)
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/iterator.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/memory.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/monostate.hpp>
+            $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/ranges.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/tuple.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/type_info.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/core/type_traits.hpp>
@@ -135,6 +147,7 @@ if(ENTT_INCLUDE_HEADERS)
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/entity/helper.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/entity/observer.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/entity/organizer.hpp>
+            $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/entity/ranges.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/entity/registry.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/entity/runtime_view.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/entity/snapshot.hpp>
@@ -160,7 +173,6 @@ if(ENTT_INCLUDE_HEADERS)
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/meta/template.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/meta/type_traits.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/meta/utility.hpp>
-            $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/platform/android-ndk-r17.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/poly/fwd.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/poly/poly.hpp>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/src/entt/process/fwd.hpp>
@@ -191,7 +203,6 @@ if(ENTT_HAS_NATVIS)
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/natvis/entt/graph.natvis>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/natvis/entt/locator.natvis>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/natvis/entt/meta.natvis>
-            $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/natvis/entt/platform.natvis>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/natvis/entt/poly.natvis>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/natvis/entt/process.natvis>
             $<BUILD_INTERFACE:${EnTT_SOURCE_DIR}/natvis/entt/resource.natvis>
@@ -202,6 +213,10 @@ endif()
 if(ENTT_HAS_SANITIZER)
     target_compile_options(EnTT INTERFACE $<$<CONFIG:Debug>:-fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined>)
     target_link_libraries(EnTT INTERFACE $<$<CONFIG:Debug>:-fsanitize=address -fno-omit-frame-pointer -fsanitize=undefined>)
+endif()
+
+if(ENTT_CLANG_TIDY_EXECUTABLE)
+    set(CMAKE_CXX_CLANG_TIDY "${ENTT_CLANG_TIDY_EXECUTABLE};--config-file=${EnTT_SOURCE_DIR}/.clang-tidy;--header-filter=${EnTT_SOURCE_DIR}/src/entt/.*")
 endif()
 
 if(ENTT_HAS_LIBCPP)
@@ -269,7 +284,13 @@ install(
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/EnTT/cmake
 )
 
-install(DIRECTORY src/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(
+    DIRECTORY src/
+    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.hpp"
+)
 
 export(PACKAGE EnTT)
 
@@ -292,12 +313,20 @@ if(ENTT_BUILD_TESTING)
     add_subdirectory(test)
 endif()
 
+# Tools
+
+option(ENTT_BUILD_TOOLS "Enable building tools." OFF)
+
+if(ENTT_BUILD_TOOLS)
+    add_subdirectory(tools)
+endif()
+
 # Documentation
 
 option(ENTT_BUILD_DOCS "Enable building with documentation." OFF)
 
 if(ENTT_BUILD_DOCS)
-    find_package(Doxygen 1.8)
+    find_package(Doxygen 1.10)
 
     if(DOXYGEN_FOUND)
         add_subdirectory(docs)

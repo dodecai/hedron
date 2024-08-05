@@ -1,8 +1,5 @@
 # EnTT in Action
 
-<!--
-@cond TURN_OFF_DOXYGEN
--->
 # Table of Contents
 
 * [Introduction](#introduction)
@@ -11,9 +8,6 @@
   * [Engines and the like](#engines-and-the-like)
   * [Articles, videos and blog posts](#articles-videos-and-blog-posts)
   * [Any Other Business](#any-other-business)
-<!--
-@endcond TURN_OFF_DOXYGEN
--->
 
 # Introduction
 
@@ -58,7 +52,7 @@ I hope the following lists can grow much more in the future.
   * Apparently [D&D Dark Alliance](https://darkalliance.wizards.com) by
     [Wizards of the Coast](https://company.wizards.com): your party, their
     funeral.
-  * [TiltedOnline](https://github.com/tiltedphoques/TiltedOnline) by
+  * [TiltedEvolution](https://github.com/tiltedphoques/TiltedEvolution) by
     [Tilted Phoques](https://github.com/tiltedphoques): Skyrim and Fallout 4 mod
     to play online.
   * [Antkeeper](https://github.com/antkeeper/antkeeper-source): an ant colony
@@ -131,6 +125,16 @@ I hope the following lists can grow much more in the future.
     where to fight colossal demons in procedurally generated levels of hell.
   * [Saurian Sorcery](https://github.com/cajallen/spellbook): a tower defense
     game where to assemble a tribe of lizards to defend against robot invaders.
+  * [robotfindskitten](https://github.com/autogalkin/robotfindskitten): a clone
+    of `robotfindskitten` inside `Notepad.exe`, powered by `EnTT`.
+  * [Orion](https://github.com/alekskoloch/Orion): Outer-space Research and
+    Interstellar Observation Network (a space shooter game).
+  * [EnTT Boids](https://github.com/DanielEliasib/entt_boids): a simple boids
+    implementation using `EnTT` and `Raylib`.
+  * [PalmRide: After Flight](https://store.steampowered.com/app/2812540/PalmRide_After_Flight/):
+    an on-rails shooter with retro outrun aesthetics.
+  * [Exhibition of Speed](https://store.steampowered.com/app/2947450/Exhibition_of_Speed/):
+    build your own car and go racing.
 
 ## Engines and the like:
 
@@ -211,6 +215,19 @@ I hope the following lists can grow much more in the future.
   * [Scion2D](https://github.com/dwjclark11/Scion2D): 2D game engine with
     [YouTube series](https://www.youtube.com/playlist?list=PL3HUvSWOJR7XRDwVVQqqWO-zyyscb8L-v)
     included.
+  * [EnTT Editor](https://github.com/TheDimin/EnttEditor): an editor for `EnTT`
+    libary that combines its built-in reflection system with `ImGui`.
+  * [Era Game Engine](https://github.com/EldarMuradov/EraGameEngine): a modern
+    ECS-based game engine.
+  * [Core SDK of Trollworks engine](https://github.com/trollworks/sdk-core): 2D
+    game engine based on procrastination.
+  * [Rocky](https://github.com/pelicanmapping/rocky): 3D geospatial application
+    engine.
+  * [Donner](https://github.com/jwmcglynn/donner): a modern C++20 SVG2 rendering
+    API with CSS3.
+  * [Hazel Engine](https://github.com/TheCherno/Hazel): a work in progress
+    engine created by [The Cherno](https://github.com/TheCherno/Hazel) during
+    one of his most famous video series.
 
 ## Articles, videos and blog posts:
 

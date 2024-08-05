@@ -1,8 +1,5 @@
 # Crash Course: runtime reflection system
 
-<!--
-@cond TURN_OFF_DOXYGEN
--->
 # Table of Contents
 
 * [Introduction](#introduction)
@@ -18,12 +15,12 @@
   * [From void to any](#from-void-to-any)
   * [Policies: the more, the less](#policies-the-more-the-less)
   * [Named constants and enums](#named-constants-and-enums)
-  * [Properties and meta objects](#properties-and-meta-objects)
+  * [User defined data](#user-defined-data)
+    * [Properties and meta objects](#properties-and-meta-objects)
+    * [Traits](#traits)
+    * [Custom data](#custom-data)
   * [Unregister types](#unregister-types)
   * [Meta context](#meta-context)
-<!--
-@endcond TURN_OFF_DOXYGEN
--->
 
 # Introduction
 
@@ -841,34 +838,58 @@ auto max = entt::resolve<int>().data("max_int"_hs).get({}).cast<int>();
 All this happens behind the scenes without any allocation because of the small
 object optimization performed by the `meta_any` class.
 
-## Properties and meta objects
+## User defined data
 
 Sometimes (for example, when it comes to creating an editor) it might be useful
-to attach properties to the meta objects created. Fortunately, this is possible
-for most of them:
+to attach _properties_, _traits_ or arbitrary _custom data_ to the meta objects
+created.
+
+The main difference between them is that:
+
+* Properties are usually key-only or key-value pairs with lower access
+  performance. They are deprecated today but have long been the only way to
+  bind user data with meta objects.
+
+* Traits are simple user-defined flags with much higher access performance. The
+  library reserves up to 16 bits for traits, that is 16 flags for a bitmask or
+  2^16 values otherwise.
+
+* Custom data are stored in a generic quick access area reserved for the user
+  and which the library will never use under any circumstances.
+
+In all cases, this support is currently available only for meta types, meta data
+and meta functions.
+
+### Properties and meta objects
+
+Properties are set via a meta factory and are not editable once created:
 
 ```cpp
-entt::meta<my_type>().type("reflected_type"_hs).prop("tooltip"_hs, "message");
+entt::meta<my_type>().prop("tooltip"_hs, "message");
 ```
 
-Properties are always in the key/value form. The key is a numeric identifier,
-mostly similar to the identifier used to register meta objects. There are no
+They are always in the key/value form. The key is a numeric identifier, mostly
+similar to the identifier used to register meta objects. There are no
 restrictions on the type of the value instead, as long as it's movable.<br/>
 Key only properties are also supported out of the box:
 
 ```cpp
-entt::meta<my_type>().type("reflected_type"_hs).prop(my_enum::key_only);
+entt::meta<my_type>().prop(my_enum::key_only);
 ```
 
 To attach multiple properties to a meta object, just invoke `prop` more than
 once.<br/>
 It's also possible to call `prop` at different times, as long as the factory is
-reset to the meta object of interest.
+reset to the meta object of interest:
 
-The meta objects for which properties are supported are currently meta types,
-meta data and meta functions.<br/>
-These types also offer a couple of member functions named `prop` to iterate all
-properties at once or to search a specific property by key:
+```cpp
+entt::meta<my_type>()
+    .data<&my_type::data_member, entt::as_ref_t>("member"_hs)
+    .prop("key"_hs, value);
+```
+
+Once created, all meta objects offer a couple of member functions named `prop`
+to iterate all properties at once or to search a specific property by key:
 
 ```cpp
 // iterate all properties of a meta type
@@ -883,6 +904,73 @@ auto prop = entt::resolve<my_type>().prop("tooltip"_hs);
 Meta properties are objects having a fairly poor interface, all in all. They
 only provide the `value` member function to retrieve the contained value in the
 form of a `meta_any` object.
+
+### Traits
+
+User-defined traits are set via a meta factory:
+
+```cpp
+entt::meta<my_type>().traits(my_traits::required | my_traits::hidden);
+```
+
+In the example above, `EnTT` bitmask enum support is used but any integral value
+is fine, as long as it doesn't exceed 16 bits.<br/>
+It's not possible to assign traits at different times. Therefore, multiple calls
+to the `traits` function overwrite previous values. However, traits can be read
+from meta objects and used to update existing data with a factory, effectively
+extending them as needed.<br/>
+Likewise, users can also set traits on meta objects later if needed, as long as
+the factory is reset to the meta object of interest:
+
+```cpp
+entt::meta<my_type>()
+    .data<&my_type::data_member, entt::as_ref_t>("member"_hs)
+    .traits(my_traits::internal);
+```
+
+Once created, all meta objects offer a member function named `traits` to get the
+currently set value:
+
+```cpp
+auto value = entt::resolve<my_type>().traits<my_traits>();
+```
+
+Note that the type is erased upon registration and must therefore be repeated
+when traits are _extracted_, so as to allow the library to _reconstruct_ them
+correctly.
+
+### Custom data
+
+Custom arbitrary data are set via a meta factory:
+
+```cpp
+entt::meta<my_type>().custom<type_data>("name");
+```
+
+The way to do this is by specifying the data type to the `custom` function and
+passing the necessary arguments to construct it correctly.<br/>
+It's not possible to assign custom data at different times. Therefore, multiple
+calls to the `custom` function overwrite previous values. However, this value
+can be read from meta objects and used to update existing data with a factory,
+effectively extending them as needed.<br/>
+Likewise, users can also set custom data on meta objects later if needed, as
+long as the factory is reset to the meta object of interest:
+
+```cpp
+entt::meta<my_type>()
+    .func<&my_type::member_function>("member"_hs)
+    .custom<function_data>("tooltip");
+```
+
+Once created, all meta objects offer a member function named `custom` to get the
+currently set value as a const reference or as a pointer to a const element:
+
+```cpp
+const type_data &value = entt::resolve<my_type>().custom();
+```
+
+Note that the returned object performs an extra check in debug before converting
+to the requested type, so as to avoid subtle bugs.
 
 ## Unregister types
 

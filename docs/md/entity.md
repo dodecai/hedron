@@ -1,8 +1,5 @@
 # Crash Course: entity-component system
 
-<!--
-@cond TURN_OFF_DOXYGEN
--->
 # Table of Contents
 
 * [Introduction](#introduction)
@@ -65,9 +62,6 @@
   * [Iterators](#iterators)
   * [Const registry](#const-registry)
 * [Beyond this document](#beyond-this-document)
-<!--
-@endcond TURN_OFF_DOXYGEN
--->
 
 # Introduction
 
@@ -692,14 +686,15 @@ to create tombstones.
 
 ### To entity
 
-This function accepts a registry and an instance of a component and returns the
-entity associated with the latter:
+This function accepts a storage and an instance of a component of the storage
+type, then it returns the entity associated with the latter:
 
 ```cpp
-const auto entity = entt::to_entity(registry, position);
+const auto entity = entt::to_entity(registry.storage<position>(), instance);
 ```
 
-A null entity is returned in case the component doesn't belong to the registry.
+Where `instance` is a component of type `position`. A null entity is returned in
+case the instance doesn't belong to the registry.
 
 ### Dependencies
 
@@ -919,7 +914,7 @@ accessible by both type and _name_ for convenience. The _name_ isn't really a
 name though. In fact, it's a numeric id of type `id_type` used as a key for the
 variable. Any value is accepted, even runtime ones.<br/>
 The context is returned via the `ctx` functions and offers a minimal set of
-feature including the following:
+features including the following:
 
 ```cpp
 // creates a new context variable by type and returns it
@@ -947,9 +942,9 @@ registry.ctx().erase<my_type>();
 registry.ctx().erase<my_type>("my_variable"_hs);
 ```
 
-Context variable must be both default constructible and movable. If the supplied
-type doesn't match that of the variable when using a _name_, the operation
-fails.<br/>
+A context variable must be both default constructible and movable. If the
+supplied type doesn't match that of the variable when using a _name_, the
+operation fails.<br/>
 For all users who want to use the context but don't want to create elements, the
 `contains` and `find` functions are also available:
 
@@ -1319,16 +1314,6 @@ fact, entities are subject to different rules with respect to components
 * The `each` function iterates only the entities _in use_, that is, those not
   marked as _ready for reuse_. To iterate all the entities it's necessary to
   iterate the underlying sparse set instead.
-
-Moreover, the entity storage offers a couple of additional utilities such as:
-
-* The `in_use` function which is used to know how many entities are still
-  _in use_. When combined with `size`, it also makes it possible to know how
-  many entities are available for recycling.
-
-* The `pack` function which is used to make a given set of entities contiguous.
-  This is particularly useful to pass valid lists of entities via iterators
-  (with access usually optimized within the library).
 
 This kind of storage is designed to be used where any other storage is fine and
 can therefore be combined with views, groups and so on.
