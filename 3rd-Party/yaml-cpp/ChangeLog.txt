@@ -13,6 +13,7 @@ git rm -f "install.txt"
 git rm -f "MODULE.bazel"
 git rm -f "SECURITY.md"
 git rm -f "WORKSPACE"
+git rm -f "yaml-cpp.pc.in"
 
 git mv "./src" "./source"
 git mv "./LICENSE" License
