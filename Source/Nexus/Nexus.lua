@@ -27,6 +27,7 @@
     
     externalincludedirs {
 	    "%{Headers.ThirdParty}",
+	    "%{Headers.boost}",
 	    "%{Headers.glm}",
     }
     includedirs {

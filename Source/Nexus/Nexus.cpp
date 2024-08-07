@@ -13,7 +13,7 @@ import Test.Tool;
 // Switches
 #define BASE_TESTS
 #define CORE_TESTS
-//#define ENGINE_TESTS
+#define ENGINE_TESTS
 #define RESEARCH_TESTS
 #define TOOL_TESTS
 

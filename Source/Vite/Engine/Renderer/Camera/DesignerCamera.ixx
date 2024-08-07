@@ -23,26 +23,41 @@ public:
     }
     ~DesignerCamera() = default;
     
-    void Update(DeltaTime delta) {
-        // ToDo: Works everywhere, but eats the performance...
+    void Update(DeltaTime delta) { // ToDo: Works everywhere, but eats the performance...
         const float cameraSpeed = 0.003f;
+
+        if (Input::GetKeyState(KeyCode::A)) { Pan(glm::vec2(2.0, 0.0f) * cameraSpeed); }
+        if (Input::GetKeyState(KeyCode::W)) { Pan(glm::vec2(0.0, 2.0f) * cameraSpeed); }
+        if (Input::GetKeyState(KeyCode::D)) { Pan(glm::vec2(-2.0, 0.0f) * cameraSpeed); }
+        if (Input::GetKeyState(KeyCode::S)) { Pan(glm::vec2(0.0, -2.0f) * cameraSpeed); }
+
         auto wheel = Input::GetMouseWheelDelta();
+        // ToDo: Implement the zooming over the mouse wheel
+
+        bool mouseButtonPressed =
+            Input::GetMouseButtonState(MouseButton::Left) ||
+            Input::GetMouseButtonState(MouseButton::Middle) ||
+            Input::GetMouseButtonState(MouseButton::Right);
+
+        if (!mouseButtonPressed) {
+            mInitialMousePosition = glm::vec2(0.0f, 0.0f);
+            UpdateView();
+            return;
+        }
+
         auto [x, y] = Input::GetMousePositionDelta();
         const glm::vec2 &mouse { x, y };
-        if (mInitialMousePosition.x == 0.0f && mInitialMousePosition.y == 0.0f) {
+
+        if (mInitialMousePosition.x == 0 && mInitialMousePosition.y == 0) {
             mInitialMousePosition = mouse;
         }
+
         glm::vec2 mouseDelta = (mouse - mInitialMousePosition) * cameraSpeed;
         mInitialMousePosition = mouse;
         
         if (Input::GetMouseButtonState(MouseButton::Left)) Rotate(mouseDelta);
         if (Input::GetMouseButtonState(MouseButton::Middle)) Pan(mouseDelta);
         if (Input::GetMouseButtonState(MouseButton::Right)) Zoom(mouseDelta.y);
-        
-        if (Input::GetKeyState(KeyCode::A)) { Pan(glm::vec2(2.0, 0.0f) * cameraSpeed); }
-        if (Input::GetKeyState(KeyCode::W)) { Pan(glm::vec2(0.0, 2.0f) * cameraSpeed); }
-        if (Input::GetKeyState(KeyCode::D)) { Pan(glm::vec2(-2.0, 0.0f) * cameraSpeed); }
-        if (Input::GetKeyState(KeyCode::S)) { Pan(glm::vec2(0.0, -2.0f) * cameraSpeed); }
         
         UpdateView();
     }
