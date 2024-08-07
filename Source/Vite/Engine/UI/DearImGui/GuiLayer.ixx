@@ -28,6 +28,9 @@ public:
     virtual void OnInputEvent(const MouseEvent &event) override;
     virtual void OnInputEvent(const TouchEvent &event) override;
 
+    // Methods
+    bool Active();
+
 private:
     /// Properties
     const float mFontSize = 16.0f;

@@ -381,10 +381,10 @@ void DearImGuiLayer::OnInputEvent(const KeyboardEvent &event) {
     auto &io = ImGui::GetIO();
     event.Handled = io.WantCaptureKeyboard;
     
-    if ((event.Modifiers & KeyModifier::Alt) == KeyModifier::Alt) io.KeyAlt = true;
-    if ((event.Modifiers & KeyModifier::Control) == KeyModifier::Control) io.KeyCtrl = true;
-    if ((event.Modifiers & KeyModifier::Shift) == KeyModifier::Shift) io.KeyShift = true;
-    if ((event.Modifiers & KeyModifier::Super) == KeyModifier::Super) io.KeySuper = true;
+    io.KeyAlt = (event.Modifiers & KeyModifier::Alt) == KeyModifier::Alt;
+    io.KeyCtrl = (event.Modifiers & KeyModifier::Control) == KeyModifier::Control;
+    io.KeyShift = (event.Modifiers & KeyModifier::Shift) == KeyModifier::Shift;
+    io.KeySuper = (event.Modifiers & KeyModifier::Super) == KeyModifier::Super;
 
 	switch (event.Action) {
 		case KeyAction::Input: {
@@ -406,10 +406,10 @@ void DearImGuiLayer::OnInputEvent(const MouseEvent &event) {
     auto &io = ImGui::GetIO();
     event.Handled = io.WantCaptureMouse;
 
-    if ((event.Modifiers & KeyModifier::Alt) == KeyModifier::Alt) io.KeyAlt = true;
-    if ((event.Modifiers & KeyModifier::Control) == KeyModifier::Control) io.KeyCtrl = true;
-    if ((event.Modifiers & KeyModifier::Shift) == KeyModifier::Shift) io.KeyShift = true;
-    if ((event.Modifiers & KeyModifier::Super) == KeyModifier::Super) io.KeySuper = true;
+    io.KeyAlt = (event.Modifiers & KeyModifier::Alt) == KeyModifier::Alt;
+    io.KeyCtrl = (event.Modifiers & KeyModifier::Control) == KeyModifier::Control;
+    io.KeyShift = (event.Modifiers & KeyModifier::Shift) == KeyModifier::Shift;
+    io.KeySuper = (event.Modifiers & KeyModifier::Super) == KeyModifier::Super;
 
 	switch (event.Action) {
 		case MouseAction::Move:	{
@@ -429,6 +429,16 @@ void DearImGuiLayer::OnInputEvent(const MouseEvent &event) {
 }
 
 void DearImGuiLayer::OnInputEvent(const TouchEvent &event) {
+}
+
+
+/// Methods
+bool DearImGuiLayer::Active() {
+    return
+        ImGui::IsAnyItemFocused() ||
+        ImGui::IsAnyItemHovered() ||
+        ImGui::IsWindowFocused(ImGuiFocusedFlags_AnyWindow) ||
+        ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
 }
 
 }

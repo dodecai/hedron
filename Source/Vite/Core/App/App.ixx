@@ -140,12 +140,12 @@ public:
             }
 
             case WindowAction::Focus: {
-                //Input::Enable();
+                Input::Enable();
                 break;
             }
 
             case WindowAction::Defocus: {
-                //Input::Disable();
+                Input::Disable();
                 break;
             }
 
@@ -373,10 +373,13 @@ private:
             mEventHandler->Update();
             mGraphicsContext->Attach();
             //mGraphicsContext->Clear();
+            auto uiActive = mDearImGuiLayer->Active();
+            if (uiActive) { Input::Disable(); }
             mRenderer->Capture();
             for (auto *layer : mLayers) layer->Update(deltaTime);
             Update(deltaTime);
             mRenderer->Present();
+            if (uiActive) { Input::Enable(); }
             if (mCoreWindow->State(WindowState::Alive)) {
                 mDearImGuiLayer->Prepare();
                 for (auto *layer : mLayers) layer->UpdateUI();

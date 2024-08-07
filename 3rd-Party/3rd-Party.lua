@@ -2,6 +2,7 @@
 
 -- Projects
 include "assimp/assimp.lua"
+include "boost/boost.lua"
 include "imgui/DearImGui.lua"
 include "entt/EnTT.lua"
 include "freetype/FreeType.lua"
@@ -27,6 +28,7 @@ Headers["yamlcpp"] = "%{wks.location}/3rd-Party/yaml-cpp/include"
 Headers["zlib"] = "%{wks.location}/3rd-Party/assimp/contrib/zlib"
 
 -- Built-In Headers, Libraries and Packages
+Headers["boost"] = "%{wks.location}/3rd-Party/boost/include"
 Headers["ShaderC"] = "%{wks.location}/3rd-Party/shaderC/include"
 Headers["Vulkan"] = "%{wks.location}/3rd-Party/vulkan/include"
 Headers["VulkanVideo"] = "%{wks.location}/3rd-Party/vk_video/include"
