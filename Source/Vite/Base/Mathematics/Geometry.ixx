@@ -7,7 +7,7 @@ export namespace Hedron {
 ///
 /// @brief Alignments for 2D objects
 ///
-enum class Alignment2D {
+enum class Alignment2D: uint8 {
     TopLeft,
     TopCenter,
     TopRight,

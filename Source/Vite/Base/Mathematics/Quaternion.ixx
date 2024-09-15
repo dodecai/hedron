@@ -157,7 +157,7 @@ struct QuaternionBase {
         T cosy_cosp = 1 - 2 * (y * y + z * z);
         yaw = std::atan2(siny_cosp, cosy_cosp);
 
-        return Vector3<T>(pitch, yaw, roll);
+        return Vector3(pitch, yaw, roll);
     }
 
     ///

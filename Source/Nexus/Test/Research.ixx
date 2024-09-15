@@ -17,6 +17,12 @@ public:
     /// Methods
     void Create() override {
         LogCaption("Research Tests");
+
+        auto displayManager = DisplayManager::Create();
+
+
+        auto test = false;
+
         Test();
     }
     void Destroy() override {}

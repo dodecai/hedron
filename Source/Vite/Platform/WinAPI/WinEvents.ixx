@@ -22,11 +22,11 @@ public:
 
 private:
     /// Methods
-    bool Dispatch(MSG message);
+    bool Dispatch(WinAPI::Message message);
     KeyModifier GetModifiers();
 
     /// Handles
-    RAWINPUTDEVICE mRawInputDevice[1];
+    WinAPI::RawInputDevice mRawInputDevice[1];
     HWND mWindowHandle;
 };
 

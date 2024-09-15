@@ -18,7 +18,7 @@ protected:
 
 private:
     /// Properties
-    mutable POINT mLastMousePosition {};
+    mutable WinAPI::Point mLastMousePosition {};
     mutable float mLastMouseWheelDelta {};
 };
 

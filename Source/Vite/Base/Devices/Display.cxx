@@ -1,6 +1,6 @@
 ﻿module;
 
-//#include "Vite/Base/Platform/Detection.h"
+#include "Vite/Base/Platform/Detection.h"
 
 module Vite.Device.Display;
 
@@ -10,12 +10,22 @@ module Vite.Device.Display;
 
 namespace Hedron {
 
-Scope<Display> Display::Create() {
-#ifdef APP_PLATFORM_WINDOWS
-    return CreateScope<WinDisplay>();
-#else
-    return {};
-#endif
+Scope<Display> Display::Create(string id) {
+  #ifdef APP_PLATFORM_WINDOWS
+    return CreateScope<WinDisplay>(id);
+  #else
+    AppAssert(nullptr, "The current platform isn't supported!");
+    return nullptr;
+  #endif
+}
+
+Scope<DisplayManager> DisplayManager::Create() {
+  #ifdef APP_PLATFORM_WINDOWS
+    return CreateScope<WinDisplayManager>();
+  #else
+    AppAssert(nullptr, "The current platform isn't supported!");
+    return nullptr;
+  #endif
 }
 
 }

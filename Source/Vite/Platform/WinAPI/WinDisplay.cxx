@@ -1,42 +1,66 @@
 ﻿module Vite.Platform.WinDisplay;
 
+import Vite.Base;
+import Vite.Bridge.WinAPI;
+
 namespace Hedron {
 
+using namespace WinAPI;
+
+WinDisplay::WinDisplay(string id) {
+
+    mProperties.ID = id;
+
+    DeviceMode deviceMode = {};
+    auto nativeId = StringToWString(id);
+    auto result = EnumDisplaySettings(nativeId.c_str(), gEnumerateCurrentSettings, &deviceMode);
+
+    auto gcd = std::gcd(deviceMode.dmPelsWidth, deviceMode.dmPelsHeight);
+    auto width = deviceMode.dmPelsWidth / gcd;
+    auto height = deviceMode.dmPelsHeight / gcd;
+    mProperties.AspectRatio = static_cast<float>(width) / height;
+    mProperties.AspectRatioString = std::to_string(width) + ":" + std::to_string(height);
+
+    mProperties.BitsPerPixel = static_cast<float>(deviceMode.dmBitsPerPel);
+    mProperties.LogicalDPI = static_cast<float>(deviceMode.dmLogPixels);
+    mProperties.RefreshRate = static_cast<float>(deviceMode.dmDisplayFrequency);
+    mProperties.Orientation = static_cast<float>(deviceMode.dmDisplayOrientation);
+    mProperties.Resolution = std::to_string(deviceMode.dmPelsWidth) + "x" + std::to_string(deviceMode.dmPelsHeight);
+    mProperties.Size = {
+        .Width = static_cast<float>(deviceMode.dmPelsWidth),
+        .Height = static_cast<float>(deviceMode.dmPelsHeight),
+    };
+    ;
+}
+
+WinDisplayManager::WinDisplayManager() {
+    auto displayCount = GetSystemMetrics((int)SystemMetrics::ScreenCount);
+    
+    DisplayDevice displayDevice = {
+        .cb = sizeof(DisplayDevice),
+    };
+
+    auto deviceIndex = 0;
+    while (EnumDisplayDevices(nullptr, deviceIndex, &displayDevice, 0)) {
+        if (displayDevice.StateFlags & (int)DisplayDeviceState::Attached) {
+            auto display = CreateScope<WinDisplay>(WStringToString(displayDevice.DeviceName));
+            mDisplays.push_back(std::move(display));
+        }
+        deviceIndex++;
+    }
 
 
-#ifdef LEGACY_CODE
-//const WindowSize WinWindow::GetDisplaySize() const {
-//	//RECT area;
-//	//GetWindowRect(WindowHandle, &area);
-//	//WindowSize(area.right - area.left, area.bottom - area.top);
-//	return Properties.Size;
-//}
+    //MonitorInfo monitorInfo = {};
+    //monitorInfo.cbSize = sizeof(MonitorInfo);
 
-//const WindowSize WinWindow::GetScreenSize() const {
-//	int32_t width = GetSystemMetrics(SM_CXSCREEN);
-//	int32_t height = GetSystemMetrics(SM_CYSCREEN);
-//
-//	return WindowSize(static_cast<uint32_t>(width), static_cast<uint32_t>(height));
-//}
+    //for (auto i = 0; i < displayCount; i++) {
+    //    if (GetMonitorInformation(nullptr, &monitorInfo)) {
+    //        auto display = CreateScope<WinDisplay>(WStringToString(monitorInfo.szDevice));
+    //        mDisplays.push_back(std::move(display));
+    //    }
+    //}
 
-//void WinWindow::SetDisplaySize(const uint32_t width, const uint32_t height) {
-//    WINDOWPLACEMENT position {};
-//	GetWindowPlacement(WindowHandle, &position);
-//
-//	RECT dimension = {};
-//	dimension.left = position.rcNormalPosition.left;
-//	dimension.top = position.rcNormalPosition.top;
-//	dimension.right = (long)width;
-//	dimension.bottom = (long)height;
-//
-//	AdjustWindowRectEx(&dimension, NULL, FALSE, NULL);
-//	if (!SetWindowPos(WindowHandle, 0, dimension.left, dimension.top, dimension.right, dimension.bottom, SWP_NOREPOSITION | SWP_NOZORDER)) {
-//        LogError("Error occurred while setting display size!");
-//		return;
-//	}
-//	Properties.Size.Width = width;
-//	Properties.Size.Height = height;
-//}
-#endif
+    auto test = false;
+}
 
 }
