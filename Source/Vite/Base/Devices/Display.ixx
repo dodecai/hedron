@@ -1,5 +1,6 @@
 ﻿export module Vite.Device.Display;
 
+import Vite.Device.Device;
 import Vite.Math;
 import Vite.Type;
 
@@ -8,11 +9,16 @@ export namespace Hedron {
 ///
 /// @brief Display Device Properties
 ///
-struct DisplayProperties {
-    string ID;
+struct DisplayProperties: public DeviceProperties {
     float AspectRatio;
+    string AspectRatioString;
+    float BitsPerPixel;
+    float LogicalDPI;
+    float Orientation;
+    bool Primary;
+    float RefreshRate;
     string Resolution;
-    Size2DBase<uint32> Size;
+    Size2D Size;
 };
 
 ///
@@ -23,12 +29,12 @@ public:
     /// Default
     Display() = default;
     virtual ~Display() = default;
-    static Scope<Display> Create();
+    static Scope<Display> Create(string id);
 
     /// Accessors
     const DisplayProperties &Properties() const { return mProperties; }
 
-private:
+protected:
     /// Properties
     DisplayProperties mProperties;
 };
@@ -39,15 +45,17 @@ private:
 class DisplayManager {
     /// Types
     using DisplayList = vector<Scope<Display>>;
+
 public:
     /// Default
     DisplayManager() = default;
     virtual ~DisplayManager() = default;
+    static Scope<DisplayManager> Create();
 
     /// Accessors
     const DisplayList &Displays() const { return mDisplays; }
 
-private:
+protected:
     /// Properties
     DisplayList mDisplays;
 };

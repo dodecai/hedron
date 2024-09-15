@@ -55,7 +55,7 @@ private:
     HICON mApplicationIcon {};
     HWND mParentWindowHandle {};
     HWND mWindowHandle {};
-    ITaskbarList3 *mTaskbarList;
+    WinAPI::TaskbarList *mTaskbarList;
 };
 
 }

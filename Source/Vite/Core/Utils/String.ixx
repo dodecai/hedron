@@ -28,7 +28,7 @@ public:
     // Checks if the given string contains the given token
     template <typename CharT, typename Traits, typename Allocator>
     static constexpr bool ContainsW(const std::basic_string<CharT, Traits, Allocator> &value, const std::basic_string<CharT, Traits, Allocator> &token) {
-        return std::ranges::search(string, token) != value.end();
+        return std::ranges::search(value, token) != value.end();
     }
 
     // Checks if the given string ends with the given token

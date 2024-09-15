@@ -153,6 +153,19 @@ struct std::formatter<E, std::enable_if_t<EnableNamedEnumFormatter<E>::Enable, c
 
 
 ///
+/// Category: string
+///
+inline std::wstring StringToWString(const std::string &str) {
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    return converter.from_bytes(str);
+}
+
+inline std::string WStringToString(const std::wstring &wstr) {
+    std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    return converter.to_bytes(wstr);
+}
+
+///
 /// Category: string_view
 ///
 

@@ -18,10 +18,14 @@ public:
 
     /// Methods
     static double Double() {
-        return sDoubleDistribution(sRandomEngine);
+        // ToDo: Bug introduced on 17.12.0 Preview 1, wait until Preview 3 where it is partially fixed
+        //return sDoubleDistribution(sRandomEngine);
+        return {};
     }
     static float Float() {
-        return sFloatDistribution(sRandomEngine);
+        // ToDo: Bug introduced on 17.12.0 Preview 1, wait until Preview 3 where it is partially fixed
+        //return sFloatDistribution(sRandomEngine);
+        return {};
     }
     static int Integer() {
         return sIntDistribution(sRandomEngine);
@@ -32,7 +36,7 @@ public:
 
 private:
     /// Properties
-    static inline std::mt19937 sRandomEngine;
+    static inline std::mt19937_64 sRandomEngine;
     static inline std::uniform_real_distribution<double> sDoubleDistribution { std::numeric_limits<double>::min(), std::numeric_limits<double>::max() };
     static inline std::uniform_real_distribution<float> sFloatDistribution { std::numeric_limits<float>::min(), std::numeric_limits<float>::max() };
     static inline std::uniform_int_distribution<int> sIntDistribution { std::numeric_limits<int>::min(), std::numeric_limits<int>::max() };
