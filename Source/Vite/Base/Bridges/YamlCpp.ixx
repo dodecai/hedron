@@ -21,10 +21,18 @@ export module Vite.Bridge.YamlCpp;
 #pragma warning(push, 0)
 export namespace YAML {
 
+///
+/// Types
+///
 using YAML::Exception;
 using YAML::Emitter;
 using YAML::Node;
 using YAML::Parser;
+
+///
+/// Functions
+///
+using YAML::Load;
 using YAML::LoadFile;
 
 }
