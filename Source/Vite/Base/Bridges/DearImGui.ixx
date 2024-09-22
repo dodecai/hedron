@@ -11,6 +11,7 @@ export module Vite.Bridge.DearImGui;
 
 ///
 /// @brief Bridge: Dear ImGui
+/// @detail Dear Immediate Mode Graphical User Interface
 /// @note Currently everything is exported, later it can be reduced to only what is needed.
 /// @todo Further research on how to reduce the export.
 ///

@@ -1,10 +1,6 @@
-﻿module;
+﻿export module Vite.Event.Emitter;
 
-//#include <entt/entt.hpp>
-
-export module Vite.Event.Emitter;
-
-//import Vite.Bridge.EnTT;
+import Vite.Bridge.EnTT;
 import Vite.Base;
 
 ///

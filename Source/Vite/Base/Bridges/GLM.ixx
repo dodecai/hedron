@@ -3,7 +3,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #define GLM_FORCE_LEFT_HANDED
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#define GLM_FORCE_XYZW_ONLY             // Disables SIMD intrinsics for now, GLM_FORCE_PURE is buggy (we disable it due to msvc bug)
+#define GLM_FORCE_PURE
+#define GLM_FORCE_XYZW_ONLY             // Disables SIMD intrinsics for now, we disable it due to msvc bug
 
 #pragma warning(push, 0)
 

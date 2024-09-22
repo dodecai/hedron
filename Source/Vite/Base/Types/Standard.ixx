@@ -7,7 +7,7 @@ export import std;
 /// @detail This module imports the standard library types and makes them available to the rest of the library.
 ///
 
-export namespace Hedron {
+export {
 
 /// Concurrency
 using std::atomic;
@@ -47,6 +47,9 @@ using std::wostringstream;
 
 /// Types
 using std::size_t;
+using char8 = char8_t;
+using char16 = char16_t;
+using char32 = char32_t;
 using empty = std::monostate;
 using int8 = std::int8_t;
 using int16 = std::int16_t;
@@ -58,5 +61,6 @@ using uint16 = std::uint16_t;
 using uint32 = std::uint32_t;
 using uint64 = std::uint64_t;
 using uintptr = std::uintptr_t;
+using wchar = wchar_t;
 
 }

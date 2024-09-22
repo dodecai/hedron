@@ -16,6 +16,8 @@
 
 module Vite.Platform.WinWindow;
 
+using namespace WinAPI;
+
 ///
 /// Helpers
 ///
@@ -262,8 +264,8 @@ WinWindow::WinWindow(const WindowSettings &settings): mSettings { settings } {
 
     // Center Window
     if (!(mSettings.Style == WindowStyle::FullScreen)/* && Properties.Position.Centered*/) {
-        unsigned int x = (GetSystemMetrics(SM_CXSCREEN) - dimension.right) / 2;
-        unsigned int y = (GetSystemMetrics(SM_CYSCREEN) - dimension.bottom) / 2;
+        unsigned int x = (WinAPI::System::GetMetrics(WinAPI::SystemMetrics::ScreenX) - dimension.right) / 2;
+        unsigned int y = (WinAPI::System::GetMetrics(WinAPI::SystemMetrics::ScreenY) - dimension.bottom) / 2;
         SetWindowPos(mWindowHandle, 0, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
     }
 
@@ -488,7 +490,7 @@ void WinWindow::Title(string_view title) {
 
 
 /// Callbacks
-LRESULT CALLBACK WinWindow::MessageCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WinWindow::MessageCallback(WindowHandle hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	// Properties
 	WinWindow *pCurrentWindow = nullptr;
 
@@ -530,7 +532,7 @@ void *WinWindow::AsPlatformHandle() {
 
 
 /// Methods
-LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT WinWindow::Message(WindowHandle hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     ///
     /// @brief	Window Messages
     /// @source:
@@ -733,8 +735,8 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             auto hasThickFrame = GetWindowLongPtr(hWnd, GWL_STYLE) & WS_THICKFRAME;
             if (!hasThickFrame) break;
 
-            const int borderX = GetSystemMetrics(SM_CXSIZEFRAME) / 2;
-            const int borderY = GetSystemMetrics(SM_CYSIZEFRAME) / 2;
+            const int borderX = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeX) / 2;
+            const int borderY = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeY) / 2;
 
             auto *params = reinterpret_cast<NCCALCSIZE_PARAMS *>(lParam);
             params->rgrc[0].left += borderX;
@@ -756,10 +758,10 @@ LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             RECT clientRect {};
             GetClientRect(hWnd, &clientRect);
 
-            const int borderH = GetSystemMetrics(SM_CXFRAME);
-            const int borderV = GetSystemMetrics(SM_CYFRAME);
-            const int borderX = GetSystemMetrics(SM_CXSIZEFRAME) / 2;
-            const int borderY = GetSystemMetrics(SM_CYSIZEFRAME) / 2;
+            const int borderH = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeX);
+            const int borderV = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeY);
+            const int borderX = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeX) / 2;
+            const int borderY = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeY) / 2;
             static RECT border { borderX, borderY, borderX, borderY };
 
             enum { left = 1, top = 2, right = 4, bottom = 8 };

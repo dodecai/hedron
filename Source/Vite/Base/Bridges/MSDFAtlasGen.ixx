@@ -1,9 +1,10 @@
 ﻿module;
 
-#pragma warning(push, 0)
-
 #undef INFINITE
 #define MSDF_ATLAS_PUBLIC
+
+#pragma warning(push, 0)
+
 #include <msdf-atlas-gen/msdf-atlas-gen.h>
 #include <msdf-atlas-gen/FontGeometry.h>
 #include <msdf-atlas-gen/GlyphGeometry.h>

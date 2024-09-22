@@ -20,7 +20,6 @@ public:
 
         auto displayManager = DisplayManager::Create();
 
-
         auto test = false;
 
         Test();

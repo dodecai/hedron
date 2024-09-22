@@ -8,12 +8,11 @@ namespace Hedron {
 using namespace WinAPI;
 
 WinDisplay::WinDisplay(string id) {
-
     mProperties.ID = id;
 
     DeviceMode deviceMode = {};
     auto nativeId = StringToWString(id);
-    auto result = EnumDisplaySettings(nativeId.c_str(), gEnumerateCurrentSettings, &deviceMode);
+    auto result = Device::EnumDisplaySettings(nativeId.c_str(), gEnumerateCurrentSettings, &deviceMode);
 
     auto gcd = std::gcd(deviceMode.dmPelsWidth, deviceMode.dmPelsHeight);
     auto width = deviceMode.dmPelsWidth / gcd;
@@ -34,14 +33,14 @@ WinDisplay::WinDisplay(string id) {
 }
 
 WinDisplayManager::WinDisplayManager() {
-    auto displayCount = GetSystemMetrics((int)SystemMetrics::ScreenCount);
+    auto displayCount = WinAPI::System::GetMetrics(SystemMetrics::ScreenCount);
     
     DisplayDevice displayDevice = {
         .cb = sizeof(DisplayDevice),
     };
 
     auto deviceIndex = 0;
-    while (EnumDisplayDevices(nullptr, deviceIndex, &displayDevice, 0)) {
+    while (Device::EnumDisplayDevices(nullptr, deviceIndex, &displayDevice, 0)) {
         if (displayDevice.StateFlags & (int)DisplayDeviceState::Attached) {
             auto display = CreateScope<WinDisplay>(WStringToString(displayDevice.DeviceName));
             mDisplays.push_back(std::move(display));

@@ -3,11 +3,13 @@
 #include "Vite/Base/Platform/Support.h"
 
 #pragma warning(push, 0)
+
 #include <glad/gl.h>
 #if defined(APP_PLATFORM_WINDOWS)
     #pragma comment(lib, "opengl32.lib")
     #include <GL/wglext.h>
 #endif
+
 #pragma warning(pop)
 
 export module Vite.Bridge.Glad;

@@ -4,6 +4,8 @@ import Vite.Bridge.WinAPI;
 import Vite.Core;
 import Vite.System.Dialog;
 
+using namespace WinAPI;
+
 export namespace Hedron {
 
 class WinDialog: public Dialog {
@@ -18,7 +20,7 @@ public:
     
 private:
     /// Properties
-    HWND mWindowHandle;
+    WindowHandle mWindowHandle;
 };
 
 }
