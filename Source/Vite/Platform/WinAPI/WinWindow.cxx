@@ -1,22 +1,8 @@
 ﻿module;
 
-#include "Vite/Base/Platform/Detection.h"
-
-#pragma comment(lib, "dwmapi.lib")
-#pragma comment(lib, "user32.lib")
-//#pragma comment(lib, "uxtheme.lib")
-
-#define NOMINMAX
-#define VC_EXTRALEAN
-
-#include <DwmApi.h>
-#include <ShObjIdl.h>
-#include <Windows.h>
-#include <WindowsX.h>
+#include "Vite/Base/Bridges/WinAPI.h"
 
 module Vite.Platform.WinWindow;
-
-using namespace WinAPI;
 
 ///
 /// Helpers
@@ -264,8 +250,8 @@ WinWindow::WinWindow(const WindowSettings &settings): mSettings { settings } {
 
     // Center Window
     if (!(mSettings.Style == WindowStyle::FullScreen)/* && Properties.Position.Centered*/) {
-        unsigned int x = (WinAPI::System::GetMetrics(WinAPI::SystemMetrics::ScreenX) - dimension.right) / 2;
-        unsigned int y = (WinAPI::System::GetMetrics(WinAPI::SystemMetrics::ScreenY) - dimension.bottom) / 2;
+        unsigned int x = (screenWidth - dimension.right) / 2;
+        unsigned int y = (screenHeight - dimension.bottom) / 2;
         SetWindowPos(mWindowHandle, 0, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE);
     }
 
@@ -293,10 +279,10 @@ WinWindow::~WinWindow() {
     
     // Ensure that the Window Class gets released
     if (mApplicationHandle) {
-        if (!UnregisterClass(mWindowClass.c_str(), mApplicationHandle)) {
+        /*if (!UnregisterClassEx(mWindowClass.c_str(), mApplicationHandle)) {
             LogError("Could not unregister window class.");
             Log("{}", GetLastErrorAsString());
-        }
+        }*/
     }
 }
 
@@ -490,7 +476,7 @@ void WinWindow::Title(string_view title) {
 
 
 /// Callbacks
-LRESULT CALLBACK WinWindow::MessageCallback(WindowHandle hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT CALLBACK WinWindow::MessageCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	// Properties
 	WinWindow *pCurrentWindow = nullptr;
 
@@ -532,7 +518,7 @@ void *WinWindow::AsPlatformHandle() {
 
 
 /// Methods
-LRESULT WinWindow::Message(WindowHandle hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT WinWindow::Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     ///
     /// @brief	Window Messages
     /// @source:
@@ -735,8 +721,8 @@ LRESULT WinWindow::Message(WindowHandle hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             auto hasThickFrame = GetWindowLongPtr(hWnd, GWL_STYLE) & WS_THICKFRAME;
             if (!hasThickFrame) break;
 
-            const int borderX = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeX) / 2;
-            const int borderY = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeY) / 2;
+            const int borderX = SM_CXSIZEFRAME / 2;
+            const int borderY = SM_CYSIZEFRAME / 2;
 
             auto *params = reinterpret_cast<NCCALCSIZE_PARAMS *>(lParam);
             params->rgrc[0].left += borderX;
@@ -758,10 +744,10 @@ LRESULT WinWindow::Message(WindowHandle hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             RECT clientRect {};
             GetClientRect(hWnd, &clientRect);
 
-            const int borderH = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeX);
-            const int borderV = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeY);
-            const int borderX = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeX) / 2;
-            const int borderY = WinAPI::System::GetMetrics(WinAPI::SystemMetrics::WindowFrameSizeY) / 2;
+            const int borderH = SM_CXSIZEFRAME;
+            const int borderV = SM_CYSIZEFRAME;
+            const int borderX = SM_CXSIZEFRAME / 2;
+            const int borderY = SM_CYSIZEFRAME / 2;
             static RECT border { borderX, borderY, borderX, borderY };
 
             enum { left = 1, top = 2, right = 4, bottom = 8 };

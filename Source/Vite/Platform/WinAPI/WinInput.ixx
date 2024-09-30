@@ -1,6 +1,9 @@
-﻿export module Vite.Platform.WinInput;
+﻿module;
 
-import Vite.Bridge.WinAPI;
+#include "Vite/Base/Bridges/WinAPI.h"
+
+export module Vite.Platform.WinInput;
+
 import Vite.Core;
 import Vite.Device.Input;
 
@@ -18,7 +21,7 @@ protected:
 
 private:
     /// Properties
-    mutable WinAPI::Point mLastMousePosition {};
+    mutable POINT mLastMousePosition {};
     mutable float mLastMouseWheelDelta {};
 };
 

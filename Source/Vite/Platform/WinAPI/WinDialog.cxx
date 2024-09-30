@@ -1,9 +1,6 @@
 ﻿module;
 
-#define NOMINMAX
-#define VC_EXTRALEAN
-
-#include <Windows.h>
+#include "Vite/Base/Bridges/WinAPI.h"
 
 module Vite.Platform.WinDialog;
 

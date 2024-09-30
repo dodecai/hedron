@@ -1,10 +1,11 @@
-﻿export module Vite.Platform.WinWindow;
+﻿module;
 
-import Vite.Bridge.WinAPI;
+#include "Vite/Base/Bridges/WinAPI.h"
+
+export module Vite.Platform.WinWindow;
+
 import Vite.Core;
 import Vite.System.Window;
-
-using namespace WinAPI;
 
 export namespace Hedron {
 
@@ -37,13 +38,13 @@ public:
 
 private:
     /// Callbacks
-    static LRESULT MessageCallback(WindowHandle hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    static LRESULT MessageCallback(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     /// Casts
     virtual void *AsPlatformHandle() override;
 
     /// Methods
-    LRESULT Message(WindowHandle hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    LRESULT Message(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     //HICON LoadIconFile(const string &icon);
     //HICON *LoadIconResource(const uint32 id);
 
@@ -53,13 +54,13 @@ private:
     wstring mWindowClass = L"Hedron::Window";
 
     /// Components
-    TaskbarList *mTaskbarList;
+    ITaskbarList3 *mTaskbarList;
 
     /// Handles
-    IconHandle mApplicationIcon {};
-    ModuleHandle mApplicationHandle {};
-    WindowHandle mParentWindowHandle {};
-    WindowHandle mWindowHandle {};
+    HICON mApplicationIcon {};
+    HINSTANCE mApplicationHandle {};
+    HWND mParentWindowHandle {};
+    HWND mWindowHandle {};
 };
 
 }
