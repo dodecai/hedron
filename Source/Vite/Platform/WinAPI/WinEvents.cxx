@@ -1,8 +1,6 @@
 ﻿module;
 
-#define NOMINMAX
-#define VC_EXTRALEAN
-#define WIN32_LEAN_AND_MEAN
+#include "Vite/Base/Bridges/WinAPI.h"
 
 /// Definitions
 #ifndef HID_USAGE_GENERIC_MOUSE
@@ -11,9 +9,6 @@
 #ifndef HID_USAGE_PAGE_GENERIC
     #define HID_USAGE_PAGE_GENERIC  ((USHORT) 0x01)
 #endif
-
-#include <Windows.h>
-#include <WindowsX.h>
 
 module Vite.Platform.WinEvent;
 

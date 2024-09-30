@@ -1,10 +1,11 @@
-﻿export module Vite.Platform.WinDialog;
+﻿module;
 
-import Vite.Bridge.WinAPI;
+#include "Vite/Base/Bridges/WinAPI.h"
+
+export module Vite.Platform.WinDialog;
+
 import Vite.Core;
 import Vite.System.Dialog;
-
-using namespace WinAPI;
 
 export namespace Hedron {
 
@@ -20,7 +21,7 @@ public:
     
 private:
     /// Properties
-    WindowHandle mWindowHandle;
+    HWND mWindowHandle;
 };
 
 }

@@ -1,6 +1,9 @@
-﻿export module Vite.Platform.WinEvent;
+﻿module;
 
-import Vite.Bridge.WinAPI;
+#include "Vite/Base/Bridges/WinAPI.h"
+
+export module Vite.Platform.WinEvent;
+
 import Vite.Core;
 import Vite.Event;
 
@@ -22,11 +25,11 @@ public:
 
 private:
     /// Methods
-    bool Dispatch(WinAPI::Message message);
+    bool Dispatch(MSG message);
     KeyModifier GetModifiers();
 
     /// Handles
-    WinAPI::RawInputDevice mRawInputDevice[1];
+    RAWINPUTDEVICE mRawInputDevice[1];
     HWND mWindowHandle;
 };
 

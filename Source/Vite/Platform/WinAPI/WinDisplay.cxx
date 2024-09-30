@@ -1,18 +1,19 @@
-﻿module Vite.Platform.WinDisplay;
+﻿module;
+
+#include "Vite/Base/Bridges/WinAPI.h"
+
+module Vite.Platform.WinDisplay;
 
 import Vite.Base;
-import Vite.Bridge.WinAPI;
 
 namespace Hedron {
-
-using namespace WinAPI;
 
 WinDisplay::WinDisplay(string id) {
     mProperties.ID = id;
 
-    DeviceMode deviceMode = {};
+    DEVMODE deviceMode = {};
     auto nativeId = StringToWString(id);
-    auto result = Device::EnumDisplaySettings(nativeId.c_str(), gEnumerateCurrentSettings, &deviceMode);
+    auto result = EnumDisplaySettings(nativeId.c_str(), ENUM_CURRENT_SETTINGS, &deviceMode);
 
     auto gcd = std::gcd(deviceMode.dmPelsWidth, deviceMode.dmPelsHeight);
     auto width = deviceMode.dmPelsWidth / gcd;
@@ -33,15 +34,15 @@ WinDisplay::WinDisplay(string id) {
 }
 
 WinDisplayManager::WinDisplayManager() {
-    auto displayCount = WinAPI::System::GetMetrics(SystemMetrics::ScreenCount);
+    auto displayCount = GetSystemMetrics(SM_CMONITORS);
     
-    DisplayDevice displayDevice = {
-        .cb = sizeof(DisplayDevice),
+    DISPLAY_DEVICE displayDevice = {
+        .cb = sizeof(DISPLAY_DEVICE),
     };
 
     auto deviceIndex = 0;
-    while (Device::EnumDisplayDevices(nullptr, deviceIndex, &displayDevice, 0)) {
-        if (displayDevice.StateFlags & (int)DisplayDeviceState::Attached) {
+    while (EnumDisplayDevices(nullptr, deviceIndex, &displayDevice, 0)) {
+        if (displayDevice.StateFlags & DISPLAY_DEVICE_ATTACHED_TO_DESKTOP) {
             auto display = CreateScope<WinDisplay>(WStringToString(displayDevice.DeviceName));
             mDisplays.push_back(std::move(display));
         }

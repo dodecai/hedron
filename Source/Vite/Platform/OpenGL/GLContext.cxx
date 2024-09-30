@@ -3,12 +3,9 @@
 #include "Vite/Base/Platform/Detection.h"
 
 #if defined(APP_PLATFORM_WINDOWS)
-    #define WIN32_LEAN_AND_MEAN
-    #define NOMINMAX
-    #define VC_EXTRALEAN
-    #include <Windows.h>
-
     #pragma comment(lib, "opengl32.lib")
+
+    #include "Vite/Base/Bridges/WinAPI.h"
 #endif
 
 #include <glad/gl.h>
