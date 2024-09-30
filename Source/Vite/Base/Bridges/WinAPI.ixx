@@ -1,29 +1,6 @@
 ﻿module;
 
-#pragma comment(lib, "dwmapi.lib")
-#pragma comment(lib, "user32.lib")
-#pragma comment(lib, "uxtheme.lib")
-
-#define NOCOMM
-#define NODRAWTEXT
-#define NOMENUS
-#define NOMCX
-#define NOMINMAX
-#define NOHELP
-#define NOSERVICE
-#define VC_EXTRALEAN
-#define WIN32_LEAN_AND_MEAN
-
-#pragma warning(push, 0)
-
-#include <DwmApi.h>
-#include <shellapi.h>
-#include <ShlObj_core.h>
-#include <Windows.h>
-#include <WindowsX.h>
-#include <commdlg.h>
-
-#pragma warning(pop)
+#include "WinAPI.h"
 
 export module Vite.Bridge.WinAPI;
 
@@ -49,9 +26,29 @@ using InstanceHandle = ::HINSTANCE;
 using ModuleHandle = ::HMODULE;
 using WindowHandle = ::HWND;
 
+///
 /// Function Wrappers
+///
 
-class Error: Hedron::StaticObject {
+class Library: Hedron::StaticObject {
+public:
+    /// Default
+
+    [[nodiscard]] static inline ModuleHandle Load(const string &name) noexcept {
+        return ::LoadLibraryA(name.c_str());
+    }
+    [[nodiscard]] static inline ModuleHandle Load(const wstring &name) noexcept {
+        return ::LoadLibraryW(name.c_str());
+    }
+
+    /// Commands
+
+    static inline void Free(ModuleHandle module) noexcept {
+        ::FreeLibrary(module);
+    }
+};
+
+class State: Hedron::StaticObject {
 public:
     /// Default
     [[nodiscard]] static inline string Message() noexcept {
@@ -71,6 +68,24 @@ public:
         string message(messageBuffer, size);
         ::LocalFree(messageBuffer);
         return message;
+    }
+};
+
+class System: Hedron::StaticObject {
+public:
+    /// Default
+
+    [[nodiscard]] static inline InstanceHandle Instance() noexcept {
+        return ::GetModuleHandle(nullptr);
+    }
+
+    /// Commands
+
+    static inline void Exit(int code) noexcept {
+        ::ExitProcess(code);
+    }
+    static inline void Terminate(int code) noexcept {
+        ::TerminateProcess(::GetCurrentProcess(), code);
     }
 };
 
@@ -94,7 +109,6 @@ public:
             nullptr
         );
     }
-
     [[no_discard]] static inline WindowHandle Create(const wstring &title, const Hedron::Position2D &position, const Hedron::Size2D &size) {
         return ::CreateWindowExW(
             0,
@@ -117,27 +131,21 @@ public:
     static inline void Close(WindowHandle window) noexcept {
         ::CloseWindow(window);
     }
-
     static inline void Destroy(WindowHandle window) noexcept {
         ::DestroyWindow(window);
     }
-
     static inline void Hide(WindowHandle window) noexcept {
         ::ShowWindow(window, SW_HIDE);
     }
-
     static inline void Maximize(WindowHandle window) noexcept {
         ::ShowWindow(window, SW_MAXIMIZE);
     }
-
     static inline void Minimize(WindowHandle window) noexcept {
         ::ShowWindow(window, SW_MINIMIZE);
     }
-
     static inline void Restore(WindowHandle window) noexcept {
         ::ShowWindow(window, SW_RESTORE);
     }
-
     static inline void Show(WindowHandle window) noexcept {
         ::ShowWindow(window, SW_SHOW);
     }
@@ -149,13 +157,11 @@ public:
         ::GetClientRect(window, &rect);
         return Hedron::Size2D { static_cast<float>(rect.right - rect.left), static_cast<float>(rect.bottom - rect.top) };
     }
-
     [[no_discard]] static inline Hedron::Position2D Position(WindowHandle window) noexcept {
         RECT rect;
         ::GetWindowRect(window, &rect);
         return Hedron::Position2D { static_cast<float>(rect.left), static_cast<float>(rect.top) };
     }
-
     [[no_discard]] static inline Hedron::Size2D Size(WindowHandle window) noexcept {
         RECT rect;
         ::GetWindowRect(window, &rect);
@@ -167,15 +173,12 @@ public:
     static inline void SetActive(WindowHandle window) noexcept {
         ::SetActiveWindow(window);
     }
-
     static inline void SetFocus(WindowHandle window) noexcept {
         ::SetFocus(window);
     }
-
     static inline void SetTitle(WindowHandle window, const string &title) noexcept {
         ::SetWindowTextA(window, title.c_str());
     }
-
     static inline void SetTitle(WindowHandle window, const wstring &title) noexcept {
         ::SetWindowTextW(window, title.c_str());
     }
