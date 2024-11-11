@@ -26,13 +26,15 @@ public:
     void Update(DeltaTime delta) { // ToDo: Works everywhere, but eats the performance...
         const float cameraSpeed = 0.003f;
 
-        if (Input::GetKeyState(KeyCode::A)) { Pan(glm::vec2(2.0, 0.0f) * cameraSpeed); }
-        if (Input::GetKeyState(KeyCode::W)) { Pan(glm::vec2(0.0, 2.0f) * cameraSpeed); }
-        if (Input::GetKeyState(KeyCode::D)) { Pan(glm::vec2(-2.0, 0.0f) * cameraSpeed); }
-        if (Input::GetKeyState(KeyCode::S)) { Pan(glm::vec2(0.0, -2.0f) * cameraSpeed); }
+        if (Input::GetKeyState(KeyCode::Q)) { Zoom(2.0f * cameraSpeed * 4); }
+        if (Input::GetKeyState(KeyCode::E)) { Zoom(-2.0f * cameraSpeed * 4); }
+        if (Input::GetKeyState(KeyCode::A)) { Pan(glm::vec2(2.0, 0.0f) * cameraSpeed * 4); }
+        if (Input::GetKeyState(KeyCode::W)) { Pan(glm::vec2(0.0, 2.0f) * cameraSpeed * 4); }
+        if (Input::GetKeyState(KeyCode::D)) { Pan(glm::vec2(-2.0, 0.0f) * cameraSpeed * 4); }
+        if (Input::GetKeyState(KeyCode::S)) { Pan(glm::vec2(0.0, -2.0f) * cameraSpeed * 4); }
 
         auto wheel = Input::GetMouseWheelDelta();
-        // ToDo: Implement the zooming over the mouse wheel
+        if (wheel != 0.0f) Zoom(wheel * cameraSpeed * 4);
 
         bool mouseButtonPressed =
             Input::GetMouseButtonState(MouseButton::Left) ||
@@ -150,7 +152,7 @@ private:
         return 0.92f;
     }
     float ZoomSpeed() const {
-        float speed = std::clamp(0.64f * mDistance, 2.0f, 100.0f);
+        float speed = std::clamp(0.64f * mDistance, 2.0f, 1000.0f);
         return speed;
     }
 

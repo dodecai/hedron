@@ -1,3 +1,3 @@
-﻿export module Vite.Tool;
+﻿export module Vite.Tools;
 
-export import Vite.Tool.Build;
+export import Vite.Tools.Build;

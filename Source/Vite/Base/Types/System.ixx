@@ -1,5 +1,7 @@
 ﻿export module Vite.Type.System;
 
+import Vite.Runtime.Benchmark;
+
 export namespace Hedron {
 
 ///
@@ -14,10 +16,20 @@ public:
 
     /// Methods
 
+    double GetDuration() {
+        return mBenchmark.Duration;
+    }
+
     // Calls the derived class's Update method
     void Update() {
-        static_cast<Derived*>(this)->Update();
+        mBenchmark.Start();
+        static_cast<Derived*>(this)->OnUpdate();
+        mBenchmark.Stop();
     }
+
+private:
+    // Properties
+    Benchmark mBenchmark;
 };
 
 }

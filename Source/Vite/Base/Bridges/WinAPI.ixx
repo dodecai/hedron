@@ -125,6 +125,20 @@ public:
             nullptr
         );
     }
+    [[no_discard]] static inline uint16 Register(const string &name, InstanceHandle instance) noexcept {
+        WNDCLASSA windowClass = {};
+        windowClass.lpfnWndProc = ::DefWindowProcA;
+        windowClass.hInstance = instance;
+        windowClass.lpszClassName = name.c_str();
+        return ::RegisterClassA(&windowClass);
+    }
+    [[no_discard]] static inline uint16 Register(const wstring &name, InstanceHandle instance) noexcept {
+        WNDCLASSW windowClass = {};
+        windowClass.lpfnWndProc = ::DefWindowProcW;
+        windowClass.hInstance = instance;
+        windowClass.lpszClassName = name.c_str();
+        return ::RegisterClassW(&windowClass);
+    }
 
     /// Commands
 

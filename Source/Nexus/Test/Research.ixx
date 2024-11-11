@@ -5,6 +5,17 @@ import Vite.App.Layers;
 
 export namespace Hedron::Test {
 
+
+class BenchmarkTest: public System<BenchmarkTest> {
+public:
+    void OnUpdate() {
+        for (auto i = 0; i < 100; i++) {
+            auto value = i * i;
+        }
+    }
+};
+
+
 ///
 /// @brief Research | Serves as an research facility, to test out the latest features for the Hedron Engine.
 ///
@@ -25,7 +36,11 @@ public:
         Test();
     }
     void Destroy() override {}
-    void Update(DeltaTime deltaTime) override {}
+    void Update(DeltaTime deltaTime) override {
+        BenchmarkTest benchCode;
+        benchCode.Update();
+        LogInfo("Benchmark: {:.6f}ms", benchCode.GetDuration());
+    }
 
     /// Tests
     void Test() {

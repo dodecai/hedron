@@ -20,7 +20,7 @@ enum class Alignment2D: uint8 {
 };
 
 ///
-/// @brief Position2D is a simple position 2D in space
+/// @brief Position2D is a simple position in 2D space
 /// @tparam T  Any arithmetic type
 ///
 template<typename T = float>

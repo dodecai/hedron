@@ -1,10 +1,4 @@
-﻿module;
-
-#define TEST_MESH_RENDERER 1
-#define TEST_SPRITE_RENDERER 0
-#define TEST_UI_RENDERER 0
-
-export module Test.Engine;
+﻿export module Test.Engine;
 
 import Vite.Bridge.GLM;
 import Vite;
@@ -27,6 +21,11 @@ import Vite.Renderer.Texture;
 import Vite.Renderer.Shader;
 
 import Vite.DearImGui.Layer;
+
+// Switches
+constexpr auto TEST_MESH_RENDERER = true;
+constexpr auto TEST_SPRITE_RENDERER = false;
+constexpr auto TEST_UI_RENDERER = false;
 
 export namespace Hedron::Test {
 
@@ -88,26 +87,26 @@ public:
         if (!mUIActive) mDesignerCamera.Update(deltaTime);
 
         // Mesh Renderer (3D)
-        #if TEST_MESH_RENDERER == 1
+        if constexpr (TEST_MESH_RENDERER) {
             mMeshRenderer.Start(mDesignerCamera);
             DrawLevel(deltaTime);
             mMeshRenderer.DrawSkybox();
             mMeshRenderer.Finish();
-        #endif
+        }
     
         // Sprite Renderer (2D)
-        #if TEST_SPRITE_RENDERER == 1
+        if constexpr (TEST_SPRITE_RENDERER) {
             mSpriteRenderer.Start();
             Draw2DLevel(deltaTime);
             mSpriteRenderer.Finish();
-        #endif
+        }
     
         // UI Renderer (2D)
-        #if TEST_UI_RENDERER == 1
+        if constexpr (TEST_UI_RENDERER) {
             mUIRenderer.Start();
             DrawUI(deltaTime);
             mUIRenderer.Finish();
-        #endif
+        }
     }
 
     void UpdateUI() override {
@@ -136,20 +135,20 @@ public:
         static Model window("Assets/Models/Cube/Cube.obj");
         static bool once = true;
         if (once) {
-            // "./Assets/Textures/CheckerBoard.png"
-            // "./Assets/Textures/Grass.png", { .SamplerWrap = TextureWrap::MirrorClamp }
-            // "./Assets/Textures/Matrix.jpg"
+            // "Assets/Textures/CheckerBoard.png"
+            // "Assets/Textures/Grass.png", { .SamplerWrap = TextureWrap::MirrorClamp }
+            // "Assets/Textures/Matrix.jpg"
 
             level.SetDefaultTexture("Assets/Textures/Metal.png");
             cube.SetDefaultTexture("Assets/Textures/Concrete.png", { .SamplerWrap = TextureWrap::Repeat });
             cube2.SetDefaultTexture("Assets/Textures/Wood.png", { .SamplerWrap = TextureWrap::Repeat, .GenerateMips = true, });
             smiley.SetDefaultTexture("Assets/Textures/Smiley.png", { .SamplerWrap = TextureWrap::Clamp });
             sphere.SetDefaultTexture("Assets/Textures/Marble.jpg", { .SamplerWrap = TextureWrap::Clamp, .GenerateMips = true, });
-            window.SetDefaultTexture("Assets/Textures/Window.png", { .SamplerWrap = TextureWrap::Clamp });
+            window.SetDefaultTexture("Assets/Textures/Window.png", { .SamplerWrap = TextureWrap::Clamp, });
             once = false;
         }
         //static Model backpack("Assets/Models/Backpack/Backpack.obj");
-        static Model nanosuit("Assets/Models/Nanosuit/Nanosuit.obj");
+        //static Model nanosuit("Assets/Models/Nanosuit/Nanosuit.obj");
         //static Model sponza("Assets/Models/Sponza/Sponza.obj");
         
         // Draw Lights
@@ -160,7 +159,7 @@ public:
         mMeshRenderer.DrawModel(cube, { { 0.0f, 15.0f, 0.0f } });
         mMeshRenderer.DrawModel(sphere, { { 10.0f, 10.0f, 0.0f } });
         //mMeshRenderer.DrawModel(backpack, { { 7.0f, 2.0f, 9.0f }, { 0.2f, 0.2f, 0.2f } });
-        mMeshRenderer.DrawModel(nanosuit, { { 7.0f, 0.0f, -8.0f }, { 0.2f, 0.2f, 0.2f } });
+        //mMeshRenderer.DrawModel(nanosuit, { { 7.0f, 0.0f, -8.0f }, { 0.2f, 0.2f, 0.2f } });
         //mMeshRenderer.DrawModel(sponza, { { 0.0f, 0.0f, 0.0f }, { 0.1f, 0.1f ,0.1f } });
         
         // Update Objects
@@ -196,7 +195,7 @@ public:
         mMeshRenderer.UpdateStencilBuffer();
         mMeshRenderer.DrawModel(window, { { 0.0f, 1.0f, -9.0f }, { 1.0f, 1.0f, 0.2f } });
         mMeshRenderer.EnableStencilTest();
-        mMeshRenderer.DrawModel(window, { { 0.0f, 1.0f, 9.0f }, { 1.2f, 1.2f, 0.4f } }, true);
+        mMeshRenderer.DrawModel(window, { { 0.0f, 1.0f, -9.0f }, { 1.2f, 1.2f, 0.4f } }, true);
         mMeshRenderer.ResetStencilTest();
     }
 
@@ -340,8 +339,8 @@ public:
     void ToDo() {
         // Model, View, Projection
         //auto orthographic = glm::ortho(0.0f, 1280.0f, 0.0f, 1024.0f, 0.1f, 100.0f);
-        auto model = glm::mat4(1.0f);
-        auto view = glm::mat4(1.0f);
+        //auto model = glm::mat4(1.0f);
+        //auto view = glm::mat4(1.0f);
         //auto projection = glm::perspective(glm::radians(flyCamera.Zoom), 1280.0f / 1024.0f, 0.1f, 100.0f);
         //view = flyCamera.GetViewMatrix();
         ////view = glm::translate(view, glm::vec3(-1.0f, 1.0f, -5.0f));

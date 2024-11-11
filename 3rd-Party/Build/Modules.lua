@@ -177,63 +177,63 @@ end)
 --
 -- @brief Visual Studio: C++ 20 Modules Support
 --
-table.insert(premake.vstudio.vc2010.categories.ClCompile.extensions, ".cppm")
-table.insert(premake.vstudio.vc2010.categories.ClCompile.extensions, ".cxx")
-table.insert(premake.vstudio.vc2010.categories.ClCompile.extensions, ".ixx")
-
-premake.api.register {
-  name = "cppmodules",
-  scope = "project",
-  kind = "boolean",
-}
-
-premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
-	local m = premake.vstudio.vc2010
-	local calls = base(prj)
-
-	if premake.project.iscpp(prj) then
-		if prj.cppmodules then
-			table.insertafter(calls, premake.xmlDeclaration,  function()
-				premake.w('<EnableModules>true</EnableModules>')
-			end)
-		else
-			table.insertafter(calls, premake.xmlDeclaration,  function()
-				premake.w('<EnableModules>false</EnableModules>')
-			end)
-		end
-		base(prj)
-	end
-	return calls
-end)
+--table.insert(premake.vstudio.vc2010.categories.ClCompile.extensions, ".cppm")
+--table.insert(premake.vstudio.vc2010.categories.ClCompile.extensions, ".cxx")
+--table.insert(premake.vstudio.vc2010.categories.ClCompile.extensions, ".ixx")
+--
+--premake.api.register {
+--  name = "cppmodules",
+--  scope = "project",
+--  kind = "boolean",
+--}
+--
+--premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
+--	local m = premake.vstudio.vc2010
+--	local calls = base(prj)
+--
+--	if premake.project.iscpp(prj) then
+--		if prj.cppmodules then
+--			table.insertafter(calls, premake.xmlDeclaration,  function()
+--				premake.w('<EnableModules>true</EnableModules>')
+--			end)
+--		else
+--			table.insertafter(calls, premake.xmlDeclaration,  function()
+--				premake.w('<EnableModules>false</EnableModules>')
+--			end)
+--		end
+--		base(prj)
+--	end
+--	return calls
+--end)
 
 
 --
 -- @brief Visual Studio: C++ 23 Build STL Modules
 --
-premake.api.register {
-  name = "buildstlmodules",
-  scope = "project",
-  kind = "boolean",
-}
-
-premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
-	local m = premake.vstudio.vc2010
-	local calls = base(prj)
-
-	if premake.project.iscpp(prj) then
-		if prj.cppmodules then
-			table.insertafter(calls, premake.xmlDeclaration,  function()
-				premake.w('<BuildStlModules>true</BuildStlModules>')
-			end)
-		else
-			table.insertafter(calls, premake.xmlDeclaration,  function()
-				premake.w('<BuildStlModules>false</BuildStlModules>')
-			end)
-		end
-		base(prj)
-	end
-	return calls
-end)
+--premake.api.register {
+--  name = "buildstlmodules",
+--  scope = "project",
+--  kind = "boolean",
+--}
+--
+--premake.override(premake.vstudio.vc2010.elements, "clCompile", function(base, prj)
+--	local m = premake.vstudio.vc2010
+--	local calls = base(prj)
+--
+--	if premake.project.iscpp(prj) then
+--		if prj.cppmodules then
+--			table.insertafter(calls, premake.xmlDeclaration,  function()
+--				premake.w('<BuildStlModules>true</BuildStlModules>')
+--			end)
+--		else
+--			table.insertafter(calls, premake.xmlDeclaration,  function()
+--				premake.w('<BuildStlModules>false</BuildStlModules>')
+--			end)
+--		end
+--		base(prj)
+--	end
+--	return calls
+--end)
 
 
 --

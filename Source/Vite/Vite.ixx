@@ -13,7 +13,7 @@ export import Vite.Core;
 export import Vite.Engine;
 
 /// Tools
-export import Vite.Tool;
+export import Vite.Tools;
 
 /// Information
 export namespace Hedron::Debug {

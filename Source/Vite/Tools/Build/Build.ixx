@@ -1,3 +1,3 @@
-﻿export module Vite.Tool.Build;
+﻿export module Vite.Tools.Build;
 
 export namespace Hedron {}

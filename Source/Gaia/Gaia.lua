@@ -5,8 +5,7 @@
     conformancemode "true"
     cdialect "C17"
     cppdialect "C++latest"
-    cppmodules "true"
-    buildstlmodules "false"
+    buildstlmodules "On"
     disablewarnings { "4189", "4100" }
     externalanglebrackets "on"
     externalwarnings "Off"
@@ -16,6 +15,7 @@
     toolset "msc"
     warnings "Extra"
     
+    debugdir "%{wks.location}/Build/%{cfg.buildcfg}"
     dependson { "Vite" }
     entrypoint "mainCRTStartup"
     files { "**.h", "**.cpp", "**.cppm", "**.cxx", "**.inl", "**.ixx", "**.lua" }

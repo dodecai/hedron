@@ -1,7 +1,7 @@
 ﻿export module Test.Tool;
 
 import Vite.Core;
-import Vite.Tool;
+import Vite.Tools;
 import Vite.App.Layers;
 
 export namespace Hedron::Test {

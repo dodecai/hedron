@@ -2,8 +2,6 @@
 import <Vite/EntryPoint.h>;
 
 import Vite;
-import Vite.Util.ThreadPool;
-
 import Test.Base;
 import Test.Core;
 import Test.Engine;
@@ -11,11 +9,11 @@ import Test.Research;
 import Test.Tool;
 
 // Switches
-#define BASE_TESTS
-#define CORE_TESTS
-#define ENGINE_TESTS
-#define RESEARCH_TESTS
-#define TOOL_TESTS
+constexpr auto BASE_TESTS = false;
+constexpr auto CORE_TESTS = false;
+constexpr auto ENGINE_TESTS = true;
+constexpr auto RESEARCH_TESTS = false;
+constexpr auto TOOL_TESTS = false;
 
 namespace Hedron {
 
@@ -31,33 +29,16 @@ public:
 
     /// Methods
     void Create() override {
-        Debug::DisplayCompileInformation();
+        //Debug::DisplayCompileInformation();
 
-
-        auto nothing = true;
-        #ifdef BASE_TESTS
-            PushLayer(new Test::Base());
-        #endif
-        #ifdef CORE_TESTS
-            PushLayer(new Test::Core());
-        #endif
-        #ifdef ENGINE_TESTS
-            PushLayer(new Test::Engine());
-        #endif
-        #ifdef RESEARCH_TESTS
-            PushLayer(new Test::Research());
-        #endif
-        #ifdef TOOL_TESTS
-            PushLayer(new Test::Tool());
-        #endif
+        if constexpr (BASE_TESTS) PushLayer(new Test::Base());
+        if constexpr (CORE_TESTS) PushLayer(new Test::Core());
+        if constexpr (ENGINE_TESTS) PushLayer(new Test::Engine());
+        if constexpr (RESEARCH_TESTS) PushLayer(new Test::Research());
+        if constexpr (TOOL_TESTS) PushLayer(new Test::Tool());
     }
-	void Destroy() override {
-    }
-	void Update(DeltaTime deltaTime) override {
-        if (Input::GetKeyState(KeyCode::Escape)) {
-            Exit();
-        }
-    }
+	void Destroy() override {}
+	void Update(DeltaTime deltaTime) override {}
 
 private:
     /// Properties

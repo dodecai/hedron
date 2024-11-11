@@ -6,8 +6,7 @@
     conformancemode "true"
     cdialect "C17"
     cppdialect "C++latest"
-    cppmodules "true"
-    buildstlmodules "true"
+    buildstlmodules "on"
     disablewarnings { "4189", "4100" }
     externalanglebrackets "on"
     externalwarnings "Off"

@@ -92,7 +92,6 @@ public:
         mGraphicsContext->Attach();
         mGraphicsContext->Viewport(mCoreWindow->ContentSize());
         mGraphicsContext->VSync(mSettings.VSync);
-        //mGraphicsContext->VSync(false);
         mGraphicsContext->Clear();
 
         // Load Renderer
@@ -196,6 +195,9 @@ public:
     
     // This method is triggered when a keyboard input event occurs.
     virtual void OnInputEvent(const KeyboardEvent &event) {
+        if (event.Key == KeyCode::Escape) {
+            Exit();
+        }
         for (auto *layer : mLayers) {
             if (event.Handled) break;
             layer->OnInputEvent(event);
