@@ -2,6 +2,7 @@
 import <Vite/EntryPoint.h>;
 
 import Vite;
+import Vite.Asset.Manager;
 import Vivid.View.Designer;
 
 namespace Hedron {
@@ -13,7 +14,9 @@ namespace Hedron {
 class Vivid: public Application {
 public:
     /// Default
-    Vivid(const Settings &settings): Application(settings) {}
+    Vivid(const Settings &settings): Application(settings) {
+        AssetManager::Instance().Load();
+    }
     ~Vivid() {}
 
     /// Methods
@@ -23,6 +26,10 @@ public:
         //Aurora::ShowDemo();
         //Aurora::Update(deltaTime);
         //Aurora::Draw();
+
+        UI::HmGui::ShowDemo();
+        UI::HmGui::Update(deltaTime);
+        UI::HmGui::Draw();
     }
 
 private:

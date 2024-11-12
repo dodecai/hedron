@@ -29,7 +29,7 @@ public:
 
     /// Methods
     void Create() override {
-        //Debug::DisplayCompileInformation();
+        //Debug::DisplayLibraryInformation();
 
         if constexpr (BASE_TESTS) PushLayer(new Test::Base());
         if constexpr (CORE_TESTS) PushLayer(new Test::Core());

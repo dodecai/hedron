@@ -10,7 +10,7 @@ export namespace SOLUTION_NAME {
 /// Information
 inline constexpr auto AppCaption        = "Hedron";
 inline constexpr auto AppDescription    = "Game Engine Framework";
-inline constexpr auto AppRelease        = "2024-07-01";
+inline constexpr auto AppRelease        = "2025-07-02";
 inline constexpr auto AppVersion        = "0.0.0";
 inline constexpr auto AppVersionMajor   = 0u;
 inline constexpr auto AppVersionMinor   = 0u;

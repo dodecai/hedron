@@ -5,7 +5,7 @@
 import "Vite/Base/Platform/Detection.h";
 import "Vite/Base/Platform/Support.h";
 
-/// Algebra: Algorithms
+/// Algorithms
 export import Vite.Algorithm;
 
 /// Devices

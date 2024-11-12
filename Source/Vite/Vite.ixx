@@ -19,14 +19,8 @@ export import Vite.Tools;
 export namespace Hedron::Debug {
 
 /// Display compile-time information
-inline void DisplayCompileInformation() {
-    Log("\nApp Information\n\t- Caption:\t{}\n\t- Description:\t{}\n\t- Release:\t{}\n\t- Version:\t{}\n",
-        "?", //AppCaption,
-        "?", //AppDescription,
-        "?", //AppRelease,
-        "?"  //AppVersion
-    );
-    Log("\nLibrary Information\n\t- Caption:\t{}\n\t- Description:\t{}\n\t- Release:\t{}\n\t- Version:\t{}\n",
+inline void DisplayLibraryInformation() {
+    Log("Library Information\n\t- Caption:\t{}\n\t- Description:\t{}\n\t- Release:\t{}\n\t- Version:\t{}\n",
         LibCaption,
         LibDescription,
         LibRelease,

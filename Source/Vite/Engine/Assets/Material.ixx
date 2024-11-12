@@ -77,6 +77,7 @@ struct MaterialData {
 };
 
 // Traditional Material Data (special layout for all graphics APIs)
+
 struct TraditonalMaterialData: public MaterialData {
     glm::vec3 Ambient {};   float AmbientWeight { 0.75f };
     glm::vec3 Diffuse {};   float DiffuseWeight { 0.75f };
