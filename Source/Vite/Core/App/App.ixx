@@ -92,6 +92,7 @@ public:
         mGraphicsContext->Attach();
         mGraphicsContext->Viewport(mCoreWindow->ContentSize());
         mGraphicsContext->VSync(mSettings.VSync);
+        //mGraphicsContext->VSync(false);
         mGraphicsContext->Clear();
 
         // Load Renderer

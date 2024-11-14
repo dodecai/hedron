@@ -17,7 +17,8 @@ enum class BlendMode {
     Additive,
     Alpha,
     Disabled,
-    Multiply,   // PreMultiplyAlpha
+    Multiply,
+    PreMultiplyAlpha,
 };
 
 

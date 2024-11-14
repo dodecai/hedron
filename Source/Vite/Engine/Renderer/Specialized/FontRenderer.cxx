@@ -23,8 +23,9 @@ namespace Hedron {
 template<typename T, typename S, int N, msdf_atlas::GeneratorFunction<S, N> GenFunc>
 static Reference<Texture2D> CreateAndCacheAtlas(
     string_view name,
+    float size,
     const vector<msdf_atlas::GlyphGeometry> &glyphs,
-    [[maybe_unused]] const msdf_atlas::FontGeometry &fontGeometry,
+    const msdf_atlas::FontGeometry &fontGeometry,
     uint32_t width, uint32_t height) {
 
     msdf_atlas::ImmediateAtlasGenerator<S, N, GenFunc, msdf_atlas::BitmapAtlasStorage<T, N>> generator(width, height);
@@ -40,6 +41,7 @@ static Reference<Texture2D> CreateAndCacheAtlas(
 
     TextureProperties properties;
     properties.Format = TextureFormat::RGB8;
+    properties.GenerateMips = false;
     properties.Width = bitmap.width;
     properties.Height = bitmap.height;
     Reference<Texture2D> texture = Texture2D::Create(properties, (void *)bitmap.pixels, bitmap.width * bitmap.height * 3);
@@ -225,10 +227,13 @@ int32_t Font::GetKerning(uint32_t leftGlyph, uint32_t rightGlyph) {
 void Font::Load(string_view path, uint32_t size) {
     auto cache = std::format("Data/Cache/Fonts/{}.bmp", File::GetName(string(path)));
     // ToDo: Finish atlas support
+
     auto test = false;
+    mMSDFData->RequestedFontSize = size;
     if (test && File::Exists(cache)) {
         TextureProperties properties;
         properties.Format = TextureFormat::RGB8;
+        properties.GenerateMips = false;
         mAtlasTexture = Texture2D::Create(properties, cache);
     } else {
         auto *ft = msdfgen::initializeFreetype();
@@ -237,25 +242,43 @@ void Font::Load(string_view path, uint32_t size) {
             return;
         }
 
+        LogInfo("Loading font from {} and generating msdf image ...", path);
+        // Note:: loadFontData loads from memroy buffer
         auto *font = msdfgen::loadFont(ft, path.data());
         if (!font) {
             LogFatal("Failed to load MSDF font data from {}!", path);
             return;
         }
 
-        mMSDFData->FontGeometry = msdf_atlas::FontGeometry(&mMSDFData->Glyphs);
         msdf_atlas::Charset charset {};
         for (auto &range : Font::sCharsetRanges) {
             for (auto current = range.Begin; current <= range.End; current++) {
                 charset.add(current);
             }
         }
-        [[maybe_unused]] auto glyphs = mMSDFData->FontGeometry.loadCharset(font, 1.0, charset);
+        auto fontScale = 8.0;
+        mMSDFData->FontGeometry = msdf_atlas::FontGeometry(&mMSDFData->Glyphs);
+        auto glyphs = mMSDFData->FontGeometry.loadCharset(font, fontScale, charset);
+        LogInfo("Loaded {} glyphs out of {} from font}", glyphs, charset.size());
+        
+        msdf_atlas::TightAtlasPacker packer;
+        //packer.setDimensionsConstraint();
+        packer.setMiterLimit(1.0);
+        packer.setPixelRange(1.0);
+        packer.setScale(fontScale);
+        auto remaining = packer.pack(mMSDFData->Glyphs.data(), static_cast<int>(mMSDFData->Glyphs.size()));
+        if (remaining != 0) {
+            LogFatal("Not all glyphs gould be loaded successfully!");
+        }
+        int width {};
+        int height {};
+        packer.getDimensions(width, height);
+        size = packer.getScale();
 
         // ToDo: Add support for selection MSDF or MTSDF
         auto coloringSeed = 0ull;
         if constexpr (sExpensiveColoring) {
-            msdf_atlas::Workload([&glyphs = mMSDFData->Glyphs, &coloringSeed](int i, [[maybe_unused]] int threadNo) -> bool {
+            msdf_atlas::Workload([&glyphs = mMSDFData->Glyphs, &coloringSeed](int i, int threadNo) -> bool {
                 unsigned long long glyphSeed = (sLCGMultiplier * (coloringSeed ^ i) + sLCGIncrement) * !!coloringSeed;
                 glyphs[i].edgeColoring(msdfgen::edgeColoringInkTrap, sMaxCornerAngle, glyphSeed);
                 return true;
@@ -264,30 +287,28 @@ void Font::Load(string_view path, uint32_t size) {
             unsigned long long glyphSeed = coloringSeed;
             for (msdf_atlas::GlyphGeometry &glyph : mMSDFData->Glyphs) {
                 glyphSeed *= sLCGMultiplier;
-                glyph.edgeColoring(msdfgen::edgeColoringInkTrap, sMaxCornerAngle, glyphSeed);
+                //glyph.edgeColoring(msdfgen::edgeColoringInkTrap, sMaxCornerAngle, glyphSeed);
+                glyph.edgeColoring(msdfgen::edgeColoringSimple, sMaxCornerAngle, glyphSeed);
             }
         }
 
-        size = 24;
-        msdf_atlas::TightAtlasPacker packer;
-        //packer.setDimensionsConstraint(msdf_atlas::TightAtlasPacker::DimensionsConstraint::SQUARE);
-        packer.setMiterLimit(1.0);
-        packer.setPixelRange(2.0);
-        //packer.setPadding(0);
-        packer.setScale(size);
-        packer.pack(mMSDFData->Glyphs.data(), static_cast<int>(mMSDFData->Glyphs.size()));
-
-        int width {};
-        int height {};
-        packer.getDimensions(width, height);
-
         mAtlasTexture = CreateAndCacheAtlas<uint8_t, float, 3, msdf_atlas::msdfGenerator>(
             File::GetName(string(path)),
+            (float)fontScale,
             mMSDFData->Glyphs,
             mMSDFData->FontGeometry,
             width,
             height
         );
+
+        //msdfgen::Shape shape;
+        //if (msdfgen::loadGlyph(shape, font, 'C')) {
+        //    shape.normalize();
+        //    msdfgen::edgeColoringSimple(shape, 3.0);
+        //    msdfgen::Bitmap<float, 3> msdf(32, 32);
+        //    msdfgen::generateMSDF(msdf, shape, 4.0, 1.0, msdfgen::Vector2(4.0, 4.0));
+        //    msdfgen::savePng(msdf, "output.png");
+        //}
 
         msdfgen::destroyFont(font);
         msdfgen::deinitializeFreetype(ft);

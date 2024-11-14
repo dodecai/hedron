@@ -23,13 +23,9 @@ public:
 	void Create() override {}
 	void Destroy() override {}
 	void Update(DeltaTime deltaTime) override {
-        //Aurora::ShowDemo();
-        //Aurora::Update(deltaTime);
-        //Aurora::Draw();
-
-        UI::HmGui::ShowDemo();
-        UI::HmGui::Update(deltaTime);
-        UI::HmGui::Draw();
+        UI::Aurora::ShowDemo();
+        UI::Aurora::Update(deltaTime);
+        UI::Aurora::Draw();
     }
 
 private:

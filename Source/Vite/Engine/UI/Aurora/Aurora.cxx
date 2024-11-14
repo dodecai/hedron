@@ -21,12 +21,12 @@ void Container::Draw() {
             case ComponentType::Window: {
                 if constexpr (EnableWindowDragging) {
                     if (element->Focused) {
-                        if (HmGui::sInputState.MouseClicked) HmGui::GetRoot()->MoveToTop(element->ID);
-                        if (HmGui::sInputState.Dragging) {
-                            element->Offset = HmGui::sInputState.DragCurrentPosition;
+                        if (Aurora::sInputState.MouseClicked) Aurora::GetRoot()->MoveToTop(element->ID);
+                        if (Aurora::sInputState.Dragging) {
+                            element->Offset = Aurora::sInputState.DragCurrentPosition;
                             element->As<Container>()->ComputePosition();
 
-                        } else if (!HmGui::sInputState.Dragging) {
+                        } else if (!Aurora::sInputState.Dragging) {
                             element->Position.X += element->Offset.X;
                             element->Position.Y += element->Offset.Y;
                             element->Offset = {};
@@ -39,7 +39,7 @@ void Container::Draw() {
                 auto position = element->Position;
                 position.X += element->Offset.X;
                 position.Y += element->Offset.Y;
-                UIRenderer::AddPanel(position, element->Size, color, 8.0f, element->FrameOpacity);
+                UIRenderer::DrawPanel(position, element->Size, color, 8.0f, element->FrameOpacity);
                 element->As<Container>()->Draw();
                 break;
             }
@@ -61,13 +61,13 @@ void Container::Draw() {
                     float handleSize = element->Size.Height * (element->Size.Height / element->OriginalSize.Height);
                     float handlePos = std::lerp(0.0f, element->Size.Height - handleSize, element->Offset.Y / maxScroll);
                     position.Y -= handlePos;
-                    //UIRenderer::AddRectangle(position, { 6.0, handlePos }, {});
-                    UIRenderer::AddRectangle(position, { 6.0, handleSize }, HmGui::GetStyle().ColorFrame);
+                    //UIRenderer::DrawRectangle(position, { 6.0, handlePos }, {});
+                    UIRenderer::DrawRectangle(position, { 6.0, handleSize }, Aurora::GetStyle().ColorFrame);
                 } else {
-                    UIRenderer::AddRectangle(position, { 6.0f, 16.0f }, {});
+                    UIRenderer::DrawRectangle(position, { 6.0f, 16.0f }, {});
                 }
                 if constexpr (DrawLayoutFrames) {
-                    UIRenderer::AddBorder(1.0f, element->Position, element->Size, HmGui::GetStyle().ColorDebugBorder);
+                    UIRenderer::DrawBorder(1.0f, element->Position, element->Size, Aurora::GetStyle().ColorDebugBorder);
                 }
                 element->As<Container>()->Draw();
                 break;
@@ -76,7 +76,7 @@ void Container::Draw() {
             case ComponentType::Panel: [[fallthrough]];
             case ComponentType::Container: {
                 if constexpr (DrawLayoutFrames) {
-                    UIRenderer::AddBorder(1.0f, element->Position, element->Size, HmGui::GetStyle().ColorDebugBorder);
+                    UIRenderer::DrawBorder(1.0f, element->Position, element->Size, Aurora::GetStyle().ColorDebugBorder);
                 }
                 element->As<Container>()->Draw();
                 break;
@@ -98,66 +98,66 @@ void Container::Draw() {
 
 void Button::Draw() {
     if (Focused) {
-        if (HmGui::sInputState.MouseClicked) if (Click) Click();
+        if (Aurora::sInputState.MouseClicked) if (Click) Click();
 
-        auto &&color = HmGui::sInputState.MousePressed ?
-            HmGui::GetStyle().ColorFillPressed :
-            HmGui::GetStyle().ColorFillHovered;
-        UIRenderer::AddPanel(Position, Size, color, 0.0f, 1.0f);
+        auto &&color = Aurora::sInputState.MousePressed ?
+            Aurora::GetStyle().ColorFillPressed :
+            Aurora::GetStyle().ColorFillHovered;
+        UIRenderer::DrawPanel(Position, Size, color, 0.0f, 1.0f);
     } else {
-        auto &&color = HmGui::GetStyle().ColorFillNone;
-        UIRenderer::AddPanel(Position, Size, color, 0.0f, FrameOpacity);
+        auto &&color = Aurora::GetStyle().ColorFillNone;
+        UIRenderer::DrawPanel(Position, Size, color, 0.0f, FrameOpacity);
     }
 
     if constexpr (DrawLayoutFrames) {
-        UIRenderer::AddBorder(1.0f, Position, Size, HmGui::GetStyle().ColorDebugBorder);
+        UIRenderer::DrawBorder(1.0f, Position, Size, Aurora::GetStyle().ColorDebugBorder);
     }
 
     Position2D position = {
         (Position.X + 8.0f + (Size.Width - MinSize.Width) * Alignment.X),
         (Position.Y + 4.0f + (Size.Height) * Alignment.Y),
     };
-    UIRenderer::AddText(position, Text, Color, Font);
+    UIRenderer::DrawText(position, Text, Color, Font);
 }
 
 void CheckBox::Draw() {
     if (Focused) {
-        if (HmGui::sInputState.MouseClicked) Value = !Value;
+        if (Aurora::sInputState.MouseClicked) Value = !Value;
 
-        auto &&color = HmGui::GetStyle().ColorFocusUnderline;
-        UIRenderer::AddRectangle(Position, Size, color);
+        auto &&color = Aurora::GetStyle().ColorFocusUnderline;
+        UIRenderer::DrawRectangle(Position, Size, color);
     }
 
     if constexpr (DrawLayoutFrames) {
-        UIRenderer::AddBorder(1.0f, Position, Size, HmGui::GetStyle().ColorDebugBorder);
+        UIRenderer::DrawBorder(1.0f, Position, Size, Aurora::GetStyle().ColorDebugBorder);
     }
 
     // CheckBox Label
     Position2D position = { Position.X + 8.0f, (Position.Y + MinSize.Height / 2 + 4.0f) };
-    UIRenderer::AddText(position, Text, Color, Font);
+    UIRenderer::DrawText(position, Text, Color, Font);
 
     // CheckBox Outer Rectangle
     position.X = Position.X + Size.Width - OutherSize.Width - 4.0f;
     position.Y -= 12.0f;
-    UIRenderer::AddRectangle(position, OutherSize, OutherColor);
+    UIRenderer::DrawRectangle(position, OutherSize, OutherColor);
 
     // CheckBox Inner Rectangle
     position.X += 3.0f;
     position.Y += 3.0f;
     if (Value) {
-        UIRenderer::AddRectangle(position, InnerSize, InnerColor);
+        UIRenderer::DrawRectangle(position, InnerSize, InnerColor);
     } else {
-        UIRenderer::AddRectangle(position, InnerSize, {});
+        UIRenderer::DrawRectangle(position, InnerSize, {});
     }
 }
 
 void InputBox::Draw() {
     if (Focused) {
-        if (HmGui::sInputState.MouseClicked) Active = !Active;
+        if (Aurora::sInputState.MouseClicked) Active = !Active;
     }
 
-    auto &&bgColor = Active ? Focused ? HmGui::GetStyle().ColorFocusUnderline : HmGui::GetStyle().ColorFocusUnderlineActive : HmGui::GetStyle().ColorFillNone;
-    UIRenderer::AddPanel(Position, Size, bgColor, 0.0f, FrameOpacity);
+    auto &&bgColor = Active ? Focused ? Aurora::GetStyle().ColorFocusUnderline : Aurora::GetStyle().ColorFocusUnderlineActive : Aurora::GetStyle().ColorFillNone;
+    UIRenderer::DrawPanel(Position, Size, bgColor, 0.0f, FrameOpacity);
 
     static bool once = true;
     if (Active && once) {
@@ -166,46 +166,46 @@ void InputBox::Draw() {
     }
 
     if constexpr (DrawLayoutFrames) {
-        UIRenderer::AddBorder(1.0f, Position, Size, HmGui::GetStyle().ColorDebugBorder);
+        UIRenderer::DrawBorder(1.0f, Position, Size, Aurora::GetStyle().ColorDebugBorder);
     }
 
     Position2D textPos = {
         Position.X + 8.0f,
         Position.Y + MinSize.Height / 2 + 4.0f,
     };
-    UIRenderer::AddText(textPos, Text, Color, Font);
+    UIRenderer::DrawText(textPos, Text, Color, Font);
 
     if (Active) {
         // TextWidth...
-        //UIRenderer::AddLine({ Position.X +textWidth, Position.Y }, { Position.X, Position.Y + Size.Height}, HmGui::GetStyle().ColorFillHovered);
+        //UIRenderer::DrawLine({ Position.X +textWidth, Position.Y }, { Position.X, Position.Y + Size.Height}, Aurora::GetStyle().ColorFillHovered);
     }
 }
 
 void Image::Draw() {
-    UIRenderer::AddImage(Position, Size, Data);
+    UIRenderer::DrawImage(Position, Size, Data);
 }
 
 void Label::Draw() {
     if constexpr (DrawLayoutFrames) {
-        UIRenderer::AddBorder(1.0f, Position, Size, HmGui::GetStyle().ColorDebugBorder);
+        UIRenderer::DrawBorder(1.0f, Position, Size, Aurora::GetStyle().ColorDebugBorder);
     }
 
     Position2D position = { Position.X, Position.Y + MinSize.Height };
-    UIRenderer::AddText(position, Text, Color, Font);
+    UIRenderer::DrawText(position, Text, Color, Font);
 }
 
 void Selection::Draw() {
     // Draw the selection area
     if (Focused) {
-        if (HmGui::sInputState.MouseClicked) if (Click) Click();
+        if (Aurora::sInputState.MouseClicked) if (Click) Click();
 
-        auto &&color = HmGui::sInputState.MousePressed ?
-            HmGui::GetStyle().ColorFillPressed :
-            HmGui::GetStyle().ColorFillHovered;
-        UIRenderer::AddPanel(Position, Size, color, 0.0f, 1.0f);
+        auto &&color = Aurora::sInputState.MousePressed ?
+            Aurora::GetStyle().ColorFillPressed :
+            Aurora::GetStyle().ColorFillHovered;
+        UIRenderer::DrawPanel(Position, Size, color, 0.0f, 1.0f);
     } else {
-        auto &&color = HmGui::GetStyle().ColorFillNone;
-        UIRenderer::AddPanel(Position, Size, color, 0.0f, FrameOpacity);
+        auto &&color = Aurora::GetStyle().ColorFillNone;
+        UIRenderer::DrawPanel(Position, Size, color, 0.0f, FrameOpacity);
     }
     auto bgColor = Hedron::Color(0.15f, 0.15f, 0.15f, 1.0f);
 
@@ -214,14 +214,14 @@ void Selection::Draw() {
         Position.X + 8.0f,
         Position.Y + Size.Height / 2 + 4.0f,
     };
-    UIRenderer::AddText(textPos, Text, Color, Font);
-    //UIRenderer::AddText(textPos, Options[SelectedIndex], Color(1.0f, 1.0f, 1.0f, 1.0f), nullptr);
+    UIRenderer::DrawText(textPos, Text, Color, Font);
+    //UIRenderer::DrawText(textPos, Options[SelectedIndex], Color(1.0f, 1.0f, 1.0f, 1.0f), nullptr);
 
     // Simulate dropdown functionality
     auto buttonPosition = Position2D(Size.Width, 0.0f);
     auto positionX = Position.X + buttonPosition.X;
     auto positionY = Position.Y + buttonPosition.Y;
-    UIRenderer::AddPanel({ positionX, positionY }, { 20.0f, Size.Height }, bgColor, 0.0f, FrameOpacity);
+    UIRenderer::DrawPanel({ positionX, positionY }, { 20.0f, Size.Height }, bgColor, 0.0f, FrameOpacity);
     //, "▼"
     /*if (U) {
         ShowDropdown = !ShowDropdown;
@@ -242,7 +242,7 @@ void Selection::DrawDropdown() {
     //        Position.Y + Size.Height + optionHeight * static_cast<float>(i),
     //    };
     //    const bool selected = (i == SelectedIndex);
-    //    //const bool clicked = UIRenderer::AddButton(optionPos, { Size.Width, optionHeight }, Options[i], selected);
+    //    //const bool clicked = UIRenderer::DrawButton(optionPos, { Size.Width, optionHeight }, Options[i], selected);
     //    if (clicked) {
     //        SelectedIndex = i;
     //        ShowDropdown = false;
@@ -266,10 +266,10 @@ void Seperator::Draw() {
 void Slider::Draw() {
     // Track
     const Hedron::Color trackColor = Hedron::Color(0.2f, 0.2f, 0.2f, 1.0f);
-    UIRenderer::AddRectangle(Position, Size, trackColor);
+    UIRenderer::DrawRectangle(Position, Size, trackColor);
 
     if constexpr (DrawLayoutFrames) {
-        UIRenderer::AddBorder(1.0f, Position, Size, HmGui::GetStyle().ColorDebugBorder);
+        UIRenderer::DrawBorder(1.0f, Position, Size, Aurora::GetStyle().ColorDebugBorder);
     }
 
     const Position2D handlePosition = {
@@ -278,18 +278,18 @@ void Slider::Draw() {
     };
 
     // Handle
-    if (Focused && HmGui::sInputState.MousePressed) {
-        if (HmGui::sInputState.MousePressed) {
-            const float newHandleX = HmGui::sInputState.LastMousePosition.X - DragOffset;
+    if (Focused && Aurora::sInputState.MousePressed) {
+        if (Aurora::sInputState.MousePressed) {
+            const float newHandleX = Aurora::sInputState.LastMousePosition.X - DragOffset;
             Value = std::clamp((newHandleX - Position.X) / (Size.Width - HandleWidth), 0.0f, 1.0f);
         }
 
-        auto &&color = HmGui::GetStyle().ColorPrimary;
-        UIRenderer::AddRectangle(handlePosition, { HandleWidth, Size.Height }, color);
+        auto &&color = Aurora::GetStyle().ColorPrimary;
+        UIRenderer::DrawRectangle(handlePosition, { HandleWidth, Size.Height }, color);
 
     } else {
-        auto &&color = HmGui::GetStyle().ColorFrame;
-        UIRenderer::AddRectangle(handlePosition, { HandleWidth, Size.Height }, color);
+        auto &&color = Aurora::GetStyle().ColorFrame;
+        UIRenderer::DrawRectangle(handlePosition, { HandleWidth, Size.Height }, color);
     }
 }
 
@@ -299,11 +299,11 @@ void Slider::Draw() {
 
 void ColorPicker::Draw() {
     // Implement the drawing of the color picker
-    auto hovered = Hovered(HmGui::sInputState.LastMousePosition);
+    auto hovered = Hovered(Aurora::sInputState.LastMousePosition);
 
     // Draw the color picker area
     const auto bgColor = Hedron::Color(0.1f, 0.1f, 0.1f, 1.0f);
-    UIRenderer::AddPanel(Position, Size, bgColor, 0.0f, FrameOpacity);
+    UIRenderer::DrawPanel(Position, Size, bgColor, 0.0f, FrameOpacity);
 
     // Simulate color spectrum representation
     for (float y = 0.0f; y < Size.Height; y++) {
@@ -316,7 +316,7 @@ void ColorPicker::Draw() {
                 Position.X + x,
                 Position.Y + y,
             };
-            //UIRenderer::AddPixel(pixelPos, color);
+            //UIRenderer::DrawPixel(pixelPos, color);
         }
     }
 
@@ -326,7 +326,7 @@ void ColorPicker::Draw() {
         Position.Y + Size.Height / 2,
     };
     Hedron::Color selectedColor(1.0f, 1.0f, 1.0f, 1.0f); // Simulated selected color
-    UIRenderer::AddPanel(selectedColorPos, { 30.0f, 30.0f }, selectedColor, 0.0f, 1.0f);
+    UIRenderer::DrawPanel(selectedColorPos, { 30.0f, 30.0f }, selectedColor, 0.0f, 1.0f);
 }
 
 void Table::DrawHeader() {
@@ -335,7 +335,7 @@ void Table::DrawHeader() {
     //    Position.Y + RowHeight / 2,
     //};
     //for (size_t i = 0; i < Header.size(); ++i) {
-    //    UIRenderer::AddText(textPos + Position(ColumnWidths[i] / 2, 0), Header[i], Color(1.0f, 1.0f, 1.0f, 1.0f), nullptr);
+    //    UIRenderer::DrawText(textPos + Position(ColumnWidths[i] / 2, 0), Header[i], Color(1.0f, 1.0f, 1.0f, 1.0f), nullptr);
     //    textPos.X += ColumnWidths[i];
     //}
 }
@@ -347,7 +347,7 @@ void Table::DrawRows() {
     //};
     //for (const auto &row : Data) {
     //    for (size_t i = 0; i < row.size(); ++i) {
-    //        UIRenderer::AddText(textPos + Position(ColumnWidths[i] / 2, 0), row[i], Color(1.0f, 1.0f, 1.0f, 1.0f), nullptr);
+    //        UIRenderer::DrawText(textPos + Position(ColumnWidths[i] / 2, 0), row[i], Color(1.0f, 1.0f, 1.0f, 1.0f), nullptr);
     //        textPos.X += ColumnWidths[i];
     //    }
     //    textPos.X = Position.X;
@@ -357,11 +357,11 @@ void Table::DrawRows() {
 
 void Tree::Draw() {
     // Implement the drawing of the tree
-    auto hovered = Hovered(HmGui::sInputState.LastMousePosition);
+    auto hovered = Hovered(Aurora::sInputState.LastMousePosition);
 
     // Draw the tree area
     const auto bgColor = Hedron::Color(0.15f, 0.15f, 0.15f, 1.0f);
-    UIRenderer::AddPanel(Position, Size, bgColor, 0.0f, FrameOpacity);
+    UIRenderer::DrawPanel(Position, Size, bgColor, 0.0f, FrameOpacity);
 
     // Simulate tree nodes
     DrawTreeNode({ Position.X + 20.0f, Position.Y + 20.0f }, "Node 1");
@@ -373,7 +373,7 @@ void Tree::Draw() {
 void Tree::DrawTreeNode([[maybe_unused]] const Position2D &position, const string_view &text) {
     if (text.empty()) return;
     //// Draw a tree node with expand/collapse functionality
-    //auto hovered = Hovered(HmGui::sLastMousePosition);
+    //auto hovered = Hovered(Aurora::sLastMousePosition);
     //const float nodeWidth = 20.0f;
     //const float nodeHeight = 20.0f;
     //const float textIndent = 25.0f;
@@ -384,7 +384,7 @@ void Tree::DrawTreeNode([[maybe_unused]] const Position2D &position, const strin
     //    position.X - 5.0f,
     //    position.Y + nodeHeight / 2,
     //};
-    //if (UIRenderer::AddButton(buttonPos, { 15.0f, 15.0f }, expanded)) {
+    //if (UIRenderer::DrawButton(buttonPos, { 15.0f, 15.0f }, expanded)) {
     //    expanded = !expanded;
     //}
 
@@ -393,7 +393,7 @@ void Tree::DrawTreeNode([[maybe_unused]] const Position2D &position, const strin
     //    position.X + textIndent,
     //    position.Y + nodeHeight / 2,
     //};
-    //UIRenderer::AddText(textPos, text, Color(1.0f, 1.0f, 1.0f, 1.0f), nullptr);
+    //UIRenderer::DrawText(textPos, text, Color(1.0f, 1.0f, 1.0f, 1.0f), nullptr);
 
     //// Draw child nodes if expanded
     //if (expanded) {

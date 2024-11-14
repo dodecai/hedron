@@ -107,9 +107,10 @@ void GLPipelineState::ResetProperties() {
 void GLPipelineState::UpdateProperties() {
     switch (mProperties.BlendMode) {
         case BlendMode::Additive: { glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ONE); break; }
-        case BlendMode::Alpha:    { glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); break; /* glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA); break;*/ }
+        case BlendMode::Alpha:    { glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); break; }
         case BlendMode::Disabled: { glBlendFunc(GL_ONE, GL_ZERO); break; }
         case BlendMode::Multiply: { glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA); break; }
+        case BlendMode::PreMultiplyAlpha: { glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA); break; }
     }
 
     switch (mProperties.CullMode) {

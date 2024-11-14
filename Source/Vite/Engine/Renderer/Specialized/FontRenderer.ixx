@@ -46,6 +46,7 @@ struct FontData {
 struct MSDFData {
     msdf_atlas::FontGeometry FontGeometry {};
     std::vector<msdf_atlas::GlyphGeometry> Glyphs {};
+    size_t RequestedFontSize;
 };
 
 

@@ -330,7 +330,11 @@ public:
 
     #pragma region UI Renderer
 
-    void DrawUI(DeltaTime deltaTime) {}
+    void DrawUI(DeltaTime deltaTime) {
+        UI::Aurora::ShowDemo();
+        UI::Aurora::Update(deltaTime);
+        UI::Aurora::Draw();
+    }
 
     #pragma endregion
 
