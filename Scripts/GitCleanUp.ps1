@@ -1,8 +1,7 @@
-# Define paths to delete
+﻿# Define paths to delete
   $pathsToDelete = @(
-    "Assets/Models/Sponza",
-    "test",
-    "3rd-Party/LibPHX/ext/lib/win64"
+    "a",
+    "b",
   )
 
 # Run git filter-repo to delete paths

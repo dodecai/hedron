@@ -1,4 +1,4 @@
-# Get all object-hashes and paths
+﻿# Get all object-hashes and paths
   $objects = git rev-list --objects --all | Out-String -Stream
 
 # Use batch-check to get all sizes in a row
@@ -16,7 +16,7 @@
     $size = $sizeInfo[2] -as [int]
     [PSCustomObject]@{ Hash = $hash; Path = $path; Size = $size }
     $index++
-  } | Sort-Object Size -Descending | Select-Object -First 70
+  } | Sort-Object Size -Descending | Select-Object -First 32
 
 # Output
   $combined | Format-Table -AutoSize
