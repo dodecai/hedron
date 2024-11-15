@@ -5,8 +5,10 @@
   )
 
 # Run git filter-repo to delete paths
-  python git-filter-repo --path "${($pathsToDelete -join ' ')}" --invert-paths
+  for ($object in $objects) {
+    git filter-repo --path $object --invert-paths
+  }
 
 # Repack the repository and prune unreachable objects
-  git reflog expire --expire=now --all
-  git gc --prune=now --aggressive
+  #git reflog expire --expire=now --all
+  #git gc --prune=now --aggressive

@@ -25,7 +25,7 @@
     }
 
     $index++
-  } | Sort-Object Size -Descending | Select-Object -First 32
+  } | Sort-Object Size -Descending | Select-Object -First 128
 
 # Output
   $combined | Format-Table -AutoSize
