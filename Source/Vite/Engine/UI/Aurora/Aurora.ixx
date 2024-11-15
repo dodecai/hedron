@@ -176,7 +176,7 @@ private:
         mViewport = Viewport::Create({ 0, 0, 1280, 1024 });
 
         mFontExo2Bold = CreateScope<Font>("Exo2-Bold", 30);
-        mFontFiraMono = CreateScope<Font>("FiraMono", 10);
+        mFontFiraMono = CreateScope<Font>("FiraMono-Regular", 10);
         mFontRajdhani = CreateScope<Font>("Rajdhani-Regular", 18);
     };
     ~Aurora() = default;
@@ -303,9 +303,9 @@ public:
         ///
 
         // Background
-        auto image = Aurora::GetRoot()->CreateImage("Assets/Textures/Wallpaper.jpg");
+        //auto image = Aurora::GetRoot()->CreateImage("Assets/Textures/Wallpaper.jpg");
         //auto image = HmGui::GetRoot()->CreateImage("Data/Cache/Fonts/Rajdhani.bmp");
-        image->Interactive = false;
+        //image->Interactive = false;
 
         //
         // Simple Window Test

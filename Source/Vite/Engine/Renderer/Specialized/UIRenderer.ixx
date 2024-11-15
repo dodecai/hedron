@@ -397,20 +397,18 @@ public: // Methods
             static size_t once = 0;
             if (once <= 4) {
                 LogInfo(R"(
-    Predefined      | Calculated
-    Position: {}:{} | {}:{}
-    Size:           | {}:{}
-    QuadMax:        | {}:{}
-    QuadMin:        | {}:{}
-    TexCoordMax:    | {}:{}
-    TexCoordMin:    | {}:{}
+    Character: '{}'
+    Predefined          | Calculated
+    Position: {}:{}     | {}:{}
+    QuadMin:            | {}:{}
+    QuadMax:            | {}:{}
+    Size:               | {}:{}
                   )",
+                  character,
                   x, y, nativePosition.x, nativePosition.y,
-                  nativeSize.x, nativeSize.y,
-                  quadMax.x, quadMax.y,
                   quadMin.x, quadMin.y,
-                  texCoordMax.x, texCoordMax.y,
-                  texCoordMin.x, texCoordMin.y
+                  quadMax.x, quadMax.y,
+                  nativeSize.x, nativeSize.y
                 );
                 once++;
             }

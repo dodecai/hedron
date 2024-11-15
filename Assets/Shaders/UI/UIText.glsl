@@ -38,7 +38,7 @@ layout(location = 0) out vec4 oColor;
 layout(binding = 0) uniform sampler2D uTextures[32];
 
 float ScreenPixelRange() {
-	const float pxRange = 1.0; // set to distance field's pixel range
+    const float pxRange = 2.0; // set to distance field's pixel range
     //vec2 unitRange = vec2(pxRange) / vec2(textureSize(uFontAtlas, 0));
     vec2 unitRange = vec2(pxRange) / vec2(textureSize(uTextures[int(vTexIndex)], 0));
     vec2 screenTexSize = vec2(1.0) / fwidth(vTexCoord);

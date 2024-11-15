@@ -48,6 +48,28 @@ static Reference<Texture2D> CreateAndCacheAtlas(
     return texture;
 }
 
+static msdfgen::FontHandle *loadVarFont(msdfgen::FreetypeHandle *library, const char *filename) {
+    std::string buffer;
+    while (*filename && *filename != '?') buffer.push_back(*filename++);
+    msdfgen::FontHandle *font = msdfgen::loadFont(library, buffer.c_str());
+    if (font && *filename++ == '?') {
+        do {
+            buffer.clear();
+            while (*filename && *filename != '=')
+                buffer.push_back(*filename++);
+            if (*filename == '=') {
+                double value = 0;
+                int skip = 0;
+                if (sscanf(++filename, "%lf%n", &value, &skip) == 1) {
+                    msdfgen::setFontVariationAxis(library, font, buffer.c_str(), value);
+                    filename += skip;
+                }
+            }
+        } while (*filename++ == '&');
+    }
+    return font;
+}
+
 inline uint32_t DecodeUtf8(string_view::iterator &begin, string_view::iterator end) {
     unsigned char byte = *begin;
     uint32_t codepoint = 0;
@@ -244,28 +266,34 @@ void Font::Load(string_view path, uint32_t size) {
 
         LogInfo("Loading font from {} and generating msdf image ...", path);
         // Note:: loadFontData loads from memroy buffer
-        auto *font = msdfgen::loadFont(ft, path.data());
+        auto *font = mMSDFData->Variable ? loadVarFont(ft, path.data()) : msdfgen::loadFont(ft, path.data());
         if (!font) {
             LogFatal("Failed to load MSDF font data from {}!", path);
             return;
         }
 
         msdf_atlas::Charset charset {};
+        auto test = msdf_atlas::Charset::ASCII;
         for (auto &range : Font::sCharsetRanges) {
             for (auto current = range.Begin; current <= range.End; current++) {
                 charset.add(current);
             }
         }
-        auto fontScale = 8.0;
+        auto fontScale = 64.0;
         mMSDFData->FontGeometry = msdf_atlas::FontGeometry(&mMSDFData->Glyphs);
         auto glyphs = mMSDFData->FontGeometry.loadCharset(font, fontScale, charset);
         LogInfo("Loaded {} glyphs out of {} from font}", glyphs, charset.size());
-        
+
+        for (auto &glyph : mMSDFData->Glyphs) {
+            msdfgen::Shape &shape = const_cast<msdfgen::Shape &>(glyph.getShape());
+            shape.inverseYAxis = true;
+        }
+
         msdf_atlas::TightAtlasPacker packer;
-        //packer.setDimensionsConstraint();
+        packer.setDimensionsConstraint(msdf_atlas::DimensionsConstraint::NONE);
         packer.setMiterLimit(1.0);
-        packer.setPixelRange(1.0);
-        packer.setScale(fontScale);
+        packer.setPixelRange(2.0);
+        //packer.setScale(fontScale);
         auto remaining = packer.pack(mMSDFData->Glyphs.data(), static_cast<int>(mMSDFData->Glyphs.size()));
         if (remaining != 0) {
             LogFatal("Not all glyphs gould be loaded successfully!");
@@ -300,15 +328,6 @@ void Font::Load(string_view path, uint32_t size) {
             width,
             height
         );
-
-        //msdfgen::Shape shape;
-        //if (msdfgen::loadGlyph(shape, font, 'C')) {
-        //    shape.normalize();
-        //    msdfgen::edgeColoringSimple(shape, 3.0);
-        //    msdfgen::Bitmap<float, 3> msdf(32, 32);
-        //    msdfgen::generateMSDF(msdf, shape, 4.0, 1.0, msdfgen::Vector2(4.0, 4.0));
-        //    msdfgen::savePng(msdf, "output.png");
-        //}
 
         msdfgen::destroyFont(font);
         msdfgen::deinitializeFreetype(ft);

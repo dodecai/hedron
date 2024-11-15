@@ -47,6 +47,7 @@ struct MSDFData {
     msdf_atlas::FontGeometry FontGeometry {};
     std::vector<msdf_atlas::GlyphGeometry> Glyphs {};
     size_t RequestedFontSize;
+    bool Variable = false;
 };
 
 
@@ -106,7 +107,7 @@ public:
 
 private:
     inline static constexpr CharsetRange sCharsetRanges[] = {
-        { 0x0020, 0x00ff }
+        { 0x20, 0x7f }
     };
 };
 

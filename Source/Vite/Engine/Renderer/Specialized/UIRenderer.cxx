@@ -212,10 +212,10 @@ void UIRenderer::DrawText(const glm::vec3 &position, const glm::vec2 &quadMin, c
 
     float textureIndex = 0.0f;
     const glm::vec2 textureCoords[] = {
-        { textureCoordinateMin.x, textureCoordinateMax.y },
-        { textureCoordinateMax.x, textureCoordinateMax.y },
-        { textureCoordinateMax.x, textureCoordinateMin.y },
         { textureCoordinateMin.x, textureCoordinateMin.y },
+        { textureCoordinateMax.x, textureCoordinateMin.y },
+        { textureCoordinateMax.x, textureCoordinateMax.y },
+        { textureCoordinateMin.x, textureCoordinateMax.y },
     };
     for (uint32_t i = 1; i < SRenderData.TextTextureSlotIndex; i++) {
         if (*SRenderData.TextTextureSlots[i].get() == *texture.get()) {

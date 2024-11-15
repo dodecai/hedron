@@ -103,9 +103,9 @@ public:
     
         // UI Renderer (2D)
         if constexpr (TEST_UI_RENDERER) {
-            mUIRenderer.Start();
+            //mUIRenderer.Start();
             DrawUI(deltaTime);
-            mUIRenderer.Finish();
+            //mUIRenderer.Finish();
         }
     }
 
@@ -136,15 +136,13 @@ public:
         static bool once = true;
         if (once) {
             // "Assets/Textures/CheckerBoard.png"
-            // "Assets/Textures/Grass.png", { .SamplerWrap = TextureWrap::MirrorClamp }
-            // "Assets/Textures/Matrix.jpg"
 
-            level.SetDefaultTexture("Assets/Textures/Metal.png");
-            cube.SetDefaultTexture("Assets/Textures/Concrete.png", { .SamplerWrap = TextureWrap::Repeat });
-            cube2.SetDefaultTexture("Assets/Textures/Wood.png", { .SamplerWrap = TextureWrap::Repeat, .GenerateMips = true, });
-            smiley.SetDefaultTexture("Assets/Textures/Smiley.png", { .SamplerWrap = TextureWrap::Clamp });
-            sphere.SetDefaultTexture("Assets/Textures/Marble.jpg", { .SamplerWrap = TextureWrap::Clamp, .GenerateMips = true, });
-            window.SetDefaultTexture("Assets/Textures/Window.png", { .SamplerWrap = TextureWrap::Clamp, });
+            level.SetDefaultTexture("Assets/Textures/Traditional/Debug.png"); // Metal
+            cube.SetDefaultTexture("Assets/Textures/Traditional/Debug.png", { .SamplerWrap = TextureWrap::Repeat }); // Concrete
+            cube2.SetDefaultTexture("Assets/Textures/Traditional/Debug.png", { .SamplerWrap = TextureWrap::Repeat, .GenerateMips = true, }); // Wood
+            smiley.SetDefaultTexture("Assets/Textures/Traditional/Debug.png", { .SamplerWrap = TextureWrap::Clamp }); // Glass
+            sphere.SetDefaultTexture("Assets/Textures/Traditional/Debug.png", { .SamplerWrap = TextureWrap::Clamp, .GenerateMips = true, }); // Marble
+            window.SetDefaultTexture("Assets/Textures/Traditional/Debug.png", { .SamplerWrap = TextureWrap::Clamp, }); // Glass
             once = false;
         }
         //static Model backpack("Assets/Models/Backpack/Backpack.obj");
@@ -373,7 +371,7 @@ private:
     DesignerCamera mDesignerCamera;
     MeshRenderer mMeshRenderer;
     SpriteRenderer mSpriteRenderer;
-    UIRenderer mUIRenderer;
+    //UIRenderer mUIRenderer;
 
     // Point Light Position
     glm::vec3 mLightPosition {};
