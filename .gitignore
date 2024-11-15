@@ -1,22 +1,28 @@
-﻿# 3rd-Party
-/3rd-Party/**/Assets
-/Assets/Models/Backpack
+﻿# 3rd-Party Directories
+/3rd-Party/LibPHX/Assets
+/3rd-Party/LibPHX/Ext
 /Assets/Models/Nanosuit
 /Assets/Models/Sponza
 
-# Build
+# Build Directories
 /[Bb]uild/
 /[Cc]ache/
 
-# Directories
-.vs/
-.vscode/
-ToDo/
-
-# Files
-*.drawio.bkp
-*.log
+# Development Files
+*.blend
 *.sln
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.user
+*.xcf
+
+# Development Directories
+.vs/
+.vscode/
+
+# Miscelaneous Directories
+ToDo/
+
+# Miscelaneous Files
+*.drawio.bkp
+*.log
