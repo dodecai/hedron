@@ -1,12 +1,12 @@
 ﻿# Define paths to delete
-  $pathsToDelete = @(
+  $objects = @(
     "a",
-    "b",
+    "b"
   )
 
 # Run git filter-repo to delete paths
-  for ($object in $objects) {
-    git filter-repo --path $object --invert-paths
+  foreach ($object in $objects) {
+    git filter-repo --path $object --invert-paths --force
   }
 
 # Repack the repository and prune unreachable objects
