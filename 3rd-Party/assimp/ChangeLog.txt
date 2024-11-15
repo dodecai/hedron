@@ -1,5 +1,6 @@
 git rm -f -r ".github"
 git rm -f -r "cmake-modules"
+git rm -f "contrib/zip/zip.png"
 git rm -f -r "doc"
 git rm -f -r "fuzz"
 git rm -f -r "packaging"
