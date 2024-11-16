@@ -160,6 +160,33 @@ Size2D Font::GetSize(string_view text) {
     return size;
 }
 
+Size2D Hedron::Font::GetSizeMsdf(string_view text) {
+    const auto &geometry = mMSDFData->FontGeometry;
+    const auto &metrics = geometry.getMetrics();
+    const auto &size = mMSDFData->RequestedFontSize;
+
+    const auto &fsScale = size / (float)(metrics.ascenderY - metrics.descenderY);
+
+    Size2D result;
+    for (auto window : text | std::views::slide(2)) {
+        char character = window[0];
+
+        auto glyph = geometry.getGlyph(character);
+        if (!glyph) glyph = geometry.getGlyph('?');
+        if (!glyph) continue;
+
+        int width;
+        int height;
+        glyph->getBoxSize(width, height);
+
+        
+        result.Width += glyph->getAdvance() * fsScale;
+        result.Height += std::max(result.Height, (float)-height + 1.0f) * fsScale;
+    }
+
+    return result;
+}
+
 FontSize Font::GetSizeFull(string_view text) {
     int x = 0;
     int y = 0;
@@ -257,6 +284,8 @@ void Font::Load(string_view path, uint32_t size) {
         properties.Format = TextureFormat::RGB8;
         properties.GenerateMips = false;
         mAtlasTexture = Texture2D::Create(properties, cache);
+
+
     } else {
         auto *ft = msdfgen::initializeFreetype();
         if (!ft) {
@@ -286,14 +315,14 @@ void Font::Load(string_view path, uint32_t size) {
 
         for (auto &glyph : mMSDFData->Glyphs) {
             msdfgen::Shape &shape = const_cast<msdfgen::Shape &>(glyph.getShape());
-            shape.inverseYAxis = true;
+            //shape.inverseYAxis = true;
         }
 
         msdf_atlas::TightAtlasPacker packer;
         packer.setDimensionsConstraint(msdf_atlas::DimensionsConstraint::NONE);
         packer.setMiterLimit(1.0);
-        packer.setPixelRange(2.0);
-        //packer.setScale(fontScale);
+        packer.setPixelRange(24.0);
+        packer.setScale(1.0);
         auto remaining = packer.pack(mMSDFData->Glyphs.data(), static_cast<int>(mMSDFData->Glyphs.size()));
         if (remaining != 0) {
             LogFatal("Not all glyphs gould be loaded successfully!");

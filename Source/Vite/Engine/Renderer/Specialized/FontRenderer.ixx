@@ -11,6 +11,7 @@
 export module Vite.FontRenderer;
 
 import Vite.Core;
+//import Vite.Bridge.MsdfAtlasGen;
 //import Vite.Renderer.Data;
 import Vite.Renderer.Texture;
 
@@ -25,13 +26,13 @@ struct FontSize {
 };
 
 struct Glyph {
-    uint32_t UniqueID;
-    int32_t Advance;
+    uint32 UniqueID;
+    int32 Advance;
 
-    int32_t X;
-    int32_t Y;
-    int32_t Width;
-    int32_t Height;
+    int32 X;
+    int32 Y;
+    int32 Width;
+    int32 Height;
 
     Reference<Texture2D> Texture;
 };
@@ -40,7 +41,7 @@ struct FontData {
     FT_Face Handle;
 
     array<Scope<Glyph>, 256> AsciiGlyphs {};
-    unordered_map<uint32_t, Scope<Glyph>> Glyphs;
+    unordered_map<uint32, Scope<Glyph>> Glyphs;
 };
 
 struct MSDFData {
@@ -70,6 +71,7 @@ public:
     /// pos.y - (size.y + bound.y) / 2
     ///
     Size2D GetSize(string_view text);
+    Size2D GetSizeMsdf(string_view text);
     FontSize GetSizeFull(string_view text);
 
     // Helpers
@@ -97,7 +99,7 @@ private:
         uint32 End;
     };
 
-    inline static constexpr auto sExpensiveColoring = false;
+    inline static constexpr auto sExpensiveColoring = true;
     inline static constexpr auto sLCGMultiplier = 6364136223846793005ull;
     inline static constexpr auto sLCGIncrement = 1442695040888963407ull;
     inline static constexpr auto sMaxCornerAngle = 3.0;

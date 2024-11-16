@@ -26,6 +26,7 @@ using std::map;
 using std::multimap;
 using std::pair;
 using std::queue;
+using std::span;
 using std::string;
 using std::string_view;
 using std::unordered_map;
@@ -33,6 +34,9 @@ using std::unordered_multimap;
 using std::vector;
 using std::wstring;
 using std::wstring_view;
+
+// Ranges
+namespace views = std::ranges::views;
 
 /// Stream
 using std::ifstream;

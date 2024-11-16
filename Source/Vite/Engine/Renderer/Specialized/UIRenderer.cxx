@@ -1,5 +1,8 @@
 ﻿module;
+
 #define GLM_ENABLE_EXPERIMENTAL
+#define GLM_FORCE_LEFT_HANDED
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
@@ -207,15 +210,22 @@ void UIRenderer::DrawRectangle(const glm::vec3 &position, const glm::vec2 &size,
     Reset();
 }
 
-void UIRenderer::DrawText(const glm::vec3 &position, const glm::vec2 &quadMin, const glm::vec2 &quadMax, const glm::vec2 &size, const Reference<Texture> &texture, const glm::vec2 &textureCoordinateMin, const glm::vec2 &textureCoordinateMax, const glm::vec4 &color) {
+void UIRenderer::DrawText(const glm::vec4 &quad, const Reference<Texture> &texture, const glm::vec4 &textureCoords, const glm::vec4 &color) {
     if (SRenderData.TextVertexBufferData.size() * 6 >= SRenderData.TextMaxIndices) Reset();
 
     float textureIndex = 0.0f;
-    const glm::vec2 textureCoords[] = {
-        { textureCoordinateMin.x, textureCoordinateMin.y },
-        { textureCoordinateMax.x, textureCoordinateMin.y },
-        { textureCoordinateMax.x, textureCoordinateMax.y },
-        { textureCoordinateMin.x, textureCoordinateMax.y },
+    const glm::vec3 vertices[] = {
+        { quad.x, quad.w, 0.0f },
+        { quad.z, quad.w, 0.0f },
+        { quad.z, quad.y, 0.0f },
+        { quad.x, quad.y, 0.0f },
+    };
+
+    const glm::vec2 textureCoordinates[] = {
+        { textureCoords.x, textureCoords.y },
+        { textureCoords.z, textureCoords.y },
+        { textureCoords.z, textureCoords.w },
+        { textureCoords.x, textureCoords.w },
     };
     for (uint32_t i = 1; i < SRenderData.TextTextureSlotIndex; i++) {
         if (*SRenderData.TextTextureSlots[i].get() == *texture.get()) {
@@ -231,15 +241,17 @@ void UIRenderer::DrawText(const glm::vec3 &position, const glm::vec2 &quadMin, c
         SRenderData.TextTextureSlotIndex++;
     }
 
-    //glm::vec2 center = position + glm::vec3(size.x, size.y, 0.0f) * 0.5f;
-    //glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(center, 0.0f)) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-    //for (size_t i = 0; i < SRenderData.TextVertexPositions.size(); i++) {
-    //    SRenderData.TextVertexBufferData.emplace_back((transform * SRenderData.TextVertexPositions[i]), color, textureCoords[i], textureIndex);
-    //}
-    Instance().SRenderData.TextVertexBufferData.emplace_back(glm::vec4(quadMin.x, quadMax.y, 0.0f, 1.0f), color, textureCoords[0], textureIndex);
-    Instance().SRenderData.TextVertexBufferData.emplace_back(glm::vec4(quadMax.x, quadMax.y, 0.0f, 1.0f), color, textureCoords[1], textureIndex);
-    Instance().SRenderData.TextVertexBufferData.emplace_back(glm::vec4(quadMax.x, quadMin.y, 0.0f, 1.0f), color, textureCoords[2], textureIndex);
-    Instance().SRenderData.TextVertexBufferData.emplace_back(glm::vec4(quadMin.x, quadMin.y, 0.0f, 1.0f), color, textureCoords[3], textureIndex);
+    glm::vec2 center = glm::vec2((quad.x + quad.z) * 0.5f, (quad.y + quad.w) * 0.5f);
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), glm::vec3(center, 0.0f)) * glm::scale(glm::mat4(1.0f), { quad.z - quad.x, quad.w - quad.y, 1.0f });
+    
+    static size_t once = 0;
+    for (size_t i = 0; i < 4; i++) {
+        SRenderData.TextVertexBufferData.emplace_back(/*transform * */vertices[i], color, textureCoordinates[i], textureIndex);
+        if (once <= 4) {
+            Log("Vertex {}: Position = {}, TextureCoords = {} \n", i, vertices[i], textureCoordinates[i]);
+            once++;
+        }
+    }
 
     // ToDo: Implement Statistics
     Reset();

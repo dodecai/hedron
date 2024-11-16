@@ -32,6 +32,7 @@ public:
     void Update() override {
         if (Font) {
             MinSize = Font->GetSize(Text);
+            auto test = Font->GetSizeMsdf(Text);
             MinSize.Width += Padding.Left + Padding.Right;
             MinSize.Height += Padding.Top + Padding.Bottom;
             Position.X -= Padding.Left + Offset.X;

@@ -1,6 +1,8 @@
 ﻿module;
 
 #define GLM_ENABLE_EXPERIMENTAL
+#define GLM_FORCE_LEFT_HANDED
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
 #include <glm/glm.hpp>
 #include <glm/ext.hpp>
 
@@ -341,12 +343,13 @@ public: // Methods
         const float texelWidth = 1.0f / fontAtlas->GetProperties().Width;
         const float texelHeight = 1.0f / fontAtlas->GetProperties().Height;
         
-        double x = position.X;
-        double y = position.Y;
-        double fsScale = size / (metrics.ascenderY - metrics.descenderY);
+        double fsScale = size / (metrics.ascenderY/* - metrics.descenderY*/);
+        double x = std::floor(position.X);
+        double y = std::floor(position.Y);
         
-        for (size_t i = 0; i < text.size(); i++) {
-            char character = text[i];
+        for (auto window : text | std::views::slide(2)) {
+            char character = window[0];
+
             if (character == '\r') continue;
             if (character == '\n') {
                 x = 0;
@@ -355,8 +358,9 @@ public: // Methods
             }
             if (character == ' ') {
                 float advance = spaceGlyphAdvance;
-                if (i < text.size() - 1) {
-                    char nextCharacter = text[i + 1];
+
+                if (window.size() > 1) {
+                    auto nextCharacter = window[1];
                     double dAdvance;
                     geometry.getAdvance(dAdvance, character, nextCharacter);
                     advance = (float)dAdvance;
@@ -373,47 +377,19 @@ public: // Methods
             auto glyph = geometry.getGlyph(character);
             if (!glyph) glyph = geometry.getGlyph('?');
             if (!glyph) return;
-
-            double atlasLeft;
-            double atlasTop;
-            double atlasRight;
-            double atlasBottom;
-            glyph->getQuadAtlasBounds(atlasLeft, atlasBottom, atlasRight, atlasTop);
-            auto texCoordMin = glm::vec2(texelWidth, texelHeight) * glm::vec2((float)atlasLeft, (float)atlasTop);
-            auto texCoordMax = glm::vec2(texelWidth, texelHeight) * glm::vec2((float)atlasRight, (float)atlasBottom);
-
-            double planeLeft;
-            double planeTop;
-            double planeRight;
-            double planeBottom;
+            
+            // Calculate Plane Bounds
+            double planeLeft, planeTop, planeRight, planeBottom;
             glyph->getQuadPlaneBounds(planeLeft, planeBottom, planeRight, planeTop);
-            auto quadMin = glm::vec2(x, y) + glm::vec2((float)planeLeft, (float)planeBottom) * fsScale;
-            auto quadMax = glm::vec2(x, y) + glm::vec2((float)planeRight, (float)planeTop) * fsScale;
+            auto quad = glm::vec4(x, y, x, y) + glm::vec4((float)planeLeft, (float)-planeTop, (float)planeRight, (float)-planeBottom) * fsScale; // Inverted Y!
+            
+            // Calculate Atlas Bounds
+            double atlasLeft, atlasTop, atlasRight, atlasBottom;
+            glyph->getQuadAtlasBounds(atlasLeft, atlasTop, atlasRight, atlasBottom); // Inverted Y!
+            auto textureCoords = glm::vec4(texelWidth, texelHeight, texelWidth, texelHeight) * glm::vec4((float)atlasLeft, (float)atlasTop, (float)atlasRight, (float)atlasBottom);
 
-            glm::vec3 nativePosition = { x, y, 0.0f };
-            glm::vec2 nativeSize = { quadMax.x - quadMin.x, quadMax.y - quadMin.y };
-            glm::vec4 nativeColor = { color.Red, color.Green, color.Blue, color.Alpha };
+            Instance().DrawText(quad, fontAtlas, textureCoords, { color.Red, color.Green, color.Blue, color.Alpha });
 
-            static size_t once = 0;
-            if (once <= 4) {
-                LogInfo(R"(
-    Character: '{}'
-    Predefined          | Calculated
-    Position: {}:{}     | {}:{}
-    QuadMin:            | {}:{}
-    QuadMax:            | {}:{}
-    Size:               | {}:{}
-                  )",
-                  character,
-                  x, y, nativePosition.x, nativePosition.y,
-                  quadMin.x, quadMin.y,
-                  quadMax.x, quadMax.y,
-                  nativeSize.x, nativeSize.y
-                );
-                once++;
-            }
-
-            Instance().DrawText(nativePosition, quadMin, quadMax, nativeSize, fontAtlas, texCoordMin, texCoordMax, nativeColor);
             x += glyph->getAdvance() * fsScale;
         }
     #endif
@@ -435,7 +411,7 @@ private: // Internal Methods
     void DrawLine(const glm::vec3 &start, const glm::vec3 &end, const glm::vec4 &color);
     void DrawRectangle(const glm::vec3 &position, const glm::vec2 &size, const glm::vec4 &color = glm::vec4(1.0f));
     void DrawRectangle(const glm::vec3 &position, const glm::vec2 &size, const Reference<Texture> &texture, const glm::vec4 &color = glm::vec4(1.0f), float tiling = 1.0f);
-    void DrawText(const glm::vec3 &position, const glm::vec2 &quadMin, const glm::vec2 &quadMax, const glm::vec2 &size, const Reference<Texture> &texture, const glm::vec2 &textureCoordinateMin, const glm::vec2 &textureCoordinateMax, const glm::vec4 &color = glm::vec4(1.0f));
+    void DrawText(const glm::vec4 &quad, const Reference<Texture> &texture, const glm::vec4 &textureCoords, const glm::vec4 &color = glm::vec4(1.0f));
     void Flush();
     void Reset();
 
