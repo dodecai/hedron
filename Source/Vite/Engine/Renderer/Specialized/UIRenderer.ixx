@@ -265,6 +265,7 @@ public: // Methods
         static auto &initialize = UIRenderer::Instance();
         //initialize.Test();
 
+        Instance().SRenderStats.DrawCalls = 0;
         mViewport = viewport.get();
         //auto properties = viewport->GetProperties();
         //auto size = Size2D { properties.Width, properties.Height };
@@ -347,9 +348,7 @@ public: // Methods
         double x = std::floor(position.X);
         double y = std::floor(position.Y);
         
-        for (auto window : text | std::views::slide(2)) {
-            char character = window[0];
-
+        for (auto character : text) {
             if (character == '\r') continue;
             if (character == '\n') {
                 x = 0;
@@ -358,14 +357,6 @@ public: // Methods
             }
             if (character == ' ') {
                 float advance = spaceGlyphAdvance;
-
-                if (window.size() > 1) {
-                    auto nextCharacter = window[1];
-                    double dAdvance;
-                    geometry.getAdvance(dAdvance, character, nextCharacter);
-                    advance = (float)dAdvance;
-                }
-
                 x += fsScale * advance + textParams.Kerning;
                 continue;
             }
@@ -392,6 +383,8 @@ public: // Methods
 
             x += glyph->getAdvance() * fsScale;
         }
+
+        Instance().Reset();
     #endif
     }
     static void End() {
@@ -404,6 +397,9 @@ public: // Methods
     static void Test() {
         //Instance().DrawRectangle({ 500.0f, 200.0f, 0.0f }, { 200.0f, 200.0f }, { 1.0f, 0.0f, 0.0f, 1.0f });
         //Instance().DrawRectangle({ 650.0f, 300.0f, 0.2f }, { 200.0f, 200.0f }, { 1.0f, 0.0f, 1.0f, 0.8f });
+    }
+    static uint32 GetDrawCalls() {
+        return Instance().SRenderStats.DrawCalls;
     }
 
 private: // Internal Methods
@@ -483,6 +479,10 @@ private:
         Reference<Buffer> PanelPropertiesUniformBuffer;
 
     } SRenderData;
+
+    struct RenderStats {
+        uint32 DrawCalls {};
+    } SRenderStats;
 };
 
 }

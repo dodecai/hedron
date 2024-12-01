@@ -36,8 +36,6 @@ struct Asset {
     string Path {};
 };
 
-
-
 // ToDo
 enum class UniformPosition {
     RendererData    = 0,

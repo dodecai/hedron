@@ -239,6 +239,7 @@ public:
         GetRoot()->Draw();
         UIRenderer::End();
         UIRenderer::Draw();
+        Instance().mDrawCalls = UIRenderer::GetDrawCalls();
     }
     static void Update(DeltaTime deltaTime) {
         // Calculate Frames
@@ -469,6 +470,8 @@ public:
             container->Alignment = { 1.0f, 1.0f };
 
             auto caption = container->CreateLabel("Application Statistics");
+            auto drawCalls = container->CreateLabel("draw calls: ######");
+            drawCalls->Text = std::format("draw calls: {:d}", mDrawCalls);
             auto fps = container->CreateLabel("frames/s: ####.##");
             fps->Text = std::format("frames/s: {:.2f}", mFPS);
             auto msf = container->CreateLabel("ms/Frame: ####.##");
@@ -524,6 +527,7 @@ private:
     Scope<Font> mFontExo2Bold = nullptr;
     Scope<Font> mFontFiraMono = nullptr;
     Scope<Font> mFontRajdhani = nullptr;
+    inline static thread_local uint32 mDrawCalls {};
     inline static thread_local double mFrames {};
     inline static thread_local double mFPS {};
     inline static thread_local double mMSPF {};

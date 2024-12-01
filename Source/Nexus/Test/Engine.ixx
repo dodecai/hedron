@@ -59,12 +59,11 @@ public:
     Engine() {
         // Prepare
         AssetManager::Instance().Load();
-        // ToDo: Will not be neccecary in the future
+        // ToDo: Will not be neccessary in the future
         mCommandBuffer = Application::Instance().GetRenderer()->GetCommandBuffer().get();
 
         // Setup Camera
-        auto aspectRatio = 1280.0f / 1024.0f;
-        mDesignerCamera = DesignerCamera(45.0f, aspectRatio, 0.1f, 10000.0f);
+        mDesignerCamera = DesignerCamera(45.0f, mAspectRatio, 0.1f, 10000.0f);
         mDesignerCamera.SetViewportSize(1280.0f, 1024.0f);
         mDesignerCamera.SetPosition({ 0.0f, 4.0f, -24.0f });
 
@@ -74,6 +73,8 @@ public:
         // Load Buffers
         mEntityUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::EntityData));
         mLightBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Lights));
+
+        mLightData.Color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
     }
     ~Engine() = default;
 
@@ -111,21 +112,24 @@ public:
 
     void UpdateUI() override {
         static float value = 1.0f;
-        static auto color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
         ImGui::Begin("Renderer");
         mUIActive = ImGui::IsWindowFocused();
-        UI::Property("Color", glm::value_ptr(color));
+        UI::Property("Color", glm::value_ptr(mLightData.Color));
         UI::Property("Distance", value);
+        UI::Property("Position", "");
         UI::Property("Lights", mEnableLights);
-        UI::Label("Lights Count: %d", 3);
-        UI::LabelX("Lights CountX: %d", 3);
-        UI::Property("State", "Count: % d", 3);
+        UI::Label("Lights Count: %d", mLights.Count);
+        UI::LabelX("Lights CountX: %d", mLights.Count);
+        UI::Property("State", "Count: % d", mLights.Count);
         ImGui::End();
     }
 
     #pragma region Mesh Renderer
 
     void DrawLevel(DeltaTime deltaTime) {
+        static auto tradMaterial = Material<MaterialType::Traditional>();
+        static auto pbrMaterial = Material<MaterialType::PBR>();
+
         // Load Model
         static Model level("Assets/Models/Test/Test.obj");
         static Model cube("Assets/Models/Cube/Cube.obj");
@@ -216,18 +220,15 @@ public:
         static auto indexBuffer = Buffer::Create(BufferType::Index, &cube.Indices, sizeof(Components::Cube::Indices));
         
         // Update Entity Data
-        mLightPosition = glm::vec3(-3.0f, 3.0f, 5.0f);
+        mLightPosition = glm::vec3(-3.0f, 3.0f, 0.0f);
         static float timeValue = 0.1f;
         timeValue += (float)deltaTime;
         float angle = timeValue * 2.0f;
         float radius = 5.0f;
-        mLightPosition.x = 1.0f + radius * std::cos(angle);
-        mLightPosition.z = 3.0f + radius * std::sin(angle);
+        mLightPosition.x = radius * std::cos(angle);
+        mLightPosition.z = radius * std::sin(angle);
         
-        float value = (sin(timeValue) / 2.0f) + 0.5f;
-        mLightData.Color = glm::vec4(1.0f, 1.0f - value, value, 1.0f);
-        auto model = glm::translate(glm::mat4(1.0f), mLightPosition) *
-            glm::scale(glm::mat4(1.0f), glm::vec3(0.2f, 0.2f, 0.2f));
+        auto model = glm::translate(glm::mat4(1.0f), mLightPosition) * glm::scale(glm::mat4(4.0f), glm::vec3(0.2f, 0.2f, 0.2f));
         mLightData.Transform = model;
         
         // Lighs
@@ -259,7 +260,7 @@ public:
         mLights.Light[3] = {
             .Type = Components::LightType::Point,
             .LightColor = { 1.0f, 1.0f, 1.0f },
-            .LightPosition = { 7.0f, 5.0f, -9.0f },
+            .LightPosition = { -8.0f, 3.0f, -9.0f },
         
             .Constant = 1.0f,
             .Linear = 0.14f,
@@ -361,8 +362,27 @@ public:
 
     #pragma endregion
 
+    #pragma region /// Events
+
+    void OnAppEvent(const WindowEvent &event) override {
+        switch (event.Action) {
+            case WindowAction::Resize: {
+                mAspectRatio = event.Size.Width / event.Size.Height;
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
+
+    }
+
+    #pragma endregion
+
 private:
     /// Properties
+    float mAspectRatio = {};
     bool mUIActive = false;
     bool mEnableLights = true;
 

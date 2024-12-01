@@ -37,9 +37,9 @@ public:
     }
     void Destroy() override {}
     void Update(DeltaTime deltaTime) override {
-        BenchmarkTest benchCode;
-        benchCode.Update();
-        LogInfo("Benchmark: {:.6f}ms", benchCode.GetDuration());
+        //BenchmarkTest benchCode;
+        //benchCode.Update();
+        //LogInfo("Benchmark: {:.6f}ms", benchCode.GetDuration());
     }
 
     /// Tests

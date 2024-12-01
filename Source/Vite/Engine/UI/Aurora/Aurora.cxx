@@ -41,6 +41,8 @@ void Container::Draw() {
                 position.Y += element->Offset.Y;
                 UIRenderer::DrawPanel(position, element->Size, color, 8.0f, element->FrameOpacity);
                 element->As<Container>()->Draw();
+
+                UIRenderer::End();
                 break;
             }
             case ComponentType::ScrollView: {
@@ -89,7 +91,10 @@ void Container::Draw() {
             }
         }
     }
-    if (Clip) UIRenderer::Unclip();
+    if (Clip) {
+        UIRenderer::End();
+        UIRenderer::Unclip();
+    }
 }
 
 ///

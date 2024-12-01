@@ -141,7 +141,6 @@ void UIRenderer::DrawPanel(const glm::vec3 &position, const glm::vec2 &size, con
         SRenderData.PanelVertexBufferData.emplace_back(positions[i], color, size, innerAlpha, bevel, texCoords[i]);
     }
 
-    // ToDo: Implement Statistics
     Reset();
 }
 
@@ -172,7 +171,6 @@ void UIRenderer::DrawRectangle(const glm::vec3 &position, const glm::vec2 &size,
         SRenderData.ComponentVertexBufferData.emplace_back((transform * SRenderData.ComponentVertexPositions[i]), color, textureCoords[i], textureIndex, tiling);
     }
 
-    // ToDo: Implement Statistics
     Reset();
 }
 
@@ -206,7 +204,6 @@ void UIRenderer::DrawRectangle(const glm::vec3 &position, const glm::vec2 &size,
         SRenderData.ComponentVertexBufferData.emplace_back((transform * SRenderData.ComponentVertexPositions[i]), color, textureCoords[i], textureIndex, tiling);
     }
 
-    // ToDo: Implement Statistics
     Reset();
 }
 
@@ -253,8 +250,8 @@ void UIRenderer::DrawText(const glm::vec4 &quad, const Reference<Texture> &textu
         }
     }
 
-    // ToDo: Implement Statistics
-    Reset();
+
+    Instance().Reset();
 }
 
 
@@ -283,7 +280,8 @@ void UIRenderer::Flush() {
         SRenderData.PanelIndexBuffer->Unbind();
         SRenderData.PanelVertexBuffer->Unbind();
         SRenderData.PanelShader->Unbind();
-        //SRenderData.Stats.DrawCalls++;
+
+        SRenderStats.DrawCalls++;
     }
 
     // Components
@@ -304,7 +302,7 @@ void UIRenderer::Flush() {
 
         SCommandBuffer->DrawIndexed(static_cast<GLsizei>(SRenderData.ComponentVertexBufferData.size() * 6), PrimitiveType::Triangle, true);
 
-        // ToDo: Implement Statistics
+        SRenderStats.DrawCalls++;
     }
 
     // Text
@@ -325,7 +323,7 @@ void UIRenderer::Flush() {
 
         SCommandBuffer->DrawIndexed(static_cast<GLsizei>(SRenderData.TextVertexBufferData.size() * 6), PrimitiveType::Triangle, true);
 
-        // ToDo: Implement Statistics
+        SRenderStats.DrawCalls++;
     }
 }
 

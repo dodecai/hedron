@@ -12,20 +12,21 @@ export namespace Hedron {
 class MeshRenderer {
 public:
     /// Default
-    MeshRenderer() = default;
+    MeshRenderer() {
+        mCommandBuffer = CommandBuffer::Create();
+        mCameraUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Camera));
+        mEntityUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::EntityData));
+        mDebugDepthShader = Shader::Create("Assets/Shaders/Debug/DepthVisualizer.glsl");
+        mGridShader = Shader::Create("Assets/Shaders/Grid.glsl");
+        mModelShader = Shader::Create("Assets/Shaders/Materials/Material.Blinn-Phong.glsl");
+        mSkyBoxShader = Shader::Create("Assets/Shaders/SkyBox.glsl");
+        mStencilOutlineShader = Shader::Create("Assets/Shaders/Stencil.Outline.glsl");
+        mNormalsShader = Shader::Create("Assets/Shaders/Debug/NormalsVisualizer.glsl");
+    }
     ~MeshRenderer() = default;
 
     /// Commands
     void Start(const DesignerCamera &camera) {
-        if (!mCommandBuffer) mCommandBuffer = CommandBuffer::Create();
-        if (!mCameraUniformBuffer) mCameraUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Camera));
-        if (!mEntityUniformBuffer) mEntityUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::EntityData));
-        if (!mDebugDepthShader) mDebugDepthShader = Shader::Create("Assets/Shaders/Debug/DepthVisualizer.glsl");
-        if (!mGridShader) mGridShader = Shader::Create("Assets/Shaders/Grid.glsl");
-        if (!mModelShader) mModelShader = Shader::Create("Assets/Shaders/Materials/Material.Blinn-Phong.glsl");
-        if (!mSkyBoxShader) mSkyBoxShader = Shader::Create("Assets/Shaders/SkyBox.glsl");
-        if (!mStencilOutlineShader) mStencilOutlineShader = Shader::Create("Assets/Shaders/Stencil.Outline.glsl");
-        if (!mNormalsShader) mNormalsShader = Shader::Create("Assets/Shaders/Debug/NormalsVisualizer.glsl");
         mCommandBuffer->Capture();
 
         mCameraData.ViewProjection = camera.GetViewProjection();
@@ -84,7 +85,7 @@ public:
         //}
 
         // Visualize Normals
-        //mNormalsShader->Bind();
+        mNormalsShader->Bind();
         //for (auto &mesh : model.GetMeshes()) {
         //    mesh.Bind();
         //    mCommandBuffer->DrawIndexed(mesh.GetIndicesCount(), PrimitiveType::Triangle, true);
