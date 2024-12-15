@@ -408,6 +408,7 @@ private:
 
         // Creation
         Create();
+        for (auto *layer : mLayers) layer->Create();
 
         while (mStates.Running) {
             // Check if application is active or reload is requested
@@ -437,6 +438,7 @@ private:
         }
 
         // Termination
+        for (auto *layer : mLayers) layer->Destroy();
         Destroy();
     }
     

@@ -90,6 +90,7 @@ public:
         // Mesh Renderer (3D)
         if constexpr (TEST_MESH_RENDERER) {
             mMeshRenderer.Start(mDesignerCamera);
+            //mMeshRenderer.DrawGrid();
             DrawLevel(deltaTime);
             mMeshRenderer.DrawSkybox();
             mMeshRenderer.Finish();
@@ -111,16 +112,16 @@ public:
     }
 
     void UpdateUI() override {
-        static float value = 1.0f;
         ImGui::Begin("Renderer");
         mUIActive = ImGui::IsWindowFocused();
         UI::Property("Color", glm::value_ptr(mLightData.Color));
-        UI::Property("Distance", value);
         UI::Property("Position", "");
         UI::Property("Lights", mEnableLights);
-        UI::Label("Lights Count: %d", mLights.Count);
-        UI::LabelX("Lights CountX: %d", mLights.Count);
-        UI::Property("State", "Count: % d", mLights.Count);
+        ImGui::End();
+
+        ImGui::Begin("Statistics");
+        UI::Property("Draw Calls: ", "%d", mMeshRenderer.GetStatistics().DrawCalls);
+        UI::Property("Lights", "%d", mLights.Count);
         ImGui::End();
     }
 
@@ -139,8 +140,6 @@ public:
         static Model window("Assets/Models/Cube/Cube.obj");
         static bool once = true;
         if (once) {
-            // "Assets/Textures/CheckerBoard.png"
-
             level.SetDefaultTexture("Assets/Textures/Traditional/Debug.png"); // Metal
             cube.SetDefaultTexture("Assets/Textures/Traditional/Debug.png", { .SamplerWrap = TextureWrap::Repeat }); // Concrete
             cube2.SetDefaultTexture("Assets/Textures/Traditional/Debug.png", { .SamplerWrap = TextureWrap::Repeat, .GenerateMips = true, }); // Wood

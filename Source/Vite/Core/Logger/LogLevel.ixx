@@ -22,6 +22,8 @@ enum class LogLevel {
     /// Structuring
     Caption     = 0x20,	// Structure the log by a given caption
     Delimiter   = 0x21,	// Structure the log with a delimiter
+
+    Disabled    = 0xFF,
 };
 
 /// Concepts

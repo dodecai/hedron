@@ -53,7 +53,7 @@ public:
     /// Mutators
     void SetLevel(const LogLevel &level) {
         std::unique_lock<mutex> lock(mMutex);
-        mLogLevel = level > LogLevel::Fatal ? LogLevel::Fatal : level;
+        mLogLevel = level /*> LogLevel::Fatal ? LogLevel::Fatal : level*/;
     }
 
     /// Methods

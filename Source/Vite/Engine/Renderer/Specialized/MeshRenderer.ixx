@@ -9,6 +9,10 @@ import Vite.Renderer.DesignerCamera;
 
 export namespace Hedron {
 
+struct RenderStatistics {
+    uint64 DrawCalls {};
+};
+
 class MeshRenderer {
 public:
     /// Default
@@ -28,6 +32,7 @@ public:
     /// Commands
     void Start(const DesignerCamera &camera) {
         mCommandBuffer->Capture();
+        Statistics = RenderStatistics {};
 
         mCameraData.ViewProjection = camera.GetViewProjection();
         mCameraData.Projection = camera.GetProjectionMatrix();
@@ -63,8 +68,11 @@ public:
         indexBuffer->Bind();
         mGridShader->Bind();
         mCommandBuffer->DrawIndexed(sizeof(grid.Indices), PrimitiveType::Triangle, true);
+
+        Statistics.DrawCalls++;
     }
     void DrawModel(Model &model, const Components::Transform &transform, bool stencil = false) {
+
         // Bind Shader
         //mDebugDepthShader->Bind();
         if (stencil) { mStencilOutlineShader->Bind(); } else { mModelShader->Bind(); }
@@ -91,6 +99,8 @@ public:
         //    mCommandBuffer->DrawIndexed(mesh.GetIndicesCount(), PrimitiveType::Triangle, true);
         //    mesh.Unbind();
         //}
+
+        Statistics.DrawCalls++;
     }
     void DrawSkybox() {
         // Specify Buffers, Pipeline and Texture
@@ -118,6 +128,8 @@ public:
         mSkyBoxShader->Bind();
         skyboxTexture->Bind(0);
         mCommandBuffer->DrawIndexed(skybox.Components, PrimitiveType::Triangle, false);
+
+        Statistics.DrawCalls++;
     }
     void Finish() {
         //Flush();
@@ -132,6 +144,8 @@ public:
     void ResetStencilTest() {
         mCommandBuffer->ResetStencilTest();
     }
+
+    RenderStatistics GetStatistics() { return Statistics; }
 
 private:
     void Flush() {
@@ -152,6 +166,7 @@ private:
 
 private:
     /// Data
+    RenderStatistics Statistics;
     uint32 mMaxMeshCount = 1024;
     vector<Mesh> mMeshes;
     vector<Components::Transform> mTransforms;

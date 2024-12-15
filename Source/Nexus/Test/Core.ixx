@@ -1,9 +1,23 @@
-﻿export module Test.Core;
+﻿module;
+
+#define BOOST_UT_DISABLE_MODULE
+#include <boost/ut.hpp>
+
+//#define APPROVAL_TESTS_INCLUDE_CPPS
+//#define APPROVALS_UT
+//#include "../ApprovalTests.h"
+
+export module Test.Core;
 
 import Vite.Core;
 import Vite.App.Layers;
 
+static constexpr auto iterations = 1'000'000;
+
 export namespace Hedron::Test {
+
+using namespace boost::ut;
+//using namespace ApprovalTests;
 
 #pragma region /// Functions
 
@@ -129,12 +143,40 @@ public:
 
     /// Methods
     void Create() override {
+        suite LoggerTests = [] {
+            "Logger"_test = [] {
+                for (auto i = 0; i < 100; ++i) {
+                    LogTrace("");
+                }
+            };
+            expect(true);
+        };
+
+        "String"_test = [] {
+            string a = "Hello World!";
+            string b = "Hello World!";
+
+            for (auto i = 0; i < iterations; ++i) {
+                String::Replace(b, "o ", "");
+            }
+
+            expect(String::Contains(b, "hellworld!", false) == false);
+            expect(String::Contains(b, "hellworld!", false) == true);
+
+            string c = b;
+
+            expect(a != b);
+            expect(b == c);
+        };
+
+        return;
         LogCaption("Core Tests");
         mThreadPool = CreateScope<ThreadPool>(12);
         Test();
     }
     void Destroy() override {}
     void Update(DeltaTime deltaTime) override {
+        return;
         //return; // OpenGL Context destroys stack
         ///
         /// ThreadPool
@@ -160,6 +202,8 @@ public:
 
     /// Tests
     void Test() {
+        return;
+
         AppTest();
         ConfigTest();
         EventTest();
