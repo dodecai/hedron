@@ -9,6 +9,10 @@ import Vite.Type;
 
 export namespace Hedron {
 
+struct InputData {
+    KeyState State;
+};
+
 ///
 /// @brief Input | Retrieve real-time input data (per frame).
 /// @todo Disable Input when the window is not active
@@ -33,7 +37,7 @@ public:
     /// Commands
     static inline void Disable() { mCaptureInput = false; }
     static inline void Enable() { mCaptureInput = true; }
-
+    static inline void Update() { if (mCaptureInput) Instance->UpdatePlatform(); }
 
     /// Methods
     [[nodiscard]] static inline bool GetKeyState(KeyCode code) {
@@ -56,6 +60,9 @@ public:
     }
 
 protected:
+    /// Platform Commands
+    virtual void UpdatePlatform() = 0;
+
     /// Platform Interface
     virtual bool GetKeyStatePlatform(KeyCode code) const = 0;
     virtual bool GetMouseButtonStatePlatform(MouseButton button) const = 0;
@@ -67,6 +74,7 @@ protected:
 protected:
     /// Properties
     static inline float sMouseWheelDelta {};
+    static inline  unordered_map<KeyCode, InputData> sInputMap {};
 
 private:
     static inline bool mCaptureInput { true };

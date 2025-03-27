@@ -1,5 +1,6 @@
 ﻿export module Vite.MeshRenderer;
 
+import Vite.App;
 import Vite.Asset;
 import Vite.Asset.Mesh;
 import Vite.Asset.Model;
@@ -17,7 +18,7 @@ class MeshRenderer {
 public:
     /// Default
     MeshRenderer() {
-        mCommandBuffer = CommandBuffer::Create();
+        mCommandBuffer = Application::Instance().GetRenderer()->GetCommandBuffer().get();
         mCameraUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::Camera));
         mEntityUniformBuffer = Buffer::Create(BufferType::Uniform, nullptr, sizeof(Components::EntityData));
         mDebugDepthShader = Shader::Create("Assets/Shaders/Debug/DepthVisualizer.glsl");
@@ -31,7 +32,6 @@ public:
 
     /// Commands
     void Start(const DesignerCamera &camera) {
-        mCommandBuffer->Capture();
         Statistics = RenderStatistics {};
 
         mCameraData.ViewProjection = camera.GetViewProjection();
@@ -71,65 +71,68 @@ public:
 
         Statistics.DrawCalls++;
     }
-    void DrawModel(Model &model, const Components::Transform &transform, bool stencil = false) {
+    void DrawModel(Model model, const Components::Transform transform, bool stencil = false) {
+        mCommandBuffer->Record([this, model, transform, stencil]() {
+            // Bind Shader
+            //mDebugDepthShader->Bind();
+            if (stencil) { mStencilOutlineShader->Bind(); } else { mModelShader->Bind(); }
 
-        // Bind Shader
-        //mDebugDepthShader->Bind();
-        if (stencil) { mStencilOutlineShader->Bind(); } else { mModelShader->Bind(); }
+            //if (mMeshes.size() >= mMaxMeshCount) Flush();
 
-        //if (mMeshes.size() >= mMaxMeshCount) Flush();
+            // Update Entity Data
+            Components::EntityData entityData;
+            entityData.Transform = transform;
+            mEntityUniformBuffer->UpdateData(&entityData, sizeof(Components::EntityData));
+            mEntityUniformBuffer->Bind((size_t)UniformPosition::EntityData);
 
-        // Update Entity Data
-        Components::EntityData entityData;
-        entityData.Transform = transform;
-        mEntityUniformBuffer->UpdateData(&entityData, sizeof(Components::EntityData));
-        mEntityUniformBuffer->Bind((size_t)UniformPosition::EntityData);
+            model.Draw(mCommandBuffer);
+            //for (auto &mesh : model.GetMeshes()) {
+            //    mesh->Bind();
+            //    mCommandBuffer->DrawIndexed(mesh->GetIndicesCount(), PrimitiveType::Triangle, true);
+            //    mesh->Unbind();
+            //}
 
-        model.Draw(mCommandBuffer.get());
-        //for (auto &mesh : model.GetMeshes()) {
-        //    mesh->Bind();
-        //    mCommandBuffer->DrawIndexed(mesh->GetIndicesCount(), PrimitiveType::Triangle, true);
-        //    mesh->Unbind();
-        //}
+            // Visualize Normals
+            mNormalsShader->Bind();
+            //for (auto &mesh : model.GetMeshes()) {
+            //    mesh.Bind();
+            //    mCommandBuffer->DrawIndexed(mesh.GetIndicesCount(), PrimitiveType::Triangle, true);
+            //    mesh.Unbind();
+            //}
 
-        // Visualize Normals
-        mNormalsShader->Bind();
-        //for (auto &mesh : model.GetMeshes()) {
-        //    mesh.Bind();
-        //    mCommandBuffer->DrawIndexed(mesh.GetIndicesCount(), PrimitiveType::Triangle, true);
-        //    mesh.Unbind();
-        //}
-
-        Statistics.DrawCalls++;
+            Statistics.DrawCalls++;
+        });
     }
     void DrawSkybox() {
-        // Specify Buffers, Pipeline and Texture
-        static Components::Skybox skybox;
-        static PipelineProperties properties {
-            .DepthTest = true,
-            .Wireframe = false,
-            .Layout = {
-                { ShaderDataType::Float3, "aPosition" }
-            }
-        };
-        static auto pipeline = PipelineState::Create(properties);
-        static TextureProperties skyboxProperties = {
-            .Dimension = TextureDimension::TextureCube,
-            .SamplerWrap = TextureWrap::Clamp,
-        };
-        static auto skyboxTexture = Texture::Create(skyboxProperties, "Assets/Textures/Skybox/Sinister");
-        static auto vertexBuffer = Buffer::Create(BufferType::Vertex, &skybox.Vertices, sizeof(Components::Skybox::Vertices));
-        static auto indexBuffer = Buffer::Create(BufferType::Index, &skybox.Indices, sizeof(Components::Skybox::Indices));
+        mCommandBuffer->Record([this]() {
+            // Specify Buffers, Pipeline and Texture
+            static Components::Skybox skybox;
+            static PipelineProperties properties {
+                .DepthTest = true,
+                .Wireframe = false,
+                .Layout = {
+                    { ShaderDataType::Float3, "aPosition" }
+                }
+            };
+            static auto pipeline = PipelineState::Create(properties);
+            static TextureProperties skyboxProperties = {
+                .Dimension = TextureDimension::TextureCube,
+                .SamplerWrap = TextureWrap::Clamp,
+            };
+            static auto skyboxTexture = Texture::Create(skyboxProperties, "Assets/Textures/Skybox/Sinister");
+            static auto vertexBuffer = Buffer::Create(BufferType::Vertex, &skybox.Vertices, sizeof(Components::Skybox::Vertices));
+            static auto indexBuffer = Buffer::Create(BufferType::Index, &skybox.Indices, sizeof(Components::Skybox::Indices));
 
-        // Draw
-        vertexBuffer->Bind();
-        pipeline->Bind();
-        indexBuffer->Bind();
-        mSkyBoxShader->Bind();
-        skyboxTexture->Bind(0);
-        mCommandBuffer->DrawIndexed(skybox.Components, PrimitiveType::Triangle, false);
+            // Draw
+            vertexBuffer->Bind();
+            pipeline->Bind();
+            indexBuffer->Bind();
+            mSkyBoxShader->Bind();
+            skyboxTexture->Bind(0);
+            mCommandBuffer->DrawIndexed(skybox.Components, PrimitiveType::Triangle, false);
 
-        Statistics.DrawCalls++;
+            Statistics.DrawCalls++;
+        });
     }
     void Finish() {
         //Flush();
@@ -175,7 +178,8 @@ private:
     Components::Camera mCameraData;
 
     /// Instances
-    Scope<CommandBuffer> mCommandBuffer;
+    //Scope<CommandBuffer> mCommandBuffer;
+    CommandBuffer *mCommandBuffer;
     Scope<Buffer> mCameraUniformBuffer;
     Reference<Buffer> mEntityUniformBuffer;
     Reference<Shader> mDebugDepthShader;

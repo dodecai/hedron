@@ -3,7 +3,7 @@
     <!--
         MatrixBase Visualizer
     -->
-    <Type Name="Vite::MatrixBase&lt;*,2&gt;">
+    <Type Name="Hedron::MatrixBase&lt;*,2&gt;">
         <DisplayString>{{ {Data[0][0],g}, {Data[0][1],g} | {Data[1][0],g}, {Data[1][1],g} }}</DisplayString>
         <Expand>
             <Synthetic Name="Row 0">
@@ -22,7 +22,7 @@
             </Synthetic>
         </Expand>
     </Type>
-    <Type Name="Vite::MatrixBase&lt;*,3&gt;">
+    <Type Name="Hedron::MatrixBase&lt;*,3&gt;">
         <DisplayString>{{ {Data[0][0],g}, {Data[0][1],g}, {Data[0][2],g} | {Data[1][0],g}, {Data[1][1],g}, {Data[1][2],g} | {Data[2][0],g}, {Data[2][1],g}, {Data[2][2],g} }}</DisplayString>
         <Expand>
             <Synthetic Name="Row 0">
@@ -51,7 +51,7 @@
             </Synthetic>
         </Expand>
     </Type>
-    <Type Name="Vite::MatrixBase&lt;*,4&gt;">
+    <Type Name="Hedron::MatrixBase&lt;*,4&gt;">
         <DisplayString>{{ {Data[0][0],g}, {Data[0][1],g}, {Data[0][2],g}, {Data[0][3],g} | {Data[1][0],g}, {Data[1][1],g}, {Data[1][2],g}, {Data[1][3],g} | {Data[2][0],g}, {Data[2][1],g}, {Data[2][2],g}, {Data[2][3],g} | {Data[3][0],g}, {Data[3][1],g}, {Data[3][2],g}, {Data[3][3],g} }}</DisplayString>
         <Expand>
             <Synthetic Name="Row 0">
@@ -96,7 +96,7 @@
     <!--
         QuaternionBase Visualizer
     -->
-    <Type Name="Vite::QuaternionBase&lt;*&gt;">
+    <Type Name="Hedron::QuaternionBase&lt;*&gt;">
         <DisplayString>{{ W={w,g} | X={x,g} | Y={y,g} | Z={z,g} }</DisplayString>
         <Expand>
             <Item Name="W">w</Item>
@@ -109,14 +109,20 @@
     <!--
         VectorBase Visualizer
     -->
-    <Type Name="Vite::VectorBase&lt;*,2,*&gt;">
+    <Type Name="Hedron::VectorBase&lt;*,1,*&gt;">
+        <DisplayString>{{ X={X,g} }</DisplayString>
+        <Expand>
+            <Item Name="X">X</Item>
+        </Expand>
+    </Type>
+    <Type Name="Hedron::VectorBase&lt;*,2,*&gt;">
         <DisplayString>{{ X={X,g} | Y={Y,g} }</DisplayString>
         <Expand>
             <Item Name="X">X</Item>
             <Item Name="Y">Y</Item>
         </Expand>
     </Type>
-    <Type Name="Vite::VectorBase&lt;*,3,*&gt;">
+    <Type Name="Hedron::VectorBase&lt;*,3,*&gt;">
         <DisplayString>{{ X={X,g} | Y={Y,g} | Z={Z,g} }</DisplayString>
         <Expand>
             <Item Name="X">X</Item>
@@ -124,7 +130,7 @@
             <Item Name="Z">Z</Item>
         </Expand>
     </Type>
-    <Type Name="Vite::VectorBase&lt;*,4,*&gt;">
+    <Type Name="Hedron::VectorBase&lt;*,4,*&gt;">
         <DisplayString>{{ X={X,g} | Y={Y,g} | Z={Z,g} | W={W,g} }</DisplayString>
         <Expand>
             <Item Name="X">X</Item>
@@ -133,14 +139,14 @@
             <Item Name="W">W</Item>
         </Expand>
     </Type>
-    <Type Name="Vite::VectorBase&lt;*,2,*&gt;">
+    <Type Name="Hedron::VectorBase&lt;*,2,*&gt;">
         <DisplayString>{{ NX={NX,g} | NY={NY,g} }</DisplayString>
         <Expand>
             <Item Name="NX">NX</Item>
             <Item Name="NY">NY</Item>
         </Expand>
     </Type>
-    <Type Name="Vite::VectorBase&lt;*,3,*&gt;">
+    <Type Name="Hedron::VectorBase&lt;*,3,*&gt;">
         <DisplayString>{{ NX={NX,g} | NY={NY,g} | NZ={NZ,g} }</DisplayString>
         <Expand>
             <Item Name="NX">NX</Item>
@@ -148,7 +154,7 @@
             <Item Name="NZ">NZ</Item>
         </Expand>
     </Type>
-    <Type Name="Vite::VectorBase&lt;*,*,*&gt;">
+    <Type Name="Hedron::VectorBase&lt;*,*,*&gt;">
         <DisplayString>{{ Pitch={Pitch,g} | Yaw={Yaw,g} | Roll={Roll,g} }</DisplayString>
         <Expand>
             <Item Name="Pitch">Pitch</Item>
@@ -156,14 +162,14 @@
             <Item Name="Roll">Roll</Item>
         </Expand>
     </Type>
-    <Type Name="Vite::VectorBase&lt;*,2,*&gt;">
+    <Type Name="Hedron::VectorBase&lt;*,2,*&gt;">
         <DisplayString>{{ U={U,g} | V={V,g} } }</DisplayString>
         <Expand>
             <Item Name="U">U</Item>
             <Item Name="V">V</Item>
         </Expand>
     </Type>
-    <Type Name="Vite::VectorBase&lt;*,3,*&gt;">
+    <Type Name="Hedron::VectorBase&lt;*,3,*&gt;">
         <DisplayString>{{ U={U,g} | V={V,g} | W={W,g} }</DisplayString>
         <Expand>
             <Item Name="U">U</Item>

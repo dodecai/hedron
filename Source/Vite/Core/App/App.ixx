@@ -373,6 +373,7 @@ private:
             }
 
             // Update application
+            Input::Update();
             mEventHandler->Update();
             mGraphicsContext->Attach();
             //mGraphicsContext->Clear();

@@ -11,6 +11,9 @@ export namespace Hedron {
 
 class WinInput: public Input {
 protected:
+    /// Commands
+    void UpdatePlatform() override;
+
     /// Methods
     bool GetKeyStatePlatform(KeyCode code) const override;
     bool GetMouseButtonStatePlatform(MouseButton button) const override;

@@ -36,7 +36,7 @@ public:
     }
     ~Model() = default;
 
-    void Draw(CommandBuffer *buffer) {
+    void Draw(CommandBuffer *buffer) const {
         for (auto &[id, object] : mModelTable) {
             object.Material->Bind();
             for (auto &&mesh : object.Meshes) {

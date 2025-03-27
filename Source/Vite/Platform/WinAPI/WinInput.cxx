@@ -4,18 +4,29 @@ import <Windows.h>;
 
 namespace Hedron {
 
-// Methods
+/// Commands
+void WinInput::UpdatePlatform() {
+    for (auto i = 0z; i <= 256; i++) {
+        auto pressed = (bool)::GetAsyncKeyState((int)i);
+        auto &&currentState = sInputMap[static_cast<KeyCode>(i)].State;
+        sInputMap[static_cast<KeyCode>(i)].State =
+            currentState == KeyState::Press && pressed ? KeyState::Repeat :
+            pressed ? KeyState::Press : KeyState::Release;
+    }
+}
+
+/// Methods
 bool WinInput::GetKeyStatePlatform(KeyCode code) const {
-    return (bool)::GetAsyncKeyState((int)code);
+    return sInputMap[static_cast<KeyCode>(code)].State != KeyState::Release;
 }
 
 bool WinInput::GetMouseButtonStatePlatform(MouseButton button) const {
     switch (button) {
-        case MouseButton::Left:		return (bool)::GetAsyncKeyState((int)VK_LBUTTON);
-        case MouseButton::Middle:	return (bool)::GetAsyncKeyState((int)VK_MBUTTON);
-        case MouseButton::Right:	return (bool)::GetAsyncKeyState((int)VK_RBUTTON);
-        case MouseButton::Extra1:	return (bool)::GetAsyncKeyState((int)VK_XBUTTON1);
-        case MouseButton::Extra2:	return (bool)::GetAsyncKeyState((int)VK_XBUTTON2);
+        case MouseButton::Left:		return sInputMap[static_cast<KeyCode>(VK_LBUTTON)].State != KeyState::Release;
+        case MouseButton::Middle:	return sInputMap[static_cast<KeyCode>(VK_MBUTTON)].State != KeyState::Release;
+        case MouseButton::Right:	return sInputMap[static_cast<KeyCode>(VK_RBUTTON)].State != KeyState::Release;
+        case MouseButton::Extra1:	return sInputMap[static_cast<KeyCode>(VK_XBUTTON1)].State != KeyState::Release;
+        case MouseButton::Extra2:	return sInputMap[static_cast<KeyCode>(VK_XBUTTON2)].State != KeyState::Release;
         default:					return false;
     }
 }
@@ -24,7 +35,7 @@ bool WinInput::GetMouseButtonStateDeltaPlatform(MouseButton button) const {
     switch (button) {
         case MouseButton::Left: {
             static thread_local bool last {};
-            auto current = (bool)::GetAsyncKeyState((int)VK_LBUTTON);
+            auto current = sInputMap[static_cast<KeyCode>(VK_LBUTTON)].State != KeyState::Release;
             if (current != last) {
                 last = current;
                 return current;
@@ -33,7 +44,7 @@ bool WinInput::GetMouseButtonStateDeltaPlatform(MouseButton button) const {
         }
         case MouseButton::Middle: {
             static thread_local bool last {};
-            auto current = (bool)::GetAsyncKeyState((int)VK_MBUTTON);
+            auto current = sInputMap[static_cast<KeyCode>(VK_MBUTTON)].State != KeyState::Release;
             if (current != last) {
                 last = current;
                 return current;
@@ -42,7 +53,7 @@ bool WinInput::GetMouseButtonStateDeltaPlatform(MouseButton button) const {
         }
         case MouseButton::Right: {
             static thread_local bool last {};
-            auto current = (bool)::GetAsyncKeyState((int)VK_RBUTTON);
+            auto current = sInputMap[static_cast<KeyCode>(VK_RBUTTON)].State != KeyState::Release;
             if (current != last) {
                 last = current;
                 return current;
@@ -51,7 +62,7 @@ bool WinInput::GetMouseButtonStateDeltaPlatform(MouseButton button) const {
         }
         case MouseButton::Extra1: {
             static thread_local bool last {};
-            auto current = (bool)::GetAsyncKeyState((int)VK_XBUTTON1);
+            auto current = sInputMap[static_cast<KeyCode>(VK_RBUTTON)].State != KeyState::Release;
             if (current != last) {
                 last = current;
                 return current;
@@ -60,7 +71,7 @@ bool WinInput::GetMouseButtonStateDeltaPlatform(MouseButton button) const {
         }
         case MouseButton::Extra2: {
             static thread_local bool last {};
-            auto current = (bool)::GetAsyncKeyState((int)VK_XBUTTON2);
+            auto current = sInputMap[static_cast<KeyCode>(VK_XBUTTON2)].State != KeyState::Release;
             if (current != last) {
                 last = current;
                 return current;

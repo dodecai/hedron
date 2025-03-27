@@ -27,11 +27,55 @@ public:
 
     /// Methods
     void Create() override {
+        Vector1D v1d { 1.0f };
+        Vector2D v2d { 1.0f, 2.0f };
+        Vector3D v3d { 1.0f, 2.0f, 3.0f };
+        Vector4D v4d { 1.0f, 2.0f, 3.0f, 4.0f };
+        Vector4D v0d { 1.0f };
+
+        auto v1dSize = sizeof(v1d);
+        auto v2dSize = sizeof(v2d);
+        auto v3dSize = sizeof(v3d);
+        auto v4dSize = sizeof(v4d);
+
+        auto v2multi = v2d * v2d / v2d + v2d - v2d * 2 / 2 + 2 - 2;
+
+        LogTrace("Data: {} | Size: {}", v1d, v1dSize);
+        LogTrace("Data: {} | Size: {}", v2d, v2dSize);
+        LogTrace("Data: {} | Size: {}", v3d, v3dSize);
+        LogTrace("Data: {} | Size: {}", v4d, v4dSize);
+        LogInfo("{}", v2multi);
+
+        // Initialize Vector4D from an array and set an array from Vector4D
+        array<float, 4> a4d { 1.0f, 2.0f, 3.0f, 4.0f };
+        Vector4D v4di { a4d };
+        array<float, 4> a4dc = v4di;
+
+
+        auto v3d2 = v3d + 3;
+        auto v3dCross = Cross(v3d, v3d2);
+
+        auto v4d2 = v4d * 4;
+        auto v4dDot = Dot(v4d, v4d);
+        //auto v4dDistance = Distance(v4d, v4d2);
+        auto v4dLength = Length(v4d);
+        //auto v4dSquaredDistance = SquaredDistance(v4d, v4d2);
+        auto v4dSquaredLength = SquaredLength(v4d);
+        //auto v4dNormalized = Normalize(v4d);
+        auto v4dAngle = Angle(v4d, v4d2);
+        auto v4dAngleDegrees = AngleDegree(v4d, v4d2);
+        auto v4dUAngle = UAngle(v4d, v4d2);
+        //auto v4dLerp = Lerp(v4d, v4d2, 2.0f);
+        //auto v4dNormalizedLerp = NormalizedLerp(v4d, v4d2, 2.0f);
+        //auto v4dSphericalLerp = SphericalLerp(v4d, v4d2, 2.0f);
+
+
+        auto test = true;
+        return;
         LogCaption("Research Tests");
 
         auto displayManager = DisplayManager::Create();
 
-        auto test = false;
 
         Test();
     }

@@ -282,18 +282,19 @@ public:
         mLights.Count = 5;
         
         // Draw
-        
-        vertexBuffer->Bind();
-        pipeline->Bind();
-        indexBuffer->Bind();
-        
-        mLightShader->Bind();
-        mLightBuffer->Bind(6);
-        mLightBuffer->UpdateData(&mLights, sizeof(Components::Lights));
-        mEntityUniformBuffer->UpdateData(&mLightData, sizeof(Components::EntityData));
-        mEntityUniformBuffer->Bind((size_t)UniformPosition::EntityData);
-        
-        mCommandBuffer->DrawIndexed(cube.Components, PrimitiveType::Triangle, true);
+        mCommandBuffer->Record([this]() {
+            vertexBuffer->Bind();
+            pipeline->Bind();
+            indexBuffer->Bind();
+
+            mLightShader->Bind();
+            mLightBuffer->Bind(6);
+            mLightBuffer->UpdateData(&mLights, sizeof(Components::Lights));
+            mEntityUniformBuffer->UpdateData(&mLightData, sizeof(Components::EntityData));
+            mEntityUniformBuffer->Bind((size_t)UniformPosition::EntityData);
+
+            mCommandBuffer->DrawIndexed(cube.Components, PrimitiveType::Triangle, true);
+        });
     }
 
     #pragma endregion
